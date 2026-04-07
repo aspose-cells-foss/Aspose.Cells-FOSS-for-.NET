@@ -1,0 +1,110 @@
+# Aspose.Cells FOSS for .NET - Data Validations Spec (v0.1)
+
+name: data_validations
+version: 0.1
+description: >
+  Worksheet data validation rules for Aspose.Cells-style validation APIs and
+  SpreadsheetML <dataValidations> import/export.
+
+scope:
+  included:
+    - worksheet validation collection
+    - validation areas (sqref)
+    - validation type and operator
+    - formula1 and formula2 persistence
+    - input and error prompts
+    - allow blank and in-cell dropdown settings
+  excluded:
+    - x14 data validations
+    - ime mode
+    - prompt window position metadata
+    - list object and table-driven validation behaviors
+    - runtime validation/calculation of entered values
+
+xml:
+  container: dataValidations
+  element: dataValidation
+  child_order:
+    - formula1?
+    - formula2?
+  container_attributes:
+    - count
+  attributes:
+    - type
+    - errorStyle
+    - operator
+    - allowBlank
+    - showDropDown
+    - showInputMessage
+    - showErrorMessage
+    - errorTitle
+    - error
+    - promptTitle
+    - prompt
+    - sqref
+
+object_model_mapping:
+  public:
+    - Worksheet.Validations
+    - ValidationCollection
+    - Validation
+    - ValidationType
+    - ValidationAlertType
+    - OperatorType
+  internal:
+    - WorksheetModel.Validations
+    - ValidationModel
+
+save_rules:
+  order: ascending_by_first_area
+  sqref_separator: single_space
+  omit_container_when_empty: true
+  omit_formula_nodes_when_empty: true
+  dropdown_semantics:
+    public_in_cell_dropdown_true: omit_showDropDown_or_false
+    public_in_cell_dropdown_false: showDropDown_true
+
+constraints:
+  - code: DV001
+    description: every persisted validation must have at least one valid area
+    severity: fatal
+  - code: DV002
+    description: validation areas must not overlap across validations
+    severity: fatal
+  - code: DV003
+    description: sqref entries must be valid A1 ranges
+    severity: warning
+
+recovery:
+  recoverable_cases:
+    - code: DV-R001
+      condition: unknown validation type or operator text
+      action: fall back to AnyValue or None and warn
+    - code: DV-R002
+      condition: showDropDown is present
+      action: invert SpreadsheetML semantics into public InCellDropDown and continue
+  lossy_cases:
+    - code: DV-L001
+      condition: one or more sqref tokens are invalid
+      action: drop invalid areas and warn
+    - code: DV-L002
+      condition: a validation has no surviving areas after normalization
+      action: drop the validation and warn
+    - code: DV-L003
+      condition: validation areas overlap an earlier validation
+      action: keep first deterministic validation areas and drop conflicting areas or validations
+  fatal_cases:
+    - code: DV-F001
+      condition: strict mode and invalid sqref remains unresolved
+
+tests:
+  unit:
+    - validation_collection_add_and_remove
+    - validation_properties_roundtrip_in_memory
+    - validation_overlap_guards
+  golden:
+    - data_validation_roundtrip_and_markup
+  malformed:
+    - invalid_sqref_dropped_with_warning
+    - overlapping_validations_keep_first
+    - invalid_type_falls_back_with_warning

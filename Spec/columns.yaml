@@ -1,0 +1,104 @@
+name: columns
+version: 0.1
+description: >
+  Column range metadata rules for worksheet column widths, hidden columns,
+  and style references.
+
+scope:
+  included:
+    - cols container
+    - col min/max ranges
+    - width
+    - hidden
+    - style
+    - customWidth
+  excluded:
+    - bestFit
+    - outline levels
+    - collapsed groups
+    - phonetic settings
+
+xml:
+  container: cols
+  element: col
+  attributes:
+    min:
+      type: uint
+      required: true
+    max:
+      type: uint
+      required: true
+    width:
+      type: double
+      required: false
+    hidden:
+      type: bool
+      required: false
+    style:
+      type: uint
+      required: false
+    customWidth:
+      type: bool
+      required: false
+
+internal_model:
+  entities:
+    - ColumnRangeModel
+    - WorksheetModel
+
+constraints:
+  - code: COL001
+    description: Column ranges must have min <= max.
+    severity: fatal
+  - code: COL002
+    description: Column indices in XML are 1-based.
+    severity: fatal
+  - code: COL003
+    description: Equivalent adjacent column ranges should be merged on save for deterministic output.
+    severity: warning
+  - code: COL004
+    description: customWidth should be emitted when width is explicitly set.
+    severity: warning
+
+save_rules:
+  - emit cols only when at least one column range has metadata
+  - merge adjacent compatible column ranges
+  - emit width and customWidth when explicit width is set
+  - emit hidden=true when column range is hidden
+  - emit style only when a valid column-level style exists
+
+recovery:
+  recoverable_cases:
+    - code: COL-R001
+      condition: overlapping compatible column ranges exist
+      action: normalize and merge ranges
+    - code: COL-R002
+      condition: customWidth missing while width exists
+      action: infer customWidth=true
+  lossy_cases:
+    - code: COL-L001
+      condition: invalid style index referenced by a column range
+      action: drop invalid style reference and warn
+  fatal_cases:
+    - code: COL-F001
+      condition: column range has invalid min/max and cannot be normalized
+
+diagnostics:
+  warning_prefix: ACF-COL
+  fields:
+    - code
+    - column_range
+    - repair_applied
+    - data_loss_risk
+
+tests:
+  unit:
+    - column_range_merging
+    - explicit_width_customWidth
+    - hidden_column_serialization
+  golden:
+    - custom_width_columns
+    - hidden_columns_sheet
+  malformed:
+    - overlapping_column_ranges_normalized
+    - invalid_min_max_fatal

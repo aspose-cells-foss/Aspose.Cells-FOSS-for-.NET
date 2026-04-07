@@ -1,0 +1,141 @@
+﻿# Aspose.Cells FOSS for .NET - Conditional Formatting Spec (v0.1)
+
+name: conditional_formatting
+version: 0.1
+description: >
+  Worksheet conditional formatting rules for Aspose.Cells-style APIs and
+  SpreadsheetML <conditionalFormatting> / <cfRule> import/export.
+
+scope:
+  included:
+    - worksheet conditional formatting collection
+    - conditional formatting areas (sqref)
+    - cellIs rules
+    - expression rules
+    - text rules (containsText, notContainsText, beginsWith, endsWith)
+    - timePeriod rules
+    - duplicateValues and uniqueValues rules
+    - top10 and bottom10 rules
+    - aboveAverage and belowAverage rules
+    - colorScale rules with 2-color and 3-color defaults
+    - dataBar rules with baseline main-namespace persistence
+    - iconSet rules with baseline main-namespace persistence
+    - operator persistence for classic rules
+    - formula1 and formula2 persistence
+    - priority and stopIfTrue persistence
+    - differential style persistence through dxfs
+  excluded:
+    - x14 conditional formatting extensions
+    - containsBlanks, notContainsBlanks, containsErrors, notContainsErrors, and similar non-core rule families
+    - custom cfvo threshold editing beyond the built-in min/mid/max defaults currently emitted
+    - advanced data bar border, negative bar, axis, and direction extensions outside the main SpreadsheetML model
+    - runtime evaluation or application of conditional formatting
+
+xml:
+  container: conditionalFormatting
+  element: cfRule
+  child_order:
+    - formula*
+    - colorScale?
+    - dataBar?
+    - iconSet?
+  container_attributes:
+    - sqref
+  attributes:
+    - type
+    - dxfId
+    - priority
+    - operator
+    - stopIfTrue
+    - text
+    - timePeriod
+    - bottom
+    - percent
+    - rank
+    - aboveAverage
+    - stdDev
+
+object_model_mapping:
+  public:
+    - Worksheet.ConditionalFormattings
+    - ConditionalFormattingCollection
+    - FormatConditionCollection
+    - FormatCondition
+    - FormatConditionType
+    - OperatorType
+  internal:
+    - WorksheetModel.ConditionalFormattings
+    - ConditionalFormattingModel
+    - FormatConditionModel
+    - StyleValue
+
+save_rules:
+  order: ascending_by_first_area
+  sqref_separator: single_space
+  omit_container_when_empty: true
+  omit_formula_nodes_when_empty: true
+  rule_priority:
+    preserve_positive_priority: true
+    synthesize_when_missing: sequential_within_workbook
+  differential_styles:
+    collect_into_dxfs: true
+    emit_only_when_non_default: true
+  color_scales:
+    supported_counts:
+      - 2
+      - 3
+    emitted_cfvo_defaults:
+      - min
+      - percentile_50_when_three_color
+      - max
+  icon_sets:
+    emit_default_thresholds: percent_buckets_by_icon_count
+
+constraints:
+  - code: CF001
+    description: every persisted conditional formatting collection must have at least one valid area
+    severity: fatal
+  - code: CF002
+    description: every persisted conditional formatting collection must have at least one supported rule
+    severity: fatal
+  - code: CF003
+    description: conditional formatting areas must be valid A1 ranges
+    severity: warning
+
+recovery:
+  recoverable_cases:
+    - code: CF-R001
+      condition: invalid or missing priority
+      action: normalize priority to deterministic sequential order and warn
+    - code: CF-R002
+      condition: dxfId is invalid or out of range
+      action: reset rule style to default style and warn
+  lossy_cases:
+    - code: CF-L001
+      condition: one or more sqref tokens are invalid
+      action: drop invalid areas and warn
+    - code: CF-L002
+      condition: unsupported conditional formatting rule type is encountered
+      action: drop the unsupported rule and warn
+    - code: CF-L003
+      condition: a conditional formatting collection has no surviving valid areas or rules
+      action: drop the collection and warn
+  fatal_cases:
+    - code: CF-F001
+      condition: strict mode and invalid sqref remains unresolved
+    - code: CF-F002
+      condition: strict mode and unsupported rule type is encountered
+
+tests:
+  unit:
+    - conditional_formatting_collection_add_and_remove
+    - conditional_formatting_rule_properties_roundtrip_in_memory
+    - conditional_formatting_advanced_rule_properties_roundtrip_in_memory
+    - conditional_formatting_area_subtraction_is_deterministic
+  golden:
+    - conditional_formatting_roundtrip_and_markup
+    - advanced_conditional_formatting_roundtrip_and_markup
+  malformed:
+    - invalid_sqref_dropped_with_warning
+    - unsupported_rule_dropped_with_warning
+    - invalid_dxfid_resets_style_with_warning

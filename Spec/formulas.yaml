@@ -1,0 +1,108 @@
+name: formulas
+version: 0.1
+description: >
+  Formula persistence and recovery rules for Aspose.Cells FOSS for .NET.
+  v0.1 does not include a formula calculation engine.
+
+scope:
+  included:
+    - formula string persistence
+    - formula XML element mapping
+    - cached value preservation when available
+    - basic formula cell round-trip
+  excluded:
+    - formula calculation engine
+    - shared formulas
+    - array formulas
+    - dynamic arrays
+    - dependency graph calculation
+    - recalculation chain generation
+
+xml:
+  element: f
+  companion_value_element: v
+  cell_integration:
+    parent: c
+
+public_api_mapping:
+  cell:
+    - Cell.Formula
+    - Cell.Value
+    - Cell.StringValue
+    - Cell.Type
+
+internal_model:
+  entities:
+    - FormulaValue
+    - CellRecord
+    - CachedScalarValue
+
+behavior:
+  formula_storage:
+    - formula text is persisted in <f>
+    - cached value may be preserved in <v> when present and valid
+    - no recalculation occurs during save in v0.1
+  public_api:
+    - setting Cell.Formula marks the cell as a formula cell
+    - formula entry should remain user-friendly and Aspose-like
+    - internal normalization may strip or normalize leading '=' if design chooses, but behavior must remain stable
+
+constraints:
+  - code: FML001
+    description: Formula text must be preserved through load-save round-trip where supported.
+    severity: fatal
+  - code: FML002
+    description: No formula recalculation must occur implicitly in v0.1.
+    severity: fatal
+  - code: FML003
+    description: Invalid cached values must not replace valid formula text.
+    severity: warning
+  - code: FML004
+    description: Unsupported advanced formula forms must degrade predictably with diagnostics.
+    severity: warning
+
+save_rules:
+  - write formula text to <f>
+  - preserve cached scalar value when loaded and still representable
+  - omit cached value when invalid or unavailable
+  - do not generate calcChain in v0.1
+  - do not rewrite formulas semantically beyond normalization policy
+
+recovery:
+  recoverable_cases:
+    - code: FML-R001
+      condition: formula text exists but cached value is invalid
+      action: preserve formula, drop cached value, warn
+    - code: FML-R002
+      condition: cached value exists without formula element on a cell classified as scalar
+      action: treat as scalar and continue
+  lossy_cases:
+    - code: FML-L001
+      condition: unsupported shared formula construct encountered
+      action: preserve as best effort plain formula if resolvable; otherwise warn and degrade
+    - code: FML-L002
+      condition: unsupported array or dynamic array metadata encountered
+      action: preserve raw part where possible and warn
+  fatal_cases:
+    - code: FML-F001
+      condition: formula element is structurally unreadable and cell cannot be classified safely
+
+diagnostics:
+  warning_prefix: ACF-FML
+  fields:
+    - code
+    - cell_ref
+    - repair_applied
+    - data_loss_risk
+
+tests:
+  unit:
+    - formula_text_roundtrip
+    - cached_value_preservation
+    - no_recalculation_on_save
+  golden:
+    - simple_formula_cells
+    - formula_cells_with_cached_values
+  malformed:
+    - invalid_cached_value_dropped
+    - unsupported_shared_formula_downgrade

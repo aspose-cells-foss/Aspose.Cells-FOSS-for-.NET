@@ -1,0 +1,166 @@
+name: opc_package
+version: 0.1
+description: >
+  Core Open Packaging Conventions rules used by Aspose.Cells FOSS for .NET
+  for XLSX package loading, saving, validation, and recovery.
+
+scope:
+  included:
+    - zip package enumeration
+    - part discovery
+    - content types
+    - package-level relationships
+    - part-level relationships
+    - standard workbook package layout
+    - repair-oriented package inference
+  excluded:
+    - digital signatures
+    - custom xml mappings
+    - encryption
+    - package thumbnails
+    - advanced metadata packages
+
+package:
+  required_root_parts:
+    - /[Content_Types].xml
+    - /_rels/.rels
+  primary_entrypoint:
+    rel_type: officeDocument
+    expected_target: /xl/workbook.xml
+
+content_types:
+  required_defaults:
+    - extension: rels
+      content_type: application/vnd.openxmlformats-package.relationships+xml
+    - extension: xml
+      content_type: application/xml
+  required_overrides:
+    - part_name: /xl/workbook.xml
+      content_type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml
+  optional_overrides:
+    - /xl/styles.xml
+    - /xl/sharedStrings.xml
+    - /docProps/core.xml
+    - /docProps/app.xml
+    - /xl/theme/theme1.xml
+    - /xl/worksheets/sheet{n}.xml
+
+standard_parts:
+  - uri: /xl/workbook.xml
+    required: true
+    category: workbook
+  - uri: /xl/styles.xml
+    required: false
+    category: styles
+  - uri: /xl/sharedStrings.xml
+    required: false
+    category: sharedStrings
+  - uri: /xl/theme/theme1.xml
+    required: false
+    category: theme
+  - uri: /xl/worksheets/sheet{n}.xml
+    required: true
+    category: worksheet
+  - uri: /docProps/core.xml
+    required: false
+    category: metadata
+  - uri: /docProps/app.xml
+    required: false
+    category: metadata
+
+relationship_types:
+  officeDocument:
+    uri: http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument
+  worksheet:
+    uri: http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet
+  styles:
+    uri: http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles
+  sharedStrings:
+    uri: http://schemas.openxmlformats.org/officeDocument/2006/relationships/sharedStrings
+  theme:
+    uri: http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme
+  coreProperties:
+    uri: http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties
+  extendedProperties:
+    uri: http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties
+
+rules:
+  - id: OPC001
+    description: Every relationship target must resolve to an existing part unless the relationship is external.
+    severity: fatal
+  - id: OPC002
+    description: Root package must contain exactly one officeDocument relationship for normal workbook packages.
+    severity: fatal
+  - id: OPC003
+    description: Every part name must be unique.
+    severity: fatal
+  - id: OPC004
+    description: Every non-relationship XML part must have a resolvable content type.
+    severity: fatal
+  - id: OPC005
+    description: Unknown non-critical parts may be preserved when PreserveUnsupportedParts is enabled.
+    severity: warning
+  - id: OPC006
+    description: Missing optional metadata parts must not prevent loading.
+    severity: warning
+
+save_layout:
+  required_save_order:
+    - /[Content_Types].xml
+    - /_rels/.rels
+    - /xl/workbook.xml
+    - /xl/_rels/workbook.xml.rels
+    - /xl/worksheets/sheet{n}.xml
+  notes:
+    - physical zip order is not semantically important, but deterministic output is preferred
+    - relationship targets should use canonical relative URIs
+    - parts should be emitted in stable order for reproducible packages
+
+recovery:
+  package_inference:
+    enabled_by_default: true
+    actions:
+      - infer workbook part from /xl/workbook.xml when root relationship is missing
+      - infer worksheet overrides from existing worksheet parts
+      - infer styles/sharedStrings overrides from existing parts
+  recoverable_cases:
+    - code: OPC-R001
+      condition: missing workbook content type override but workbook part exists
+      action: synthesize missing override
+    - code: OPC-R002
+      condition: missing root officeDocument relationship but /xl/workbook.xml exists
+      action: synthesize in-memory root relationship
+    - code: OPC-R003
+      condition: unknown extra package parts exist
+      action: preserve and continue
+  fatal_cases:
+    - code: OPC-F001
+      condition: package is not a readable zip archive
+    - code: OPC-F002
+      condition: workbook part cannot be located or inferred
+    - code: OPC-F003
+      condition: duplicate part URIs exist
+
+diagnostics:
+  warning_prefix: ACF-OPC
+  fields:
+    - code
+    - severity
+    - message
+    - part_uri
+    - repair_applied
+    - data_loss_risk
+
+tests:
+  unit:
+    - content_type_resolution
+    - relationship_target_resolution
+    - part_uri_canonicalization
+  golden:
+    - minimal_package_layout
+    - package_with_styles_and_shared_strings
+  malformed:
+    - missing_root_relationship
+    - missing_workbook_override
+    - duplicate_part_names
+    - unknown_extra_part

@@ -1,0 +1,83 @@
+name: merges
+version: 0.1
+description: >
+  Merge cell region rules for worksheet merged ranges.
+
+scope:
+  included:
+    - mergeCells container
+    - mergeCell refs
+    - merge region validation
+    - interaction with dimension recalculation
+  excluded:
+    - merge-aware formatting propagation
+    - merge-aware formula semantics
+
+xml:
+  container: mergeCells
+  element: mergeCell
+  attributes:
+    ref:
+      type: range_ref
+      required: true
+
+public_api_mapping:
+  methods:
+    - Cells.Merge(int firstRow, int firstColumn, int totalRows, int totalColumns)
+
+internal_model:
+  entities:
+    - MergeRegion
+    - WorksheetModel
+
+constraints:
+  - code: MRG001
+    description: Merge regions must have valid rectangular ranges.
+    severity: fatal
+  - code: MRG002
+    description: Merge regions must not overlap.
+    severity: fatal
+  - code: MRG003
+    description: mergeCells container should be omitted when no merge ranges exist.
+    severity: warning
+  - code: MRG004
+    description: Merged regions must be included in worksheet dimension recalculation.
+    severity: warning
+
+save_rules:
+  - emit mergeCells only when at least one merge region exists
+  - emit merge regions in stable sorted order
+  - include merge extents in dimension calculation
+
+recovery:
+  recoverable_cases:
+    - code: MRG-R001
+      condition: merge ranges unsorted
+      action: sort ranges deterministically
+  lossy_cases:
+    - code: MRG-L001
+      condition: overlapping merge ranges encountered
+      action: keep first deterministic range, drop conflicting ranges, warn
+  fatal_cases:
+    - code: MRG-F001
+      condition: merge reference cannot be parsed into a valid rectangle
+
+diagnostics:
+  warning_prefix: ACF-MRG
+  fields:
+    - code
+    - merge_ref
+    - repair_applied
+    - data_loss_risk
+
+tests:
+  unit:
+    - merge_range_validation
+    - overlap_detection
+    - merge_sorting
+  golden:
+    - simple_merge_regions
+    - dimension_includes_merges
+  malformed:
+    - overlapping_merges_dropped_with_warning
+    - invalid_merge_ref_fatal

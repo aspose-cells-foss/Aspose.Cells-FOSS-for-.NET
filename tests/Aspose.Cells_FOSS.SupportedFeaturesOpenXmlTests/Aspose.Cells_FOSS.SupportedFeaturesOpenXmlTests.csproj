@@ -1,0 +1,44 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <OutputType>Exe</OutputType>
+    <IsPackable>false</IsPackable>
+    <AssemblyName>Aspose.Cells_FOSS.SupportedFeaturesOpenXmlTests</AssemblyName>
+    <RootNamespace>Aspose.Cells_FOSS.SupportedFeaturesOpenXmlTests</RootNamespace>
+  </PropertyGroup>
+
+  <Target Name="EnsureOpenXmlSdkPresent" BeforeTargets="ResolveReferences">
+    <Error Condition="!Exists('$(NuGetPackageRoot)documentformat.openxml\3.0.2\lib\net8.0\DocumentFormat.OpenXml.dll')" Text="DocumentFormat.OpenXml 3.0.2 was not found in the local NuGet cache." />
+    <Error Condition="!Exists('$(NuGetPackageRoot)documentformat.openxml.framework\3.0.2\lib\net8.0\DocumentFormat.OpenXml.Framework.dll')" Text="DocumentFormat.OpenXml.Framework 3.0.2 was not found in the local NuGet cache." />
+    <Error Condition="!Exists('$(NuGetPackageRoot)system.io.packaging\8.0.0\lib\net8.0\System.IO.Packaging.dll')" Text="System.IO.Packaging 8.0.0 was not found in the local NuGet cache." />
+  </Target>
+
+  <ItemGroup>
+    <Reference Include="Aspose.Cells_FOSS">
+      <HintPath>..\..\src\Aspose.Cells_FOSS\bin\Debug\net8.0\Aspose.Cells_FOSS.dll</HintPath>
+      <Private>true</Private>
+    </Reference>
+    <Reference Include="DocumentFormat.OpenXml">
+      <HintPath>$(NuGetPackageRoot)documentformat.openxml\3.0.2\lib\net8.0\DocumentFormat.OpenXml.dll</HintPath>
+      <Private>true</Private>
+    </Reference>
+    <Reference Include="DocumentFormat.OpenXml.Framework">
+      <HintPath>$(NuGetPackageRoot)documentformat.openxml.framework\3.0.2\lib\net8.0\DocumentFormat.OpenXml.Framework.dll</HintPath>
+      <Private>true</Private>
+    </Reference>
+    <Reference Include="System.IO.Packaging">
+      <HintPath>$(NuGetPackageRoot)system.io.packaging\8.0.0\lib\net8.0\System.IO.Packaging.dll</HintPath>
+      <Private>true</Private>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\Shared\TestInfrastructure.cs" Link="TestInfrastructure.cs" />
+    <Compile Include="..\Shared\WorkbookMetadataScenarioFactory.cs" Link="WorkbookMetadataScenarioFactory.cs" />
+    <Compile Include="..\Aspose.Cells_FOSS.CompareOpenXml\ComparisonModels.cs" Link="OpenXmlComparison\ComparisonModels.cs" />
+    <Compile Include="..\Aspose.Cells_FOSS.CompareOpenXml\ComparisonValueHelpers.cs" Link="OpenXmlComparison\ComparisonValueHelpers.cs" />
+    <Compile Include="..\Aspose.Cells_FOSS.CompareOpenXml\OpenXmlComparisonSupport.cs" Link="OpenXmlComparison\OpenXmlComparisonSupport.cs" />
+  </ItemGroup>
+</Project>

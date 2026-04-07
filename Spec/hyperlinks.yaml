@@ -1,0 +1,136 @@
+name: hyperlinks
+version: 0.1
+description: >
+  Worksheet hyperlink object model and SpreadsheetML hyperlink persistence
+  rules for Aspose.Cells FOSS for .NET.
+
+scope:
+  included:
+    - worksheet hyperlink collection
+    - single-cell and rectangular hyperlink refs
+    - external hyperlinks through worksheet relationships
+    - internal workbook hyperlinks through location
+    - hyperlink display text metadata
+    - hyperlink tooltip metadata
+  excluded:
+    - drawing hyperlinks
+    - style auto-formatting for hyperlink appearance
+    - visited hyperlink state
+    - mail merge and web query hyperlink features
+
+public_api_mapping:
+  worksheet_members:
+    - Worksheet.Hyperlinks
+  collection_members:
+    - HyperlinkCollection.Count
+    - HyperlinkCollection[this[int index]]
+    - HyperlinkCollection.Add(string cellName, int totalRows, int totalColumns, string address)
+    - HyperlinkCollection.Add(int firstRow, int firstColumn, int totalRows, int totalColumns, string address)
+    - HyperlinkCollection.Add(string startCellName, string endCellName, string address, string textToDisplay, string screenTip)
+    - HyperlinkCollection.RemoveAt(int index)
+  hyperlink_members:
+    - Hyperlink.Area
+    - Hyperlink.Address
+    - Hyperlink.LinkType
+    - Hyperlink.ScreenTip
+    - Hyperlink.TextToDisplay
+    - Hyperlink.Delete
+
+internal_model:
+  entities:
+    - HyperlinkModel
+    - WorksheetModel.Hyperlinks
+  area_rules:
+    - hyperlinks store zero-based rectangular anchors
+    - serialized refs use A1 range syntax
+  addressing_rules:
+    - public API uses Hyperlink.Address for both external targets and internal worksheet locations
+    - internal worksheet locations are persisted to SpreadsheetML location attributes
+
+xml_mapping:
+  worksheet_part: /xl/worksheets/sheet{n}.xml
+  worksheet_relationships_part: /xl/worksheets/_rels/sheet{n}.xml.rels
+  worksheet_elements:
+    - hyperlinks?
+    - hyperlinks/hyperlink*
+  hyperlink_attributes:
+    ref:
+      type: range_ref
+      required: true
+    r:id:
+      type: relationship_id
+      required: false
+    location:
+      type: string
+      required: false
+    tooltip:
+      type: string
+      required: false
+    display:
+      type: string
+      required: false
+  relationship_type:
+    external_hyperlink: http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink
+
+save_rules:
+  - serialize hyperlinks in ascending top-left anchor order
+  - emit worksheet hyperlinks container only when at least one hyperlink exists
+  - emit external hyperlink relationships only for hyperlinks with non-empty external Address
+  - emit location attribute when Address represents an internal worksheet location
+  - emit display and tooltip only when non-empty
+  - keep worksheet relationship ids stable within a save operation using rId1..n
+
+constraints:
+  - code: HL001
+    description: hyperlink anchor refs must be valid non-empty cell or range references
+    severity: fatal
+  - code: HL002
+    description: hyperlink ranges must not overlap existing hyperlink ranges
+    severity: fatal
+  - code: HL003
+    description: a hyperlink must resolve to either an external address or an internal worksheet location
+    severity: warning
+  - code: HL004
+    description: external hyperlink r:id values must resolve to hyperlink relationships
+    severity: warning
+
+recovery:
+  recoverable_cases:
+    - code: HL-R001
+      condition: hyperlink relationships are out of order
+      action: preserve logical hyperlink order and rewrite deterministic relationship ids on save
+  lossy_cases:
+    - code: HL-L001
+      condition: hyperlink ref is invalid
+      action: drop hyperlink and record warning
+    - code: HL-L002
+      condition: hyperlink r:id does not resolve
+      action: preserve non-address metadata, clear external address, and warn
+    - code: HL-L003
+      condition: overlapping hyperlink ranges are encountered during load
+      action: keep first deterministic hyperlink and drop later conflicting hyperlinks with warning
+  fatal_cases:
+    - code: HL-F001
+      condition: strict mode encounters invalid hyperlink ref or contradictory hyperlink payload
+
+diagnostics:
+  warning_prefix: ACF-HL
+  fields:
+    - code
+    - sheet_name
+    - cell_ref
+    - repair_applied
+    - data_loss_risk
+
+tests:
+  unit:
+    - hyperlink_collection_add_and_remove
+    - hyperlink_area_validation
+    - hyperlink_overlap_detection
+  golden:
+    - external_hyperlink_roundtrip
+    - internal_hyperlink_roundtrip
+    - mixed_hyperlink_relationship_serialization
+  malformed:
+    - invalid_hyperlink_ref_is_dropped_with_warning
+    - missing_hyperlink_relationship_records_warning

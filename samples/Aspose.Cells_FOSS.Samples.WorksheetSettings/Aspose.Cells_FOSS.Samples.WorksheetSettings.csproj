@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <AssemblyName>Aspose.Cells_FOSS.Samples.WorksheetSettings</AssemblyName>
+    <RootNamespace>Aspose.Cells_FOSS.Samples.WorksheetSettings</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Aspose.Cells_FOSS\Aspose.Cells_FOSS.csproj" />
+  </ItemGroup>
+</Project>
