@@ -1,7 +1,10 @@
-﻿using Aspose.Cells_FOSS.Core;
+using Aspose.Cells_FOSS.Core;
 
 namespace Aspose.Cells_FOSS;
 
+/// <summary>
+/// Represents workbook protection.
+/// </summary>
 public sealed class WorkbookProtection
 {
     private readonly WorkbookProtectionModel _model;
@@ -11,6 +14,9 @@ public sealed class WorkbookProtection
         _model = model;
     }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether lock structure.
+    /// </summary>
     public bool LockStructure
     {
         get
@@ -23,6 +29,9 @@ public sealed class WorkbookProtection
         }
     }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether lock windows.
+    /// </summary>
     public bool LockWindows
     {
         get
@@ -35,6 +44,9 @@ public sealed class WorkbookProtection
         }
     }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether lock revision.
+    /// </summary>
     public bool LockRevision
     {
         get
@@ -47,6 +59,9 @@ public sealed class WorkbookProtection
         }
     }
 
+    /// <summary>
+    /// Gets or sets the workbook password.
+    /// </summary>
     public string WorkbookPassword
     {
         get
@@ -59,6 +74,9 @@ public sealed class WorkbookProtection
         }
     }
 
+    /// <summary>
+    /// Gets or sets the revisions password.
+    /// </summary>
     public string RevisionsPassword
     {
         get
@@ -71,6 +89,9 @@ public sealed class WorkbookProtection
         }
     }
 
+    /// <summary>
+    /// Gets a value indicating whether protected.
+    /// </summary>
     public bool IsProtected
     {
         get

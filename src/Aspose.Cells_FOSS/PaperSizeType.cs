@@ -1,5 +1,8 @@
 namespace Aspose.Cells_FOSS;
 
+/// <summary>
+/// Specifies paper size type.
+/// </summary>
 public enum PaperSizeType
 {
     Default = 0,

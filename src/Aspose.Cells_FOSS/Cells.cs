@@ -2,6 +2,19 @@ using Aspose.Cells_FOSS.Core;
 
 namespace Aspose.Cells_FOSS;
 
+/// <summary>
+/// Provides access to worksheet cells, rows, columns, and merged ranges.
+/// </summary>
+/// <example>
+/// <code>
+/// var workbook = new Workbook();
+/// var cells = workbook.Worksheets[0].Cells;
+///
+/// cells["A1"].PutValue("Total");
+/// cells[1, 1].PutValue(125.75);
+/// cells.Merge(0, 0, 1, 2);
+/// </code>
+/// </example>
 public class Cells
 {
     private readonly Worksheet _worksheet;
@@ -15,12 +28,17 @@ public class Cells
         _columns = new ColumnCollection(worksheet);
     }
 
+    /// <summary>
+    /// Gets a cell by A1 reference such as <c>A1</c> or <c>BC12</c>.
+    /// </summary>
     public Cell this[string cellName]
     {
         get
         {
             try
             {
+                // The public API uses Aspose-style CellsException rather than exposing
+                // the lower-level argument validation coming from A1 parsing.
                 return new Cell(_worksheet, CellAddress.Parse(cellName));
             }
             catch (ArgumentException exception)
@@ -30,6 +48,9 @@ public class Cells
         }
     }
 
+    /// <summary>
+    /// Gets a cell by zero-based row and column index.
+    /// </summary>
     public Cell this[int row, int column]
     {
         get
@@ -39,6 +60,9 @@ public class Cells
         }
     }
 
+    /// <summary>
+    /// Gets row-level settings for the worksheet.
+    /// </summary>
     public RowCollection Rows
     {
         get
@@ -47,6 +71,9 @@ public class Cells
         }
     }
 
+    /// <summary>
+    /// Gets column-level settings for the worksheet.
+    /// </summary>
     public ColumnCollection Columns
     {
         get
@@ -55,6 +82,9 @@ public class Cells
         }
     }
 
+    /// <summary>
+    /// Gets the current merged-cell regions in worksheet order.
+    /// </summary>
     public IReadOnlyList<CellArea> MergedCells
     {
         get
@@ -69,11 +99,16 @@ public class Cells
         }
     }
 
+    /// <summary>
+    /// Merges a rectangular cell region using zero-based coordinates.
+    /// </summary>
     public void Merge(int firstRow, int firstColumn, int totalRows, int totalColumns)
     {
         if (firstRow < 0 || firstColumn < 0) throw new CellsException("Merge origin indices must be non-negative.");
         if (totalRows <= 0 || totalColumns <= 0) throw new CellsException("Merge range dimensions must be positive.");
 
+        // Validate overlaps eagerly so the worksheet keeps a deterministic merge set
+        // instead of deferring conflict resolution until save time.
         var candidate = new MergeRegion(firstRow, firstColumn, totalRows, totalColumns);
         foreach (var existing in _worksheet.Model.MergeRegions)
         {

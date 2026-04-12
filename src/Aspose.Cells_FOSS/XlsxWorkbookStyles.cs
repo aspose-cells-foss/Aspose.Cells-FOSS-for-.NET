@@ -10,64 +10,6 @@ namespace Aspose.Cells_FOSS;
 
 internal static class XlsxWorkbookStyles
 {
-    internal sealed class FillValue
-    {
-        public FillPatternKind Pattern { get; set; }
-        public ColorValue ForegroundColor { get; set; }
-        public ColorValue BackgroundColor { get; set; }
-    }
-
-    internal sealed class CellFormatValue
-    {
-        public int NumFmtId { get; set; }
-        public int FontId { get; set; }
-        public int FillId { get; set; }
-        public int BorderId { get; set; }
-        public AlignmentValue Alignment { get; set; } = new AlignmentValue();
-        public ProtectionValue Protection { get; set; } = new ProtectionValue();
-    }
-
-    internal sealed class StylesheetLoadContext
-    {
-        public StyleValue DefaultCellStyle { get; set; } = StyleValue.Default.Clone();
-        public List<StyleValue> CellFormats { get; } = new List<StyleValue> { StyleValue.Default.Clone() };
-        public List<StyleValue> DifferentialFormats { get; } = new List<StyleValue>();
-        public HashSet<int> DateStyleIndexes { get; } = new HashSet<int>();
-    }
-
-    internal sealed class StylesheetSaveContext
-    {
-        public StylesheetSaveContext(XDocument document, IReadOnlyDictionary<string, int> styleIndices, IReadOnlyDictionary<string, int> differentialStyleIndices, int differentialFormatCount, bool hasStyles)
-        {
-            Document = document;
-            _styleIndices = styleIndices;
-            _differentialStyleIndices = differentialStyleIndices;
-            DifferentialFormatCount = differentialFormatCount;
-            HasStyles = hasStyles;
-        }
-
-        private readonly IReadOnlyDictionary<string, int> _styleIndices;
-        private readonly IReadOnlyDictionary<string, int> _differentialStyleIndices;
-        public XDocument Document { get; }
-        public int DifferentialFormatCount { get; }
-        public bool HasStyles { get; }
-
-        public int GetStyleIndex(CellRecord record)
-        {
-            var style = GetStyleForSerialization(record);
-            return _styleIndices.TryGetValue(GetStyleKey(style), out var index) ? index : 0;
-        }
-
-        public int? GetDifferentialStyleIndex(FormatConditionModel condition)
-        {
-            if (StylesEqual(condition.Style, StyleValue.Default))
-            {
-                return null;
-            }
-
-            return _differentialStyleIndices.TryGetValue(GetStyleKey(condition.Style), out var index) ? index : null;
-        }
-    }
 
     internal static StylesheetSaveContext BuildStylesheet(WorkbookModel model)
     {
@@ -179,7 +121,7 @@ internal static class XlsxWorkbookStyles
         return new StylesheetSaveContext(BuildStylesheetDocument(fonts, fills, borders, normalCellFormat, cellFormats, customNumberFormats, differentialFormats), styleIndices, differentialStyleIndices, differentialFormats.Count, hasStyles);
     }
 
-    private static StyleValue GetStyleForSerialization(CellRecord record)
+    internal static StyleValue GetStyleForSerialization(CellRecord record)
     {
         var style = GetEffectiveStyle(record);
         if (record.Kind != CellValueKind.DateTime || IsDateNumberFormat(style.NumberFormat))
@@ -386,7 +328,7 @@ internal static class XlsxWorkbookStyles
         return id;
     }
 
-    private static string GetStyleKey(StyleValue style)
+    internal static string GetStyleKey(StyleValue style)
     {
         return string.Concat(
             GetFontKey(style.Font), '|',
@@ -505,10 +447,3 @@ internal static class XlsxWorkbookStyles
         return !string.IsNullOrEmpty(customFormat) && LooksLikeDateFormat(customFormat!);
     }
 }
-
-
-
-
-
-
-

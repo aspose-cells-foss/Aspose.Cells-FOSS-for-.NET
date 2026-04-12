@@ -2,6 +2,9 @@ using Aspose.Cells_FOSS.Core;
 
 namespace Aspose.Cells_FOSS;
 
+/// <summary>
+/// Represents worksheet protection.
+/// </summary>
 public sealed class WorksheetProtection
 {
     private readonly WorksheetProtectionModel _model;
@@ -11,6 +14,9 @@ public sealed class WorksheetProtection
         _model = model;
     }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether protected.
+    /// </summary>
     public bool IsProtected
     {
         get
@@ -23,6 +29,9 @@ public sealed class WorksheetProtection
         }
     }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether objects.
+    /// </summary>
     public bool Objects
     {
         get
@@ -36,6 +45,9 @@ public sealed class WorksheetProtection
         }
     }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether scenarios.
+    /// </summary>
     public bool Scenarios
     {
         get
@@ -49,6 +61,9 @@ public sealed class WorksheetProtection
         }
     }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether format cells.
+    /// </summary>
     public bool FormatCells
     {
         get
@@ -62,6 +77,9 @@ public sealed class WorksheetProtection
         }
     }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether format columns.
+    /// </summary>
     public bool FormatColumns
     {
         get
@@ -75,6 +93,9 @@ public sealed class WorksheetProtection
         }
     }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether format rows.
+    /// </summary>
     public bool FormatRows
     {
         get
@@ -88,6 +109,9 @@ public sealed class WorksheetProtection
         }
     }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether insert columns.
+    /// </summary>
     public bool InsertColumns
     {
         get
@@ -101,6 +125,9 @@ public sealed class WorksheetProtection
         }
     }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether insert rows.
+    /// </summary>
     public bool InsertRows
     {
         get
@@ -114,6 +141,9 @@ public sealed class WorksheetProtection
         }
     }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether insert hyperlinks.
+    /// </summary>
     public bool InsertHyperlinks
     {
         get
@@ -127,6 +157,9 @@ public sealed class WorksheetProtection
         }
     }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether delete columns.
+    /// </summary>
     public bool DeleteColumns
     {
         get
@@ -140,6 +173,9 @@ public sealed class WorksheetProtection
         }
     }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether delete rows.
+    /// </summary>
     public bool DeleteRows
     {
         get
@@ -153,6 +189,9 @@ public sealed class WorksheetProtection
         }
     }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether select locked cells.
+    /// </summary>
     public bool SelectLockedCells
     {
         get
@@ -166,6 +205,9 @@ public sealed class WorksheetProtection
         }
     }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether sort.
+    /// </summary>
     public bool Sort
     {
         get
@@ -179,6 +221,9 @@ public sealed class WorksheetProtection
         }
     }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether auto filter.
+    /// </summary>
     public bool AutoFilter
     {
         get
@@ -192,6 +237,9 @@ public sealed class WorksheetProtection
         }
     }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether pivot tables.
+    /// </summary>
     public bool PivotTables
     {
         get
@@ -205,6 +253,9 @@ public sealed class WorksheetProtection
         }
     }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether select unlocked cells.
+    /// </summary>
     public bool SelectUnlockedCells
     {
         get

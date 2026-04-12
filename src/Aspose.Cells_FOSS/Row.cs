@@ -2,6 +2,9 @@ using Aspose.Cells_FOSS.Core;
 
 namespace Aspose.Cells_FOSS;
 
+/// <summary>
+/// Represents row.
+/// </summary>
 public sealed class Row
 {
     private readonly Worksheet _worksheet;
@@ -13,6 +16,9 @@ public sealed class Row
         _index = index;
     }
 
+    /// <summary>
+    /// Gets or sets the height.
+    /// </summary>
     public double? Height
     {
         get
@@ -33,6 +39,9 @@ public sealed class Row
         }
     }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether hidden.
+    /// </summary>
     public bool IsHidden
     {
         get

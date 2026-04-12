@@ -2,6 +2,21 @@ using Aspose.Cells_FOSS.Core;
 
 namespace Aspose.Cells_FOSS;
 
+/// <summary>
+/// Represents worksheet print and page-layout settings.
+/// </summary>
+/// <example>
+/// <code>
+/// var workbook = new Workbook();
+/// var pageSetup = workbook.Worksheets[0].PageSetup;
+///
+/// pageSetup.Orientation = PageOrientationType.Landscape;
+/// pageSetup.LeftMargin = 1.5;
+/// pageSetup.RightMargin = 1.5;
+/// pageSetup.PrintTitleRows = "$1:$1";
+/// pageSetup.AddHorizontalPageBreak(40);
+/// </code>
+/// </example>
 public sealed class PageSetup
 {
     private const double CentimetersPerInch = 2.54d;
@@ -12,6 +27,9 @@ public sealed class PageSetup
         _model = model;
     }
 
+    /// <summary>
+    /// Gets or sets the paper size.
+    /// </summary>
     public PaperSizeType PaperSize
     {
         get
@@ -24,6 +42,9 @@ public sealed class PageSetup
         }
     }
 
+    /// <summary>
+    /// Gets or sets the page orientation.
+    /// </summary>
     public PageOrientationType Orientation
     {
         get
@@ -55,6 +76,9 @@ public sealed class PageSetup
         }
     }
 
+    /// <summary>
+    /// Gets or sets the first printed page number.
+    /// </summary>
     public int? FirstPageNumber
     {
         get
@@ -72,6 +96,9 @@ public sealed class PageSetup
         }
     }
 
+    /// <summary>
+    /// Gets or sets the print scaling percentage.
+    /// </summary>
     public int? Scale
     {
         get
@@ -89,6 +116,9 @@ public sealed class PageSetup
         }
     }
 
+    /// <summary>
+    /// Gets or sets the number of pages wide to fit when printing.
+    /// </summary>
     public int? FitToPagesWide
     {
         get
@@ -106,6 +136,9 @@ public sealed class PageSetup
         }
     }
 
+    /// <summary>
+    /// Gets or sets the number of pages tall to fit when printing.
+    /// </summary>
     public int? FitToPagesTall
     {
         get
@@ -123,6 +156,9 @@ public sealed class PageSetup
         }
     }
 
+    /// <summary>
+    /// Gets or sets the print area reference.
+    /// </summary>
     public string PrintArea
     {
         get
@@ -135,6 +171,9 @@ public sealed class PageSetup
         }
     }
 
+    /// <summary>
+    /// Gets or sets the repeating title rows reference.
+    /// </summary>
     public string PrintTitleRows
     {
         get
@@ -147,6 +186,9 @@ public sealed class PageSetup
         }
     }
 
+    /// <summary>
+    /// Gets or sets the repeating title columns reference.
+    /// </summary>
     public string PrintTitleColumns
     {
         get
@@ -159,6 +201,9 @@ public sealed class PageSetup
         }
     }
 
+    /// <summary>
+    /// Gets or sets the left margin in centimeters.
+    /// </summary>
     public double LeftMargin
     {
         get
@@ -171,6 +216,9 @@ public sealed class PageSetup
         }
     }
 
+    /// <summary>
+    /// Gets or sets the right margin in centimeters.
+    /// </summary>
     public double RightMargin
     {
         get
@@ -183,6 +231,9 @@ public sealed class PageSetup
         }
     }
 
+    /// <summary>
+    /// Gets or sets the top margin in centimeters.
+    /// </summary>
     public double TopMargin
     {
         get
@@ -195,6 +246,9 @@ public sealed class PageSetup
         }
     }
 
+    /// <summary>
+    /// Gets or sets the bottom margin in centimeters.
+    /// </summary>
     public double BottomMargin
     {
         get
@@ -207,6 +261,9 @@ public sealed class PageSetup
         }
     }
 
+    /// <summary>
+    /// Gets or sets the header margin in centimeters.
+    /// </summary>
     public double HeaderMargin
     {
         get
@@ -219,6 +276,9 @@ public sealed class PageSetup
         }
     }
 
+    /// <summary>
+    /// Gets or sets the footer margin in centimeters.
+    /// </summary>
     public double FooterMargin
     {
         get
@@ -231,6 +291,9 @@ public sealed class PageSetup
         }
     }
 
+    /// <summary>
+    /// Gets or sets the left margin in inches.
+    /// </summary>
     public double LeftMarginInch
     {
         get
@@ -243,6 +306,9 @@ public sealed class PageSetup
         }
     }
 
+    /// <summary>
+    /// Gets or sets the right margin in inches.
+    /// </summary>
     public double RightMarginInch
     {
         get
@@ -255,6 +321,9 @@ public sealed class PageSetup
         }
     }
 
+    /// <summary>
+    /// Gets or sets the top margin in inches.
+    /// </summary>
     public double TopMarginInch
     {
         get
@@ -267,6 +336,9 @@ public sealed class PageSetup
         }
     }
 
+    /// <summary>
+    /// Gets or sets the bottom margin in inches.
+    /// </summary>
     public double BottomMarginInch
     {
         get
@@ -279,6 +351,9 @@ public sealed class PageSetup
         }
     }
 
+    /// <summary>
+    /// Gets or sets the header margin in inches.
+    /// </summary>
     public double HeaderMarginInch
     {
         get
@@ -291,6 +366,9 @@ public sealed class PageSetup
         }
     }
 
+    /// <summary>
+    /// Gets or sets the footer margin in inches.
+    /// </summary>
     public double FooterMarginInch
     {
         get
@@ -303,6 +381,9 @@ public sealed class PageSetup
         }
     }
 
+    /// <summary>
+    /// Gets or sets the left header text.
+    /// </summary>
     public string LeftHeader
     {
         get
@@ -315,6 +396,9 @@ public sealed class PageSetup
         }
     }
 
+    /// <summary>
+    /// Gets or sets the center header text.
+    /// </summary>
     public string CenterHeader
     {
         get
@@ -327,6 +411,9 @@ public sealed class PageSetup
         }
     }
 
+    /// <summary>
+    /// Gets or sets the right header text.
+    /// </summary>
     public string RightHeader
     {
         get
@@ -339,6 +426,9 @@ public sealed class PageSetup
         }
     }
 
+    /// <summary>
+    /// Gets or sets the left footer text.
+    /// </summary>
     public string LeftFooter
     {
         get
@@ -351,6 +441,9 @@ public sealed class PageSetup
         }
     }
 
+    /// <summary>
+    /// Gets or sets the center footer text.
+    /// </summary>
     public string CenterFooter
     {
         get
@@ -363,6 +456,9 @@ public sealed class PageSetup
         }
     }
 
+    /// <summary>
+    /// Gets or sets the right footer text.
+    /// </summary>
     public string RightFooter
     {
         get
@@ -375,6 +471,9 @@ public sealed class PageSetup
         }
     }
 
+    /// <summary>
+    /// Gets or sets whether gridlines are printed.
+    /// </summary>
     public bool PrintGridlines
     {
         get
@@ -387,6 +486,9 @@ public sealed class PageSetup
         }
     }
 
+    /// <summary>
+    /// Gets or sets whether row and column headings are printed.
+    /// </summary>
     public bool PrintHeadings
     {
         get
@@ -399,6 +501,9 @@ public sealed class PageSetup
         }
     }
 
+    /// <summary>
+    /// Gets or sets whether content is centered horizontally on the page.
+    /// </summary>
     public bool CenterHorizontally
     {
         get
@@ -411,6 +516,9 @@ public sealed class PageSetup
         }
     }
 
+    /// <summary>
+    /// Gets or sets whether content is centered vertically on the page.
+    /// </summary>
     public bool CenterVertically
     {
         get
@@ -423,6 +531,9 @@ public sealed class PageSetup
         }
     }
 
+    /// <summary>
+    /// Gets the horizontal page breaks as sorted zero-based row indexes.
+    /// </summary>
     public IReadOnlyList<int> HorizontalPageBreaks
     {
         get
@@ -431,6 +542,9 @@ public sealed class PageSetup
         }
     }
 
+    /// <summary>
+    /// Gets the vertical page breaks as sorted zero-based column indexes.
+    /// </summary>
     public IReadOnlyList<int> VerticalPageBreaks
     {
         get
@@ -439,6 +553,9 @@ public sealed class PageSetup
         }
     }
 
+    /// <summary>
+    /// Adds a horizontal page break at the specified zero-based row index.
+    /// </summary>
     public void AddHorizontalPageBreak(int rowIndex)
     {
         if (rowIndex < 0)
@@ -449,6 +566,9 @@ public sealed class PageSetup
         AddDistinct(_model.HorizontalPageBreaks, rowIndex);
     }
 
+    /// <summary>
+    /// Adds a vertical page break at the specified zero-based column index.
+    /// </summary>
     public void AddVerticalPageBreak(int columnIndex)
     {
         if (columnIndex < 0)
@@ -459,11 +579,17 @@ public sealed class PageSetup
         AddDistinct(_model.VerticalPageBreaks, columnIndex);
     }
 
+    /// <summary>
+    /// Removes all horizontal page breaks.
+    /// </summary>
     public void ClearHorizontalPageBreaks()
     {
         _model.HorizontalPageBreaks.Clear();
     }
 
+    /// <summary>
+    /// Removes all vertical page breaks.
+    /// </summary>
     public void ClearVerticalPageBreaks()
     {
         _model.VerticalPageBreaks.Clear();
@@ -514,5 +640,3 @@ public sealed class PageSetup
         return value!.Trim();
     }
 }
-
-

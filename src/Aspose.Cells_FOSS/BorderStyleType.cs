@@ -1,5 +1,8 @@
 namespace Aspose.Cells_FOSS;
 
+/// <summary>
+/// Specifies border style type.
+/// </summary>
 public enum BorderStyleType
 {
     None,

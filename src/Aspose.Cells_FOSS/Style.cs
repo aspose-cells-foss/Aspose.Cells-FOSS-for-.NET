@@ -2,25 +2,74 @@ using Aspose.Cells_FOSS.Core;
 
 namespace Aspose.Cells_FOSS;
 
+/// <summary>
+/// Represents a mutable cell style facade that can be applied to one or more cells.
+/// </summary>
+/// <example>
+/// <code>
+/// var workbook = new Workbook();
+/// var cell = workbook.Worksheets[0].Cells["C3"];
+///
+/// var style = cell.GetStyle();
+/// style.Font.Bold = true;
+/// style.NumberFormat = "$#,##0.00";
+/// style.HorizontalAlignment = HorizontalAlignmentType.Center;
+/// cell.SetStyle(style);
+/// </code>
+/// </example>
 public class Style
 {
     private int _indentLevel;
     private int _textRotation;
     private int _readingOrder;
 
+    /// <summary>
+    /// Initializes a new style with default font and border objects.
+    /// </summary>
     public Style()
     {
         Font = new Font();
         Borders = new Borders();
     }
 
+    /// <summary>
+    /// Gets or sets the font settings.
+    /// </summary>
     public Font Font { get; set; }
+
+    /// <summary>
+    /// Gets or sets border settings.
+    /// </summary>
     public Borders Borders { get; set; }
+
+    /// <summary>
+    /// Gets or sets the fill pattern.
+    /// </summary>
     public FillPattern Pattern { get; set; }
+
+    /// <summary>
+    /// Gets or sets the fill foreground color.
+    /// </summary>
     public Color ForegroundColor { get; set; } = Color.Empty;
+
+    /// <summary>
+    /// Gets or sets the fill background color.
+    /// </summary>
     public Color BackgroundColor { get; set; } = Color.Empty;
+
+    /// <summary>
+    /// Gets or sets the numeric format identifier.
+    /// </summary>
     public int Number { get; set; }
+
+    /// <summary>
+    /// Gets or sets the custom number format code.
+    /// </summary>
     public string? Custom { get; set; }
+
+    /// <summary>
+    /// Gets or sets the resolved number format string.
+    /// </summary>
     public string NumberFormat
     {
         get
@@ -41,9 +90,25 @@ public class Style
             Custom = string.IsNullOrWhiteSpace(value) ? null : value.Trim();
         }
     }
+
+    /// <summary>
+    /// Gets or sets the horizontal alignment.
+    /// </summary>
     public HorizontalAlignmentType HorizontalAlignment { get; set; }
+
+    /// <summary>
+    /// Gets or sets the vertical alignment.
+    /// </summary>
     public VerticalAlignmentType VerticalAlignment { get; set; } = VerticalAlignmentType.Bottom;
+
+    /// <summary>
+    /// Gets or sets whether text wraps within the cell.
+    /// </summary>
     public bool WrapText { get; set; }
+
+    /// <summary>
+    /// Gets or sets the indentation level.
+    /// </summary>
     public int IndentLevel
     {
         get
@@ -60,6 +125,10 @@ public class Style
             _indentLevel = value;
         }
     }
+
+    /// <summary>
+    /// Gets or sets the text rotation.
+    /// </summary>
     public int TextRotation
     {
         get
@@ -76,7 +145,15 @@ public class Style
             _textRotation = value;
         }
     }
+
+    /// <summary>
+    /// Gets or sets whether the cell content shrinks to fit.
+    /// </summary>
     public bool ShrinkToFit { get; set; }
+
+    /// <summary>
+    /// Gets or sets the reading order.
+    /// </summary>
     public int ReadingOrder
     {
         get
@@ -93,10 +170,25 @@ public class Style
             _readingOrder = value;
         }
     }
+
+    /// <summary>
+    /// Gets or sets the relative indent.
+    /// </summary>
     public int RelativeIndent { get; set; }
+
+    /// <summary>
+    /// Gets or sets whether the cell is locked when worksheet protection is enabled.
+    /// </summary>
     public bool IsLocked { get; set; } = true;
+
+    /// <summary>
+    /// Gets or sets whether the cell formula is hidden when worksheet protection is enabled.
+    /// </summary>
     public bool IsHidden { get; set; }
 
+    /// <summary>
+    /// Creates a copy of the current style.
+    /// </summary>
     public Style Clone()
     {
         return new Style

@@ -3,6 +3,9 @@ using Aspose.Cells_FOSS.Core;
 
 namespace Aspose.Cells_FOSS;
 
+/// <summary>
+/// Represents hyperlink.
+/// </summary>
 public sealed class Hyperlink
 {
     private readonly IList<HyperlinkModel> _owner;
@@ -14,6 +17,9 @@ public sealed class Hyperlink
         _model = model;
     }
 
+    /// <summary>
+    /// Gets the area.
+    /// </summary>
     public string Area
     {
         get
@@ -29,6 +35,9 @@ public sealed class Hyperlink
         }
     }
 
+    /// <summary>
+    /// Gets or sets the address.
+    /// </summary>
     public string Address
     {
         get
@@ -47,6 +56,9 @@ public sealed class Hyperlink
         }
     }
 
+    /// <summary>
+    /// Gets the link type.
+    /// </summary>
     public TargetModeType LinkType
     {
         get
@@ -76,6 +88,9 @@ public sealed class Hyperlink
         }
     }
 
+    /// <summary>
+    /// Gets or sets the screen tip.
+    /// </summary>
     public string ScreenTip
     {
         get
@@ -88,6 +103,9 @@ public sealed class Hyperlink
         }
     }
 
+    /// <summary>
+    /// Gets or sets the text to display.
+    /// </summary>
     public string TextToDisplay
     {
         get
@@ -100,6 +118,9 @@ public sealed class Hyperlink
         }
     }
 
+    /// <summary>
+    /// Performs delete.
+    /// </summary>
     public void Delete()
     {
         _owner.Remove(_model);

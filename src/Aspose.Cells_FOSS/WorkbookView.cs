@@ -1,7 +1,10 @@
-﻿using Aspose.Cells_FOSS.Core;
+using Aspose.Cells_FOSS.Core;
 
 namespace Aspose.Cells_FOSS;
 
+/// <summary>
+/// Represents workbook view.
+/// </summary>
 public sealed class WorkbookView
 {
     private readonly WorkbookModel _workbookModel;
@@ -13,6 +16,9 @@ public sealed class WorkbookView
         _model = workbookModel.Properties.View;
     }
 
+    /// <summary>
+    /// Gets or sets the x window.
+    /// </summary>
     public int XWindow
     {
         get
@@ -25,6 +31,9 @@ public sealed class WorkbookView
         }
     }
 
+    /// <summary>
+    /// Gets or sets the y window.
+    /// </summary>
     public int YWindow
     {
         get
@@ -37,6 +46,9 @@ public sealed class WorkbookView
         }
     }
 
+    /// <summary>
+    /// Gets or sets the window width.
+    /// </summary>
     public int WindowWidth
     {
         get
@@ -54,6 +66,9 @@ public sealed class WorkbookView
         }
     }
 
+    /// <summary>
+    /// Gets or sets the window height.
+    /// </summary>
     public int WindowHeight
     {
         get
@@ -71,6 +86,9 @@ public sealed class WorkbookView
         }
     }
 
+    /// <summary>
+    /// Gets or sets the active tab.
+    /// </summary>
     public int ActiveTab
     {
         get
@@ -88,6 +106,9 @@ public sealed class WorkbookView
         }
     }
 
+    /// <summary>
+    /// Gets or sets the first sheet.
+    /// </summary>
     public int FirstSheet
     {
         get
@@ -105,6 +126,9 @@ public sealed class WorkbookView
         }
     }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether show horizontal scroll.
+    /// </summary>
     public bool ShowHorizontalScroll
     {
         get
@@ -117,6 +141,9 @@ public sealed class WorkbookView
         }
     }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether show vertical scroll.
+    /// </summary>
     public bool ShowVerticalScroll
     {
         get
@@ -129,6 +156,9 @@ public sealed class WorkbookView
         }
     }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether show sheet tabs.
+    /// </summary>
     public bool ShowSheetTabs
     {
         get
@@ -141,6 +171,9 @@ public sealed class WorkbookView
         }
     }
 
+    /// <summary>
+    /// Gets or sets the tab ratio.
+    /// </summary>
     public int TabRatio
     {
         get
@@ -158,6 +191,9 @@ public sealed class WorkbookView
         }
     }
 
+    /// <summary>
+    /// Gets or sets the visibility.
+    /// </summary>
     public string Visibility
     {
         get
@@ -170,6 +206,9 @@ public sealed class WorkbookView
         }
     }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether minimized.
+    /// </summary>
     public bool Minimized
     {
         get
@@ -182,6 +221,9 @@ public sealed class WorkbookView
         }
     }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether auto filter date grouping.
+    /// </summary>
     public bool AutoFilterDateGrouping
     {
         get

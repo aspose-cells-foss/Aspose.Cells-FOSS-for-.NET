@@ -44,7 +44,7 @@ internal static class XlsxWorkbookAutoFilter
         return element;
     }
 
-    internal static void LoadAutoFilter(WorksheetModel worksheetModel, XElement worksheetRoot, XlsxWorkbookStyles.StylesheetLoadContext stylesheet, LoadDiagnostics diagnostics, LoadOptions options, string sheetName)
+    internal static void LoadAutoFilter(WorksheetModel worksheetModel, XElement worksheetRoot, StylesheetLoadContext stylesheet, LoadDiagnostics diagnostics, LoadOptions options, string sheetName)
     {
         worksheetModel.AutoFilter.Clear();
         var autoFilterElement = worksheetRoot.Element(MainNs + "autoFilter");
@@ -360,7 +360,7 @@ internal static class XlsxWorkbookAutoFilter
         return ordered;
     }
 
-    private static FilterColumnModel? LoadFilterColumn(XElement filterColumnElement, XlsxWorkbookStyles.StylesheetLoadContext stylesheet, LoadDiagnostics diagnostics, LoadOptions options, string sheetName, string autoFilterRange)
+    private static FilterColumnModel? LoadFilterColumn(XElement filterColumnElement, StylesheetLoadContext stylesheet, LoadDiagnostics diagnostics, LoadOptions options, string sheetName, string autoFilterRange)
     {
         var columnIndex = ParseIntAttribute(filterColumnElement.Attribute("colId"));
         if (!columnIndex.HasValue || columnIndex.Value < 0)
@@ -540,7 +540,7 @@ internal static class XlsxWorkbookAutoFilter
         }
     }
 
-    private static void LoadColorFilter(AutoFilterColorFilterModel model, XElement? colorFilterElement, XlsxWorkbookStyles.StylesheetLoadContext stylesheet, LoadDiagnostics diagnostics, LoadOptions options, string sheetName, string autoFilterRange)
+    private static void LoadColorFilter(AutoFilterColorFilterModel model, XElement? colorFilterElement, StylesheetLoadContext stylesheet, LoadDiagnostics diagnostics, LoadOptions options, string sheetName, string autoFilterRange)
     {
         model.Clear();
         if (colorFilterElement is null)
@@ -655,7 +655,7 @@ internal static class XlsxWorkbookAutoFilter
         model.FilterValue = ParseOptionalDouble(top10Element.Attribute("filterVal"), diagnostics, options, sheetName, autoFilterRange, "top10 filter value");
     }
 
-    private static void LoadSortState(AutoFilterSortStateModel model, XElement sortStateElement, XlsxWorkbookStyles.StylesheetLoadContext stylesheet, LoadDiagnostics diagnostics, LoadOptions options, string sheetName, string autoFilterRange)
+    private static void LoadSortState(AutoFilterSortStateModel model, XElement sortStateElement, StylesheetLoadContext stylesheet, LoadDiagnostics diagnostics, LoadOptions options, string sheetName, string autoFilterRange)
     {
         model.Clear();
         var reference = (string?)sortStateElement.Attribute("ref");

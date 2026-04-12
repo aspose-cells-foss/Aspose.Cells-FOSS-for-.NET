@@ -12,13 +12,6 @@ internal static class XlsxWorkbookPageSetup
     private const int MaxSpreadsheetRow = 1048575;
     private const int MaxSpreadsheetColumn = 16383;
 
-    internal sealed class WorksheetDefinedNamesState
-    {
-        public string? PrintArea { get; set; }
-        public string? PrintTitleRows { get; set; }
-        public string? PrintTitleColumns { get; set; }
-    }
-
     internal static XElement? BuildPageSetupDefinedNames(WorkbookModel model)
     {
         var definedNames = new List<XElement>();
@@ -889,11 +882,3 @@ internal static class XlsxWorkbookPageSetup
         return PageOrientation.Default;
     }
 }
-
-
-
-
-
-
-
-

@@ -1,5 +1,8 @@
-﻿namespace Aspose.Cells_FOSS;
+namespace Aspose.Cells_FOSS;
 
+/// <summary>
+/// Specifies format condition type.
+/// </summary>
 public enum FormatConditionType
 {
     CellValue,

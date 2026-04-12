@@ -1,7 +1,10 @@
-﻿using Aspose.Cells_FOSS.Core;
+using Aspose.Cells_FOSS.Core;
 
 namespace Aspose.Cells_FOSS;
 
+/// <summary>
+/// Represents format condition.
+/// </summary>
 public sealed class FormatCondition
 {
     private readonly List<ConditionalFormattingModel> _owner;
@@ -15,6 +18,9 @@ public sealed class FormatCondition
         _model = model;
     }
 
+    /// <summary>
+    /// Gets or sets the type.
+    /// </summary>
     public FormatConditionType Type
     {
         get
@@ -27,6 +33,9 @@ public sealed class FormatCondition
         }
     }
 
+    /// <summary>
+    /// Gets or sets the operator.
+    /// </summary>
     public OperatorType Operator
     {
         get
@@ -39,6 +48,9 @@ public sealed class FormatCondition
         }
     }
 
+    /// <summary>
+    /// Gets or sets the formula1.
+    /// </summary>
     public string Formula1
     {
         get
@@ -51,6 +63,9 @@ public sealed class FormatCondition
         }
     }
 
+    /// <summary>
+    /// Gets or sets the formula2.
+    /// </summary>
     public string Formula2
     {
         get
@@ -63,6 +78,9 @@ public sealed class FormatCondition
         }
     }
 
+    /// <summary>
+    /// Gets or sets the formula.
+    /// </summary>
     public string Formula
     {
         get
@@ -75,6 +93,9 @@ public sealed class FormatCondition
         }
     }
 
+    /// <summary>
+    /// Gets or sets the time period.
+    /// </summary>
     public string TimePeriod
     {
         get
@@ -87,6 +108,9 @@ public sealed class FormatCondition
         }
     }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether duplicate.
+    /// </summary>
     public bool Duplicate
     {
         get
@@ -99,6 +123,9 @@ public sealed class FormatCondition
         }
     }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether top.
+    /// </summary>
     public bool Top
     {
         get
@@ -111,6 +138,9 @@ public sealed class FormatCondition
         }
     }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether percent.
+    /// </summary>
     public bool Percent
     {
         get
@@ -123,6 +153,9 @@ public sealed class FormatCondition
         }
     }
 
+    /// <summary>
+    /// Gets or sets the rank.
+    /// </summary>
     public int Rank
     {
         get
@@ -140,6 +173,9 @@ public sealed class FormatCondition
         }
     }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether above.
+    /// </summary>
     public bool Above
     {
         get
@@ -152,6 +188,9 @@ public sealed class FormatCondition
         }
     }
 
+    /// <summary>
+    /// Gets or sets the standard deviation.
+    /// </summary>
     public int StandardDeviation
     {
         get
@@ -169,6 +208,9 @@ public sealed class FormatCondition
         }
     }
 
+    /// <summary>
+    /// Gets or sets the color scale count.
+    /// </summary>
     public int ColorScaleCount
     {
         get
@@ -186,6 +228,9 @@ public sealed class FormatCondition
         }
     }
 
+    /// <summary>
+    /// Gets or sets the min color.
+    /// </summary>
     public Color MinColor
     {
         get
@@ -198,6 +243,9 @@ public sealed class FormatCondition
         }
     }
 
+    /// <summary>
+    /// Gets or sets the mid color.
+    /// </summary>
     public Color MidColor
     {
         get
@@ -210,6 +258,9 @@ public sealed class FormatCondition
         }
     }
 
+    /// <summary>
+    /// Gets or sets the max color.
+    /// </summary>
     public Color MaxColor
     {
         get
@@ -222,6 +273,9 @@ public sealed class FormatCondition
         }
     }
 
+    /// <summary>
+    /// Gets or sets the bar color.
+    /// </summary>
     public Color BarColor
     {
         get
@@ -234,6 +288,9 @@ public sealed class FormatCondition
         }
     }
 
+    /// <summary>
+    /// Gets or sets the negative bar color.
+    /// </summary>
     public Color NegativeBarColor
     {
         get
@@ -246,6 +303,9 @@ public sealed class FormatCondition
         }
     }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether show border.
+    /// </summary>
     public bool ShowBorder
     {
         get
@@ -258,6 +318,9 @@ public sealed class FormatCondition
         }
     }
 
+    /// <summary>
+    /// Gets or sets the direction.
+    /// </summary>
     public string Direction
     {
         get
@@ -270,6 +333,9 @@ public sealed class FormatCondition
         }
     }
 
+    /// <summary>
+    /// Gets or sets the bar length.
+    /// </summary>
     public string BarLength
     {
         get
@@ -282,6 +348,9 @@ public sealed class FormatCondition
         }
     }
 
+    /// <summary>
+    /// Gets or sets the icon set type.
+    /// </summary>
     public string IconSetType
     {
         get
@@ -294,6 +363,9 @@ public sealed class FormatCondition
         }
     }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether reverse icons.
+    /// </summary>
     public bool ReverseIcons
     {
         get
@@ -306,6 +378,9 @@ public sealed class FormatCondition
         }
     }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether show icon only.
+    /// </summary>
     public bool ShowIconOnly
     {
         get
@@ -318,6 +393,9 @@ public sealed class FormatCondition
         }
     }
 
+    /// <summary>
+    /// Gets or sets the priority.
+    /// </summary>
     public int Priority
     {
         get
@@ -335,6 +413,9 @@ public sealed class FormatCondition
         }
     }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether stop if true.
+    /// </summary>
     public bool StopIfTrue
     {
         get
@@ -347,6 +428,9 @@ public sealed class FormatCondition
         }
     }
 
+    /// <summary>
+    /// Gets or sets the style.
+    /// </summary>
     public Style Style
     {
         get
@@ -359,6 +443,9 @@ public sealed class FormatCondition
         }
     }
 
+    /// <summary>
+    /// Removes the specified item.
+    /// </summary>
     public void Remove()
     {
         FormatConditionCollection.RemoveCondition(_owner, _collection, _model);

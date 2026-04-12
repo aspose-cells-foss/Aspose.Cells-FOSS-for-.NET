@@ -1,7 +1,10 @@
-﻿using Aspose.Cells_FOSS.Core;
+using Aspose.Cells_FOSS.Core;
 
 namespace Aspose.Cells_FOSS;
 
+/// <summary>
+/// Represents workbook properties.
+/// </summary>
 public sealed class WorkbookProperties
 {
     private readonly WorkbookModel _workbookModel;
@@ -19,6 +22,9 @@ public sealed class WorkbookProperties
         _calculation = new CalculationProperties(_model.Calculation);
     }
 
+    /// <summary>
+    /// Gets or sets the code name.
+    /// </summary>
     public string CodeName
     {
         get
@@ -31,6 +37,9 @@ public sealed class WorkbookProperties
         }
     }
 
+    /// <summary>
+    /// Gets or sets the show objects.
+    /// </summary>
     public string ShowObjects
     {
         get
@@ -43,6 +52,9 @@ public sealed class WorkbookProperties
         }
     }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether filter privacy.
+    /// </summary>
     public bool FilterPrivacy
     {
         get
@@ -55,6 +67,9 @@ public sealed class WorkbookProperties
         }
     }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether show border unselected tables.
+    /// </summary>
     public bool ShowBorderUnselectedTables
     {
         get
@@ -67,6 +82,9 @@ public sealed class WorkbookProperties
         }
     }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether show ink annotation.
+    /// </summary>
     public bool ShowInkAnnotation
     {
         get
@@ -79,6 +97,9 @@ public sealed class WorkbookProperties
         }
     }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether backup file.
+    /// </summary>
     public bool BackupFile
     {
         get
@@ -91,6 +112,9 @@ public sealed class WorkbookProperties
         }
     }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether save external link values.
+    /// </summary>
     public bool SaveExternalLinkValues
     {
         get
@@ -103,6 +127,9 @@ public sealed class WorkbookProperties
         }
     }
 
+    /// <summary>
+    /// Gets or sets the update links.
+    /// </summary>
     public string UpdateLinks
     {
         get
@@ -115,6 +142,9 @@ public sealed class WorkbookProperties
         }
     }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether hide pivot field list.
+    /// </summary>
     public bool HidePivotFieldList
     {
         get
@@ -127,6 +157,9 @@ public sealed class WorkbookProperties
         }
     }
 
+    /// <summary>
+    /// Gets or sets the default theme version.
+    /// </summary>
     public int? DefaultThemeVersion
     {
         get
@@ -144,6 +177,9 @@ public sealed class WorkbookProperties
         }
     }
 
+    /// <summary>
+    /// Gets the protection.
+    /// </summary>
     public WorkbookProtection Protection
     {
         get
@@ -152,6 +188,9 @@ public sealed class WorkbookProperties
         }
     }
 
+    /// <summary>
+    /// Gets the view.
+    /// </summary>
     public WorkbookView View
     {
         get
@@ -160,6 +199,9 @@ public sealed class WorkbookProperties
         }
     }
 
+    /// <summary>
+    /// Gets the calculation.
+    /// </summary>
     public CalculationProperties Calculation
     {
         get

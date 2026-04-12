@@ -92,6 +92,8 @@ internal static class XlsxWorkbookArchiveHelpers
         var sharedStringsUri = FindRelationshipTarget(workbookRelationships, "/xl/sharedStrings.xml");
         if (string.IsNullOrEmpty(sharedStringsUri))
         {
+            // Recovery-friendly loading first tries the conventional path, then falls
+            // back to relationship-type discovery when metadata is incomplete.
             if (workbookRelationships.Count == 0)
             {
                 sharedStringsUri = "/xl/sharedStrings.xml";
@@ -165,6 +167,8 @@ internal static class XlsxWorkbookArchiveHelpers
                 continue;
             }
 
+            // Custom formats need heuristic detection because SpreadsheetML only gives
+            // the format code and does not flag 'this is a date style' explicitly.
             if (customFormats.TryGetValue(numFmtId.Value, out var formatCode) && LooksLikeDateFormat(formatCode))
             {
                 dateStyleIndexes.Add(index);
@@ -289,6 +293,8 @@ internal static class XlsxWorkbookArchiveHelpers
             return worksheetUri;
         }
 
+        // The worksheet part naming convention is a safe fallback when the workbook
+        // metadata is incomplete but the package still contains the expected part.
         var fallbackUri = $"/xl/worksheets/sheet{sheetIndex + 1}.xml";
         if (GetEntry(archive, fallbackUri) is not null)
         {
@@ -356,6 +362,8 @@ internal static class XlsxWorkbookArchiveHelpers
         var inQuote = false;
         var inBracket = false;
 
+        // Strip quoted literals, escapes, and most bracket directives so detection
+        // focuses on the actual date/time placeholders that affect interpretation.
         for (var index = 0; index < formatCode.Length; index++)
         {
             var character = formatCode[index];

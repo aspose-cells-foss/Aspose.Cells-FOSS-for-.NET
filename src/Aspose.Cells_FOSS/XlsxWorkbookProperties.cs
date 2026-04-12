@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+using System.Globalization;
 using System.Xml.Linq;
 using Aspose.Cells_FOSS.Core;
 using static Aspose.Cells_FOSS.XlsxWorkbookArchiveHelpers;

@@ -1,8 +1,11 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Aspose.Cells_FOSS.Core;
 
 namespace Aspose.Cells_FOSS;
 
+/// <summary>
+/// Represents a collection of format condition objects.
+/// </summary>
 public sealed class FormatConditionCollection
 {
     private readonly List<ConditionalFormattingModel> _owner;
@@ -14,6 +17,9 @@ public sealed class FormatConditionCollection
         _model = model;
     }
 
+    /// <summary>
+    /// Gets the number of items.
+    /// </summary>
     public int Count
     {
         get
@@ -22,6 +28,9 @@ public sealed class FormatConditionCollection
         }
     }
 
+    /// <summary>
+    /// Gets the range count.
+    /// </summary>
     public int RangeCount
     {
         get
@@ -30,6 +39,9 @@ public sealed class FormatConditionCollection
         }
     }
 
+    /// <summary>
+    /// Gets the element at the specified zero-based index.
+    /// </summary>
     public FormatCondition this[int index]
     {
         get
@@ -43,17 +55,39 @@ public sealed class FormatConditionCollection
         }
     }
 
+    /// <summary>
+    /// Adds the specified item.
+    /// </summary>
+    /// <param name="area">The area.</param>
+    /// <param name="type">The type.</param>
+    /// <param name="operatorType">The operator type.</param>
+    /// <param name="formula1">The formula1.</param>
+    /// <param name="formula2">The formula2.</param>
+    /// <returns>The zero-based index of the added item.</returns>
     public int Add(CellArea area, FormatConditionType type, OperatorType operatorType, string formula1, string formula2)
     {
         AddArea(area);
         return AddCondition(type, operatorType, formula1, formula2);
     }
 
+    /// <summary>
+    /// Adds the specified item.
+    /// </summary>
+    /// <param name="type">The type.</param>
+    /// <returns>The zero-based index of the added item.</returns>
     public int AddCondition(FormatConditionType type)
     {
         return AddCondition(type, OperatorType.None, string.Empty, string.Empty);
     }
 
+    /// <summary>
+    /// Adds the specified item.
+    /// </summary>
+    /// <param name="type">The type.</param>
+    /// <param name="operatorType">The operator type.</param>
+    /// <param name="formula1">The formula1.</param>
+    /// <param name="formula2">The formula2.</param>
+    /// <returns>The zero-based index of the added item.</returns>
     public int AddCondition(FormatConditionType type, OperatorType operatorType, string formula1, string formula2)
     {
         var condition = new FormatConditionModel
@@ -70,6 +104,10 @@ public sealed class FormatConditionCollection
         return _model.Conditions.Count - 1;
     }
 
+    /// <summary>
+    /// Adds the specified item.
+    /// </summary>
+    /// <param name="area">The area.</param>
     public void AddArea(CellArea area)
     {
         ValidateArea(area);
@@ -77,6 +115,11 @@ public sealed class FormatConditionCollection
         SortAreas(_model.Areas);
     }
 
+    /// <summary>
+    /// Gets the cell area.
+    /// </summary>
+    /// <param name="index">The zero-based index.</param>
+    /// <returns>The cell area.</returns>
     public CellArea GetCellArea(int index)
     {
         if (index < 0 || index >= _model.Areas.Count)
@@ -87,6 +130,10 @@ public sealed class FormatConditionCollection
         return _model.Areas[index];
     }
 
+    /// <summary>
+    /// Removes the specified item.
+    /// </summary>
+    /// <param name="index">The zero-based index.</param>
     public void RemoveArea(int index)
     {
         if (index < 0 || index >= _model.Areas.Count)
@@ -98,6 +145,13 @@ public sealed class FormatConditionCollection
         RemoveCollectionIfEmpty(_owner, _model);
     }
 
+    /// <summary>
+    /// Removes the specified item.
+    /// </summary>
+    /// <param name="startRow">The start row.</param>
+    /// <param name="startColumn">The start column.</param>
+    /// <param name="totalRows">The total number of rows.</param>
+    /// <param name="totalColumns">The total number of columns.</param>
     public void RemoveArea(int startRow, int startColumn, int totalRows, int totalColumns)
     {
         RemoveArea(new CellArea(startRow, startColumn, totalRows, totalColumns));
@@ -110,6 +164,10 @@ public sealed class FormatConditionCollection
         RemoveCollectionIfEmpty(_owner, _model);
     }
 
+    /// <summary>
+    /// Removes the specified item.
+    /// </summary>
+    /// <param name="index">The zero-based index.</param>
     public void RemoveCondition(int index)
     {
         if (index < 0 || index >= _model.Conditions.Count)

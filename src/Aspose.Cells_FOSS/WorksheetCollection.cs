@@ -1,9 +1,20 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using Aspose.Cells_FOSS.Core;
 
 namespace Aspose.Cells_FOSS;
 
+/// <summary>
+/// Encapsulates the workbook's worksheets and active-sheet state.
+/// </summary>
+/// <example>
+/// <code>
+/// var workbook = new Workbook();
+/// int summaryIndex = workbook.Worksheets.Add("Summary");
+/// workbook.Worksheets[summaryIndex].Cells["A1"].PutValue("Ready");
+/// workbook.Worksheets.ActiveSheetName = "Summary";
+/// </code>
+/// </example>
 public class WorksheetCollection : IEnumerable<Worksheet>
 {
     private readonly Workbook _workbook;
@@ -13,6 +24,9 @@ public class WorksheetCollection : IEnumerable<Worksheet>
         _workbook = workbook;
     }
 
+    /// <summary>
+    /// Gets the worksheet at the specified zero-based index.
+    /// </summary>
     public Worksheet this[int index]
     {
         get
@@ -21,6 +35,9 @@ public class WorksheetCollection : IEnumerable<Worksheet>
         }
     }
 
+    /// <summary>
+    /// Gets the worksheet with the specified name using case-insensitive lookup.
+    /// </summary>
     public Worksheet this[string name]
     {
         get
@@ -35,6 +52,9 @@ public class WorksheetCollection : IEnumerable<Worksheet>
         }
     }
 
+    /// <summary>
+    /// Gets the total number of worksheets in the workbook.
+    /// </summary>
     public int Count
     {
         get
@@ -43,6 +63,9 @@ public class WorksheetCollection : IEnumerable<Worksheet>
         }
     }
 
+    /// <summary>
+    /// Gets or sets the zero-based index of the active worksheet.
+    /// </summary>
     public int ActiveSheetIndex
     {
         get
@@ -60,6 +83,9 @@ public class WorksheetCollection : IEnumerable<Worksheet>
         }
     }
 
+    /// <summary>
+    /// Gets or sets the name of the active worksheet.
+    /// </summary>
     public string ActiveSheetName
     {
         get
@@ -78,11 +104,17 @@ public class WorksheetCollection : IEnumerable<Worksheet>
         }
     }
 
+    /// <summary>
+    /// Adds a worksheet using the next generated default name.
+    /// </summary>
     public int Add()
     {
         return Add(GenerateDefaultSheetName());
     }
 
+    /// <summary>
+    /// Adds a worksheet with the specified name and returns its index.
+    /// </summary>
     public int Add(string sheetName)
     {
         if (string.IsNullOrWhiteSpace(sheetName)) throw new CellsException("Worksheet name must be non-empty.");
@@ -91,6 +123,9 @@ public class WorksheetCollection : IEnumerable<Worksheet>
         return _workbook.Model.Worksheets.Count - 1;
     }
 
+    /// <summary>
+    /// Removes the worksheet with the specified name.
+    /// </summary>
     public void RemoveAt(string sheetName)
     {
         var index = IndexOf(sheetName);
@@ -102,6 +137,9 @@ public class WorksheetCollection : IEnumerable<Worksheet>
         RemoveAt(index);
     }
 
+    /// <summary>
+    /// Removes the worksheet at the specified zero-based index.
+    /// </summary>
     public void RemoveAt(int index)
     {
         if (_workbook.Model.Worksheets.Count == 1)
@@ -133,6 +171,9 @@ public class WorksheetCollection : IEnumerable<Worksheet>
         }
     }
 
+    /// <summary>
+    /// Returns an enumerator that iterates through worksheets in workbook order.
+    /// </summary>
     public IEnumerator<Worksheet> GetEnumerator()
     {
         var worksheets = new List<Worksheet>(_workbook.Model.Worksheets.Count);
@@ -184,4 +225,3 @@ public class WorksheetCollection : IEnumerable<Worksheet>
         return new Worksheet(_workbook, worksheet);
     }
 }
-

@@ -1,4 +1,4 @@
-﻿using System.IO.Compression;
+using System.IO.Compression;
 using System.Xml.Linq;
 using Aspose.Cells_FOSS.Core;
 using static Aspose.Cells_FOSS.XlsxWorkbookArchiveHelpers;

@@ -1,9 +1,15 @@
-﻿using System;
+using System;
 
 namespace Aspose.Cells_FOSS.Core;
 
+/// <summary>
+/// Represents workbook properties model.
+/// </summary>
 public sealed class WorkbookPropertiesModel
 {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="WorkbookPropertiesModel"/> class.
+    /// </summary>
     public WorkbookPropertiesModel()
     {
         Protection = new WorkbookProtectionModel();
@@ -11,20 +17,63 @@ public sealed class WorkbookPropertiesModel
         Calculation = new CalculationPropertiesModel();
     }
 
+    /// <summary>
+    /// Gets or sets the code name.
+    /// </summary>
     public string CodeName { get; set; } = string.Empty;
+    /// <summary>
+    /// Gets or sets the show objects.
+    /// </summary>
     public string ShowObjects { get; set; } = string.Empty;
+    /// <summary>
+    /// Gets or sets a value indicating whether filter privacy.
+    /// </summary>
     public bool FilterPrivacy { get; set; }
+    /// <summary>
+    /// Gets or sets a value indicating whether show border unselected tables.
+    /// </summary>
     public bool ShowBorderUnselectedTables { get; set; } = true;
+    /// <summary>
+    /// Gets or sets a value indicating whether show ink annotation.
+    /// </summary>
     public bool ShowInkAnnotation { get; set; } = true;
+    /// <summary>
+    /// Gets or sets a value indicating whether backup file.
+    /// </summary>
     public bool BackupFile { get; set; }
+    /// <summary>
+    /// Gets or sets a value indicating whether save external link values.
+    /// </summary>
     public bool SaveExternalLinkValues { get; set; } = true;
+    /// <summary>
+    /// Gets or sets the update links.
+    /// </summary>
     public string UpdateLinks { get; set; } = string.Empty;
+    /// <summary>
+    /// Gets or sets a value indicating whether hide pivot field list.
+    /// </summary>
     public bool HidePivotFieldList { get; set; }
+    /// <summary>
+    /// Gets or sets the default theme version.
+    /// </summary>
     public int? DefaultThemeVersion { get; set; }
+    /// <summary>
+    /// Gets the protection.
+    /// </summary>
     public WorkbookProtectionModel Protection { get; }
+    /// <summary>
+    /// Gets the view.
+    /// </summary>
     public WorkbookViewModel View { get; }
+    /// <summary>
+    /// Gets the calculation.
+    /// </summary>
     public CalculationPropertiesModel Calculation { get; }
 
+    /// <summary>
+    /// Copies values from the specified source.
+    /// </summary>
+    /// <param name="source">The source.</param>
     public void CopyFrom(WorkbookPropertiesModel source)
     {
         CodeName = source.CodeName;
@@ -42,6 +91,10 @@ public sealed class WorkbookPropertiesModel
         Calculation.CopyFrom(source.Calculation);
     }
 
+    /// <summary>
+    /// Performs has workbook properties state.
+    /// </summary>
+    /// <returns><see langword="true"/> if the condition is met; otherwise, <see langword="false"/>.</returns>
     public bool HasWorkbookPropertiesState()
     {
         return !string.IsNullOrEmpty(CodeName)
@@ -54,129 +107,5 @@ public sealed class WorkbookPropertiesModel
             || !string.IsNullOrEmpty(UpdateLinks)
             || HidePivotFieldList
             || DefaultThemeVersion.HasValue;
-    }
-}
-
-public sealed class WorkbookProtectionModel
-{
-    public bool LockStructure { get; set; }
-    public bool LockWindows { get; set; }
-    public bool LockRevision { get; set; }
-    public string WorkbookPassword { get; set; } = string.Empty;
-    public string RevisionsPassword { get; set; } = string.Empty;
-
-    public void CopyFrom(WorkbookProtectionModel source)
-    {
-        LockStructure = source.LockStructure;
-        LockWindows = source.LockWindows;
-        LockRevision = source.LockRevision;
-        WorkbookPassword = source.WorkbookPassword;
-        RevisionsPassword = source.RevisionsPassword;
-    }
-
-    public bool HasStoredState()
-    {
-        return LockStructure
-            || LockWindows
-            || LockRevision
-            || !string.IsNullOrEmpty(WorkbookPassword)
-            || !string.IsNullOrEmpty(RevisionsPassword);
-    }
-}
-
-public sealed class WorkbookViewModel
-{
-    public int? XWindow { get; set; }
-    public int? YWindow { get; set; }
-    public int? WindowWidth { get; set; }
-    public int? WindowHeight { get; set; }
-    public int? FirstSheet { get; set; }
-    public bool? ShowHorizontalScroll { get; set; }
-    public bool? ShowVerticalScroll { get; set; }
-    public bool? ShowSheetTabs { get; set; }
-    public int? TabRatio { get; set; }
-    public string Visibility { get; set; } = string.Empty;
-    public bool Minimized { get; set; }
-    public bool AutoFilterDateGrouping { get; set; } = true;
-
-    public void CopyFrom(WorkbookViewModel source)
-    {
-        XWindow = source.XWindow;
-        YWindow = source.YWindow;
-        WindowWidth = source.WindowWidth;
-        WindowHeight = source.WindowHeight;
-        FirstSheet = source.FirstSheet;
-        ShowHorizontalScroll = source.ShowHorizontalScroll;
-        ShowVerticalScroll = source.ShowVerticalScroll;
-        ShowSheetTabs = source.ShowSheetTabs;
-        TabRatio = source.TabRatio;
-        Visibility = source.Visibility;
-        Minimized = source.Minimized;
-        AutoFilterDateGrouping = source.AutoFilterDateGrouping;
-    }
-
-    public bool HasStoredState(int activeSheetIndex)
-    {
-        return activeSheetIndex > 0
-            || XWindow.HasValue
-            || YWindow.HasValue
-            || WindowWidth.HasValue
-            || WindowHeight.HasValue
-            || FirstSheet.HasValue
-            || ShowHorizontalScroll.HasValue
-            || ShowVerticalScroll.HasValue
-            || ShowSheetTabs.HasValue
-            || TabRatio.HasValue
-            || !string.IsNullOrEmpty(Visibility)
-            || Minimized
-            || !AutoFilterDateGrouping;
-    }
-}
-
-public sealed class CalculationPropertiesModel
-{
-    public int? CalculationId { get; set; }
-    public string CalculationMode { get; set; } = string.Empty;
-    public bool FullCalculationOnLoad { get; set; }
-    public string ReferenceMode { get; set; } = string.Empty;
-    public bool Iterate { get; set; }
-    public int? IterateCount { get; set; }
-    public double? IterateDelta { get; set; }
-    public bool? FullPrecision { get; set; }
-    public bool? CalculationCompleted { get; set; }
-    public bool? CalculationOnSave { get; set; }
-    public bool? ConcurrentCalculation { get; set; }
-    public bool ForceFullCalculation { get; set; }
-
-    public void CopyFrom(CalculationPropertiesModel source)
-    {
-        CalculationId = source.CalculationId;
-        CalculationMode = source.CalculationMode;
-        FullCalculationOnLoad = source.FullCalculationOnLoad;
-        ReferenceMode = source.ReferenceMode;
-        Iterate = source.Iterate;
-        IterateCount = source.IterateCount;
-        IterateDelta = source.IterateDelta;
-        FullPrecision = source.FullPrecision;
-        CalculationCompleted = source.CalculationCompleted;
-        CalculationOnSave = source.CalculationOnSave;
-        ConcurrentCalculation = source.ConcurrentCalculation;
-        ForceFullCalculation = source.ForceFullCalculation;
-    }
-
-    public bool HasStoredState()
-    {
-        return CalculationId.HasValue
-            || !string.IsNullOrEmpty(CalculationMode)
-            || FullCalculationOnLoad
-            || !string.IsNullOrEmpty(ReferenceMode)
-            || Iterate
-            || IterateCount.HasValue
-            || IterateDelta.HasValue
-            || FullPrecision.HasValue
-            || CalculationCompleted.HasValue
-            || CalculationOnSave.HasValue
-            || ConcurrentCalculation.HasValue
-            || ForceFullCalculation;
     }
 }

@@ -225,7 +225,7 @@ internal static class XlsxWorkbookSerializerCommon
         return new XDocument(new XDeclaration("1.0", "utf-8", "yes"), relationships);
     }
 
-    internal static XDocument BuildWorksheet(WorksheetModel worksheet, StyleValue workbookDefaultStyle, Aspose.Cells_FOSS.Core.DateSystem dateSystem, SharedStringRepository sharedStrings, SaveOptions options, XlsxWorkbookStyles.StylesheetSaveContext stylesheet)
+    internal static XDocument BuildWorksheet(WorksheetModel worksheet, StyleValue workbookDefaultStyle, Aspose.Cells_FOSS.Core.DateSystem dateSystem, SharedStringRepository sharedStrings, SaveOptions options, StylesheetSaveContext stylesheet)
     {
         var persistedCells = CollectPersistedCells(worksheet, workbookDefaultStyle);
         var worksheetElement = new XElement(MainNs + "worksheet",
@@ -439,7 +439,7 @@ internal static class XlsxWorkbookSerializerCommon
 
         return mergeCellElements;
     }
-    internal static XElement BuildRowElement(int rowIndex, RowModel? rowModel, IReadOnlyList<KeyValuePair<CellAddress, CellRecord>> rowCells, Aspose.Cells_FOSS.Core.DateSystem dateSystem, SharedStringRepository sharedStrings, SaveOptions options, XlsxWorkbookStyles.StylesheetSaveContext stylesheet)
+    internal static XElement BuildRowElement(int rowIndex, RowModel? rowModel, IReadOnlyList<KeyValuePair<CellAddress, CellRecord>> rowCells, Aspose.Cells_FOSS.Core.DateSystem dateSystem, SharedStringRepository sharedStrings, SaveOptions options, StylesheetSaveContext stylesheet)
     {
         var row = new XElement(MainNs + "row", new XAttribute("r", rowIndex + 1));
         if (rowModel?.Height is double height)
@@ -670,7 +670,7 @@ internal static class XlsxWorkbookSerializerCommon
         }
     }
 
-    internal static XElement BuildCell(CellAddress address, CellRecord record, Aspose.Cells_FOSS.Core.DateSystem dateSystem, SharedStringRepository sharedStrings, SaveOptions options, XlsxWorkbookStyles.StylesheetSaveContext stylesheet)
+    internal static XElement BuildCell(CellAddress address, CellRecord record, Aspose.Cells_FOSS.Core.DateSystem dateSystem, SharedStringRepository sharedStrings, SaveOptions options, StylesheetSaveContext stylesheet)
     {
         var cell = new XElement(MainNs + "c", new XAttribute("r", address.ToString()));
         var styleIndex = stylesheet.GetStyleIndex(record);

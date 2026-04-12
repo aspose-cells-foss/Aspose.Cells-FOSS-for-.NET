@@ -1,9 +1,17 @@
 namespace Aspose.Cells_FOSS;
 
+/// <summary>
+/// Provides number format operations.
+/// </summary>
 public static class NumberFormat
 {
     private static readonly Dictionary<int, string> BuiltInFormats = CreateBuiltInFormats();
 
+    /// <summary>
+    /// Gets the built in format.
+    /// </summary>
+    /// <param name="formatId">The format id.</param>
+    /// <returns>The string.</returns>
     public static string GetBuiltInFormat(int formatId)
     {
         if (BuiltInFormats.TryGetValue(formatId, out var formatCode))
@@ -14,11 +22,21 @@ public static class NumberFormat
         return "General";
     }
 
+    /// <summary>
+    /// Performs is built in format.
+    /// </summary>
+    /// <param name="formatCode">The format code.</param>
+    /// <returns><see langword="true"/> if the condition is met; otherwise, <see langword="false"/>.</returns>
     public static bool IsBuiltInFormat(string formatCode)
     {
         return GetBuiltInFormatId(formatCode).HasValue;
     }
 
+    /// <summary>
+    /// Gets the built in format id.
+    /// </summary>
+    /// <param name="formatCode">The format code.</param>
+    /// <returns>The int.</returns>
     public static int? GetBuiltInFormatId(string? formatCode)
     {
         if (string.IsNullOrWhiteSpace(formatCode))

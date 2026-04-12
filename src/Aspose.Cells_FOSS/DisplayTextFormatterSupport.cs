@@ -5,14 +5,6 @@ using System.Text;
 
 namespace Aspose.Cells_FOSS;
 
-internal sealed class DisplayFormatSectionInfo
-{
-    public string Raw { get; set; } = string.Empty;
-    public bool HasCondition { get; set; }
-    public string ConditionOperator { get; set; } = string.Empty;
-    public double ConditionValue { get; set; }
-}
-
 internal static class DisplayTextFormatterSupport
 {
     internal static DisplayFormatSectionInfo? SelectNumericSection(IReadOnlyList<DisplayFormatSectionInfo> sections, double numericValue, out bool useAbsoluteValue)
@@ -510,5 +502,3 @@ internal static class DisplayTextFormatterSupport
         }
     }
 }
-
-

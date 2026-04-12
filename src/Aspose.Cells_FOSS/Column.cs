@@ -2,6 +2,9 @@ using Aspose.Cells_FOSS.Core;
 
 namespace Aspose.Cells_FOSS;
 
+/// <summary>
+/// Represents column.
+/// </summary>
 public sealed class Column
 {
     private readonly Worksheet _worksheet;
@@ -13,6 +16,9 @@ public sealed class Column
         _index = index;
     }
 
+    /// <summary>
+    /// Gets or sets the width.
+    /// </summary>
     public double? Width
     {
         get
@@ -33,6 +39,9 @@ public sealed class Column
         }
     }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether hidden.
+    /// </summary>
     public bool IsHidden
     {
         get

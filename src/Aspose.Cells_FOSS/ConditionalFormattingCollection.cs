@@ -3,6 +3,9 @@ using Aspose.Cells_FOSS.Core;
 
 namespace Aspose.Cells_FOSS;
 
+/// <summary>
+/// Represents a collection of conditional formatting objects.
+/// </summary>
 public sealed class ConditionalFormattingCollection
 {
     private readonly List<ConditionalFormattingModel> _collections;
@@ -12,6 +15,9 @@ public sealed class ConditionalFormattingCollection
         _collections = collections;
     }
 
+    /// <summary>
+    /// Gets the number of items.
+    /// </summary>
     public int Count
     {
         get
@@ -20,6 +26,9 @@ public sealed class ConditionalFormattingCollection
         }
     }
 
+    /// <summary>
+    /// Gets the element at the specified zero-based index.
+    /// </summary>
     public FormatConditionCollection this[int index]
     {
         get
@@ -33,12 +42,20 @@ public sealed class ConditionalFormattingCollection
         }
     }
 
+    /// <summary>
+    /// Adds the specified item.
+    /// </summary>
+    /// <returns>The zero-based index of the added item.</returns>
     public int Add()
     {
         _collections.Add(new ConditionalFormattingModel());
         return _collections.Count - 1;
     }
 
+    /// <summary>
+    /// Removes the specified item.
+    /// </summary>
+    /// <param name="index">The zero-based index.</param>
     public void RemoveAt(int index)
     {
         if (index < 0 || index >= _collections.Count)
@@ -49,6 +66,13 @@ public sealed class ConditionalFormattingCollection
         _collections.RemoveAt(index);
     }
 
+    /// <summary>
+    /// Removes the specified item.
+    /// </summary>
+    /// <param name="startRow">The start row.</param>
+    /// <param name="startColumn">The start column.</param>
+    /// <param name="totalRows">The total number of rows.</param>
+    /// <param name="totalColumns">The total number of columns.</param>
     public void RemoveArea(int startRow, int startColumn, int totalRows, int totalColumns)
     {
         var area = new CellArea(startRow, startColumn, totalRows, totalColumns);

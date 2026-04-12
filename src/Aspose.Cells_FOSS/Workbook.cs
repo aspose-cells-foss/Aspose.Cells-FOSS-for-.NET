@@ -1,8 +1,25 @@
-﻿using System.Globalization;
+using System.Globalization;
 using Aspose.Cells_FOSS.Core;
 
 namespace Aspose.Cells_FOSS;
 
+/// <summary>
+/// Represents the root spreadsheet object used to create, load, modify, and save an XLSX workbook.
+/// </summary>
+/// <example>
+/// <code>
+/// var workbook = new Workbook();
+/// var sheet = workbook.Worksheets[0];
+///
+/// sheet.Cells["A1"].PutValue("Item");
+/// sheet.Cells["B1"].PutValue("Price");
+/// sheet.Cells["A2"].PutValue("Apple");
+/// sheet.Cells["B2"].PutValue(2.5);
+///
+/// workbook.Settings.Culture = CultureInfo.GetCultureInfo("en-US");
+/// workbook.Save("report.xlsx");
+/// </code>
+/// </example>
 public class Workbook : IDisposable
 {
     private readonly WorkbookModel _model;
@@ -12,6 +29,9 @@ public class Workbook : IDisposable
     private readonly DocumentProperties _documentProperties;
     private readonly DefinedNameCollection _definedNames;
 
+    /// <summary>
+    /// Initializes a new workbook with one default worksheet.
+    /// </summary>
     public Workbook()
     {
         _model = new WorkbookModel();
@@ -23,9 +43,19 @@ public class Workbook : IDisposable
         LoadDiagnostics = new LoadDiagnostics();
     }
 
+    /// <summary>
+    /// Opens an existing workbook from a file path using default load options.
+    /// </summary>
     public Workbook(string fileName) : this(fileName, new LoadOptions()) { }
+
+    /// <summary>
+    /// Opens an existing workbook from a stream using default load options.
+    /// </summary>
     public Workbook(Stream stream) : this(stream, new LoadOptions()) { }
 
+    /// <summary>
+    /// Opens an existing workbook from a file path using explicit load options.
+    /// </summary>
     public Workbook(string fileName, LoadOptions options) : this()
     {
         if (fileName is null) throw new ArgumentNullException(nameof(fileName));
@@ -35,6 +65,9 @@ public class Workbook : IDisposable
         LoadFromStream(stream, options);
     }
 
+    /// <summary>
+    /// Opens an existing workbook from a stream using explicit load options.
+    /// </summary>
     public Workbook(Stream stream, LoadOptions options) : this()
     {
         if (stream is null) throw new ArgumentNullException(nameof(stream));
@@ -43,6 +76,9 @@ public class Workbook : IDisposable
         LoadFromStream(stream, options);
     }
 
+    /// <summary>
+    /// Gets the worksheets in workbook order.
+    /// </summary>
     public WorksheetCollection Worksheets
     {
         get
@@ -51,6 +87,9 @@ public class Workbook : IDisposable
         }
     }
 
+    /// <summary>
+    /// Gets workbook-level settings such as the date system and display culture.
+    /// </summary>
     public WorkbookSettings Settings
     {
         get
@@ -59,6 +98,9 @@ public class Workbook : IDisposable
         }
     }
 
+    /// <summary>
+    /// Gets workbook metadata and view settings exposed by the supported public API.
+    /// </summary>
     public WorkbookProperties Properties
     {
         get
@@ -67,6 +109,9 @@ public class Workbook : IDisposable
         }
     }
 
+    /// <summary>
+    /// Gets the document properties facade for core and extended metadata.
+    /// </summary>
     public DocumentProperties DocumentProperties
     {
         get
@@ -75,6 +120,9 @@ public class Workbook : IDisposable
         }
     }
 
+    /// <summary>
+    /// Gets the workbook-defined names collection.
+    /// </summary>
     public DefinedNameCollection DefinedNames
     {
         get
@@ -83,6 +131,9 @@ public class Workbook : IDisposable
         }
     }
 
+    /// <summary>
+    /// Gets diagnostics collected while loading the current workbook.
+    /// </summary>
     public LoadDiagnostics LoadDiagnostics { get; }
 
     internal WorkbookModel Model
@@ -145,16 +196,25 @@ public class Workbook : IDisposable
         }
     }
 
+    /// <summary>
+    /// Saves the workbook to an XLSX file using default save options.
+    /// </summary>
     public void Save(string fileName)
     {
         Save(fileName, new SaveOptions());
     }
 
+    /// <summary>
+    /// Saves the workbook to a file using the specified save format.
+    /// </summary>
     public void Save(string fileName, SaveFormat format)
     {
         Save(fileName, new SaveOptions { SaveFormat = format });
     }
 
+    /// <summary>
+    /// Saves the workbook to a file using explicit save options.
+    /// </summary>
     public void Save(string fileName, SaveOptions options)
     {
         if (fileName is null) throw new ArgumentNullException(nameof(fileName));
@@ -164,11 +224,17 @@ public class Workbook : IDisposable
         Save(stream, options);
     }
 
+    /// <summary>
+    /// Saves the workbook to a stream using the specified save format.
+    /// </summary>
     public void Save(Stream stream, SaveFormat format)
     {
         Save(stream, new SaveOptions { SaveFormat = format });
     }
 
+    /// <summary>
+    /// Saves the workbook to a stream using explicit save options.
+    /// </summary>
     public void Save(Stream stream, SaveOptions options)
     {
         if (stream is null) throw new ArgumentNullException(nameof(stream));
@@ -188,6 +254,9 @@ public class Workbook : IDisposable
         }
     }
 
+    /// <summary>
+    /// Releases resources associated with the workbook instance.
+    /// </summary>
     public void Dispose()
     {
     }
@@ -197,6 +266,8 @@ public class Workbook : IDisposable
         try
         {
             var loadedModel = XlsxWorkbookSerializer.Load(stream, options, LoadDiagnostics);
+            // Keep the Workbook facade and child facade instances stable after load by
+            // copying the loaded state into the existing model graph.
             _model.Worksheets.Clear();
             _model.Worksheets.AddRange(loadedModel.Worksheets);
             _model.Settings.DateSystem = loadedModel.Settings.DateSystem;

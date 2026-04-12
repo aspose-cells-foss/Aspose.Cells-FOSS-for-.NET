@@ -114,6 +114,8 @@ internal static class DisplayTextFormatter
             return value;
         }
 
+        // Excel text formats can have a dedicated fourth section; only that section
+        // should shape the displayed text without mutating the underlying value.
         var sections = DisplayTextFormatterSupport.ParseSections(formatCode);
         var textSection = DisplayTextFormatterSupport.SelectTextSection(sections);
         if (textSection is null)
@@ -139,6 +141,8 @@ internal static class DisplayTextFormatter
             return FormatStringValue(value);
         }
 
+        // Numeric formats can split positive, negative, zero, and text behavior into
+        // separate sections, so the display path first selects the matching section.
         var sections = DisplayTextFormatterSupport.ParseSections(formatCode);
         if (sections.Count == 0)
         {
@@ -154,6 +158,8 @@ internal static class DisplayTextFormatter
         }
 
         string fractionResult;
+        // Fraction placeholders are not directly compatible with .NET numeric format
+        // strings, so they are handled separately before standard formatting.
         if (TryFormatFraction(numericValue, selectedSection.Raw, useAbsoluteValue, out fractionResult))
         {
             return fractionResult;
@@ -207,6 +213,8 @@ internal static class DisplayTextFormatter
             return FormatRawDateTimeValue(value);
         }
 
+        // Date/time display uses the first section that still carries date tokens
+        // after locale and directive cleanup.
         var sections = DisplayTextFormatterSupport.ParseSections(formatCode);
         var section = DisplayTextFormatterSupport.SelectDateTimeSection(sections);
         if (section is null || string.IsNullOrWhiteSpace(section.Raw))
@@ -217,6 +225,7 @@ internal static class DisplayTextFormatter
         CultureInfo sectionCulture;
         var localizedSection = DisplayTextLocaleSupport.ApplyLocaleDirectives(section.Raw, workbookCulture, out sectionCulture);
         var sectionFormat = DisplayTextFormatterSupport.StripDirectiveBrackets(localizedSection, true);
+        // Elapsed-time formats are duration-style output, not calendar rendering.
         if (DisplayTextDateFormatSupport.ContainsElapsedTimeToken(sectionFormat))
         {
             return DisplayTextDateFormatSupport.FormatElapsedTimeValue(value.TimeOfDay, sectionFormat, sectionCulture);
@@ -300,6 +309,8 @@ internal static class DisplayTextFormatter
             maxDenominator *= 10;
         }
 
+        // Match Excel's visible fraction behavior by finding the closest rational
+        // value that fits within the placeholder width from the format section.
         maxDenominator -= 1;
         var bestNumerator = 0;
         var bestDenominator = 1;

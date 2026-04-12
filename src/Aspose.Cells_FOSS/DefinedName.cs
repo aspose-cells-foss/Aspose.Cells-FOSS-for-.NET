@@ -2,6 +2,9 @@ using Aspose.Cells_FOSS.Core;
 
 namespace Aspose.Cells_FOSS;
 
+/// <summary>
+/// Represents defined name.
+/// </summary>
 public sealed class DefinedName
 {
     private readonly Workbook _workbook;
@@ -13,6 +16,9 @@ public sealed class DefinedName
         _model = model;
     }
 
+    /// <summary>
+    /// Gets or sets the name.
+    /// </summary>
     public string Name
     {
         get
@@ -27,6 +33,9 @@ public sealed class DefinedName
         }
     }
 
+    /// <summary>
+    /// Gets or sets the formula.
+    /// </summary>
     public string Formula
     {
         get
@@ -39,6 +48,9 @@ public sealed class DefinedName
         }
     }
 
+    /// <summary>
+    /// Gets or sets the local sheet index.
+    /// </summary>
     public int? LocalSheetIndex
     {
         get
@@ -53,6 +65,9 @@ public sealed class DefinedName
         }
     }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether hidden.
+    /// </summary>
     public bool Hidden
     {
         get
@@ -65,6 +80,9 @@ public sealed class DefinedName
         }
     }
 
+    /// <summary>
+    /// Gets or sets the comment.
+    /// </summary>
     public string Comment
     {
         get

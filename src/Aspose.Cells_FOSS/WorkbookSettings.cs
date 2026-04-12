@@ -3,6 +3,16 @@ using Aspose.Cells_FOSS.Core;
 
 namespace Aspose.Cells_FOSS;
 
+/// <summary>
+/// Represents workbook-level settings that affect date handling and display formatting.
+/// </summary>
+/// <example>
+/// <code>
+/// var workbook = new Workbook();
+/// workbook.Settings.Date1904 = true;
+/// workbook.Settings.Culture = CultureInfo.GetCultureInfo("fr-FR");
+/// </code>
+/// </example>
 public sealed class WorkbookSettings
 {
     private readonly WorkbookSettingsModel _model;
@@ -12,6 +22,9 @@ public sealed class WorkbookSettings
         _model = model;
     }
 
+    /// <summary>
+    /// Gets or sets whether the workbook uses the 1904 date system.
+    /// </summary>
     public bool Date1904
     {
         get
@@ -24,10 +37,15 @@ public sealed class WorkbookSettings
         }
     }
 
+    /// <summary>
+    /// Gets or sets the culture used for display-string formatting.
+    /// </summary>
     public CultureInfo Culture
     {
         get
         {
+            // Expose a defensive copy so callers can mutate the returned CultureInfo
+            // without changing workbook formatting rules until they assign it back.
             return (CultureInfo)_model.DisplayCulture.Clone();
         }
         set

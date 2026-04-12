@@ -1,5 +1,8 @@
 namespace Aspose.Cells_FOSS.Core;
 
+/// <summary>
+/// Specifies fill pattern kind.
+/// </summary>
 public enum FillPatternKind
 {
     None,

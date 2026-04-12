@@ -4,6 +4,9 @@ using Aspose.Cells_FOSS.Core;
 
 namespace Aspose.Cells_FOSS;
 
+/// <summary>
+/// Represents a collection of defined name objects.
+/// </summary>
 public sealed class DefinedNameCollection : IEnumerable<DefinedName>
 {
     private readonly Workbook _workbook;
@@ -13,6 +16,9 @@ public sealed class DefinedNameCollection : IEnumerable<DefinedName>
         _workbook = workbook;
     }
 
+    /// <summary>
+    /// Gets the number of items.
+    /// </summary>
     public int Count
     {
         get
@@ -21,6 +27,9 @@ public sealed class DefinedNameCollection : IEnumerable<DefinedName>
         }
     }
 
+    /// <summary>
+    /// Gets the element at the specified zero-based index.
+    /// </summary>
     public DefinedName this[int index]
     {
         get
@@ -34,11 +43,24 @@ public sealed class DefinedNameCollection : IEnumerable<DefinedName>
         }
     }
 
+    /// <summary>
+    /// Adds the specified item.
+    /// </summary>
+    /// <param name="name">The name.</param>
+    /// <param name="formula">The formula.</param>
+    /// <returns>The zero-based index of the added item.</returns>
     public int Add(string name, string formula)
     {
         return Add(name, formula, null);
     }
 
+    /// <summary>
+    /// Adds the specified item.
+    /// </summary>
+    /// <param name="name">The name.</param>
+    /// <param name="formula">The formula.</param>
+    /// <param name="localSheetIndex">The local sheet index.</param>
+    /// <returns>The zero-based index of the added item.</returns>
     public int Add(string name, string formula, int? localSheetIndex)
     {
         var normalizedName = DefinedNameUtility.NormalizeName(name);
@@ -57,6 +79,10 @@ public sealed class DefinedNameCollection : IEnumerable<DefinedName>
         return _workbook.Model.DefinedNames.Count - 1;
     }
 
+    /// <summary>
+    /// Removes the specified item.
+    /// </summary>
+    /// <param name="index">The zero-based index.</param>
     public void RemoveAt(int index)
     {
         if (index < 0 || index >= _workbook.Model.DefinedNames.Count)
@@ -67,6 +93,10 @@ public sealed class DefinedNameCollection : IEnumerable<DefinedName>
         _workbook.Model.DefinedNames.RemoveAt(index);
     }
 
+    /// <summary>
+    /// Returns an enumerator that iterates through the collection.
+    /// </summary>
+    /// <returns>An enumerator that can be used to iterate through the collection.</returns>
     public IEnumerator<DefinedName> GetEnumerator()
     {
         var names = new List<DefinedName>(_workbook.Model.DefinedNames.Count);

@@ -2,6 +2,18 @@ using Aspose.Cells_FOSS.Core;
 
 namespace Aspose.Cells_FOSS;
 
+/// <summary>
+/// Encapsulates the hyperlinks defined for a worksheet.
+/// </summary>
+/// <example>
+/// <code>
+/// var workbook = new Workbook();
+/// var links = workbook.Worksheets[0].Hyperlinks;
+///
+/// links.Add("A1", 1, 1, "https://example.com");
+/// links.Add("B2", "B3", "#Sheet1!A1", "Jump", "Go to start");
+/// </code>
+/// </example>
 public sealed class HyperlinkCollection
 {
     private readonly List<HyperlinkModel> _hyperlinks;
@@ -11,6 +23,9 @@ public sealed class HyperlinkCollection
         _hyperlinks = hyperlinks;
     }
 
+    /// <summary>
+    /// Gets the number of hyperlinks in the worksheet.
+    /// </summary>
     public int Count
     {
         get
@@ -19,6 +34,9 @@ public sealed class HyperlinkCollection
         }
     }
 
+    /// <summary>
+    /// Gets the hyperlink at the specified zero-based index.
+    /// </summary>
     public Hyperlink this[int index]
     {
         get
@@ -32,6 +50,9 @@ public sealed class HyperlinkCollection
         }
     }
 
+    /// <summary>
+    /// Adds a hyperlink anchored at a cell or rectangular range specified by its top-left A1 reference.
+    /// </summary>
     public int Add(string cellName, int totalRows, int totalColumns, string address)
     {
         if (address is null)
@@ -42,6 +63,9 @@ public sealed class HyperlinkCollection
         return AddInternal(cellName, totalRows, totalColumns, address);
     }
 
+    /// <summary>
+    /// Adds a hyperlink anchored at a cell or rectangular range specified by zero-based coordinates.
+    /// </summary>
     public int Add(int firstRow, int firstColumn, int totalRows, int totalColumns, string address)
     {
         if (firstRow < 0 || firstColumn < 0)
@@ -57,6 +81,9 @@ public sealed class HyperlinkCollection
         return AddInternal(null, totalRows, totalColumns, address, firstRow, firstColumn);
     }
 
+    /// <summary>
+    /// Adds a hyperlink over the specified A1 range and optional display text metadata.
+    /// </summary>
     public int Add(string startCellName, string endCellName, string address, string textToDisplay, string screenTip)
     {
         if (startCellName is null)
@@ -97,6 +124,9 @@ public sealed class HyperlinkCollection
         return index;
     }
 
+    /// <summary>
+    /// Removes the hyperlink at the specified zero-based index.
+    /// </summary>
     public void RemoveAt(int index)
     {
         if (index < 0 || index >= _hyperlinks.Count)
@@ -206,4 +236,3 @@ public sealed class HyperlinkCollection
         return value;
     }
 }
-

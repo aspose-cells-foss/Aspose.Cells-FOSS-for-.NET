@@ -1,7 +1,10 @@
-﻿using Aspose.Cells_FOSS.Core;
+using Aspose.Cells_FOSS.Core;
 
 namespace Aspose.Cells_FOSS;
 
+/// <summary>
+/// Represents calculation properties.
+/// </summary>
 public sealed class CalculationProperties
 {
     private readonly CalculationPropertiesModel _model;
@@ -11,6 +14,9 @@ public sealed class CalculationProperties
         _model = model;
     }
 
+    /// <summary>
+    /// Gets or sets the calculation id.
+    /// </summary>
     public int? CalculationId
     {
         get
@@ -28,6 +34,9 @@ public sealed class CalculationProperties
         }
     }
 
+    /// <summary>
+    /// Gets or sets the calculation mode.
+    /// </summary>
     public string CalculationMode
     {
         get
@@ -40,6 +49,9 @@ public sealed class CalculationProperties
         }
     }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether full calculation on load.
+    /// </summary>
     public bool FullCalculationOnLoad
     {
         get
@@ -52,6 +64,9 @@ public sealed class CalculationProperties
         }
     }
 
+    /// <summary>
+    /// Gets or sets the reference mode.
+    /// </summary>
     public string ReferenceMode
     {
         get
@@ -64,6 +79,9 @@ public sealed class CalculationProperties
         }
     }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether iterate.
+    /// </summary>
     public bool Iterate
     {
         get
@@ -76,6 +94,9 @@ public sealed class CalculationProperties
         }
     }
 
+    /// <summary>
+    /// Gets or sets the iterate count.
+    /// </summary>
     public int IterateCount
     {
         get
@@ -93,6 +114,9 @@ public sealed class CalculationProperties
         }
     }
 
+    /// <summary>
+    /// Gets or sets the iterate delta.
+    /// </summary>
     public double IterateDelta
     {
         get
@@ -110,6 +134,9 @@ public sealed class CalculationProperties
         }
     }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether full precision.
+    /// </summary>
     public bool FullPrecision
     {
         get
@@ -122,6 +149,9 @@ public sealed class CalculationProperties
         }
     }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether calculation completed.
+    /// </summary>
     public bool CalculationCompleted
     {
         get
@@ -134,6 +164,9 @@ public sealed class CalculationProperties
         }
     }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether calculation on save.
+    /// </summary>
     public bool CalculationOnSave
     {
         get
@@ -146,6 +179,9 @@ public sealed class CalculationProperties
         }
     }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether concurrent calculation.
+    /// </summary>
     public bool ConcurrentCalculation
     {
         get
@@ -158,6 +194,9 @@ public sealed class CalculationProperties
         }
     }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether force full calculation.
+    /// </summary>
     public bool ForceFullCalculation
     {
         get

@@ -3,6 +3,22 @@ using Aspose.Cells_FOSS.Core;
 
 namespace Aspose.Cells_FOSS;
 
+/// <summary>
+/// Represents a single worksheet cell and exposes value, formula, and style operations.
+/// </summary>
+/// <example>
+/// <code>
+/// var workbook = new Workbook();
+/// var cell = workbook.Worksheets[0].Cells["B2"];
+///
+/// cell.PutValue(12.5);
+/// cell.Formula = "=SUM(B2:B10)";
+///
+/// var style = cell.GetStyle();
+/// style.NumberFormat = "$#,##0.00";
+/// cell.SetStyle(style);
+/// </code>
+/// </example>
 public class Cell
 {
     private readonly Worksheet _worksheet;
@@ -14,6 +30,12 @@ public class Cell
         _address = address;
     }
 
+    /// <summary>
+    /// Gets or sets the logical cell value.
+    /// </summary>
+    /// <remarks>
+    /// Supported assignments in v0.1 include strings, booleans, numbers, <see cref="DateTime"/>, and <see langword="null"/>.
+    /// </remarks>
     public object? Value
     {
         get
@@ -27,6 +49,9 @@ public class Cell
         }
     }
 
+    /// <summary>
+    /// Gets a stable string representation of the cell value without applying style-based display formatting.
+    /// </summary>
     public string StringValue
     {
         get
@@ -36,16 +61,27 @@ public class Cell
         }
     }
 
+    /// <summary>
+    /// Gets the display text generated from the cell value, style, and workbook culture.
+    /// </summary>
     public string DisplayStringValue
     {
         get
         {
             var record = TryGetRecord();
+            // Display formatting is style-aware while StringValue stays a stable raw
+            // representation of the logical cell payload.
             var style = record is null ? _worksheet.Workbook.Model.DefaultStyle : record.Style;
             return DisplayTextFormatter.FormatDisplayValue(record?.Value, style, _worksheet.Workbook.Model.Settings.DisplayCulture);
         }
     }
 
+    /// <summary>
+    /// Gets or sets the cell formula.
+    /// </summary>
+    /// <remarks>
+    /// Formulas are stored and round-tripped in v0.1, but they are not recalculated automatically.
+    /// </remarks>
     public string Formula
     {
         get
@@ -61,6 +97,8 @@ public class Cell
         set
         {
             var record = GetOrCreateRecord();
+            // Store formulas without a leading '=' so XML persistence and comparisons
+            // have one normalized internal representation.
             record.Formula = NormalizeFormula(value);
             if (string.IsNullOrEmpty(record.Formula))
             {
@@ -76,6 +114,9 @@ public class Cell
         }
     }
 
+    /// <summary>
+    /// Gets the current logical cell value type.
+    /// </summary>
     public CellValueType Type
     {
         get
@@ -109,37 +150,61 @@ public class Cell
         }
     }
 
+    /// <summary>
+    /// Sets the cell value to a string.
+    /// </summary>
     public void PutValue(string value)
     {
         if (value is null) throw new ArgumentNullException(nameof(value));
         SetScalar(value, CellValueKind.String);
     }
 
+    /// <summary>
+    /// Sets the cell value to an integer.
+    /// </summary>
     public void PutValue(int value)
     {
         SetScalar(value, CellValueKind.Number);
     }
 
+    /// <summary>
+    /// Sets the cell value to a decimal number.
+    /// </summary>
     public void PutValue(decimal value)
     {
         SetScalar(value, CellValueKind.Number);
     }
 
+    /// <summary>
+    /// Sets the cell value to a floating-point number.
+    /// </summary>
     public void PutValue(double value)
     {
         SetScalar(value, CellValueKind.Number);
     }
 
+    /// <summary>
+    /// Sets the cell value to a boolean.
+    /// </summary>
     public void PutValue(bool value)
     {
         SetScalar(value, CellValueKind.Boolean);
     }
 
+    /// <summary>
+    /// Sets the cell value to a <see cref="DateTime"/>.
+    /// </summary>
+    /// <remarks>
+    /// Date serialization honors <see cref="WorkbookSettings.Date1904"/> when the workbook is saved.
+    /// </remarks>
     public void PutValue(DateTime value)
     {
         SetScalar(value, CellValueKind.DateTime);
     }
 
+    /// <summary>
+    /// Gets a detached copy of the cell style.
+    /// </summary>
     public Style GetStyle()
     {
         var record = TryGetRecord();
@@ -147,6 +212,9 @@ public class Cell
         return Style.FromCore(style.Clone());
     }
 
+    /// <summary>
+    /// Replaces the cell style with the supplied style object.
+    /// </summary>
     public void SetStyle(Style style)
     {
         if (style is null) throw new ArgumentNullException(nameof(style));
@@ -229,6 +297,8 @@ public class Cell
             return existing;
         }
 
+        // Allocate a record even for currently blank cells so style-only and
+        // formula-ready cells can participate in later serialization.
         var record = new CellRecord
         {
             Style = _worksheet.Workbook.Model.DefaultStyle.Clone(),

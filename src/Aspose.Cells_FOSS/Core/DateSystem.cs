@@ -1,5 +1,8 @@
 namespace Aspose.Cells_FOSS.Core;
 
+/// <summary>
+/// Specifies date system.
+/// </summary>
 public enum DateSystem
 {
     Windows1900,

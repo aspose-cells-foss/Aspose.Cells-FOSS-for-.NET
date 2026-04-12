@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Xml.Linq;
@@ -10,7 +10,7 @@ namespace Aspose.Cells_FOSS;
 
 internal static class XlsxWorkbookConditionalFormatting
 {
-    internal static List<XElement> BuildConditionalFormattingElements(WorksheetModel worksheet, XlsxWorkbookStyles.StylesheetSaveContext stylesheet)
+    internal static List<XElement> BuildConditionalFormattingElements(WorksheetModel worksheet, StylesheetSaveContext stylesheet)
     {
         var ordered = GetOrderedConditionalFormattings(worksheet.ConditionalFormattings);
         var elements = new List<XElement>(ordered.Count);
@@ -37,7 +37,7 @@ internal static class XlsxWorkbookConditionalFormatting
         return elements;
     }
 
-    internal static void LoadConditionalFormattings(WorksheetModel worksheetModel, XElement worksheetRoot, XlsxWorkbookStyles.StylesheetLoadContext stylesheet, LoadDiagnostics diagnostics, LoadOptions options, string sheetName)
+    internal static void LoadConditionalFormattings(WorksheetModel worksheetModel, XElement worksheetRoot, StylesheetLoadContext stylesheet, LoadDiagnostics diagnostics, LoadOptions options, string sheetName)
     {
         worksheetModel.ConditionalFormattings.Clear();
 
@@ -72,7 +72,7 @@ internal static class XlsxWorkbookConditionalFormatting
         }
     }
 
-    private static XElement BuildConditionRule(ConditionalFormattingModel formatting, FormatConditionModel condition, int conditionIndex, XlsxWorkbookStyles.StylesheetSaveContext stylesheet)
+    private static XElement BuildConditionRule(ConditionalFormattingModel formatting, FormatConditionModel condition, int conditionIndex, StylesheetSaveContext stylesheet)
     {
         var rule = new XElement(MainNs + "cfRule",
             new XAttribute("type", ToRuleTypeName(condition)),
@@ -216,7 +216,7 @@ internal static class XlsxWorkbookConditionalFormatting
         return true;
     }
 
-    private static bool TryLoadCondition(ConditionalFormattingModel formatting, XElement ruleElement, XlsxWorkbookStyles.StylesheetLoadContext stylesheet, LoadDiagnostics diagnostics, LoadOptions options, string sheetName, string? cellRef)
+    private static bool TryLoadCondition(ConditionalFormattingModel formatting, XElement ruleElement, StylesheetLoadContext stylesheet, LoadDiagnostics diagnostics, LoadOptions options, string sheetName, string? cellRef)
     {
         if (!TryParseRuleType(ruleElement, options, diagnostics, sheetName, cellRef, out var type))
         {
@@ -420,7 +420,7 @@ internal static class XlsxWorkbookConditionalFormatting
         return formatting.Conditions.Count + 1;
     }
 
-    private static StyleValue ResolveDifferentialStyle(XAttribute? attribute, XlsxWorkbookStyles.StylesheetLoadContext stylesheet, LoadDiagnostics diagnostics, LoadOptions options, string sheetName, string? cellRef)
+    private static StyleValue ResolveDifferentialStyle(XAttribute? attribute, StylesheetLoadContext stylesheet, LoadDiagnostics diagnostics, LoadOptions options, string sheetName, string? cellRef)
     {
         var dxfId = ParseIntAttribute(attribute);
         if (!dxfId.HasValue)

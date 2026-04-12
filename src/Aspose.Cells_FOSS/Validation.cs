@@ -3,6 +3,9 @@ using Aspose.Cells_FOSS.Core;
 
 namespace Aspose.Cells_FOSS;
 
+/// <summary>
+/// Represents validation.
+/// </summary>
 public sealed class Validation
 {
     private readonly IList<ValidationModel> _owner;
@@ -14,6 +17,9 @@ public sealed class Validation
         _model = model;
     }
 
+    /// <summary>
+    /// Gets the areas.
+    /// </summary>
     public IReadOnlyList<CellArea> Areas
     {
         get
@@ -28,6 +34,9 @@ public sealed class Validation
         }
     }
 
+    /// <summary>
+    /// Gets or sets the type.
+    /// </summary>
     public ValidationType Type
     {
         get
@@ -40,6 +49,9 @@ public sealed class Validation
         }
     }
 
+    /// <summary>
+    /// Gets or sets the alert style.
+    /// </summary>
     public ValidationAlertType AlertStyle
     {
         get
@@ -52,6 +64,9 @@ public sealed class Validation
         }
     }
 
+    /// <summary>
+    /// Gets or sets the operator.
+    /// </summary>
     public OperatorType Operator
     {
         get
@@ -64,6 +79,9 @@ public sealed class Validation
         }
     }
 
+    /// <summary>
+    /// Gets or sets the formula1.
+    /// </summary>
     public string Formula1
     {
         get
@@ -76,6 +94,9 @@ public sealed class Validation
         }
     }
 
+    /// <summary>
+    /// Gets or sets the formula2.
+    /// </summary>
     public string Formula2
     {
         get
@@ -88,6 +109,9 @@ public sealed class Validation
         }
     }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether ignore blank.
+    /// </summary>
     public bool IgnoreBlank
     {
         get
@@ -100,6 +124,9 @@ public sealed class Validation
         }
     }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether in cell drop down.
+    /// </summary>
     public bool InCellDropDown
     {
         get
@@ -112,6 +139,9 @@ public sealed class Validation
         }
     }
 
+    /// <summary>
+    /// Gets or sets the input title.
+    /// </summary>
     public string InputTitle
     {
         get
@@ -124,6 +154,9 @@ public sealed class Validation
         }
     }
 
+    /// <summary>
+    /// Gets or sets the input message.
+    /// </summary>
     public string InputMessage
     {
         get
@@ -136,6 +169,9 @@ public sealed class Validation
         }
     }
 
+    /// <summary>
+    /// Gets or sets the error title.
+    /// </summary>
     public string ErrorTitle
     {
         get
@@ -148,6 +184,9 @@ public sealed class Validation
         }
     }
 
+    /// <summary>
+    /// Gets or sets the error message.
+    /// </summary>
     public string ErrorMessage
     {
         get
@@ -160,6 +199,9 @@ public sealed class Validation
         }
     }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether show input.
+    /// </summary>
     public bool ShowInput
     {
         get
@@ -172,6 +214,9 @@ public sealed class Validation
         }
     }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether show error.
+    /// </summary>
     public bool ShowError
     {
         get
@@ -184,11 +229,19 @@ public sealed class Validation
         }
     }
 
+    /// <summary>
+    /// Adds the specified item.
+    /// </summary>
+    /// <param name="area">The area.</param>
     public void AddArea(CellArea area)
     {
         ValidationCollection.AddAreaToValidation(_owner, _model, area);
     }
 
+    /// <summary>
+    /// Removes the specified item.
+    /// </summary>
+    /// <param name="area">The area.</param>
     public void RemoveArea(CellArea area)
     {
         ValidationCollection.RemoveAreaFromValidation(_owner, _model, area);

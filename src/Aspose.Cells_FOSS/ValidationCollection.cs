@@ -3,6 +3,9 @@ using Aspose.Cells_FOSS.Core;
 
 namespace Aspose.Cells_FOSS;
 
+/// <summary>
+/// Represents a collection of validation objects.
+/// </summary>
 public sealed class ValidationCollection
 {
     private readonly List<ValidationModel> _validations;
@@ -12,6 +15,9 @@ public sealed class ValidationCollection
         _validations = validations;
     }
 
+    /// <summary>
+    /// Gets the number of items.
+    /// </summary>
     public int Count
     {
         get
@@ -20,6 +26,9 @@ public sealed class ValidationCollection
         }
     }
 
+    /// <summary>
+    /// Gets the element at the specified zero-based index.
+    /// </summary>
     public Validation this[int index]
     {
         get
@@ -33,6 +42,11 @@ public sealed class ValidationCollection
         }
     }
 
+    /// <summary>
+    /// Adds the specified item.
+    /// </summary>
+    /// <param name="area">The area.</param>
+    /// <returns>The zero-based index of the added item.</returns>
     public int Add(CellArea area)
     {
         ValidateArea(area);
@@ -44,6 +58,12 @@ public sealed class ValidationCollection
         return _validations.Count - 1;
     }
 
+    /// <summary>
+    /// Gets the validation in cell.
+    /// </summary>
+    /// <param name="row">The zero-based row index.</param>
+    /// <param name="column">The zero-based column index.</param>
+    /// <returns>The validation.</returns>
     public Validation? GetValidationInCell(int row, int column)
     {
         if (row < 0 || column < 0)
@@ -66,6 +86,11 @@ public sealed class ValidationCollection
         return null;
     }
 
+    /// <summary>
+    /// Removes the specified item.
+    /// </summary>
+    /// <param name="row">The zero-based row index.</param>
+    /// <param name="column">The zero-based column index.</param>
     public void RemoveACell(int row, int column)
     {
         if (row < 0 || column < 0)
@@ -76,6 +101,10 @@ public sealed class ValidationCollection
         RemoveArea(new CellArea(row, column, 1, 1));
     }
 
+    /// <summary>
+    /// Removes the specified item.
+    /// </summary>
+    /// <param name="cellArea">The cell area.</param>
     public void RemoveArea(CellArea cellArea)
     {
         ValidateArea(cellArea);

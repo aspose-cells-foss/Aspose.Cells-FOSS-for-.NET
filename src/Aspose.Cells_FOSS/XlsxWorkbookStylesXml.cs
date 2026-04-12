@@ -9,10 +9,10 @@ internal static class XlsxWorkbookStylesXml
 {
     internal static XDocument BuildStylesheetDocument(
         IReadOnlyList<FontValue> fonts,
-        IReadOnlyList<XlsxWorkbookStyles.FillValue> fills,
+        IReadOnlyList<FillValue> fills,
         IReadOnlyList<BordersValue> borders,
-        XlsxWorkbookStyles.CellFormatValue normalCellFormat,
-        IReadOnlyList<XlsxWorkbookStyles.CellFormatValue> cellFormats,
+        CellFormatValue normalCellFormat,
+        IReadOnlyList<CellFormatValue> cellFormats,
         IReadOnlyList<KeyValuePair<int, string>> customNumberFormats,
         IReadOnlyList<StyleValue> differentialFormats)
     {
@@ -69,9 +69,9 @@ internal static class XlsxWorkbookStylesXml
         }
         return fonts;
     }
-    internal static List<XlsxWorkbookStyles.FillValue> ReadFillValues(XElement root)
+    internal static List<FillValue> ReadFillValues(XElement root)
     {
-        var fills = new List<XlsxWorkbookStyles.FillValue>();
+        var fills = new List<FillValue>();
         foreach (var fill in root.Element(MainNs + "fills")?.Elements(MainNs + "fill") ?? Enumerable.Empty<XElement>())
         {
             fills.Add(ReadFillValue(fill));
@@ -105,7 +105,7 @@ internal static class XlsxWorkbookStylesXml
         }
         return elements;
     }
-    internal static List<XElement> BuildFillElements(IReadOnlyList<XlsxWorkbookStyles.FillValue> fills)
+    internal static List<XElement> BuildFillElements(IReadOnlyList<FillValue> fills)
     {
         var elements = new List<XElement>(fills.Count);
         for (var index = 0; index < fills.Count; index++)
@@ -123,7 +123,7 @@ internal static class XlsxWorkbookStylesXml
         }
         return elements;
     }
-    internal static List<XElement> BuildCellFormatElements(IReadOnlyList<XlsxWorkbookStyles.CellFormatValue> cellFormats)
+    internal static List<XElement> BuildCellFormatElements(IReadOnlyList<CellFormatValue> cellFormats)
     {
         var elements = new List<XElement>(cellFormats.Count);
         for (var index = 0; index < cellFormats.Count; index++)
@@ -183,7 +183,7 @@ internal static class XlsxWorkbookStylesXml
     {
         return attribute is null ? null : ParseBoolAttribute(attribute);
     }
-    private static XElement BuildCellStyleFormatElement(XlsxWorkbookStyles.CellFormatValue cellFormat)
+    private static XElement BuildCellStyleFormatElement(CellFormatValue cellFormat)
     {
         return BuildCellFormatElement(cellFormat, false);
     }
@@ -256,12 +256,12 @@ internal static class XlsxWorkbookStylesXml
             Color = ReadColorValue(font.Element(MainNs + "color")),
         };
     }
-    private static XlsxWorkbookStyles.FillValue ReadFillValue(XElement fill)
+    private static FillValue ReadFillValue(XElement fill)
     {
         var patternFill = fill.Element(MainNs + "patternFill");
         if (patternFill is null)
         {
-            return new XlsxWorkbookStyles.FillValue();
+            return new FillValue();
         }
         var patternType = ((string?)patternFill.Attribute("patternType") ?? "none").ToLowerInvariant();
         FillPatternKind pattern;
@@ -322,7 +322,7 @@ internal static class XlsxWorkbookStylesXml
                 pattern = FillPatternKind.None;
                 break;
         }
-        return new XlsxWorkbookStyles.FillValue
+        return new FillValue
         {
             Pattern = pattern,
             ForegroundColor = ReadColorValue(patternFill.Element(MainNs + "fgColor")),
@@ -370,7 +370,7 @@ internal static class XlsxWorkbookStylesXml
         element.Add(new XElement(MainNs + "name", new XAttribute("val", font.Name)));
         return element;
     }
-    private static XElement BuildFillElement(XlsxWorkbookStyles.FillValue fill)
+    private static XElement BuildFillElement(FillValue fill)
     {
         var patternFill = new XElement(MainNs + "patternFill");
         switch (fill.Pattern)
@@ -460,7 +460,7 @@ internal static class XlsxWorkbookStylesXml
         }
         return element;
     }
-    private static XElement BuildCellFormatElement(XlsxWorkbookStyles.CellFormatValue cellFormat)
+    private static XElement BuildCellFormatElement(CellFormatValue cellFormat)
     {
         return BuildCellFormatElement(cellFormat, true);
     }
@@ -473,7 +473,7 @@ internal static class XlsxWorkbookStylesXml
         }
         if (style.Pattern != FillPatternKind.None || !IsEmptyColor(style.ForegroundColor) || !IsEmptyColor(style.BackgroundColor))
         {
-            element.Add(BuildFillElement(new XlsxWorkbookStyles.FillValue
+            element.Add(BuildFillElement(new FillValue
             {
                 Pattern = style.Pattern,
                 ForegroundColor = style.ForegroundColor,
@@ -506,7 +506,7 @@ internal static class XlsxWorkbookStylesXml
         }
         return element;
     }
-    private static XElement BuildCellFormatElement(XlsxWorkbookStyles.CellFormatValue cellFormat, bool includeXfId)
+    private static XElement BuildCellFormatElement(CellFormatValue cellFormat, bool includeXfId)
     {
         var element = new XElement(MainNs + "xf",
             new XAttribute("numFmtId", cellFormat.NumFmtId),

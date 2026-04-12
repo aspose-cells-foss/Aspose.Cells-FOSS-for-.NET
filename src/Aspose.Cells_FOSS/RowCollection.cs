@@ -1,7 +1,10 @@
-﻿using System.Linq;
+using System.Linq;
 
 namespace Aspose.Cells_FOSS;
 
+/// <summary>
+/// Represents a collection of row objects.
+/// </summary>
 public sealed class RowCollection
 {
     private readonly Worksheet _worksheet;
@@ -11,6 +14,9 @@ public sealed class RowCollection
         _worksheet = worksheet;
     }
 
+    /// <summary>
+    /// Gets the element at the specified zero-based index.
+    /// </summary>
     public Row this[int index]
     {
         get

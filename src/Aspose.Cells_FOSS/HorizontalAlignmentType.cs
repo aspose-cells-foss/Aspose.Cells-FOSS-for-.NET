@@ -1,5 +1,8 @@
 namespace Aspose.Cells_FOSS;
 
+/// <summary>
+/// Specifies horizontal alignment type.
+/// </summary>
 public enum HorizontalAlignmentType
 {
     General,

@@ -2,8 +2,16 @@ using System.Collections.Generic;
 
 namespace Aspose.Cells_FOSS.Core;
 
+/// <summary>
+/// Represents cell address.
+/// </summary>
 public readonly struct CellAddress : IEquatable<CellAddress>
 {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="CellAddress"/> class.
+    /// </summary>
+    /// <param name="rowIndex">The zero-based row index.</param>
+    /// <param name="columnIndex">The zero-based column index.</param>
     public CellAddress(int rowIndex, int columnIndex)
     {
         if (rowIndex < 0) throw new ArgumentOutOfRangeException(nameof(rowIndex));
@@ -12,9 +20,20 @@ public readonly struct CellAddress : IEquatable<CellAddress>
         ColumnIndex = columnIndex;
     }
 
+    /// <summary>
+    /// Gets the row index.
+    /// </summary>
     public int RowIndex { get; }
+    /// <summary>
+    /// Gets the column index.
+    /// </summary>
     public int ColumnIndex { get; }
 
+    /// <summary>
+    /// Parses the specified value.
+    /// </summary>
+    /// <param name="cellReference">The cell reference.</param>
+    /// <returns>The cell address.</returns>
     public static CellAddress Parse(string cellReference)
     {
         if (string.IsNullOrWhiteSpace(cellReference)) throw new ArgumentException("Cell reference must be non-empty.", nameof(cellReference));
@@ -22,6 +41,7 @@ public readonly struct CellAddress : IEquatable<CellAddress>
         var index = 0;
         var column = 0;
 
+        // Convert the A1 column prefix into a zero-based index using base-26 letters.
         while (index < reference.Length && char.IsLetter(reference[index]))
         {
             var letter = char.ToUpperInvariant(reference[index]);
@@ -43,16 +63,30 @@ public readonly struct CellAddress : IEquatable<CellAddress>
         return new CellAddress(row - 1, column - 1);
     }
 
+    /// <summary>
+    /// Determines whether the specified value is equal to the current instance.
+    /// </summary>
+    /// <param name="other">The other.</param>
+    /// <returns><see langword="true"/> if the condition is met; otherwise, <see langword="false"/>.</returns>
     public bool Equals(CellAddress other)
     {
         return RowIndex == other.RowIndex && ColumnIndex == other.ColumnIndex;
     }
 
+    /// <summary>
+    /// Determines whether the specified value is equal to the current instance.
+    /// </summary>
+    /// <param name="obj">The obj.</param>
+    /// <returns><see langword="true"/> if the condition is met; otherwise, <see langword="false"/>.</returns>
     public override bool Equals(object? obj)
     {
         return obj is CellAddress other && Equals(other);
     }
 
+    /// <summary>
+    /// Returns a hash code for the current instance.
+    /// </summary>
+    /// <returns>The int.</returns>
     public override int GetHashCode()
     {
         unchecked
@@ -61,6 +95,10 @@ public readonly struct CellAddress : IEquatable<CellAddress>
         }
     }
 
+    /// <summary>
+    /// Returns the string representation of the current instance.
+    /// </summary>
+    /// <returns>The string.</returns>
     public override string ToString()
     {
         return ColumnIndexToName(ColumnIndex) + (RowIndex + 1);
@@ -70,6 +108,7 @@ public readonly struct CellAddress : IEquatable<CellAddress>
     {
         var index = columnIndex + 1;
         var characters = new Stack<char>();
+        // Convert the zero-based column index back to Excel's repeated-letter form.
         while (index > 0)
         {
             index--;

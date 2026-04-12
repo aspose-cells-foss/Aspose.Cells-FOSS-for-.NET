@@ -2,6 +2,21 @@ using Aspose.Cells_FOSS.Core;
 
 namespace Aspose.Cells_FOSS;
 
+/// <summary>
+/// Encapsulates a single worksheet and its supported v0.1 worksheet features.
+/// </summary>
+/// <example>
+/// <code>
+/// var workbook = new Workbook();
+/// var sheet = workbook.Worksheets[0];
+///
+/// sheet.Name = "Data";
+/// sheet.Cells["A1"].PutValue("North");
+/// sheet.Cells["B1"].PutValue(42);
+/// sheet.Zoom = 120;
+/// sheet.PageSetup.Orientation = PageOrientationType.Landscape;
+/// </code>
+/// </example>
 public class Worksheet
 {
     private readonly Workbook _workbook;
@@ -43,6 +58,9 @@ public class Worksheet
         }
     }
 
+    /// <summary>
+    /// Gets or sets the worksheet name.
+    /// </summary>
     public string Name
     {
         get
@@ -57,6 +75,9 @@ public class Worksheet
         }
     }
 
+    /// <summary>
+    /// Gets or sets the worksheet visibility state.
+    /// </summary>
     public VisibilityType VisibilityType
     {
         get
@@ -88,6 +109,9 @@ public class Worksheet
         }
     }
 
+    /// <summary>
+    /// Gets or sets the worksheet tab color.
+    /// </summary>
     public Color TabColor
     {
         get
@@ -111,6 +135,9 @@ public class Worksheet
         }
     }
 
+    /// <summary>
+    /// Gets or sets whether gridlines are shown in the worksheet view.
+    /// </summary>
     public bool ShowGridlines
     {
         get
@@ -123,6 +150,9 @@ public class Worksheet
         }
     }
 
+    /// <summary>
+    /// Gets or sets whether row and column headers are shown in the worksheet view.
+    /// </summary>
     public bool ShowRowColumnHeaders
     {
         get
@@ -135,6 +165,9 @@ public class Worksheet
         }
     }
 
+    /// <summary>
+    /// Gets or sets whether zero values are shown in the worksheet view.
+    /// </summary>
     public bool ShowZeros
     {
         get
@@ -147,6 +180,9 @@ public class Worksheet
         }
     }
 
+    /// <summary>
+    /// Gets or sets whether the worksheet view is right-to-left.
+    /// </summary>
     public bool RightToLeft
     {
         get
@@ -159,6 +195,9 @@ public class Worksheet
         }
     }
 
+    /// <summary>
+    /// Gets or sets the worksheet zoom percentage.
+    /// </summary>
     public int Zoom
     {
         get
@@ -176,6 +215,9 @@ public class Worksheet
         }
     }
 
+    /// <summary>
+    /// Gets the cell grid facade for the worksheet.
+    /// </summary>
     public Cells Cells
     {
         get
@@ -184,6 +226,9 @@ public class Worksheet
         }
     }
 
+    /// <summary>
+    /// Gets the worksheet hyperlink collection.
+    /// </summary>
     public HyperlinkCollection Hyperlinks
     {
         get
@@ -192,6 +237,9 @@ public class Worksheet
         }
     }
 
+    /// <summary>
+    /// Gets the worksheet data validation collection.
+    /// </summary>
     public ValidationCollection Validations
     {
         get
@@ -200,6 +248,9 @@ public class Worksheet
         }
     }
 
+    /// <summary>
+    /// Gets the worksheet conditional formatting collection.
+    /// </summary>
     public ConditionalFormattingCollection ConditionalFormattings
     {
         get
@@ -208,6 +259,9 @@ public class Worksheet
         }
     }
 
+    /// <summary>
+    /// Gets page setup settings for the worksheet.
+    /// </summary>
     public PageSetup PageSetup
     {
         get
@@ -216,6 +270,9 @@ public class Worksheet
         }
     }
 
+    /// <summary>
+    /// Gets worksheet protection settings.
+    /// </summary>
     public WorksheetProtection Protection
     {
         get
@@ -224,6 +281,9 @@ public class Worksheet
         }
     }
 
+    /// <summary>
+    /// Gets auto-filter settings for the worksheet.
+    /// </summary>
     public AutoFilter AutoFilter
     {
         get
@@ -232,11 +292,17 @@ public class Worksheet
         }
     }
 
+    /// <summary>
+    /// Marks the worksheet as protected using the current protection settings.
+    /// </summary>
     public void Protect()
     {
         _model.Protection.IsProtected = true;
     }
 
+    /// <summary>
+    /// Clears worksheet protection and resets supported protection flags.
+    /// </summary>
     public void Unprotect()
     {
         _protection.Reset();

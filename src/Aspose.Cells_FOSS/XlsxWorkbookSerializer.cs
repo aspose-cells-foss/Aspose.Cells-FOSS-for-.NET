@@ -23,6 +23,12 @@ namespace Aspose.Cells_FOSS;
 
 internal static class XlsxWorkbookSerializer
 {
+    /// <summary>
+    /// Saves the current state.
+    /// </summary>
+    /// <param name="model">The model.</param>
+    /// <param name="stream">The stream.</param>
+    /// <param name="options">The options to use.</param>
     public static void Save(WorkbookModel model, Stream stream, SaveOptions options)
     {
         if (options.SaveFormat != SaveFormat.Xlsx)
@@ -99,6 +105,13 @@ internal static class XlsxWorkbookSerializer
         }
     }
 
+    /// <summary>
+    /// Loads the current state.
+    /// </summary>
+    /// <param name="stream">The stream.</param>
+    /// <param name="options">The options to use.</param>
+    /// <param name="diagnostics">The diagnostics.</param>
+    /// <returns>The workbook model.</returns>
     public static WorkbookModel Load(Stream stream, LoadOptions options, LoadDiagnostics diagnostics)
     {
         if (!stream.CanRead)
@@ -225,10 +238,10 @@ internal static class XlsxWorkbookSerializer
         IReadOnlyDictionary<string, string> worksheetHyperlinkTargets,
         Aspose.Cells_FOSS.Core.DateSystem dateSystem,
         IReadOnlyList<string> sharedStrings,
-        XlsxWorkbookStyles.StylesheetLoadContext stylesheet,
+        StylesheetLoadContext stylesheet,
         LoadDiagnostics diagnostics,
         LoadOptions options,
-        XlsxWorkbookPageSetup.WorksheetDefinedNamesState? definedNamesState)
+        WorksheetDefinedNamesState? definedNamesState)
     {
         var worksheetModel = new WorksheetModel(sheetName);
         var worksheetRoot = worksheetDocument.Root;
@@ -332,7 +345,7 @@ internal static class XlsxWorkbookSerializer
         return worksheetModel;
     }
 
-    private static void LoadColumns(WorksheetModel worksheetModel, XElement worksheetRoot, XlsxWorkbookStyles.StylesheetLoadContext stylesheet, LoadDiagnostics diagnostics, LoadOptions options, string sheetName)
+    private static void LoadColumns(WorksheetModel worksheetModel, XElement worksheetRoot, StylesheetLoadContext stylesheet, LoadDiagnostics diagnostics, LoadOptions options, string sheetName)
     {
         var columns = new List<ColumnRangeModel>();
         foreach (var columnElement in worksheetRoot.Element(MainNs + "cols")?.Elements(MainNs + "col") ?? Enumerable.Empty<XElement>())
@@ -467,7 +480,7 @@ internal static class XlsxWorkbookSerializer
         return false;
     }
 
-    private static void ApplyRowMetadata(WorksheetModel worksheetModel, XElement rowElement, int rowIndex, XlsxWorkbookStyles.StylesheetLoadContext stylesheet, LoadDiagnostics diagnostics, LoadOptions options, string sheetName)
+    private static void ApplyRowMetadata(WorksheetModel worksheetModel, XElement rowElement, int rowIndex, StylesheetLoadContext stylesheet, LoadDiagnostics diagnostics, LoadOptions options, string sheetName)
     {
         var styleIndex = ParseIntAttribute(rowElement.Attribute("s"));
         if (styleIndex.HasValue && (styleIndex.Value < 0 || styleIndex.Value >= stylesheet.CellFormats.Count))
@@ -512,7 +525,7 @@ internal static class XlsxWorkbookSerializer
         int rowIndex,
         Aspose.Cells_FOSS.Core.DateSystem dateSystem,
         IReadOnlyList<string> sharedStrings,
-        XlsxWorkbookStyles.StylesheetLoadContext stylesheet,
+        StylesheetLoadContext stylesheet,
         LoadDiagnostics diagnostics,
         LoadOptions options,
         string sheetName,
