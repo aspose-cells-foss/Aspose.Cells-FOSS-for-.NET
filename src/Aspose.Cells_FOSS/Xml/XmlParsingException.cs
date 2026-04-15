@@ -1,13 +1,18 @@
-namespace Aspose.Cells_FOSS.Xml;
-
-/// <summary>
-/// Represents an error that occurs during xml parsing.
-/// </summary>
-public class XmlParsingException : Exception
+using System.Linq;
+using System.IO;
+using System.Collections.Generic;
+using System;
+namespace Aspose.Cells_FOSS.Xml
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="XmlParsingException"/> class.
+    /// Represents an error that occurs during xml parsing.
     /// </summary>
-    /// <param name="message">The error message.</param>
-    public XmlParsingException(string message) : base(message) { }
+    public class XmlParsingException : Exception
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="XmlParsingException"/> class.
+        /// </summary>
+        /// <param name="message">The error message.</param>
+        public XmlParsingException(string message) : base(message) { }
+    }
 }

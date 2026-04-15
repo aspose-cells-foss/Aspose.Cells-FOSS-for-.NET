@@ -1,13 +1,18 @@
-namespace Aspose.Cells_FOSS.Core;
-
-/// <summary>
-/// Specifies vertical alignment.
-/// </summary>
-public enum VerticalAlignment
+using System.Linq;
+using System.IO;
+using System.Collections.Generic;
+using System;
+namespace Aspose.Cells_FOSS.Core
 {
-    Bottom,
-    Center,
-    Top,
-    Justify,
-    Distributed
+    /// <summary>
+    /// Specifies vertical alignment.
+    /// </summary>
+    public enum VerticalAlignment
+    {
+        Bottom,
+        Center,
+        Top,
+        Justify,
+        Distributed
+    }
 }

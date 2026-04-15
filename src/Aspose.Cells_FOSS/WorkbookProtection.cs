@@ -1,102 +1,107 @@
+using System.Linq;
+using System.IO;
+using System.Collections.Generic;
+using System;
 using Aspose.Cells_FOSS.Core;
 
-namespace Aspose.Cells_FOSS;
-
-/// <summary>
-/// Represents workbook protection.
-/// </summary>
-public sealed class WorkbookProtection
+namespace Aspose.Cells_FOSS
 {
-    private readonly WorkbookProtectionModel _model;
-
-    internal WorkbookProtection(WorkbookProtectionModel model)
-    {
-        _model = model;
-    }
-
     /// <summary>
-    /// Gets or sets a value indicating whether lock structure.
+    /// Represents workbook protection.
     /// </summary>
-    public bool LockStructure
+    public sealed class WorkbookProtection
     {
-        get
-        {
-            return _model.LockStructure;
-        }
-        set
-        {
-            _model.LockStructure = value;
-        }
-    }
+        private readonly WorkbookProtectionModel _model;
 
-    /// <summary>
-    /// Gets or sets a value indicating whether lock windows.
-    /// </summary>
-    public bool LockWindows
-    {
-        get
+        internal WorkbookProtection(WorkbookProtectionModel model)
         {
-            return _model.LockWindows;
+            _model = model;
         }
-        set
-        {
-            _model.LockWindows = value;
-        }
-    }
 
-    /// <summary>
-    /// Gets or sets a value indicating whether lock revision.
-    /// </summary>
-    public bool LockRevision
-    {
-        get
+        /// <summary>
+        /// Gets or sets a value indicating whether lock structure.
+        /// </summary>
+        public bool LockStructure
         {
-            return _model.LockRevision;
+            get
+            {
+                return _model.LockStructure;
+            }
+            set
+            {
+                _model.LockStructure = value;
+            }
         }
-        set
-        {
-            _model.LockRevision = value;
-        }
-    }
 
-    /// <summary>
-    /// Gets or sets the workbook password.
-    /// </summary>
-    public string WorkbookPassword
-    {
-        get
+        /// <summary>
+        /// Gets or sets a value indicating whether lock windows.
+        /// </summary>
+        public bool LockWindows
         {
-            return _model.WorkbookPassword;
+            get
+            {
+                return _model.LockWindows;
+            }
+            set
+            {
+                _model.LockWindows = value;
+            }
         }
-        set
-        {
-            _model.WorkbookPassword = value ?? string.Empty;
-        }
-    }
 
-    /// <summary>
-    /// Gets or sets the revisions password.
-    /// </summary>
-    public string RevisionsPassword
-    {
-        get
+        /// <summary>
+        /// Gets or sets a value indicating whether lock revision.
+        /// </summary>
+        public bool LockRevision
         {
-            return _model.RevisionsPassword;
+            get
+            {
+                return _model.LockRevision;
+            }
+            set
+            {
+                _model.LockRevision = value;
+            }
         }
-        set
-        {
-            _model.RevisionsPassword = value ?? string.Empty;
-        }
-    }
 
-    /// <summary>
-    /// Gets a value indicating whether protected.
-    /// </summary>
-    public bool IsProtected
-    {
-        get
+        /// <summary>
+        /// Gets or sets the workbook password.
+        /// </summary>
+        public string WorkbookPassword
         {
-            return _model.HasStoredState();
+            get
+            {
+                return _model.WorkbookPassword;
+            }
+            set
+            {
+                _model.WorkbookPassword = value ?? string.Empty;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the revisions password.
+        /// </summary>
+        public string RevisionsPassword
+        {
+            get
+            {
+                return _model.RevisionsPassword;
+            }
+            set
+            {
+                _model.RevisionsPassword = value ?? string.Empty;
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether protected.
+        /// </summary>
+        public bool IsProtected
+        {
+            get
+            {
+                return _model.HasStoredState();
+            }
         }
     }
 }

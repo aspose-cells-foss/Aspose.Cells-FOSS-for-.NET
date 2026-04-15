@@ -1,238 +1,115 @@
-﻿# AGENTS.md
+# AGENTS.md
 
 ## Purpose
 
-This file defines how agents should use the documents under `Spec/` to produce the final code for `Aspose.Cells_FOSS`.
+This file defines how agents should work in this checkout of `Aspose.Cells_FOSS`.
 
-The project is spec-driven. Code generation must follow the specs first, then the current source layout, and finally the tests.
+The repository is currently source-driven. Agents must align changes to the code and assets that are present in this checkout instead of assuming missing spec or test folders exist.
+
+## Current Checkout Facts
+
+Before making changes, account for the current repository state:
+
+- the repository contains `src/`, `samples/`, `License/`, the root solution file, and this document
+- there is no `Spec/` directory in this checkout
+- there is no `tests/` directory in this checkout
+- `src/Aspose.Cells_FOSS/Aspose.Cells_FOSS.csproj` targets `netstandard2.0` and `net8.0`
+- the library is compiled with `LangVersion` set to `6`
+
+Do not write instructions or code that depend on files that are not present unless the user explicitly asks you to add them.
 
 ## Source Of Truth
 
-Read the following files before changing production code:
+When changing code or docs in this checkout, use the following priority:
 
-1. `Spec/product_scope.md`
-2. `Spec/public_api.md`
-3. `Spec/implementation_rules.md`
-4. `Spec/Aspose.Cells_FOSS_for_DotNET_Agent_Architecture_v0.2.md`
-5. `Spec/recovery_design.md`
-6. `Spec/recovery_policy.yaml`
-7. `Spec/step.md`
-8. `Spec/api_compatibility_alignment.md`
+1. direct user instructions
+2. this `AGENTS.md`
+3. the current public API and behavior in `src/Aspose.Cells_FOSS/`
+4. runnable examples under `samples/`
+5. the root `README.md`, solution file, and project files
 
-Use the YAML specs as feature-level contracts:
+If a future checkout adds a `Spec/` directory, treat those specs as the feature contract for the areas they cover. In this checkout, do not block work on missing specs.
 
-- `Spec/opc_package.yaml`
-- `Spec/workbook.yaml`
-- `Spec/worksheet.yaml`
-- `Spec/cells.yaml`
-- `Spec/rows.yaml`
-- `Spec/columns.yaml`
-- `Spec/merges.yaml`
-- `Spec/shared_strings.yaml`
-- `Spec/hyperlinks.yaml`
-- `Spec/data_validations.yaml`
-- `Spec/conditional_formatting.yaml`
-- `Spec/styles.yaml`
-- `Spec/formulas.yaml`
-- `Spec/dates.yaml`
+## Working Rules
 
-## Priority Rules
+All code changes should preserve the existing implementation constraints that are visible in the repo:
 
-When multiple files describe the same behavior, apply this priority:
+- keep the library compatible with C# 6 syntax
+- preserve `netstandard2.0` support unless the user explicitly asks to change targets
+- prefer explicit control flow and simple, maintainable code
+- keep save output deterministic where current serializer code depends on ordering
+- preserve file and stream load and save support
+- treat load diagnostics and recovery behavior as important public behavior
+- do not introduce a dependency on Microsoft Excel
 
-1. `Spec/implementation_rules.md`
-2. `Spec/public_api.md`
-3. Feature YAML specs under `Spec/*.yaml`
-4. `Spec/recovery_policy.yaml` and `Spec/recovery_design.md`
-5. `Spec/Aspose.Cells_FOSS_for_DotNET_Agent_Architecture_v0.2.md`
-6. `Spec/step.md`
+When editing existing files:
 
-If a conflict still exists, prefer:
-
-- public behavior compatible with Aspose.Cells style
-- recovery-friendly loading with explicit diagnostics
-- deterministic XLSX serialization
-- simple, Java-portable implementation style
-
-## Mandatory Coding Rules
-
-All generated code must follow `Spec/implementation_rules.md`:
-
-- do not use `partial` classes
-- keep each production `.cs` file under 800 lines
-- do not use the `=>` operator
-- do not use alias `using` directives
-- prefer explicit loops and simple control flow
-
-Also follow these project-level rules from the specs:
-
-- production code must not depend on Open XML SDK
-- support both file and stream load/save
-- support both 1900 and 1904 date systems
-- treat recovery and diagnostics as first-class behavior
-- preserve deterministic output order for rows, cells, relationships, styles, and shared strings
+- read the surrounding code first and follow the local style
+- do not revert unrelated work already present in the worktree
+- avoid broad refactors unless they are required for the requested change
+- update docs and samples when the public behavior they describe changes
 
 ## Implementation Workflow
 
-For every feature or code change:
+For feature work or bug fixes:
 
-1. Read the relevant global docs in the Source Of Truth section.
-2. Read the matching feature YAML files.
-3. Map public API behavior from `Spec/public_api.md` to the internal model.
-4. Implement load behavior, save behavior, validation, and recovery together.
-5. Add or update tests for unit, golden, malformed, and compatibility coverage when applicable.
-6. Verify the implementation against the spec rules, not only against current code shape.
+1. inspect the relevant public API types under `src/Aspose.Cells_FOSS/`
+2. inspect the matching internal model, packaging, and XML mapper code under `src/Aspose.Cells_FOSS/Core/`, `Packaging/`, and `Xml/`
+3. inspect any related sample projects under `samples/`
+4. implement the public behavior, load path, save path, and diagnostics together
+5. run the narrowest practical verification command for the touched project or sample
+6. update `README.md` or sample code if the user-facing workflow changed
 
-Do not implement features that are outside `Spec/product_scope.md` v0.1 unless the user explicitly asks for them.
+Because `tests/` is absent in this checkout, do not claim automated test coverage that you did not run. Prefer targeted `dotnet build` verification and clearly state what was and was not validated.
 
-## Feature To Spec Mapping
+## Repository Map
 
-### Workbook and package structure
+Use the current layout as the implementation map:
 
-Use:
+- `src/Aspose.Cells_FOSS/`: public API surface and XLSX implementation
+- `src/Aspose.Cells_FOSS/Core/`: internal workbook, worksheet, style, and value models
+- `src/Aspose.Cells_FOSS/Packaging/`: OPC package abstractions and relationship handling
+- `src/Aspose.Cells_FOSS/Xml/`: XML load and save mappers
+- `src/Aspose.Cells_FOSS/Validation/`: workbook validation messages and validator
+- `samples/`: runnable console samples for implemented features
+- `License/`: license files
 
-- `Spec/product_scope.md`
-- `Spec/public_api.md`
-- `Spec/workbook.yaml`
-- `Spec/opc_package.yaml`
-- `Spec/recovery_policy.yaml`
+## Build And Verification
 
-Responsible for:
+Prefer targeted project builds over broad solution commands.
 
-- `Workbook`
-- `WorksheetCollection`
-- workbook relationships
-- workbook settings
-- package part registration
-- load/save entry points
+Recommended commands:
 
-### Worksheet grid and metadata
+- `dotnet build src\Aspose.Cells_FOSS\Aspose.Cells_FOSS.csproj -c Debug`
+- `dotnet build samples\Aspose.Cells_FOSS.Samples.Basic\Aspose.Cells_FOSS.Samples.Basic.csproj -c Debug`
 
-Use:
+Use additional sample project builds when your change affects that area.
 
-- `Spec/worksheet.yaml`
-- `Spec/rows.yaml`
-- `Spec/columns.yaml`
-- `Spec/merges.yaml`
-- `Spec/hyperlinks.yaml`
-- `Spec/data_validations.yaml`
-- `Spec/conditional_formatting.yaml`
-- `Spec/recovery_policy.yaml`
+## Documentation Rules
 
-Responsible for:
+When updating docs:
 
-- worksheet XML
-- dimension
-- row metadata
-- column metadata
-- merge regions
-- sheet ordering and visibility
-- worksheet hyperlinks
-- worksheet data validations
-- worksheet conditional formatting
-
-### Cell values and addressing
-
-Use:
-
-- `Spec/cells.yaml`
-- `Spec/formulas.yaml`
-- `Spec/dates.yaml`
-- `Spec/shared_strings.yaml`
-- `Spec/worksheet.yaml`
-
-Responsible for:
-
-- A1 parsing and formatting
-- zero-based public indexers
-- scalar values
-- formula persistence
-- blank cell rules
-- date serial conversion
-- shared string and inline string behavior
-
-### Styles
-
-Use:
-
-- `Spec/styles.yaml`
-- `Spec/dates.yaml`
-- `Spec/public_api.md`
-- `Spec/Aspose.Cells_FOSS_for_DotNET_Agent_Architecture_v0.2.md`
-
-Responsible for:
-
-- `Style`, `Font`, `Borders`, `Border`
-- style repositories and deduplication
-- style index allocation
-- number format behavior for dates
-
-### Recovery and diagnostics
-
-Use:
-
-- `Spec/recovery_design.md`
-- `Spec/recovery_policy.yaml`
-- all feature YAML `recovery` sections
-
-Responsible for:
-
-- fatal vs recoverable vs lossy recoverable behavior
-- `LoadDiagnostics`
-- warning callback integration
-- repair rules
-- data loss risk reporting
-
-## Execution Order
-
-Follow `Spec/step.md` as the preferred delivery order:
-
-1. cell data APIs and Excel cell data import/export
-2. style APIs and full style import/export
-3. worksheet options and settings APIs and import/export
-4. page setup APIs and import/export
-
-Within each step, finish the whole vertical slice:
-
-- public API
-- internal model
-- XML/package load
-- XML/package save
-- recovery rules
-- tests
-
-## Definition Of Done
-
-A feature is complete only when all of the following are true:
-
-- public API matches the intended shape in `Spec/public_api.md`
-- implementation respects `Spec/implementation_rules.md`
-- XML load/save behavior matches the relevant YAML specs
-- recovery behavior matches the relevant `recovery` section
-- deterministic serialization is preserved
-- unsupported v0.1 features are not silently half-implemented
-- tests cover nominal, round-trip, and malformed cases where required by the spec
+- describe only behavior that exists in this checkout
+- avoid references to missing `Spec/` or `tests/` folders unless you explicitly call out that they are absent
+- keep build instructions executable from the repository root
+- prefer short, concrete examples over broad feature claims that cannot be verified locally
 
 ## Anti-Patterns
 
 Do not:
 
-- invent behavior that contradicts the spec files
-- spread date conversion logic outside a single date conversion service
-- mix public facade objects with internal storage records
-- rely on current incidental behavior when the spec says otherwise
-- silently drop recoverable or lossy cases without diagnostics
-- add unsupported advanced Excel features as hidden partial implementations
+- assume spec files exist when they do not
+- describe solution contents that are not in `Aspose.Cells_FOSS.sln`
+- claim automated tests were updated when the repo has no test project in this checkout
+- add modern C# syntax that conflicts with `LangVersion` 6
+- silently change public API behavior without updating docs or samples
 
 ## Expected Output Style
 
-Agents should produce code that is:
+Agents should produce work that is:
 
-- small, explicit, and maintainable
-- deterministic on save
-- strict on fatal corruption
-- tolerant on recoverable corruption
-- easy to port to Java later
-- aligned with the existing folder structure under `src/`, `tests/`, and `samples/`
-
-
+- accurate to the current checkout
+- small and explicit
+- compatible with the existing API shape
+- straightforward to verify with targeted builds
+- clear about validation limits when tests are unavailable

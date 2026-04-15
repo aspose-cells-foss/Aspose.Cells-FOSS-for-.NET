@@ -1,98 +1,103 @@
+using System.Linq;
+using System.IO;
+using System.Collections.Generic;
+using System;
 using Aspose.Cells_FOSS.Core;
 
-namespace Aspose.Cells_FOSS;
-
-/// <summary>
-/// Represents column.
-/// </summary>
-public sealed class Column
+namespace Aspose.Cells_FOSS
 {
-    private readonly Worksheet _worksheet;
-    private readonly int _index;
-
-    internal Column(Worksheet worksheet, int index)
-    {
-        _worksheet = worksheet;
-        _index = index;
-    }
-
     /// <summary>
-    /// Gets or sets the width.
+    /// Represents column.
     /// </summary>
-    public double? Width
+    public sealed class Column
     {
-        get
+        private readonly Worksheet _worksheet;
+        private readonly int _index;
+
+        internal Column(Worksheet worksheet, int index)
         {
-            var model = FindModel();
-            return model?.Width;
+            _worksheet = worksheet;
+            _index = index;
         }
-        set
+
+        /// <summary>
+        /// Gets or sets the width.
+        /// </summary>
+        public double? Width
         {
-            if (value.HasValue && value.Value <= 0d)
+            get
             {
-                throw new CellsException("Column width must be positive.");
+                var model = FindModel();
+                return model?.Width;
             }
-
-            var model = GetOrCreateModel();
-            model.Width = value;
-            Normalize(model);
-        }
-    }
-
-    /// <summary>
-    /// Gets or sets a value indicating whether hidden.
-    /// </summary>
-    public bool IsHidden
-    {
-        get
-        {
-            var model = FindModel();
-            return model?.Hidden ?? false;
-        }
-        set
-        {
-            var model = GetOrCreateModel();
-            model.Hidden = value;
-            Normalize(model);
-        }
-    }
-
-    private ColumnRangeModel? FindModel()
-    {
-        for (var index = _worksheet.Model.Columns.Count - 1; index >= 0; index--)
-        {
-            var model = _worksheet.Model.Columns[index];
-            if (model.MinColumnIndex <= _index && model.MaxColumnIndex >= _index)
+            set
             {
-                return model;
+                if (value.HasValue && value.Value <= 0d)
+                {
+                    throw new CellsException("Column width must be positive.");
+                }
+
+                var model = GetOrCreateModel();
+                model.Width = value;
+                Normalize(model);
             }
         }
 
-        return null;
-    }
-
-    private ColumnRangeModel GetOrCreateModel()
-    {
-        var existing = FindModel();
-        if (existing is not null && existing.MinColumnIndex == _index && existing.MaxColumnIndex == _index)
+        /// <summary>
+        /// Gets or sets a value indicating whether hidden.
+        /// </summary>
+        public bool IsHidden
         {
-            return existing;
+            get
+            {
+                var model = FindModel();
+                return model?.Hidden ?? false;
+            }
+            set
+            {
+                var model = GetOrCreateModel();
+                model.Hidden = value;
+                Normalize(model);
+            }
         }
 
-        var created = new ColumnRangeModel
+        private ColumnRangeModel FindModel()
         {
-            MinColumnIndex = _index,
-            MaxColumnIndex = _index,
-        };
-        _worksheet.Model.Columns.Add(created);
-        return created;
-    }
+            for (var index = _worksheet.Model.Columns.Count - 1; index >= 0; index--)
+            {
+                var model = _worksheet.Model.Columns[index];
+                if (model.MinColumnIndex <= _index && model.MaxColumnIndex >= _index)
+                {
+                    return model;
+                }
+            }
 
-    private void Normalize(ColumnRangeModel model)
-    {
-        if (!model.Width.HasValue && !model.Hidden && !model.StyleIndex.HasValue)
+            return null;
+        }
+
+        private ColumnRangeModel GetOrCreateModel()
         {
-            _worksheet.Model.Columns.Remove(model);
+            var existing = FindModel();
+            if (existing != null && existing.MinColumnIndex == _index && existing.MaxColumnIndex == _index)
+            {
+                return existing;
+            }
+
+            var created = new ColumnRangeModel
+            {
+                MinColumnIndex = _index,
+                MaxColumnIndex = _index,
+            };
+            _worksheet.Model.Columns.Add(created);
+            return created;
+        }
+
+        private void Normalize(ColumnRangeModel model)
+        {
+            if (!model.Width.HasValue && !model.Hidden && !model.StyleIndex.HasValue)
+            {
+                _worksheet.Model.Columns.Remove(model);
+            }
         }
     }
 }

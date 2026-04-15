@@ -1,238 +1,243 @@
+using System.Linq;
+using System.IO;
+using System.Collections.Generic;
+using System;
 using Aspose.Cells_FOSS.Core;
 
-namespace Aspose.Cells_FOSS;
-
-/// <summary>
-/// Represents workbook view.
-/// </summary>
-public sealed class WorkbookView
+namespace Aspose.Cells_FOSS
 {
-    private readonly WorkbookModel _workbookModel;
-    private readonly WorkbookViewModel _model;
-
-    internal WorkbookView(WorkbookModel workbookModel)
-    {
-        _workbookModel = workbookModel;
-        _model = workbookModel.Properties.View;
-    }
-
     /// <summary>
-    /// Gets or sets the x window.
+    /// Represents workbook view.
     /// </summary>
-    public int XWindow
+    public sealed class WorkbookView
     {
-        get
-        {
-            return _model.XWindow ?? 0;
-        }
-        set
-        {
-            _model.XWindow = value;
-        }
-    }
+        private readonly WorkbookModel _workbookModel;
+        private readonly WorkbookViewModel _model;
 
-    /// <summary>
-    /// Gets or sets the y window.
-    /// </summary>
-    public int YWindow
-    {
-        get
+        internal WorkbookView(WorkbookModel workbookModel)
         {
-            return _model.YWindow ?? 0;
+            _workbookModel = workbookModel;
+            _model = workbookModel.Properties.View;
         }
-        set
-        {
-            _model.YWindow = value;
-        }
-    }
 
-    /// <summary>
-    /// Gets or sets the window width.
-    /// </summary>
-    public int WindowWidth
-    {
-        get
+        /// <summary>
+        /// Gets or sets the x window.
+        /// </summary>
+        public int XWindow
         {
-            return _model.WindowWidth ?? 0;
-        }
-        set
-        {
-            if (value < 0)
+            get
             {
-                throw new CellsException("WindowWidth must be non-negative.");
+                return _model.XWindow ?? 0;
             }
-
-            _model.WindowWidth = value;
-        }
-    }
-
-    /// <summary>
-    /// Gets or sets the window height.
-    /// </summary>
-    public int WindowHeight
-    {
-        get
-        {
-            return _model.WindowHeight ?? 0;
-        }
-        set
-        {
-            if (value < 0)
+            set
             {
-                throw new CellsException("WindowHeight must be non-negative.");
+                _model.XWindow = value;
             }
-
-            _model.WindowHeight = value;
         }
-    }
 
-    /// <summary>
-    /// Gets or sets the active tab.
-    /// </summary>
-    public int ActiveTab
-    {
-        get
+        /// <summary>
+        /// Gets or sets the y window.
+        /// </summary>
+        public int YWindow
         {
-            return _workbookModel.ActiveSheetIndex;
-        }
-        set
-        {
-            if (value < 0 || value >= _workbookModel.Worksheets.Count)
+            get
             {
-                throw new CellsException("ActiveTab must refer to an existing worksheet.");
+                return _model.YWindow ?? 0;
             }
-
-            _workbookModel.ActiveSheetIndex = value;
-        }
-    }
-
-    /// <summary>
-    /// Gets or sets the first sheet.
-    /// </summary>
-    public int FirstSheet
-    {
-        get
-        {
-            return _model.FirstSheet ?? 0;
-        }
-        set
-        {
-            if (value < 0)
+            set
             {
-                throw new CellsException("FirstSheet must be non-negative.");
+                _model.YWindow = value;
             }
+        }
 
-            _model.FirstSheet = value;
-        }
-    }
-
-    /// <summary>
-    /// Gets or sets a value indicating whether show horizontal scroll.
-    /// </summary>
-    public bool ShowHorizontalScroll
-    {
-        get
+        /// <summary>
+        /// Gets or sets the window width.
+        /// </summary>
+        public int WindowWidth
         {
-            return !_model.ShowHorizontalScroll.HasValue || _model.ShowHorizontalScroll.Value;
-        }
-        set
-        {
-            _model.ShowHorizontalScroll = value;
-        }
-    }
-
-    /// <summary>
-    /// Gets or sets a value indicating whether show vertical scroll.
-    /// </summary>
-    public bool ShowVerticalScroll
-    {
-        get
-        {
-            return !_model.ShowVerticalScroll.HasValue || _model.ShowVerticalScroll.Value;
-        }
-        set
-        {
-            _model.ShowVerticalScroll = value;
-        }
-    }
-
-    /// <summary>
-    /// Gets or sets a value indicating whether show sheet tabs.
-    /// </summary>
-    public bool ShowSheetTabs
-    {
-        get
-        {
-            return !_model.ShowSheetTabs.HasValue || _model.ShowSheetTabs.Value;
-        }
-        set
-        {
-            _model.ShowSheetTabs = value;
-        }
-    }
-
-    /// <summary>
-    /// Gets or sets the tab ratio.
-    /// </summary>
-    public int TabRatio
-    {
-        get
-        {
-            return _model.TabRatio ?? 600;
-        }
-        set
-        {
-            if (value < 0 || value > 1000)
+            get
             {
-                throw new CellsException("TabRatio must be between 0 and 1000.");
+                return _model.WindowWidth ?? 0;
             }
+            set
+            {
+                if (value < 0)
+                {
+                    throw new CellsException("WindowWidth must be non-negative.");
+                }
 
-            _model.TabRatio = value;
+                _model.WindowWidth = value;
+            }
         }
-    }
 
-    /// <summary>
-    /// Gets or sets the visibility.
-    /// </summary>
-    public string Visibility
-    {
-        get
+        /// <summary>
+        /// Gets or sets the window height.
+        /// </summary>
+        public int WindowHeight
         {
-            return string.IsNullOrEmpty(_model.Visibility) ? "visible" : _model.Visibility;
-        }
-        set
-        {
-            _model.Visibility = WorkbookPropertySupport.NormalizeVisibility(value);
-        }
-    }
+            get
+            {
+                return _model.WindowHeight ?? 0;
+            }
+            set
+            {
+                if (value < 0)
+                {
+                    throw new CellsException("WindowHeight must be non-negative.");
+                }
 
-    /// <summary>
-    /// Gets or sets a value indicating whether minimized.
-    /// </summary>
-    public bool Minimized
-    {
-        get
-        {
-            return _model.Minimized;
+                _model.WindowHeight = value;
+            }
         }
-        set
-        {
-            _model.Minimized = value;
-        }
-    }
 
-    /// <summary>
-    /// Gets or sets a value indicating whether auto filter date grouping.
-    /// </summary>
-    public bool AutoFilterDateGrouping
-    {
-        get
+        /// <summary>
+        /// Gets or sets the active tab.
+        /// </summary>
+        public int ActiveTab
         {
-            return _model.AutoFilterDateGrouping;
+            get
+            {
+                return _workbookModel.ActiveSheetIndex;
+            }
+            set
+            {
+                if (value < 0 || value >= _workbookModel.Worksheets.Count)
+                {
+                    throw new CellsException("ActiveTab must refer to an existing worksheet.");
+                }
+
+                _workbookModel.ActiveSheetIndex = value;
+            }
         }
-        set
+
+        /// <summary>
+        /// Gets or sets the first sheet.
+        /// </summary>
+        public int FirstSheet
         {
-            _model.AutoFilterDateGrouping = value;
+            get
+            {
+                return _model.FirstSheet ?? 0;
+            }
+            set
+            {
+                if (value < 0)
+                {
+                    throw new CellsException("FirstSheet must be non-negative.");
+                }
+
+                _model.FirstSheet = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether show horizontal scroll.
+        /// </summary>
+        public bool ShowHorizontalScroll
+        {
+            get
+            {
+                return !_model.ShowHorizontalScroll.HasValue || _model.ShowHorizontalScroll.Value;
+            }
+            set
+            {
+                _model.ShowHorizontalScroll = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether show vertical scroll.
+        /// </summary>
+        public bool ShowVerticalScroll
+        {
+            get
+            {
+                return !_model.ShowVerticalScroll.HasValue || _model.ShowVerticalScroll.Value;
+            }
+            set
+            {
+                _model.ShowVerticalScroll = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether show sheet tabs.
+        /// </summary>
+        public bool ShowSheetTabs
+        {
+            get
+            {
+                return !_model.ShowSheetTabs.HasValue || _model.ShowSheetTabs.Value;
+            }
+            set
+            {
+                _model.ShowSheetTabs = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the tab ratio.
+        /// </summary>
+        public int TabRatio
+        {
+            get
+            {
+                return _model.TabRatio ?? 600;
+            }
+            set
+            {
+                if (value < 0 || value > 1000)
+                {
+                    throw new CellsException("TabRatio must be between 0 and 1000.");
+                }
+
+                _model.TabRatio = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the visibility.
+        /// </summary>
+        public string Visibility
+        {
+            get
+            {
+                return string.IsNullOrEmpty(_model.Visibility) ? "visible" : _model.Visibility;
+            }
+            set
+            {
+                _model.Visibility = WorkbookPropertySupport.NormalizeVisibility(value);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether minimized.
+        /// </summary>
+        public bool Minimized
+        {
+            get
+            {
+                return _model.Minimized;
+            }
+            set
+            {
+                _model.Minimized = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether auto filter date grouping.
+        /// </summary>
+        public bool AutoFilterDateGrouping
+        {
+            get
+            {
+                return _model.AutoFilterDateGrouping;
+            }
+            set
+            {
+                _model.AutoFilterDateGrouping = value;
+            }
         }
     }
 }

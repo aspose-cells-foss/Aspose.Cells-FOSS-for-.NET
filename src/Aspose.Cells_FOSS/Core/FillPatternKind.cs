@@ -1,26 +1,31 @@
-namespace Aspose.Cells_FOSS.Core;
-
-/// <summary>
-/// Specifies fill pattern kind.
-/// </summary>
-public enum FillPatternKind
+using System.Linq;
+using System.IO;
+using System.Collections.Generic;
+using System;
+namespace Aspose.Cells_FOSS.Core
 {
-    None,
-    Solid,
-    MediumGray,
-    DarkGray,
-    Gray125,
-    Gray0625,
-    DarkHorizontal,
-    DarkVertical,
-    DarkDown,
-    DarkUp,
-    DarkGrid,
-    DarkTrellis,
-    LightHorizontal,
-    LightVertical,
-    LightDown,
-    LightUp,
-    LightGrid,
-    LightTrellis
+    /// <summary>
+    /// Specifies fill pattern kind.
+    /// </summary>
+    public enum FillPatternKind
+    {
+        None,
+        Solid,
+        MediumGray,
+        DarkGray,
+        Gray125,
+        Gray0625,
+        DarkHorizontal,
+        DarkVertical,
+        DarkDown,
+        DarkUp,
+        DarkGrid,
+        DarkTrellis,
+        LightHorizontal,
+        LightVertical,
+        LightDown,
+        LightUp,
+        LightGrid,
+        LightTrellis
+    }
 }

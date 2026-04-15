@@ -1,22 +1,27 @@
-namespace Aspose.Cells_FOSS;
-
-/// <summary>
-/// Specifies border style type.
-/// </summary>
-public enum BorderStyleType
+using System.Linq;
+using System.IO;
+using System.Collections.Generic;
+using System;
+namespace Aspose.Cells_FOSS
 {
-    None,
-    Thin,
-    Medium,
-    Thick,
-    Dotted,
-    Dashed,
-    Double,
-    Hair,
-    MediumDashed,
-    DashDot,
-    MediumDashDot,
-    DashDotDot,
-    MediumDashDotDot,
-    SlantedDashDot
+    /// <summary>
+    /// Specifies border style type.
+    /// </summary>
+    public enum BorderStyleType
+    {
+        None,
+        Thin,
+        Medium,
+        Thick,
+        Dotted,
+        Dashed,
+        Double,
+        Hair,
+        MediumDashed,
+        DashDot,
+        MediumDashDot,
+        DashDotDot,
+        MediumDashDotDot,
+        SlantedDashDot
+    }
 }

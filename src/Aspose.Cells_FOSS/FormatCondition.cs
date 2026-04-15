@@ -1,490 +1,495 @@
+using System.Linq;
+using System.IO;
+using System.Collections.Generic;
+using System;
 using Aspose.Cells_FOSS.Core;
 
-namespace Aspose.Cells_FOSS;
-
-/// <summary>
-/// Represents format condition.
-/// </summary>
-public sealed class FormatCondition
+namespace Aspose.Cells_FOSS
 {
-    private readonly List<ConditionalFormattingModel> _owner;
-    private readonly ConditionalFormattingModel _collection;
-    private readonly FormatConditionModel _model;
-
-    internal FormatCondition(List<ConditionalFormattingModel> owner, ConditionalFormattingModel collection, FormatConditionModel model)
-    {
-        _owner = owner;
-        _collection = collection;
-        _model = model;
-    }
-
     /// <summary>
-    /// Gets or sets the type.
+    /// Represents format condition.
     /// </summary>
-    public FormatConditionType Type
+    public sealed class FormatCondition
     {
-        get
-        {
-            return _model.Type;
-        }
-        set
-        {
-            _model.Type = value;
-        }
-    }
+        private readonly List<ConditionalFormattingModel> _owner;
+        private readonly ConditionalFormattingModel _collection;
+        private readonly FormatConditionModel _model;
 
-    /// <summary>
-    /// Gets or sets the operator.
-    /// </summary>
-    public OperatorType Operator
-    {
-        get
+        internal FormatCondition(List<ConditionalFormattingModel> owner, ConditionalFormattingModel collection, FormatConditionModel model)
         {
-            return _model.Operator;
+            _owner = owner;
+            _collection = collection;
+            _model = model;
         }
-        set
-        {
-            _model.Operator = value;
-        }
-    }
 
-    /// <summary>
-    /// Gets or sets the formula1.
-    /// </summary>
-    public string Formula1
-    {
-        get
+        /// <summary>
+        /// Gets or sets the type.
+        /// </summary>
+        public FormatConditionType Type
         {
-            return _model.Formula1 ?? string.Empty;
-        }
-        set
-        {
-            _model.Formula1 = NormalizeFormula(value);
-        }
-    }
-
-    /// <summary>
-    /// Gets or sets the formula2.
-    /// </summary>
-    public string Formula2
-    {
-        get
-        {
-            return _model.Formula2 ?? string.Empty;
-        }
-        set
-        {
-            _model.Formula2 = NormalizeFormula(value);
-        }
-    }
-
-    /// <summary>
-    /// Gets or sets the formula.
-    /// </summary>
-    public string Formula
-    {
-        get
-        {
-            return _model.Formula1 ?? string.Empty;
-        }
-        set
-        {
-            _model.Formula1 = NormalizeFormula(value);
-        }
-    }
-
-    /// <summary>
-    /// Gets or sets the time period.
-    /// </summary>
-    public string TimePeriod
-    {
-        get
-        {
-            return _model.TimePeriod ?? string.Empty;
-        }
-        set
-        {
-            _model.TimePeriod = NormalizeText(value);
-        }
-    }
-
-    /// <summary>
-    /// Gets or sets a value indicating whether duplicate.
-    /// </summary>
-    public bool Duplicate
-    {
-        get
-        {
-            return _model.Duplicate;
-        }
-        set
-        {
-            _model.Duplicate = value;
-        }
-    }
-
-    /// <summary>
-    /// Gets or sets a value indicating whether top.
-    /// </summary>
-    public bool Top
-    {
-        get
-        {
-            return _model.Top;
-        }
-        set
-        {
-            _model.Top = value;
-        }
-    }
-
-    /// <summary>
-    /// Gets or sets a value indicating whether percent.
-    /// </summary>
-    public bool Percent
-    {
-        get
-        {
-            return _model.Percent;
-        }
-        set
-        {
-            _model.Percent = value;
-        }
-    }
-
-    /// <summary>
-    /// Gets or sets the rank.
-    /// </summary>
-    public int Rank
-    {
-        get
-        {
-            return _model.Rank;
-        }
-        set
-        {
-            if (value < 0)
+            get
             {
-                throw new CellsException("Conditional formatting rank must be zero or greater.");
+                return _model.Type;
+            }
+            set
+            {
+                _model.Type = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the operator.
+        /// </summary>
+        public OperatorType Operator
+        {
+            get
+            {
+                return _model.Operator;
+            }
+            set
+            {
+                _model.Operator = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the formula1.
+        /// </summary>
+        public string Formula1
+        {
+            get
+            {
+                return _model.Formula1 ?? string.Empty;
+            }
+            set
+            {
+                _model.Formula1 = NormalizeFormula(value);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the formula2.
+        /// </summary>
+        public string Formula2
+        {
+            get
+            {
+                return _model.Formula2 ?? string.Empty;
+            }
+            set
+            {
+                _model.Formula2 = NormalizeFormula(value);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the formula.
+        /// </summary>
+        public string Formula
+        {
+            get
+            {
+                return _model.Formula1 ?? string.Empty;
+            }
+            set
+            {
+                _model.Formula1 = NormalizeFormula(value);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the time period.
+        /// </summary>
+        public string TimePeriod
+        {
+            get
+            {
+                return _model.TimePeriod ?? string.Empty;
+            }
+            set
+            {
+                _model.TimePeriod = NormalizeText(value);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether duplicate.
+        /// </summary>
+        public bool Duplicate
+        {
+            get
+            {
+                return _model.Duplicate;
+            }
+            set
+            {
+                _model.Duplicate = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether top.
+        /// </summary>
+        public bool Top
+        {
+            get
+            {
+                return _model.Top;
+            }
+            set
+            {
+                _model.Top = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether percent.
+        /// </summary>
+        public bool Percent
+        {
+            get
+            {
+                return _model.Percent;
+            }
+            set
+            {
+                _model.Percent = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the rank.
+        /// </summary>
+        public int Rank
+        {
+            get
+            {
+                return _model.Rank;
+            }
+            set
+            {
+                if (value < 0)
+                {
+                    throw new CellsException("Conditional formatting rank must be zero or greater.");
+                }
+
+                _model.Rank = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether above.
+        /// </summary>
+        public bool Above
+        {
+            get
+            {
+                return _model.Above;
+            }
+            set
+            {
+                _model.Above = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the standard deviation.
+        /// </summary>
+        public int StandardDeviation
+        {
+            get
+            {
+                return _model.StandardDeviation;
+            }
+            set
+            {
+                if (value < 0)
+                {
+                    throw new CellsException("Conditional formatting standard deviation must be zero or greater.");
+                }
+
+                _model.StandardDeviation = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the color scale count.
+        /// </summary>
+        public int ColorScaleCount
+        {
+            get
+            {
+                return _model.ColorScaleCount;
+            }
+            set
+            {
+                if (value != 2 && value != 3)
+                {
+                    throw new CellsException("ColorScaleCount must be 2 or 3.");
+                }
+
+                _model.ColorScaleCount = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the min color.
+        /// </summary>
+        public Color MinColor
+        {
+            get
+            {
+                return Color.FromCore(_model.MinColor);
+            }
+            set
+            {
+                _model.MinColor = value.ToCore();
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the mid color.
+        /// </summary>
+        public Color MidColor
+        {
+            get
+            {
+                return Color.FromCore(_model.MidColor);
+            }
+            set
+            {
+                _model.MidColor = value.ToCore();
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the max color.
+        /// </summary>
+        public Color MaxColor
+        {
+            get
+            {
+                return Color.FromCore(_model.MaxColor);
+            }
+            set
+            {
+                _model.MaxColor = value.ToCore();
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the bar color.
+        /// </summary>
+        public Color BarColor
+        {
+            get
+            {
+                return Color.FromCore(_model.BarColor);
+            }
+            set
+            {
+                _model.BarColor = value.ToCore();
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the negative bar color.
+        /// </summary>
+        public Color NegativeBarColor
+        {
+            get
+            {
+                return Color.FromCore(_model.NegativeBarColor);
+            }
+            set
+            {
+                _model.NegativeBarColor = value.ToCore();
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether show border.
+        /// </summary>
+        public bool ShowBorder
+        {
+            get
+            {
+                return _model.ShowBorder;
+            }
+            set
+            {
+                _model.ShowBorder = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the direction.
+        /// </summary>
+        public string Direction
+        {
+            get
+            {
+                return _model.Direction ?? string.Empty;
+            }
+            set
+            {
+                _model.Direction = NormalizeText(value);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the bar length.
+        /// </summary>
+        public string BarLength
+        {
+            get
+            {
+                return _model.BarLength ?? string.Empty;
+            }
+            set
+            {
+                _model.BarLength = NormalizeText(value);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the icon set type.
+        /// </summary>
+        public string IconSetType
+        {
+            get
+            {
+                return _model.IconSetType ?? string.Empty;
+            }
+            set
+            {
+                _model.IconSetType = NormalizeText(value);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether reverse icons.
+        /// </summary>
+        public bool ReverseIcons
+        {
+            get
+            {
+                return _model.ReverseIcons;
+            }
+            set
+            {
+                _model.ReverseIcons = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether show icon only.
+        /// </summary>
+        public bool ShowIconOnly
+        {
+            get
+            {
+                return _model.ShowIconOnly;
+            }
+            set
+            {
+                _model.ShowIconOnly = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the priority.
+        /// </summary>
+        public int Priority
+        {
+            get
+            {
+                return _model.Priority;
+            }
+            set
+            {
+                if (value <= 0)
+                {
+                    throw new CellsException("Conditional formatting priority must be greater than zero.");
+                }
+
+                _model.Priority = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether stop if true.
+        /// </summary>
+        public bool StopIfTrue
+        {
+            get
+            {
+                return _model.StopIfTrue;
+            }
+            set
+            {
+                _model.StopIfTrue = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the style.
+        /// </summary>
+        public Style Style
+        {
+            get
+            {
+                return Style.FromCore(_model.Style).Clone();
+            }
+            set
+            {
+                _model.Style = value == null ? StyleValue.Default.Clone() : value.ToCore();
+            }
+        }
+
+        /// <summary>
+        /// Removes the specified item.
+        /// </summary>
+        public void Remove()
+        {
+            FormatConditionCollection.RemoveCondition(_owner, _collection, _model);
+        }
+
+        private static string NormalizeFormula(string value)
+        {
+            if (value == null)
+            {
+                return null;
             }
 
-            _model.Rank = value;
-        }
-    }
-
-    /// <summary>
-    /// Gets or sets a value indicating whether above.
-    /// </summary>
-    public bool Above
-    {
-        get
-        {
-            return _model.Above;
-        }
-        set
-        {
-            _model.Above = value;
-        }
-    }
-
-    /// <summary>
-    /// Gets or sets the standard deviation.
-    /// </summary>
-    public int StandardDeviation
-    {
-        get
-        {
-            return _model.StandardDeviation;
-        }
-        set
-        {
-            if (value < 0)
+            var trimmed = value.Trim();
+            if (trimmed.Length == 0)
             {
-                throw new CellsException("Conditional formatting standard deviation must be zero or greater.");
+                return null;
             }
 
-            _model.StandardDeviation = value;
-        }
-    }
-
-    /// <summary>
-    /// Gets or sets the color scale count.
-    /// </summary>
-    public int ColorScaleCount
-    {
-        get
-        {
-            return _model.ColorScaleCount;
-        }
-        set
-        {
-            if (value != 2 && value != 3)
+            if (trimmed[0] == '=')
             {
-                throw new CellsException("ColorScaleCount must be 2 or 3.");
+                return trimmed.Substring(1);
             }
 
-            _model.ColorScaleCount = value;
+            return trimmed;
         }
-    }
 
-    /// <summary>
-    /// Gets or sets the min color.
-    /// </summary>
-    public Color MinColor
-    {
-        get
+        private static string NormalizeText(string value)
         {
-            return Color.FromCore(_model.MinColor);
-        }
-        set
-        {
-            _model.MinColor = value.ToCore();
-        }
-    }
-
-    /// <summary>
-    /// Gets or sets the mid color.
-    /// </summary>
-    public Color MidColor
-    {
-        get
-        {
-            return Color.FromCore(_model.MidColor);
-        }
-        set
-        {
-            _model.MidColor = value.ToCore();
-        }
-    }
-
-    /// <summary>
-    /// Gets or sets the max color.
-    /// </summary>
-    public Color MaxColor
-    {
-        get
-        {
-            return Color.FromCore(_model.MaxColor);
-        }
-        set
-        {
-            _model.MaxColor = value.ToCore();
-        }
-    }
-
-    /// <summary>
-    /// Gets or sets the bar color.
-    /// </summary>
-    public Color BarColor
-    {
-        get
-        {
-            return Color.FromCore(_model.BarColor);
-        }
-        set
-        {
-            _model.BarColor = value.ToCore();
-        }
-    }
-
-    /// <summary>
-    /// Gets or sets the negative bar color.
-    /// </summary>
-    public Color NegativeBarColor
-    {
-        get
-        {
-            return Color.FromCore(_model.NegativeBarColor);
-        }
-        set
-        {
-            _model.NegativeBarColor = value.ToCore();
-        }
-    }
-
-    /// <summary>
-    /// Gets or sets a value indicating whether show border.
-    /// </summary>
-    public bool ShowBorder
-    {
-        get
-        {
-            return _model.ShowBorder;
-        }
-        set
-        {
-            _model.ShowBorder = value;
-        }
-    }
-
-    /// <summary>
-    /// Gets or sets the direction.
-    /// </summary>
-    public string Direction
-    {
-        get
-        {
-            return _model.Direction ?? string.Empty;
-        }
-        set
-        {
-            _model.Direction = NormalizeText(value);
-        }
-    }
-
-    /// <summary>
-    /// Gets or sets the bar length.
-    /// </summary>
-    public string BarLength
-    {
-        get
-        {
-            return _model.BarLength ?? string.Empty;
-        }
-        set
-        {
-            _model.BarLength = NormalizeText(value);
-        }
-    }
-
-    /// <summary>
-    /// Gets or sets the icon set type.
-    /// </summary>
-    public string IconSetType
-    {
-        get
-        {
-            return _model.IconSetType ?? string.Empty;
-        }
-        set
-        {
-            _model.IconSetType = NormalizeText(value);
-        }
-    }
-
-    /// <summary>
-    /// Gets or sets a value indicating whether reverse icons.
-    /// </summary>
-    public bool ReverseIcons
-    {
-        get
-        {
-            return _model.ReverseIcons;
-        }
-        set
-        {
-            _model.ReverseIcons = value;
-        }
-    }
-
-    /// <summary>
-    /// Gets or sets a value indicating whether show icon only.
-    /// </summary>
-    public bool ShowIconOnly
-    {
-        get
-        {
-            return _model.ShowIconOnly;
-        }
-        set
-        {
-            _model.ShowIconOnly = value;
-        }
-    }
-
-    /// <summary>
-    /// Gets or sets the priority.
-    /// </summary>
-    public int Priority
-    {
-        get
-        {
-            return _model.Priority;
-        }
-        set
-        {
-            if (value <= 0)
+            if (value == null)
             {
-                throw new CellsException("Conditional formatting priority must be greater than zero.");
+                return null;
             }
 
-            _model.Priority = value;
-        }
-    }
+            var trimmed = value.Trim();
+            if (trimmed.Length == 0)
+            {
+                return null;
+            }
 
-    /// <summary>
-    /// Gets or sets a value indicating whether stop if true.
-    /// </summary>
-    public bool StopIfTrue
-    {
-        get
-        {
-            return _model.StopIfTrue;
+            return trimmed;
         }
-        set
-        {
-            _model.StopIfTrue = value;
-        }
-    }
-
-    /// <summary>
-    /// Gets or sets the style.
-    /// </summary>
-    public Style Style
-    {
-        get
-        {
-            return Style.FromCore(_model.Style).Clone();
-        }
-        set
-        {
-            _model.Style = value is null ? StyleValue.Default.Clone() : value.ToCore();
-        }
-    }
-
-    /// <summary>
-    /// Removes the specified item.
-    /// </summary>
-    public void Remove()
-    {
-        FormatConditionCollection.RemoveCondition(_owner, _collection, _model);
-    }
-
-    private static string? NormalizeFormula(string? value)
-    {
-        if (value is null)
-        {
-            return null;
-        }
-
-        var trimmed = value.Trim();
-        if (trimmed.Length == 0)
-        {
-            return null;
-        }
-
-        if (trimmed[0] == '=')
-        {
-            return trimmed.Substring(1);
-        }
-
-        return trimmed;
-    }
-
-    private static string? NormalizeText(string? value)
-    {
-        if (value is null)
-        {
-            return null;
-        }
-
-        var trimmed = value.Trim();
-        if (trimmed.Length == 0)
-        {
-            return null;
-        }
-
-        return trimmed;
     }
 }

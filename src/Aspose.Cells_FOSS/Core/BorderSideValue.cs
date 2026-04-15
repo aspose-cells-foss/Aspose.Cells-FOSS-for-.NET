@@ -1,26 +1,30 @@
+using System.Linq;
+using System.IO;
+using System;
 using System.Collections.Generic;
 
-namespace Aspose.Cells_FOSS.Core;
-
-/// <summary>
-/// Represents border side value.
-/// </summary>
-public sealed class BorderSideValue
+namespace Aspose.Cells_FOSS.Core
 {
     /// <summary>
-    /// Gets or sets the style.
+    /// Represents border side value.
     /// </summary>
-    public BorderStyle Style { get; set; }
-    /// <summary>
-    /// Gets or sets the color.
-    /// </summary>
-    public ColorValue Color { get; set; }
-    /// <summary>
-    /// Creates a copy of the current instance.
-    /// </summary>
-    /// <returns>The border side value.</returns>
-    public BorderSideValue Clone()
+    public sealed class BorderSideValue
     {
-        return new BorderSideValue { Style = Style, Color = Color };
+        /// <summary>
+        /// Gets or sets the style.
+        /// </summary>
+        public BorderStyle Style { get; set; }
+        /// <summary>
+        /// Gets or sets the color.
+        /// </summary>
+        public ColorValue Color { get; set; }
+        /// <summary>
+        /// Creates a copy of the current instance.
+        /// </summary>
+        /// <returns>The border side value.</returns>
+        public BorderSideValue Clone()
+        {
+            return new BorderSideValue { Style = Style, Color = Color };
+        }
     }
 }

@@ -1,97 +1,102 @@
+using System.Linq;
+using System.IO;
+using System.Collections.Generic;
+using System;
 using Aspose.Cells_FOSS.Core;
 
-namespace Aspose.Cells_FOSS;
-
-/// <summary>
-/// Represents defined name.
-/// </summary>
-public sealed class DefinedName
+namespace Aspose.Cells_FOSS
 {
-    private readonly Workbook _workbook;
-    private readonly DefinedNameModel _model;
-
-    internal DefinedName(Workbook workbook, DefinedNameModel model)
-    {
-        _workbook = workbook;
-        _model = model;
-    }
-
     /// <summary>
-    /// Gets or sets the name.
+    /// Represents defined name.
     /// </summary>
-    public string Name
+    public sealed class DefinedName
     {
-        get
-        {
-            return _model.Name;
-        }
-        set
-        {
-            var normalized = DefinedNameUtility.NormalizeName(value);
-            _workbook.EnsureUniqueDefinedName(_model, normalized, _model.LocalSheetIndex);
-            _model.Name = normalized;
-        }
-    }
+        private readonly Workbook _workbook;
+        private readonly DefinedNameModel _model;
 
-    /// <summary>
-    /// Gets or sets the formula.
-    /// </summary>
-    public string Formula
-    {
-        get
+        internal DefinedName(Workbook workbook, DefinedNameModel model)
         {
-            return _model.Formula;
+            _workbook = workbook;
+            _model = model;
         }
-        set
-        {
-            _model.Formula = DefinedNameUtility.NormalizeFormula(value);
-        }
-    }
 
-    /// <summary>
-    /// Gets or sets the local sheet index.
-    /// </summary>
-    public int? LocalSheetIndex
-    {
-        get
+        /// <summary>
+        /// Gets or sets the name.
+        /// </summary>
+        public string Name
         {
-            return _model.LocalSheetIndex;
+            get
+            {
+                return _model.Name;
+            }
+            set
+            {
+                var normalized = DefinedNameUtility.NormalizeName(value);
+                _workbook.EnsureUniqueDefinedName(_model, normalized, _model.LocalSheetIndex);
+                _model.Name = normalized;
+            }
         }
-        set
-        {
-            _workbook.EnsureValidDefinedNameScope(value);
-            _workbook.EnsureUniqueDefinedName(_model, _model.Name, value);
-            _model.LocalSheetIndex = value;
-        }
-    }
 
-    /// <summary>
-    /// Gets or sets a value indicating whether hidden.
-    /// </summary>
-    public bool Hidden
-    {
-        get
+        /// <summary>
+        /// Gets or sets the formula.
+        /// </summary>
+        public string Formula
         {
-            return _model.Hidden;
+            get
+            {
+                return _model.Formula;
+            }
+            set
+            {
+                _model.Formula = DefinedNameUtility.NormalizeFormula(value);
+            }
         }
-        set
-        {
-            _model.Hidden = value;
-        }
-    }
 
-    /// <summary>
-    /// Gets or sets the comment.
-    /// </summary>
-    public string Comment
-    {
-        get
+        /// <summary>
+        /// Gets or sets the local sheet index.
+        /// </summary>
+        public int? LocalSheetIndex
         {
-            return _model.Comment;
+            get
+            {
+                return _model.LocalSheetIndex;
+            }
+            set
+            {
+                _workbook.EnsureValidDefinedNameScope(value);
+                _workbook.EnsureUniqueDefinedName(_model, _model.Name, value);
+                _model.LocalSheetIndex = value;
+            }
         }
-        set
+
+        /// <summary>
+        /// Gets or sets a value indicating whether hidden.
+        /// </summary>
+        public bool Hidden
         {
-            _model.Comment = DefinedNameUtility.NormalizeComment(value);
+            get
+            {
+                return _model.Hidden;
+            }
+            set
+            {
+                _model.Hidden = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the comment.
+        /// </summary>
+        public string Comment
+        {
+            get
+            {
+                return _model.Comment;
+            }
+            set
+            {
+                _model.Comment = DefinedNameUtility.NormalizeComment(value);
+            }
         }
     }
 }

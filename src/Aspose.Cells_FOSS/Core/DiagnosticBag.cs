@@ -1,31 +1,35 @@
+using System.Linq;
+using System.IO;
+using System;
 using System.Collections.Generic;
 
-namespace Aspose.Cells_FOSS.Core;
-
-/// <summary>
-/// Represents diagnostic bag.
-/// </summary>
-public sealed class DiagnosticBag
+namespace Aspose.Cells_FOSS.Core
 {
-    private readonly List<DiagnosticEntry> _entries = new List<DiagnosticEntry>();
-
     /// <summary>
-    /// Gets the entries.
+    /// Represents diagnostic bag.
     /// </summary>
-    public IReadOnlyList<DiagnosticEntry> Entries
+    public sealed class DiagnosticBag
     {
-        get
+        private readonly List<DiagnosticEntry> _entries = new List<DiagnosticEntry>();
+
+        /// <summary>
+        /// Gets the entries.
+        /// </summary>
+        public IReadOnlyList<DiagnosticEntry> Entries
         {
-            return _entries;
+            get
+            {
+                return _entries;
+            }
         }
-    }
 
-    /// <summary>
-    /// Adds the specified item.
-    /// </summary>
-    /// <param name="entry">The entry.</param>
-    public void Add(DiagnosticEntry entry)
-    {
-        _entries.Add(entry);
+        /// <summary>
+        /// Adds the specified item.
+        /// </summary>
+        /// <param name="entry">The entry.</param>
+        public void Add(DiagnosticEntry entry)
+        {
+            _entries.Add(entry);
+        }
     }
 }

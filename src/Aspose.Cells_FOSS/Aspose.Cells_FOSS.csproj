@@ -4,5 +4,6 @@
     <AssemblyName>Aspose.Cells_FOSS</AssemblyName>
     <RootNamespace>Aspose.Cells_FOSS</RootNamespace>
     <BuildInParallel>false</BuildInParallel>
+    <LangVersion>6</LangVersion>
   </PropertyGroup>
 </Project>

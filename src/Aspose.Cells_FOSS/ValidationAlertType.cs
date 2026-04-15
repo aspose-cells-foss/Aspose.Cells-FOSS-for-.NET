@@ -1,11 +1,16 @@
-namespace Aspose.Cells_FOSS;
-
-/// <summary>
-/// Specifies validation alert type.
-/// </summary>
-public enum ValidationAlertType
+using System.Linq;
+using System.IO;
+using System.Collections.Generic;
+using System;
+namespace Aspose.Cells_FOSS
 {
-    Stop,
-    Warning,
-    Information
+    /// <summary>
+    /// Specifies validation alert type.
+    /// </summary>
+    public enum ValidationAlertType
+    {
+        Stop,
+        Warning,
+        Information
+    }
 }

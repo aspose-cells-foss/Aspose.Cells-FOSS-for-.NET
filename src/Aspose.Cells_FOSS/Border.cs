@@ -1,29 +1,34 @@
-namespace Aspose.Cells_FOSS;
-
-/// <summary>
-/// Represents border.
-/// </summary>
-public class Border
+using System.Linq;
+using System.IO;
+using System.Collections.Generic;
+using System;
+namespace Aspose.Cells_FOSS
 {
     /// <summary>
-    /// Gets or sets the line style.
+    /// Represents border.
     /// </summary>
-    public BorderStyleType LineStyle { get; set; }
-    /// <summary>
-    /// Gets or sets the color.
-    /// </summary>
-    public Color Color { get; set; } = Color.Empty;
-
-    /// <summary>
-    /// Creates a copy of the current instance.
-    /// </summary>
-    /// <returns>The border.</returns>
-    public Border Clone()
+    public class Border
     {
-        return new Border
+        /// <summary>
+        /// Gets or sets the line style.
+        /// </summary>
+        public BorderStyleType LineStyle { get; set; }
+        /// <summary>
+        /// Gets or sets the color.
+        /// </summary>
+        public Color Color { get; set; } = Color.Empty;
+
+        /// <summary>
+        /// Creates a copy of the current instance.
+        /// </summary>
+        /// <returns>The border.</returns>
+        public Border Clone()
         {
-            LineStyle = LineStyle,
-            Color = Color,
-        };
+            return new Border
+            {
+                LineStyle = LineStyle,
+                Color = Color,
+            };
+        }
     }
 }

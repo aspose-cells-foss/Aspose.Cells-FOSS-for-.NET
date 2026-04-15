@@ -1,310 +1,315 @@
+using System.Linq;
+using System.IO;
+using System.Collections.Generic;
+using System;
 using Aspose.Cells_FOSS.Core;
 
-namespace Aspose.Cells_FOSS;
-
-/// <summary>
-/// Encapsulates a single worksheet and its supported v0.1 worksheet features.
-/// </summary>
-/// <example>
-/// <code>
-/// var workbook = new Workbook();
-/// var sheet = workbook.Worksheets[0];
-///
-/// sheet.Name = "Data";
-/// sheet.Cells["A1"].PutValue("North");
-/// sheet.Cells["B1"].PutValue(42);
-/// sheet.Zoom = 120;
-/// sheet.PageSetup.Orientation = PageOrientationType.Landscape;
-/// </code>
-/// </example>
-public class Worksheet
+namespace Aspose.Cells_FOSS
 {
-    private readonly Workbook _workbook;
-    private readonly WorksheetModel _model;
-    private readonly Cells _cells;
-    private readonly HyperlinkCollection _hyperlinks;
-    private readonly ValidationCollection _validations;
-    private readonly ConditionalFormattingCollection _conditionalFormattings;
-    private readonly PageSetup _pageSetup;
-    private readonly WorksheetProtection _protection;
-    private readonly AutoFilter _autoFilter;
-
-    internal Worksheet(Workbook workbook, WorksheetModel model)
-    {
-        _workbook = workbook;
-        _model = model;
-        _cells = new Cells(this);
-        _hyperlinks = new HyperlinkCollection(model.Hyperlinks);
-        _validations = new ValidationCollection(model.Validations);
-        _conditionalFormattings = new ConditionalFormattingCollection(model.ConditionalFormattings);
-        _pageSetup = new PageSetup(model.PageSetup);
-        _protection = new WorksheetProtection(model.Protection);
-        _autoFilter = new AutoFilter(model.AutoFilter);
-    }
-
-    internal WorksheetModel Model
-    {
-        get
-        {
-            return _model;
-        }
-    }
-
-    internal Workbook Workbook
-    {
-        get
-        {
-            return _workbook;
-        }
-    }
-
     /// <summary>
-    /// Gets or sets the worksheet name.
+    /// Encapsulates a single worksheet and its supported v0.1 worksheet features.
     /// </summary>
-    public string Name
+    /// <example>
+    /// <code>
+    /// var workbook = new Workbook();
+    /// var sheet = workbook.Worksheets[0];
+    ///
+    /// sheet.Name = "Data";
+    /// sheet.Cells["A1"].PutValue("North");
+    /// sheet.Cells["B1"].PutValue(42);
+    /// sheet.Zoom = 120;
+    /// sheet.PageSetup.Orientation = PageOrientationType.Landscape;
+    /// </code>
+    /// </example>
+    public class Worksheet
     {
-        get
-        {
-            return _model.Name;
-        }
-        set
-        {
-            if (string.IsNullOrWhiteSpace(value)) throw new CellsException("Worksheet name must be non-empty.");
-            _workbook.EnsureUniqueSheetName(value, _model);
-            _model.Name = value;
-        }
-    }
+        private readonly Workbook _workbook;
+        private readonly WorksheetModel _model;
+        private readonly Cells _cells;
+        private readonly HyperlinkCollection _hyperlinks;
+        private readonly ValidationCollection _validations;
+        private readonly ConditionalFormattingCollection _conditionalFormattings;
+        private readonly PageSetup _pageSetup;
+        private readonly WorksheetProtection _protection;
+        private readonly AutoFilter _autoFilter;
 
-    /// <summary>
-    /// Gets or sets the worksheet visibility state.
-    /// </summary>
-    public VisibilityType VisibilityType
-    {
-        get
+        internal Worksheet(Workbook workbook, WorksheetModel model)
         {
-            switch (_model.Visibility)
+            _workbook = workbook;
+            _model = model;
+            _cells = new Cells(this);
+            _hyperlinks = new HyperlinkCollection(model.Hyperlinks);
+            _validations = new ValidationCollection(model.Validations);
+            _conditionalFormattings = new ConditionalFormattingCollection(model.ConditionalFormattings);
+            _pageSetup = new PageSetup(model.PageSetup);
+            _protection = new WorksheetProtection(model.Protection);
+            _autoFilter = new AutoFilter(model.AutoFilter);
+        }
+
+        internal WorksheetModel Model
+        {
+            get
             {
-                case SheetVisibility.Hidden:
-                    return Aspose.Cells_FOSS.VisibilityType.Hidden;
-                case SheetVisibility.VeryHidden:
-                    return Aspose.Cells_FOSS.VisibilityType.VeryHidden;
-                default:
-                    return Aspose.Cells_FOSS.VisibilityType.Visible;
+                return _model;
             }
         }
-        set
+
+        internal Workbook Workbook
         {
-            switch (value)
+            get
             {
-                case VisibilityType.Hidden:
-                    _model.Visibility = SheetVisibility.Hidden;
-                    break;
-                case VisibilityType.VeryHidden:
-                    _model.Visibility = SheetVisibility.VeryHidden;
-                    break;
-                default:
-                    _model.Visibility = SheetVisibility.Visible;
-                    break;
+                return _workbook;
             }
         }
-    }
 
-    /// <summary>
-    /// Gets or sets the worksheet tab color.
-    /// </summary>
-    public Color TabColor
-    {
-        get
+        /// <summary>
+        /// Gets or sets the worksheet name.
+        /// </summary>
+        public string Name
         {
-            if (_model.TabColor.HasValue)
+            get
             {
-                return Color.FromCore(_model.TabColor.Value);
+                return _model.Name;
             }
-
-            return Color.Empty;
-        }
-        set
-        {
-            if (value.Equals(Color.Empty))
+            set
             {
-                _model.TabColor = null;
-                return;
+                if (string.IsNullOrWhiteSpace(value)) throw new CellsException("Worksheet name must be non-empty.");
+                _workbook.EnsureUniqueSheetName(value, _model);
+                _model.Name = value;
             }
+        }
 
-            _model.TabColor = value.ToCore();
-        }
-    }
-
-    /// <summary>
-    /// Gets or sets whether gridlines are shown in the worksheet view.
-    /// </summary>
-    public bool ShowGridlines
-    {
-        get
+        /// <summary>
+        /// Gets or sets the worksheet visibility state.
+        /// </summary>
+        public VisibilityType VisibilityType
         {
-            return _model.View.ShowGridLines;
-        }
-        set
-        {
-            _model.View.ShowGridLines = value;
-        }
-    }
-
-    /// <summary>
-    /// Gets or sets whether row and column headers are shown in the worksheet view.
-    /// </summary>
-    public bool ShowRowColumnHeaders
-    {
-        get
-        {
-            return _model.View.ShowRowColumnHeaders;
-        }
-        set
-        {
-            _model.View.ShowRowColumnHeaders = value;
-        }
-    }
-
-    /// <summary>
-    /// Gets or sets whether zero values are shown in the worksheet view.
-    /// </summary>
-    public bool ShowZeros
-    {
-        get
-        {
-            return _model.View.ShowZeros;
-        }
-        set
-        {
-            _model.View.ShowZeros = value;
-        }
-    }
-
-    /// <summary>
-    /// Gets or sets whether the worksheet view is right-to-left.
-    /// </summary>
-    public bool RightToLeft
-    {
-        get
-        {
-            return _model.View.RightToLeft;
-        }
-        set
-        {
-            _model.View.RightToLeft = value;
-        }
-    }
-
-    /// <summary>
-    /// Gets or sets the worksheet zoom percentage.
-    /// </summary>
-    public int Zoom
-    {
-        get
-        {
-            return _model.View.ZoomScale;
-        }
-        set
-        {
-            if (value < 10 || value > 400)
+            get
             {
-                throw new CellsException("Zoom must be between 10 and 400.");
+                switch (_model.Visibility)
+                {
+                    case SheetVisibility.Hidden:
+                        return Aspose.Cells_FOSS.VisibilityType.Hidden;
+                    case SheetVisibility.VeryHidden:
+                        return Aspose.Cells_FOSS.VisibilityType.VeryHidden;
+                    default:
+                        return Aspose.Cells_FOSS.VisibilityType.Visible;
+                }
             }
-
-            _model.View.ZoomScale = value;
+            set
+            {
+                switch (value)
+                {
+                    case VisibilityType.Hidden:
+                        _model.Visibility = SheetVisibility.Hidden;
+                        break;
+                    case VisibilityType.VeryHidden:
+                        _model.Visibility = SheetVisibility.VeryHidden;
+                        break;
+                    default:
+                        _model.Visibility = SheetVisibility.Visible;
+                        break;
+                }
+            }
         }
-    }
 
-    /// <summary>
-    /// Gets the cell grid facade for the worksheet.
-    /// </summary>
-    public Cells Cells
-    {
-        get
+        /// <summary>
+        /// Gets or sets the worksheet tab color.
+        /// </summary>
+        public Color TabColor
         {
-            return _cells;
-        }
-    }
+            get
+            {
+                if (_model.TabColor.HasValue)
+                {
+                    return Color.FromCore(_model.TabColor.Value);
+                }
 
-    /// <summary>
-    /// Gets the worksheet hyperlink collection.
-    /// </summary>
-    public HyperlinkCollection Hyperlinks
-    {
-        get
+                return Color.Empty;
+            }
+            set
+            {
+                if (value.Equals(Color.Empty))
+                {
+                    _model.TabColor = null;
+                    return;
+                }
+
+                _model.TabColor = value.ToCore();
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets whether gridlines are shown in the worksheet view.
+        /// </summary>
+        public bool ShowGridlines
         {
-            return _hyperlinks;
+            get
+            {
+                return _model.View.ShowGridLines;
+            }
+            set
+            {
+                _model.View.ShowGridLines = value;
+            }
         }
-    }
 
-    /// <summary>
-    /// Gets the worksheet data validation collection.
-    /// </summary>
-    public ValidationCollection Validations
-    {
-        get
+        /// <summary>
+        /// Gets or sets whether row and column headers are shown in the worksheet view.
+        /// </summary>
+        public bool ShowRowColumnHeaders
         {
-            return _validations;
+            get
+            {
+                return _model.View.ShowRowColumnHeaders;
+            }
+            set
+            {
+                _model.View.ShowRowColumnHeaders = value;
+            }
         }
-    }
 
-    /// <summary>
-    /// Gets the worksheet conditional formatting collection.
-    /// </summary>
-    public ConditionalFormattingCollection ConditionalFormattings
-    {
-        get
+        /// <summary>
+        /// Gets or sets whether zero values are shown in the worksheet view.
+        /// </summary>
+        public bool ShowZeros
         {
-            return _conditionalFormattings;
+            get
+            {
+                return _model.View.ShowZeros;
+            }
+            set
+            {
+                _model.View.ShowZeros = value;
+            }
         }
-    }
 
-    /// <summary>
-    /// Gets page setup settings for the worksheet.
-    /// </summary>
-    public PageSetup PageSetup
-    {
-        get
+        /// <summary>
+        /// Gets or sets whether the worksheet view is right-to-left.
+        /// </summary>
+        public bool RightToLeft
         {
-            return _pageSetup;
+            get
+            {
+                return _model.View.RightToLeft;
+            }
+            set
+            {
+                _model.View.RightToLeft = value;
+            }
         }
-    }
 
-    /// <summary>
-    /// Gets worksheet protection settings.
-    /// </summary>
-    public WorksheetProtection Protection
-    {
-        get
+        /// <summary>
+        /// Gets or sets the worksheet zoom percentage.
+        /// </summary>
+        public int Zoom
         {
-            return _protection;
-        }
-    }
+            get
+            {
+                return _model.View.ZoomScale;
+            }
+            set
+            {
+                if (value < 10 || value > 400)
+                {
+                    throw new CellsException("Zoom must be between 10 and 400.");
+                }
 
-    /// <summary>
-    /// Gets auto-filter settings for the worksheet.
-    /// </summary>
-    public AutoFilter AutoFilter
-    {
-        get
+                _model.View.ZoomScale = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets the cell grid facade for the worksheet.
+        /// </summary>
+        public Cells Cells
         {
-            return _autoFilter;
+            get
+            {
+                return _cells;
+            }
         }
-    }
 
-    /// <summary>
-    /// Marks the worksheet as protected using the current protection settings.
-    /// </summary>
-    public void Protect()
-    {
-        _model.Protection.IsProtected = true;
-    }
+        /// <summary>
+        /// Gets the worksheet hyperlink collection.
+        /// </summary>
+        public HyperlinkCollection Hyperlinks
+        {
+            get
+            {
+                return _hyperlinks;
+            }
+        }
 
-    /// <summary>
-    /// Clears worksheet protection and resets supported protection flags.
-    /// </summary>
-    public void Unprotect()
-    {
-        _protection.Reset();
+        /// <summary>
+        /// Gets the worksheet data validation collection.
+        /// </summary>
+        public ValidationCollection Validations
+        {
+            get
+            {
+                return _validations;
+            }
+        }
+
+        /// <summary>
+        /// Gets the worksheet conditional formatting collection.
+        /// </summary>
+        public ConditionalFormattingCollection ConditionalFormattings
+        {
+            get
+            {
+                return _conditionalFormattings;
+            }
+        }
+
+        /// <summary>
+        /// Gets page setup settings for the worksheet.
+        /// </summary>
+        public PageSetup PageSetup
+        {
+            get
+            {
+                return _pageSetup;
+            }
+        }
+
+        /// <summary>
+        /// Gets worksheet protection settings.
+        /// </summary>
+        public WorksheetProtection Protection
+        {
+            get
+            {
+                return _protection;
+            }
+        }
+
+        /// <summary>
+        /// Gets auto-filter settings for the worksheet.
+        /// </summary>
+        public AutoFilter AutoFilter
+        {
+            get
+            {
+                return _autoFilter;
+            }
+        }
+
+        /// <summary>
+        /// Marks the worksheet as protected using the current protection settings.
+        /// </summary>
+        public void Protect()
+        {
+            _model.Protection.IsProtected = true;
+        }
+
+        /// <summary>
+        /// Clears worksheet protection and resets supported protection flags.
+        /// </summary>
+        public void Unprotect()
+        {
+            _protection.Reset();
+        }
     }
 }

@@ -1,65 +1,69 @@
+using System.Linq;
+using System.IO;
+using System;
 using System.Collections.Generic;
 
-namespace Aspose.Cells_FOSS;
-
-/// <summary>
-/// Represents load diagnostics.
-/// </summary>
-public sealed class LoadDiagnostics
+namespace Aspose.Cells_FOSS
 {
-    private readonly List<LoadIssue> _issues = new List<LoadIssue>();
-
     /// <summary>
-    /// Gets a value indicating whether sues.
+    /// Represents load diagnostics.
     /// </summary>
-    public IReadOnlyList<LoadIssue> Issues
+    public sealed class LoadDiagnostics
     {
-        get
-        {
-            return _issues;
-        }
-    }
+        private readonly List<LoadIssue> _issues = new List<LoadIssue>();
 
-    /// <summary>
-    /// Gets a value indicating whether repairs.
-    /// </summary>
-    public bool HasRepairs
-    {
-        get
+        /// <summary>
+        /// Gets a value indicating whether sues.
+        /// </summary>
+        public IReadOnlyList<LoadIssue> Issues
         {
-            foreach (var issue in _issues)
+            get
             {
-                if (issue.RepairApplied)
-                {
-                    return true;
-                }
+                return _issues;
             }
-
-            return false;
         }
-    }
 
-    /// <summary>
-    /// Gets a value indicating whether data loss risk.
-    /// </summary>
-    public bool HasDataLossRisk
-    {
-        get
+        /// <summary>
+        /// Gets a value indicating whether repairs.
+        /// </summary>
+        public bool HasRepairs
         {
-            foreach (var issue in _issues)
+            get
             {
-                if (issue.DataLossRisk)
+                foreach (var issue in _issues)
                 {
-                    return true;
+                    if (issue.RepairApplied)
+                    {
+                        return true;
+                    }
                 }
+
+                return false;
             }
-
-            return false;
         }
-    }
 
-    internal void Add(LoadIssue issue)
-    {
-        _issues.Add(issue);
+        /// <summary>
+        /// Gets a value indicating whether data loss risk.
+        /// </summary>
+        public bool HasDataLossRisk
+        {
+            get
+            {
+                foreach (var issue in _issues)
+                {
+                    if (issue.DataLossRisk)
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+        }
+
+        internal void Add(LoadIssue issue)
+        {
+            _issues.Add(issue);
+        }
     }
 }
