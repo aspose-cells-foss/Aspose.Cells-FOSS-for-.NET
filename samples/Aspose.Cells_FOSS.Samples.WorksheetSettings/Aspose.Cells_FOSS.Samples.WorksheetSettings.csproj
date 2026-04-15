@@ -1,7 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <ImplicitUsings>enable</ImplicitUsings>
     <TargetFramework>net8.0</TargetFramework>
     <AssemblyName>Aspose.Cells_FOSS.Samples.WorksheetSettings</AssemblyName>
     <RootNamespace>Aspose.Cells_FOSS.Samples.WorksheetSettings</RootNamespace>

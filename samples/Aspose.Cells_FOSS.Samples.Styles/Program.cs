@@ -1,13 +1,23 @@
-﻿using Aspose.Cells_FOSS;
+using System;
+using Aspose.Cells_FOSS;
 
-var workbook = new Workbook();
-var cell = workbook.Worksheets[0].Cells["A1"];
-cell.PutValue("Styled");
+namespace Aspose.Cells_FOSS.Samples.Styles
+{
+    internal static class Program
+    {
+        private static void Main()
+        {
+            var workbook = new Workbook();
+            var cell = workbook.Worksheets[0].Cells["A1"];
+            cell.PutValue("Styled");
 
-var style = cell.GetStyle();
-style.Font.Bold = true;
-style.Pattern = FillPattern.Solid;
-style.ForegroundColor = Color.FromArgb(255, 241, 196, 15);
-cell.SetStyle(style);
+            var style = cell.GetStyle();
+            style.Font.Bold = true;
+            style.Pattern = FillPattern.Solid;
+            style.ForegroundColor = Color.FromArgb(255, 241, 196, 15);
+            cell.SetStyle(style);
 
-Console.WriteLine($"{cell.StringValue} / Bold={cell.GetStyle().Font.Bold}");
+            Console.WriteLine("{0} / Bold={1}", cell.StringValue, cell.GetStyle().Font.Bold);
+        }
+    }
+}

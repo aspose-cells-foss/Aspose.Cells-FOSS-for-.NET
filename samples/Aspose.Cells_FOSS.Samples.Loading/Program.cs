@@ -1,16 +1,26 @@
-﻿using Aspose.Cells_FOSS;
+using System;
+using Aspose.Cells_FOSS;
 
-var options = new LoadOptions
+namespace Aspose.Cells_FOSS.Samples.Loading
 {
-    TryRepairPackage = true,
-    TryRepairXml = true,
-};
+    internal static class Program
+    {
+        private static void Main()
+        {
+            var options = new LoadOptions
+            {
+                TryRepairPackage = true,
+                TryRepairXml = true
+            };
 
-try
-{
-    _ = new Workbook("sample.xlsx", options);
-}
-catch (WorkbookLoadException exception)
-{
-    Console.WriteLine(exception.Message);
+            try
+            {
+                new Workbook("sample.xlsx", options);
+            }
+            catch (WorkbookLoadException exception)
+            {
+                Console.WriteLine(exception.Message);
+            }
+        }
+    }
 }
