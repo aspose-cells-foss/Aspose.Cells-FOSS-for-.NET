@@ -2,7 +2,6 @@ using System.IO;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Xml.Linq;
 using Aspose.Cells_FOSS.Core;
 using static Aspose.Cells_FOSS.XlsxWorkbookArchiveHelpers;
@@ -118,7 +117,7 @@ namespace Aspose.Cells_FOSS
         {
             worksheetModel.Validations.Clear();
 
-            foreach (var validationElement in worksheetRoot.Element(MainNs + "dataValidations")?.Elements(MainNs + "dataValidation") ?? Enumerable.Empty<XElement>())
+            foreach (var validationElement in worksheetRoot.Element(MainNs + "dataValidations")?.Elements(MainNs + "dataValidation") ?? new XElement[0])
             {
                 var validation = new ValidationModel();
                 var sqref = (string)validationElement.Attribute("sqref");

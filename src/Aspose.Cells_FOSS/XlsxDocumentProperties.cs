@@ -1,4 +1,3 @@
-using System.Linq;
 using System.IO;
 using System;
 using System.Collections.Generic;
@@ -116,7 +115,7 @@ namespace Aspose.Cells_FOSS
                 return relationshipTargets;
             }
 
-            foreach (var relationship in document.Root?.Elements(PackageRelationshipNs + "Relationship") ?? Enumerable.Empty<XElement>())
+            foreach (var relationship in document.Root?.Elements(PackageRelationshipNs + "Relationship") ?? new XElement[0])
             {
                 var type = (string)relationship.Attribute("Type");
                 var target = (string)relationship.Attribute("Target");

@@ -1,4 +1,3 @@
-using System.Linq;
 using System.IO;
 using System.Collections.Generic;
 using System;
@@ -130,7 +129,8 @@ namespace Aspose.Cells_FOSS
 
         internal static bool IsEmptyColor(ColorValue color)
         {
-            return color.A == 0 && color.R == 0 && color.G == 0 && color.B == 0;
+            return !color.ThemeIndex.HasValue && !color.Indexed.HasValue
+                && color.A == 0 && color.R == 0 && color.G == 0 && color.B == 0;
         }
 
         internal static bool FontEquals(FontValue left, FontValue right)

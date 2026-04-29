@@ -72,6 +72,20 @@ Use the current layout as the implementation map:
 - `src/Aspose.Cells_FOSS/Xml/`: XML load and save mappers
 - `src/Aspose.Cells_FOSS/Validation/`: workbook validation messages and validator
 - `samples/`: runnable console samples for implemented features
+  - `Aspose.Cells_FOSS.Samples.Basic`: core operations and cell manipulation
+  - `Aspose.Cells_FOSS.Samples.Loading`: load options and diagnostics
+  - `Aspose.Cells_FOSS.Samples.Styles`: cell styling and formatting
+  - `Aspose.Cells_FOSS.Samples.WorksheetSettings`: worksheet configuration
+  - `Aspose.Cells_FOSS.Samples.Validations`: data validation rules
+  - `Aspose.Cells_FOSS.Samples.ConditionalFormatting`: conditional formatting rules
+  - `Aspose.Cells_FOSS.Samples.HyperlinksAndNames`: hyperlinks and defined names
+  - `Aspose.Cells_FOSS.Samples.PageSetup`: print and page setup
+  - `Aspose.Cells_FOSS.Samples.Shapes`: drawing shapes
+  - `Aspose.Cells_FOSS.Samples.Charts`: chart creation
+  - `Aspose.Cells_FOSS.Samples.Comments`: cell comments
+  - `Aspose.Cells_FOSS.Samples.DocumentProperties`: workbook properties
+  - `Aspose.Cells_FOSS.Samples.ListObjects`: tables and lists
+  - `Aspose.Cells_FOSS.Samples.Pictures`: image insertion
 - `License/`: license files
 
 ## Build And Verification

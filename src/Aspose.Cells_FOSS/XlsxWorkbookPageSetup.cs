@@ -1,4 +1,3 @@
-using System.Linq;
 using System.IO;
 using System.Collections.Generic;
 using System;
@@ -47,7 +46,7 @@ namespace Aspose.Cells_FOSS
         internal static Dictionary<int, WorksheetDefinedNamesState> LoadWorksheetDefinedNames(XElement workbookRoot, LoadDiagnostics diagnostics, LoadOptions options)
         {
             var states = new Dictionary<int, WorksheetDefinedNamesState>();
-            foreach (var definedName in workbookRoot.Element(MainNs + "definedNames")?.Elements(MainNs + "definedName") ?? Enumerable.Empty<XElement>())
+            foreach (var definedName in workbookRoot.Element(MainNs + "definedNames")?.Elements(MainNs + "definedName") ?? new XElement[0])
             {
                 var name = ((string)definedName.Attribute("name") ?? string.Empty).Trim();
                 if (!string.Equals(name, DefinedNameUtility.PrintAreaDefinedName, StringComparison.OrdinalIgnoreCase)
@@ -710,12 +709,27 @@ namespace Aspose.Cells_FOSS
 
         private static bool LooksLikeRowRange(string value)
         {
-            return value.Replace("$", string.Empty).Split(':').All(delegate(string part) { int ignored; return int.TryParse(part, NumberStyles.Integer, CultureInfo.InvariantCulture, out ignored); });
+            foreach (var part in value.Replace("$", string.Empty).Split(':'))
+            {
+                int ignored;
+                if (!int.TryParse(part, NumberStyles.Integer, CultureInfo.InvariantCulture, out ignored))
+                {
+                    return false;
+                }
+            }
+            return true;
         }
 
         private static bool LooksLikeColumnRange(string value)
         {
-            return value.Replace("$", string.Empty).Split(':').All(IsColumnName);
+            foreach (var part in value.Replace("$", string.Empty).Split(':'))
+            {
+                if (!IsColumnName(part))
+                {
+                    return false;
+                }
+            }
+            return true;
         }
 
         private static bool IsColumnName(string value)

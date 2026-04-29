@@ -3,22 +3,22 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.IO.Compression;
-using System.Linq;
+using System.Text;
 using System.Xml.Linq;
 using Aspose.Cells_FOSS.Core;
 using static Aspose.Cells_FOSS.XlsxWorkbookArchiveHelpers;
-using static Aspose.Cells_FOSS.XlsxWorkbookConditionalFormatting;
 using static Aspose.Cells_FOSS.XlsxWorkbookHyperlinks;
 using static Aspose.Cells_FOSS.XlsxWorkbookDefinedNames;
-using static Aspose.Cells_FOSS.XlsxWorkbookSerializerCommon;
-using static Aspose.Cells_FOSS.XlsxWorkbookStyles;
 using static Aspose.Cells_FOSS.XlsxWorkbookPageSetup;
-using static Aspose.Cells_FOSS.XlsxWorkbookValidations;
-using static Aspose.Cells_FOSS.XlsxWorkbookWorksheetProtection;
-using static Aspose.Cells_FOSS.XlsxWorkbookAutoFilter;
-using static Aspose.Cells_FOSS.XlsxWorkbookWorksheetViews;
+using static Aspose.Cells_FOSS.XlsxWorkbookSerializerCommon;
+using static Aspose.Cells_FOSS.XlsxWorkbookWorksheetWriter;
+using static Aspose.Cells_FOSS.XlsxWorkbookWorksheetLoader;
+using static Aspose.Cells_FOSS.XlsxWorkbookStyles;
 using static Aspose.Cells_FOSS.XlsxWorkbookProperties;
 using static Aspose.Cells_FOSS.XlsxDocumentProperties;
+using static Aspose.Cells_FOSS.XlsxWorkbookTables;
+using static Aspose.Cells_FOSS.XlsxWorkbookPictures;
+using static Aspose.Cells_FOSS.XlsxWorkbookComments;
 
 namespace Aspose.Cells_FOSS
 {
@@ -72,21 +72,121 @@ namespace Aspose.Cells_FOSS
                 }
             }
 
+            var tableFileOffsets = ComputeTableFileOffsets(model);
+            var totalTableCount = ComputeTotalTableCount(model);
+            var pictureFileOffsets = ComputePictureFileOffsets(model);
+            var chartFileOffsets = ComputeChartFileOffsets(model);
+            var drawingNumbers = ComputeDrawingNumbers(model);
+            var totalDrawingCount = ComputeTotalDrawingCount(model);
+            var imageExtensions = CollectImageExtensions(model);
+            var chartPartNames = CollectChartPartNames(model, chartFileOffsets);
+            var chartContentTypes = CollectChartContentTypes(model);
+            var chartCompanionPartNames = CollectChartCompanionPartNames(model, chartFileOffsets, totalDrawingCount);
+            var chartCompanionContentTypes = CollectChartCompanionContentTypes(model);
+            var commentFileNumbers = ComputeCommentFileNumbers(model);
+            var totalCommentCount = ComputeTotalCommentCount(model);
+
+            var userShapesDrawingCounter = totalDrawingCount;
+
             using (var archive = new ZipArchive(stream, ZipArchiveMode.Create, true))
             {
-                WriteXmlEntry(archive, "[Content_Types].xml", BuildContentTypes(model, sharedStrings.Values.Count > 0, stylesheet.HasStyles, corePropertiesDocument != null, extendedPropertiesDocument != null));
+                var hasSharedStrings = sharedStrings.Values.Count > 0;
+                var hasTheme = !string.IsNullOrEmpty(model.RawThemeXml);
+                var externalLinkBaseRId = model.Worksheets.Count
+                    + (hasSharedStrings ? 1 : 0)
+                    + 1
+                    + (hasTheme ? 1 : 0)
+                    + 1;
+                WriteXmlEntry(archive, "[Content_Types].xml", BuildContentTypes(model, hasSharedStrings, true, corePropertiesDocument != null, extendedPropertiesDocument != null, totalTableCount, totalDrawingCount, imageExtensions, chartPartNames, chartContentTypes, chartCompanionPartNames, chartCompanionContentTypes, hasTheme, totalCommentCount));
                 WriteXmlEntry(archive, "_rels/.rels", BuildRootRelationships(corePropertiesDocument != null, extendedPropertiesDocument != null));
-                WriteXmlEntry(archive, "xl/workbook.xml", BuildWorkbook(model));
-                WriteXmlEntry(archive, "xl/_rels/workbook.xml.rels", BuildWorkbookRelationships(model, sharedStrings.Values.Count > 0, stylesheet.HasStyles));
+                WriteXmlEntry(archive, "xl/workbook.xml", BuildWorkbook(model, externalLinkBaseRId));
+                WriteXmlEntry(archive, "xl/_rels/workbook.xml.rels", BuildWorkbookRelationships(model, hasSharedStrings, true));
+
+                if (hasTheme)
+                {
+                    var themeEntry = archive.CreateEntry("xl/theme/theme1.xml", CompressionLevel.Optimal);
+                    using (var themeStream = themeEntry.Open())
+                    using (var writer = new StreamWriter(themeStream, new UTF8Encoding(false)))
+                    {
+                        writer.Write(model.RawThemeXml);
+                    }
+                }
+
+                for (var e = 0; e < model.ExternalLinks.Count; e++)
+                {
+                    var extLink = model.ExternalLinks[e];
+                    var extN = (e + 1).ToString(CultureInfo.InvariantCulture);
+                    var extPath = "xl/externalLinks/externalLink" + extN + ".xml";
+                    var extEntry = archive.CreateEntry(extPath, CompressionLevel.Optimal);
+                    using (var extStream = extEntry.Open())
+                    using (var writer = new StreamWriter(extStream, new UTF8Encoding(false)))
+                    {
+                        writer.Write(extLink.RawXml);
+                    }
+
+                    if (!string.IsNullOrEmpty(extLink.RawRelsXml))
+                    {
+                        var extRelsPath = "xl/externalLinks/_rels/externalLink" + extN + ".xml.rels";
+                        var extRelsEntry = archive.CreateEntry(extRelsPath, CompressionLevel.Optimal);
+                        using (var extRelsStream = extRelsEntry.Open())
+                        using (var writer = new StreamWriter(extRelsStream, new UTF8Encoding(false)))
+                        {
+                            writer.Write(extLink.RawRelsXml);
+                        }
+                    }
+                }
 
                 for (var i = 0; i < model.Worksheets.Count; i++)
                 {
                     var worksheet = model.Worksheets[i];
-                    WriteXmlEntry(archive, "xl/worksheets/sheet" + (i + 1) + ".xml", BuildWorksheet(worksheet, model.DefaultStyle, model.Settings.DateSystem, sharedStrings, options, stylesheet));
-                    var worksheetHyperlinkRelationships = BuildWorksheetHyperlinkRelationships(worksheet);
-                    if (worksheetHyperlinkRelationships != null)
+                    var tableFileOffset = tableFileOffsets[i];
+                    var pictureFileOffset = pictureFileOffsets[i];
+                    var chartFileOffset = chartFileOffsets[i];
+                    var drawingNumber = drawingNumbers[i];
+                    var commentFileNumber = commentFileNumbers[i];
+                    var hasDrawing = worksheet.Pictures.Count > 0 || worksheet.Shapes.Count > 0 || worksheet.Charts.Count > 0;
+                    var hasComments = worksheet.Comments.Count > 0;
+                    var externalHyperlinkCount = CountExternalHyperlinks(worksheet);
+
+                    for (var t = 0; t < worksheet.ListObjects.Count; t++)
                     {
-                        WriteXmlEntry(archive, "xl/worksheets/_rels/sheet" + (i + 1) + ".xml.rels", worksheetHyperlinkRelationships);
+                        var globalTableNumber = tableFileOffset + t + 1;
+                        var tableDocument = BuildTableDocument(worksheet.ListObjects[t], globalTableNumber);
+                        WriteXmlEntry(archive, "xl/tables/table" + globalTableNumber + ".xml", tableDocument);
+                    }
+
+                    if (hasDrawing)
+                    {
+                        WriteXmlEntry(archive, "xl/drawings/drawing" + drawingNumber + ".xml", BuildDrawingDocument(worksheet, pictureFileOffset, chartFileOffset));
+                        if (worksheet.Pictures.Count > 0 || worksheet.ShapeImages.Count > 0)
+                        {
+                            WritePictureMediaEntries(archive, worksheet, pictureFileOffset);
+                        }
+
+                        if (worksheet.Pictures.Count > 0 || worksheet.ShapeImages.Count > 0 || worksheet.Charts.Count > 0)
+                        {
+                            WriteXmlEntry(archive, "xl/drawings/_rels/drawing" + drawingNumber + ".xml.rels", BuildDrawingRelationshipsDocument(worksheet, pictureFileOffset, chartFileOffset));
+                        }
+
+                        for (var k = 0; k < worksheet.Charts.Count; k++)
+                        {
+                            var globalChartNumber = chartFileOffset + k + 1;
+                            WriteChartFiles(archive, worksheet.Charts[k], globalChartNumber, ref userShapesDrawingCounter);
+                        }
+                    }
+
+                    if (hasComments)
+                    {
+                        WriteXmlEntry(archive, "xl/comments" + commentFileNumber + ".xml", BuildCommentsDocument(worksheet));
+                        WriteVmlDrawing(archive, worksheet, commentFileNumber);
+                    }
+
+                    WriteXmlEntry(archive, "xl/worksheets/sheet" + (i + 1) + ".xml", BuildWorksheet(worksheet, model.DefaultStyle, model.Settings.DateSystem, sharedStrings, options, stylesheet, externalHyperlinkCount, hasDrawing, hasComments));
+
+                    var worksheetRelationships = BuildWorksheetRelationshipsDocument(worksheet, tableFileOffset, drawingNumber, commentFileNumber);
+                    if (worksheetRelationships != null)
+                    {
+                        WriteXmlEntry(archive, "xl/worksheets/_rels/sheet" + (i + 1) + ".xml.rels", worksheetRelationships);
                     }
                 }
 
@@ -95,10 +195,7 @@ namespace Aspose.Cells_FOSS
                     WriteXmlEntry(archive, "xl/sharedStrings.xml", BuildSharedStrings(sharedStrings));
                 }
 
-                if (stylesheet.HasStyles)
-                {
-                    WriteXmlEntry(archive, "xl/styles.xml", stylesheet.Document);
-                }
+                WriteXmlEntry(archive, "xl/styles.xml", stylesheet.Document);
 
                 if (corePropertiesDocument != null)
                 {
@@ -110,6 +207,377 @@ namespace Aspose.Cells_FOSS
                     WriteXmlEntry(archive, "docProps/app.xml", extendedPropertiesDocument);
                 }
             }
+        }
+
+        private static int[] ComputeTableFileOffsets(WorkbookModel model)
+        {
+            var offsets = new int[model.Worksheets.Count];
+            var running = 0;
+            for (var i = 0; i < model.Worksheets.Count; i++)
+            {
+                offsets[i] = running;
+                running += model.Worksheets[i].ListObjects.Count;
+            }
+
+            return offsets;
+        }
+
+        private static int ComputeTotalTableCount(WorkbookModel model)
+        {
+            var total = 0;
+            for (var i = 0; i < model.Worksheets.Count; i++)
+            {
+                total += model.Worksheets[i].ListObjects.Count;
+            }
+
+            return total;
+        }
+
+        private static int CountExternalHyperlinks(WorksheetModel worksheet)
+        {
+            var count = 0;
+            var ordered = GetOrderedHyperlinks(worksheet.Hyperlinks);
+            for (var i = 0; i < ordered.Count; i++)
+            {
+                if (!string.IsNullOrEmpty(ordered[i].Address))
+                {
+                    count++;
+                }
+            }
+
+            return count;
+        }
+
+        private static int[] ComputePictureFileOffsets(WorkbookModel model)
+        {
+            var offsets = new int[model.Worksheets.Count];
+            var running = 0;
+            for (var i = 0; i < model.Worksheets.Count; i++)
+            {
+                offsets[i] = running;
+                running += model.Worksheets[i].Pictures.Count + model.Worksheets[i].ShapeImages.Count;
+            }
+
+            return offsets;
+        }
+
+        private static int[] ComputeChartFileOffsets(WorkbookModel model)
+        {
+            var offsets = new int[model.Worksheets.Count];
+            var running = 0;
+            for (var i = 0; i < model.Worksheets.Count; i++)
+            {
+                offsets[i] = running;
+                running += model.Worksheets[i].Charts.Count;
+            }
+
+            return offsets;
+        }
+
+        private static int[] ComputeDrawingNumbers(WorkbookModel model)
+        {
+            var numbers = new int[model.Worksheets.Count];
+            var drawingCounter = 0;
+            for (var i = 0; i < model.Worksheets.Count; i++)
+            {
+                var ws = model.Worksheets[i];
+                if (ws.Pictures.Count > 0 || ws.Shapes.Count > 0 || ws.Charts.Count > 0)
+                {
+                    drawingCounter++;
+                    numbers[i] = drawingCounter;
+                }
+                else
+                {
+                    numbers[i] = 0;
+                }
+            }
+
+            return numbers;
+        }
+
+        private static int[] ComputeCommentFileNumbers(WorkbookModel model)
+        {
+            var numbers = new int[model.Worksheets.Count];
+            var counter = 0;
+            for (var i = 0; i < model.Worksheets.Count; i++)
+            {
+                if (model.Worksheets[i].Comments.Count > 0)
+                {
+                    counter++;
+                    numbers[i] = counter;
+                }
+                else
+                {
+                    numbers[i] = 0;
+                }
+            }
+
+            return numbers;
+        }
+
+        private static int ComputeTotalCommentCount(WorkbookModel model)
+        {
+            var total = 0;
+            for (var i = 0; i < model.Worksheets.Count; i++)
+            {
+                if (model.Worksheets[i].Comments.Count > 0)
+                {
+                    total++;
+                }
+            }
+
+            return total;
+        }
+
+        private static int ComputeTotalDrawingCount(WorkbookModel model)
+        {
+            var total = 0;
+            for (var i = 0; i < model.Worksheets.Count; i++)
+            {
+                var ws = model.Worksheets[i];
+                if (ws.Pictures.Count > 0 || ws.Shapes.Count > 0 || ws.Charts.Count > 0)
+                {
+                    total++;
+                }
+            }
+
+            return total;
+        }
+
+        private static IReadOnlyList<string> CollectChartCompanionPartNames(WorkbookModel model, int[] chartFileOffsets, int totalDrawingCount)
+        {
+            var result = new List<string>();
+            var userShapesCounter = totalDrawingCount;
+            for (var i = 0; i < model.Worksheets.Count; i++)
+            {
+                var charts = model.Worksheets[i].Charts;
+                for (var k = 0; k < charts.Count; k++)
+                {
+                    var globalChartNumber = chartFileOffsets[i] + k + 1;
+                    foreach (var companion in charts[k].CompanionFiles)
+                    {
+                        string partName;
+                        if (companion.FileName.IndexOf('/') >= 0)
+                        {
+                            userShapesCounter++;
+                            partName = "/xl/drawings/drawing" + userShapesCounter.ToString(CultureInfo.InvariantCulture) + ".xml";
+                        }
+                        else
+                        {
+                            partName = "/" + ResolveCompanionPath(RenumberCompanionFileName(companion.FileName, globalChartNumber));
+                        }
+
+                        result.Add(partName);
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        private static IReadOnlyList<string> CollectChartCompanionContentTypes(WorkbookModel model)
+        {
+            var result = new List<string>();
+            for (var i = 0; i < model.Worksheets.Count; i++)
+            {
+                var charts = model.Worksheets[i].Charts;
+                for (var k = 0; k < charts.Count; k++)
+                {
+                    foreach (var companion in charts[k].CompanionFiles)
+                    {
+                        result.Add(GetCompanionContentType(companion.RelationshipType));
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        private static IReadOnlyList<string> CollectChartPartNames(WorkbookModel model, int[] chartFileOffsets)
+        {
+            var result = new List<string>();
+            for (var i = 0; i < model.Worksheets.Count; i++)
+            {
+                var charts = model.Worksheets[i].Charts;
+                for (var k = 0; k < charts.Count; k++)
+                {
+                    var globalChartNumber = (chartFileOffsets[i] + k + 1).ToString(CultureInfo.InvariantCulture);
+                    var fileName = charts[k].IsChartEx
+                        ? "/xl/charts/chartEx" + globalChartNumber + ".xml"
+                        : "/xl/charts/chart" + globalChartNumber + ".xml";
+                    result.Add(fileName);
+                }
+            }
+
+            return result;
+        }
+
+        private static IReadOnlyList<string> CollectChartContentTypes(WorkbookModel model)
+        {
+            var result = new List<string>();
+            for (var i = 0; i < model.Worksheets.Count; i++)
+            {
+                var charts = model.Worksheets[i].Charts;
+                for (var k = 0; k < charts.Count; k++)
+                {
+                    result.Add(charts[k].IsChartEx ? ChartExContentType : ChartContentType);
+                }
+            }
+
+            return result;
+        }
+
+        private static string GetCompanionContentType(string relationshipType)
+        {
+            if (string.Equals(relationshipType, ChartStyleRelationshipType, StringComparison.OrdinalIgnoreCase))
+            {
+                return ChartStyleContentType;
+            }
+
+            if (string.Equals(relationshipType, ChartColorStyleRelationshipType, StringComparison.OrdinalIgnoreCase))
+            {
+                return ChartColorStyleContentType;
+            }
+
+            if (string.Equals(relationshipType, ChartUserShapesRelationshipType, StringComparison.OrdinalIgnoreCase))
+            {
+                return ChartUserShapesContentType;
+            }
+
+            return "application/octet-stream";
+        }
+
+        private static string RenumberCompanionFileName(string originalName, int globalNumber)
+        {
+            // Cross-directory paths (e.g. "../drawings/drawing4.xml") are kept verbatim
+            // to avoid overwriting worksheet drawings with chart user-shape files.
+            if (originalName.IndexOf('/') >= 0)
+            {
+                return originalName;
+            }
+
+            var suffixStart = originalName.LastIndexOf('.');
+            if (suffixStart < 0)
+            {
+                return originalName;
+            }
+
+            var suffix = originalName.Substring(suffixStart);
+            var basePart = originalName.Substring(0, suffixStart);
+            var trimmed = basePart.TrimEnd('0', '1', '2', '3', '4', '5', '6', '7', '8', '9');
+            if (string.IsNullOrEmpty(trimmed) || trimmed == basePart)
+            {
+                return originalName;
+            }
+
+            return trimmed + globalNumber.ToString(CultureInfo.InvariantCulture) + suffix;
+        }
+
+        // Resolves a chart companion target relative to "xl/charts/" and normalises ".." segments.
+        // e.g. ("../drawings/drawing4.xml") → "xl/drawings/drawing4.xml"
+        //      ("style1.xml")              → "xl/charts/style1.xml"
+        private static string ResolveCompanionPath(string renumberedTarget)
+        {
+            var parts = ("xl/charts/" + renumberedTarget).Split('/');
+            var stack = new List<string>();
+            foreach (var part in parts)
+            {
+                if (part == "..")
+                {
+                    if (stack.Count > 0) stack.RemoveAt(stack.Count - 1);
+                }
+                else if (part.Length > 0 && part != ".")
+                {
+                    stack.Add(part);
+                }
+            }
+
+            return string.Join("/", stack);
+        }
+
+        private static void WriteChartFiles(ZipArchive archive, ChartModel chart, int globalChartNumber, ref int userShapesDrawingCounter)
+        {
+            var chartFileName = chart.IsChartEx
+                ? "chartEx" + globalChartNumber.ToString(CultureInfo.InvariantCulture) + ".xml"
+                : "chart" + globalChartNumber.ToString(CultureInfo.InvariantCulture) + ".xml";
+            var chartPath = "xl/charts/" + chartFileName;
+            var chartEntry = archive.CreateEntry(chartPath, CompressionLevel.Optimal);
+            using (var stream = chartEntry.Open())
+            using (var writer = new StreamWriter(stream, new UTF8Encoding(false)))
+            {
+                writer.Write(chart.RawChartXml);
+            }
+
+            if (chart.CompanionFiles.Count == 0)
+            {
+                return;
+            }
+
+            var companionRels = new XElement(PackageRelationshipNs + "Relationships");
+            foreach (var companion in chart.CompanionFiles)
+            {
+                string companionPath;
+                string relsTarget;
+
+                if (companion.FileName.IndexOf('/') >= 0)
+                {
+                    // Cross-directory companion (e.g. chart user shapes): assign the next
+                    // drawing number after all worksheet drawings to avoid collisions.
+                    userShapesDrawingCounter++;
+                    var drawingName = "drawing" + userShapesDrawingCounter.ToString(CultureInfo.InvariantCulture) + ".xml";
+                    companionPath = "xl/drawings/" + drawingName;
+                    relsTarget = "../drawings/" + drawingName;
+                }
+                else
+                {
+                    var newFileName = RenumberCompanionFileName(companion.FileName, globalChartNumber);
+                    companionPath = ResolveCompanionPath(newFileName);
+                    relsTarget = newFileName;
+                }
+
+                var companionEntry = archive.CreateEntry(companionPath, CompressionLevel.Optimal);
+                using (var stream = companionEntry.Open())
+                using (var writer = new StreamWriter(stream, new UTF8Encoding(false)))
+                {
+                    writer.Write(companion.RawContent);
+                }
+
+                companionRels.Add(new XElement(PackageRelationshipNs + "Relationship",
+                    new XAttribute("Id", companion.RelationshipId),
+                    new XAttribute("Type", companion.RelationshipType),
+                    new XAttribute("Target", relsTarget)));
+            }
+
+            var relsPath = "xl/charts/_rels/" + chartFileName + ".rels";
+            WriteXmlEntry(archive, relsPath, new XDocument(new XDeclaration("1.0", "utf-8", "yes"), companionRels));
+        }
+
+        private static IReadOnlyList<string> CollectImageExtensions(WorkbookModel model)
+        {
+            var seen = new System.Collections.Generic.HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            var result = new List<string>();
+            for (var i = 0; i < model.Worksheets.Count; i++)
+            {
+                var ws = model.Worksheets[i];
+                for (var p = 0; p < ws.Pictures.Count; p++)
+                {
+                    var ext = ws.Pictures[p].ImageExtension;
+                    if (!string.IsNullOrEmpty(ext) && seen.Add(ext))
+                    {
+                        result.Add(ext);
+                    }
+                }
+                for (var s = 0; s < ws.ShapeImages.Count; s++)
+                {
+                    var ext = ws.ShapeImages[s].Extension;
+                    if (!string.IsNullOrEmpty(ext) && seen.Add(ext))
+                    {
+                        result.Add(ext);
+                    }
+                }
+            }
+
+            return result;
         }
 
         /// <summary>
@@ -161,7 +629,7 @@ namespace Aspose.Cells_FOSS
                         throw new InvalidFileFormatException("The workbook XML does not contain a sheets element.");
                     }
 
-                    var sheetElements = sheets.Elements(MainNs + "sheet").ToList();
+                    var sheetElements = new List<XElement>(sheets.Elements(MainNs + "sheet"));
                     if (sheetElements.Count == 0)
                     {
                         throw new InvalidFileFormatException("The workbook XML does not contain any worksheets.");
@@ -170,6 +638,8 @@ namespace Aspose.Cells_FOSS
                     LoadWorkbookMetadata(workbookRoot, workbookModel, sheetElements.Count, diagnostics, options);
                     LoadDocumentProperties(archive, workbookModel, diagnostics, options);
                     LoadWorkbookDefinedNames(workbookRoot, workbookModel, sheetElements.Count, diagnostics, options);
+                    workbookModel.RawThemeXml = LoadRawTheme(archive);
+                    LoadExternalLinks(archive, workbookRoot, workbookRelationships, workbookModel);
 
                     workbookModel.ActiveSheetIndex = workbookModel.ActiveSheetIndex < sheetElements.Count ? workbookModel.ActiveSheetIndex : 0;
                     for (var index = 0; index < sheetElements.Count; index++)
@@ -204,7 +674,9 @@ namespace Aspose.Cells_FOSS
                             stylesheet,
                             diagnostics,
                             options,
-                            definedNamesState);
+                            definedNamesState,
+                            archive,
+                            worksheetUri);
 
                         var state = (string)sheetElement.Attribute("state");
                         switch (state)
@@ -242,582 +714,76 @@ namespace Aspose.Cells_FOSS
                 }
             }
         }
-        private static WorksheetModel LoadWorksheet(
-            string sheetName,
-            XDocument worksheetDocument,
-            IReadOnlyDictionary<string, string> worksheetHyperlinkTargets,
-            Aspose.Cells_FOSS.Core.DateSystem dateSystem,
-            IReadOnlyList<string> sharedStrings,
-            StylesheetLoadContext stylesheet,
-            LoadDiagnostics diagnostics,
-            LoadOptions options,
-            WorksheetDefinedNamesState definedNamesState)
+
+        private static string LoadRawTheme(ZipArchive archive)
         {
-            var worksheetModel = new WorksheetModel(sheetName);
-            var worksheetRoot = worksheetDocument.Root;
-            if (worksheetRoot == null)
+            var entry = GetEntry(archive, "xl/theme/theme1.xml");
+            if (entry == null)
             {
-                return worksheetModel;
+                return null;
             }
 
-            LoadWorksheetViewSettings(worksheetModel, worksheetRoot, diagnostics, options, sheetName);
-            LoadWorksheetProtection(worksheetModel, worksheetRoot, diagnostics, options, sheetName);
-            LoadAutoFilter(worksheetModel, worksheetRoot, stylesheet, diagnostics, options, sheetName);
-            LoadColumns(worksheetModel, worksheetRoot, stylesheet, diagnostics, options, sheetName);
-            LoadWorksheetPageSetup(worksheetModel, worksheetRoot, diagnostics, options, sheetName);
-            LoadHyperlinks(worksheetModel, worksheetRoot, worksheetHyperlinkTargets, diagnostics, options, sheetName);
-            LoadConditionalFormattings(worksheetModel, worksheetRoot, stylesheet, diagnostics, options, sheetName);
-            LoadValidations(worksheetModel, worksheetRoot, diagnostics, options, sheetName);
-            ApplyWorksheetDefinedNames(worksheetModel, definedNamesState);
-
-            var sheetData = worksheetRoot.Element(MainNs + "sheetData");
-            if (sheetData == null)
+            using (var stream = entry.Open())
+            using (var reader = new StreamReader(stream, Encoding.UTF8))
             {
-                AddIssue(diagnostics, options, new LoadIssue("ACF-WS-001", DiagnosticSeverity.Recoverable, "Worksheet sheetData is missing; an empty sheet was synthesized.", repairApplied: true)
-                {
-                    SheetName = sheetName,
-                });
-                return worksheetModel;
+                return reader.ReadToEnd();
+            }
+        }
+
+        private static void LoadExternalLinks(ZipArchive archive, XElement workbookRoot, IReadOnlyDictionary<string, string> workbookRelationships, WorkbookModel workbookModel)
+        {
+            var externalReferencesElement = workbookRoot.Element(MainNs + "externalReferences");
+            if (externalReferencesElement == null)
+            {
+                return;
             }
 
-            var rowElements = sheetData.Elements(MainNs + "row").ToList();
-            var seenRows = new HashSet<int>();
-            var seenCells = new HashSet<CellAddress>();
-            var previousRowIndex = -1;
-            var rowsOutOfOrderReported = false;
-
-            foreach (var rowElement in rowElements)
+            foreach (var extRef in externalReferencesElement.Elements(MainNs + "externalReference"))
             {
-                int rowIndex;
-                if (!TryResolveRowIndex(rowElement, diagnostics, options, sheetName, out rowIndex))
+                var rId = (string)extRef.Attribute(RelationshipNs + "id");
+                if (string.IsNullOrEmpty(rId))
                 {
                     continue;
                 }
 
-                if (!seenRows.Add(rowIndex))
+                string partUri;
+                if (!workbookRelationships.TryGetValue(rId, out partUri))
                 {
-                    throw new InvalidFileFormatException($"Duplicate row index '{rowIndex + 1}' was found in worksheet '{sheetName}'.");
-                }
-
-                if (previousRowIndex > rowIndex && !rowsOutOfOrderReported)
-                {
-                    AddIssue(diagnostics, options, new LoadIssue("WS-R002", DiagnosticSeverity.Recoverable, "Worksheet rows were out of order and were normalized during load.", repairApplied: true)
-                    {
-                        SheetName = sheetName,
-                    });
-                    rowsOutOfOrderReported = true;
-                }
-
-                previousRowIndex = rowIndex;
-                ApplyRowMetadata(worksheetModel, rowElement, rowIndex, stylesheet, diagnostics, options, sheetName);
-
-                var previousColumnIndex = -1;
-                var cellsOutOfOrderReported = false;
-                foreach (var cellElement in rowElement.Elements(MainNs + "c"))
-                {
-                    CellAddress address;
-                    CellRecord record;
-                    if (!TryReadCellRecord(cellElement, rowIndex, dateSystem, sharedStrings, stylesheet, diagnostics, options, sheetName, out address, out record))
-                    {
-                        continue;
-                    }
-
-                    if (previousColumnIndex > address.ColumnIndex && !cellsOutOfOrderReported)
-                    {
-                        AddIssue(diagnostics, options, new LoadIssue("WS-R003", DiagnosticSeverity.Recoverable, "Worksheet cells were out of order within a row and were normalized during load.", repairApplied: true)
-                        {
-                            SheetName = sheetName,
-                            RowIndex = rowIndex,
-                        });
-                        cellsOutOfOrderReported = true;
-                    }
-
-                    previousColumnIndex = address.ColumnIndex;
-                    if (!seenCells.Add(address))
-                    {
-                        throw new InvalidFileFormatException($"Duplicate cell reference '{address}' was found in worksheet '{sheetName}'.");
-                    }
-
-                    if (ShouldPersistCell(stylesheet.DefaultCellStyle, record))
-                    {
-                        worksheetModel.Cells[address] = record;
-                    }
-                }
-            }
-
-            LoadMergeRegions(worksheetModel, worksheetRoot, diagnostics, options, sheetName);
-
-            if (worksheetRoot.Element(MainNs + "dimension") == null && (worksheetModel.Cells.Count > 0 || worksheetModel.MergeRegions.Count > 0))
-            {
-                AddIssue(diagnostics, options, new LoadIssue("WS-R001", DiagnosticSeverity.Recoverable, "Worksheet dimension was missing and was recalculated during load.", repairApplied: true)
-                {
-                    SheetName = sheetName,
-                });
-            }
-
-            return worksheetModel;
-        }
-
-        private static void LoadColumns(WorksheetModel worksheetModel, XElement worksheetRoot, StylesheetLoadContext stylesheet, LoadDiagnostics diagnostics, LoadOptions options, string sheetName)
-        {
-            var columns = new List<ColumnRangeModel>();
-            foreach (var columnElement in worksheetRoot.Element(MainNs + "cols")?.Elements(MainNs + "col") ?? Enumerable.Empty<XElement>())
-            {
-                var min = ParseIntAttribute(columnElement.Attribute("min"));
-                var max = ParseIntAttribute(columnElement.Attribute("max"));
-                if (!min.HasValue || !max.HasValue || min.Value <= 0 || max.Value <= 0 || min.Value > max.Value)
-                {
-                    throw new InvalidFileFormatException($"Worksheet column metadata in '{sheetName}' contains an invalid min/max span.");
-                }
-
-                var styleIndex = ParseIntAttribute(columnElement.Attribute("style"));
-                if (styleIndex.HasValue && (styleIndex.Value < 0 || styleIndex.Value >= stylesheet.CellFormats.Count))
-                {
-                    if (options.StrictMode)
-                    {
-                        throw new InvalidFileFormatException($"The column style index '{styleIndex.Value}' is invalid.");
-                    }
-
-                    AddIssue(diagnostics, options, new LoadIssue("COL-L001", DiagnosticSeverity.Warning, $"Column style index '{styleIndex.Value}' is invalid and was dropped.", dataLossRisk: true)
-                    {
-                        SheetName = sheetName,
-                    });
-                    styleIndex = null;
-                }
-
-                columns.Add(new ColumnRangeModel
-                {
-                    MinColumnIndex = min.Value - 1,
-                    MaxColumnIndex = max.Value - 1,
-                    Width = ParseDoubleAttribute(columnElement.Attribute("width")),
-                    Hidden = ParseBoolAttribute(columnElement.Attribute("hidden")),
-                    StyleIndex = styleIndex,
-                });
-            }
-
-            worksheetModel.Columns.AddRange(NormalizeLoadedColumns(columns, diagnostics, options, sheetName));
-        }
-
-        private static List<ColumnRangeModel> NormalizeLoadedColumns(IReadOnlyList<ColumnRangeModel> columns, LoadDiagnostics diagnostics, LoadOptions options, string sheetName)
-        {
-            var ordered = new List<ColumnRangeModel>(columns.Count);
-            for (var index = 0; index < columns.Count; index++)
-            {
-                ordered.Add(columns[index]);
-            }
-
-            ordered.Sort(CompareColumnRangesByBounds);
-            if (ordered.Count == 0)
-            {
-                return ordered;
-            }
-
-            var normalized = new List<ColumnRangeModel> { ordered[0] };
-            var mergeReported = false;
-            for (var index = 1; index < ordered.Count; index++)
-            {
-                var current = ordered[index];
-                var previous = normalized[normalized.Count - 1];
-                if (current.MinColumnIndex <= previous.MaxColumnIndex + 1 && ColumnRangesCompatible(previous, current))
-                {
-                    if ((current.MinColumnIndex <= previous.MaxColumnIndex || current.MaxColumnIndex <= previous.MaxColumnIndex) && !mergeReported)
-                    {
-                        AddIssue(diagnostics, options, new LoadIssue("COL-R001", DiagnosticSeverity.Recoverable, "Overlapping compatible column metadata was normalized during load.", repairApplied: true)
-                        {
-                            SheetName = sheetName,
-                        });
-                        mergeReported = true;
-                    }
-
-                    previous.MaxColumnIndex = Math.Max(previous.MaxColumnIndex, current.MaxColumnIndex);
                     continue;
                 }
 
-                normalized.Add(current);
-            }
-
-            return normalized;
-        }
-
-        private static int CompareColumnRangesByBounds(ColumnRangeModel left, ColumnRangeModel right)
-        {
-            var minComparison = left.MinColumnIndex.CompareTo(right.MinColumnIndex);
-            if (minComparison != 0)
-            {
-                return minComparison;
-            }
-
-            return left.MaxColumnIndex.CompareTo(right.MaxColumnIndex);
-        }
-        private static bool ColumnRangesCompatible(ColumnRangeModel left, ColumnRangeModel right)
-        {
-            return Nullable.Equals(left.Width, right.Width)
-                && left.Hidden == right.Hidden
-                && left.StyleIndex == right.StyleIndex;
-        }
-
-        private static bool TryResolveRowIndex(XElement rowElement, LoadDiagnostics diagnostics, LoadOptions options, string sheetName, out int rowIndex)
-        {
-            var rowIndexAttribute = ParseIntAttribute(rowElement.Attribute("r"));
-            if (rowIndexAttribute.HasValue)
-            {
-                if (rowIndexAttribute.Value <= 0)
+                var partEntry = GetEntry(archive, partUri);
+                if (partEntry == null)
                 {
-                    throw new InvalidFileFormatException($"Worksheet row index '{rowIndexAttribute.Value}' is invalid.");
-                }
-
-                rowIndex = rowIndexAttribute.Value - 1;
-                return true;
-            }
-
-            foreach (var cellElement in rowElement.Elements(MainNs + "c"))
-            {
-                var cellReference = (string)cellElement.Attribute("r");
-                CellAddress address;
-                if (TryParseCellReference(cellReference ?? string.Empty, out address))
-                {
-                    rowIndex = address.RowIndex;
-                    AddIssue(diagnostics, options, new LoadIssue("WS-R004", DiagnosticSeverity.Recoverable, "A worksheet row index was missing and was inferred from contained cells.", repairApplied: true)
-                    {
-                        SheetName = sheetName,
-                        RowIndex = rowIndex,
-                    });
-                    return true;
-                }
-            }
-
-            rowIndex = -1;
-            AddIssue(diagnostics, options, new LoadIssue("ROW-F001", DiagnosticSeverity.Warning, "A worksheet row without an index and without parseable cells was skipped.")
-            {
-                SheetName = sheetName,
-            });
-            return false;
-        }
-
-        private static void ApplyRowMetadata(WorksheetModel worksheetModel, XElement rowElement, int rowIndex, StylesheetLoadContext stylesheet, LoadDiagnostics diagnostics, LoadOptions options, string sheetName)
-        {
-            var styleIndex = ParseIntAttribute(rowElement.Attribute("s"));
-            if (styleIndex.HasValue && (styleIndex.Value < 0 || styleIndex.Value >= stylesheet.CellFormats.Count))
-            {
-                if (options.StrictMode)
-                {
-                    throw new InvalidFileFormatException($"The row style index '{styleIndex.Value}' is invalid.");
-                }
-
-                AddIssue(diagnostics, options, new LoadIssue("ROW-L001", DiagnosticSeverity.Warning, $"Row style index '{styleIndex.Value}' is invalid and was dropped.", dataLossRisk: true)
-                {
-                    SheetName = sheetName,
-                    RowIndex = rowIndex,
-                });
-                styleIndex = null;
-            }
-
-            var rowModel = new RowModel
-            {
-                Height = ParseDoubleAttribute(rowElement.Attribute("ht")),
-                Hidden = ParseBoolAttribute(rowElement.Attribute("hidden")),
-                StyleIndex = styleIndex,
-            };
-
-            if (rowModel.Height.HasValue && !ParseBoolAttribute(rowElement.Attribute("customHeight")))
-            {
-                AddIssue(diagnostics, options, new LoadIssue("ROW-R002", DiagnosticSeverity.Recoverable, "Row height metadata was missing customHeight and was normalized during load.", repairApplied: true)
-                {
-                    SheetName = sheetName,
-                    RowIndex = rowIndex,
-                });
-            }
-
-            if (rowModel.Height.HasValue || rowModel.Hidden || rowModel.StyleIndex.HasValue)
-            {
-                worksheetModel.Rows[rowIndex] = rowModel;
-            }
-        }
-
-        private static bool TryReadCellRecord(
-            XElement cellElement,
-            int rowIndex,
-            Aspose.Cells_FOSS.Core.DateSystem dateSystem,
-            IReadOnlyList<string> sharedStrings,
-            StylesheetLoadContext stylesheet,
-            LoadDiagnostics diagnostics,
-            LoadOptions options,
-            string sheetName,
-            out CellAddress address,
-            out CellRecord record)
-        {
-            record = new CellRecord
-            {
-                Style = stylesheet.DefaultCellStyle.Clone(),
-                IsExplicitlyStored = true,
-            };
-
-            var cellReference = (string)cellElement.Attribute("r");
-            if (string.IsNullOrWhiteSpace(cellReference))
-            {
-                AddIssue(diagnostics, options, new LoadIssue("CELL-F001", DiagnosticSeverity.Warning, "A cell without a reference was skipped.")
-                {
-                    SheetName = sheetName,
-                    RowIndex = rowIndex,
-                });
-                address = default(CellAddress);
-                return false;
-            }
-
-            var resolvedCellReference = cellReference;
-
-            try
-            {
-                address = CellAddress.Parse(resolvedCellReference);
-            }
-            catch (ArgumentException)
-            {
-                if (options.StrictMode)
-                {
-                    throw new InvalidFileFormatException($"The cell reference '{resolvedCellReference}' is invalid.");
-                }
-
-                AddIssue(diagnostics, options, new LoadIssue("CELL-F001", DiagnosticSeverity.Warning, $"Cell reference '{resolvedCellReference}' is invalid and was skipped.")
-                {
-                    SheetName = sheetName,
-                    CellRef = resolvedCellReference,
-                    RowIndex = rowIndex,
-                });
-                address = default(CellAddress);
-                return false;
-            }
-
-            var styleIndex = ParseIntAttribute(cellElement.Attribute("s"));
-            var isDateStyle = styleIndex.HasValue && stylesheet.DateStyleIndexes.Contains(styleIndex.Value);
-            if (styleIndex.HasValue)
-            {
-                if (styleIndex.Value >= 0 && styleIndex.Value < stylesheet.CellFormats.Count)
-                {
-                    record.Style = stylesheet.CellFormats[styleIndex.Value].Clone();
-                }
-                else if (options.StrictMode)
-                {
-                    throw new InvalidFileFormatException($"The style index '{styleIndex.Value}' is invalid.");
-                }
-                else
-                {
-                    AddIssue(diagnostics, options, new LoadIssue("STYLE-F001", DiagnosticSeverity.Warning, $"Cell style index '{styleIndex.Value}' is invalid and style 0 was used instead.")
-                    {
-                        SheetName = sheetName,
-                        CellRef = cellReference,
-                        RowIndex = rowIndex,
-                    });
-                }
-            }
-
-            var formulaText = NormalizeFormula((string)cellElement.Element(MainNs + "f"));
-            if (!string.IsNullOrEmpty(formulaText))
-            {
-                record.Formula = formulaText;
-                record.Kind = CellValueKind.Formula;
-            }
-
-            var cellType = (string)cellElement.Attribute("t");
-            var valueElement = cellElement.Element(MainNs + "v");
-            object value;
-            CellValueKind kind;
-            if (TryReadCellValue(cellElement, cellType, valueElement?.Value, isDateStyle, dateSystem, sharedStrings, diagnostics, options, sheetName, resolvedCellReference, out value, out kind))
-            {
-                record.Value = value;
-                if (string.IsNullOrEmpty(record.Formula))
-                {
-                    record.Kind = kind;
-                }
-            }
-
-            return true;
-        }
-
-        private static void LoadMergeRegions(WorksheetModel worksheetModel, XElement worksheetRoot, LoadDiagnostics diagnostics, LoadOptions options, string sheetName)
-        {
-            foreach (var mergeElement in worksheetRoot.Element(MainNs + "mergeCells")?.Elements(MainNs + "mergeCell") ?? Enumerable.Empty<XElement>())
-            {
-                var mergeReference = (string)mergeElement.Attribute("ref");
-                MergeRegion region;
-                if (!TryParseMergeReference(mergeReference ?? string.Empty, out region))
-                {
-                    throw new InvalidFileFormatException($"The merge reference '{mergeReference}' is invalid.");
-                }
-
-                if (ContainsOverlappingMergeRegion(worksheetModel.MergeRegions, region))
-                {
-                    if (options.StrictMode)
-                    {
-                        throw new InvalidFileFormatException($"The merge reference '{mergeReference}' overlaps an existing merged range.");
-                    }
-
-                    AddIssue(diagnostics, options, new LoadIssue("MRG-L001", DiagnosticSeverity.LossyRecoverable, $"Overlapping merge range '{mergeReference}' was dropped during load.", repairApplied: true, dataLossRisk: true)
-                    {
-                        SheetName = sheetName,
-                    });
                     continue;
                 }
 
-                worksheetModel.MergeRegions.Add(region);
-            }
-
-            worksheetModel.MergeRegions.Sort(delegate(MergeRegion left, MergeRegion right)
-            {
-                var rowComparison = left.FirstRow.CompareTo(right.FirstRow);
-                if (rowComparison != 0)
+                string rawXml;
+                using (var rawStream = partEntry.Open())
+                using (var reader = new StreamReader(rawStream, Encoding.UTF8))
                 {
-                    return rowComparison;
+                    rawXml = reader.ReadToEnd();
                 }
 
-                var columnComparison = left.FirstColumn.CompareTo(right.FirstColumn);
-                if (columnComparison != 0)
+                var normalizedUri = partUri.TrimStart('/');
+                var lastSlash = normalizedUri.LastIndexOf('/');
+                var directory = lastSlash >= 0 ? normalizedUri.Substring(0, lastSlash + 1) : string.Empty;
+                var fileName = lastSlash >= 0 ? normalizedUri.Substring(lastSlash + 1) : normalizedUri;
+                var relsUri = "/" + directory + "_rels/" + fileName + ".rels";
+
+                string rawRelsXml = null;
+                var relsEntry = GetEntry(archive, relsUri);
+                if (relsEntry != null)
                 {
-                    return columnComparison;
+                    using (var relsStream = relsEntry.Open())
+                    using (var reader = new StreamReader(relsStream, Encoding.UTF8))
+                    {
+                        rawRelsXml = reader.ReadToEnd();
+                    }
                 }
 
-                var rowCountComparison = left.TotalRows.CompareTo(right.TotalRows);
-                return rowCountComparison != 0 ? rowCountComparison : left.TotalColumns.CompareTo(right.TotalColumns);
-            });
-        }
-
-        private static bool ContainsOverlappingMergeRegion(IReadOnlyList<MergeRegion> mergeRegions, MergeRegion candidate)
-        {
-            for (var index = 0; index < mergeRegions.Count; index++)
-            {
-                if (MergeRegionsOverlap(mergeRegions[index], candidate))
-                {
-                    return true;
-                }
+                workbookModel.ExternalLinks.Add(new ExternalLinkModel { RawXml = rawXml, RawRelsXml = rawRelsXml });
             }
-
-            return false;
-        }
-
-        private static bool MergeRegionsOverlap(MergeRegion left, MergeRegion right)
-        {
-            var leftLastRow = left.FirstRow + left.TotalRows - 1;
-            var leftLastColumn = left.FirstColumn + left.TotalColumns - 1;
-            var rightLastRow = right.FirstRow + right.TotalRows - 1;
-            var rightLastColumn = right.FirstColumn + right.TotalColumns - 1;
-
-            return left.FirstRow <= rightLastRow
-                && right.FirstRow <= leftLastRow
-                && left.FirstColumn <= rightLastColumn
-                && right.FirstColumn <= leftLastColumn;
-        }
-        private static bool TryReadCellValue(
-            XElement cellElement,
-            string cellType,
-            string rawValue,
-            bool isDateStyle,
-            Aspose.Cells_FOSS.Core.DateSystem dateSystem,
-            IReadOnlyList<string> sharedStrings,
-            LoadDiagnostics diagnostics,
-            LoadOptions options,
-            string sheetName,
-            string cellReference,
-            out object value,
-            out CellValueKind kind)
-        {
-            value = null;
-            kind = CellValueKind.Blank;
-
-            if (cellType == "inlineStr")
-            {
-                value = ReadInlineString(cellElement.Element(MainNs + "is"));
-                kind = CellValueKind.String;
-                return true;
-            }
-
-            if (cellType == "s")
-            {
-                int sharedStringIndex;
-                if (int.TryParse(rawValue, NumberStyles.Integer, CultureInfo.InvariantCulture, out sharedStringIndex) && sharedStringIndex >= 0 && sharedStringIndex < sharedStrings.Count)
-                {
-                    value = sharedStrings[sharedStringIndex];
-                    kind = CellValueKind.String;
-                    return true;
-                }
-
-                AddIssue(diagnostics, options, new LoadIssue("SST-L001", DiagnosticSeverity.LossyRecoverable, "The cell points to an invalid shared string index.", dataLossRisk: true)
-                {
-                    SheetName = sheetName,
-                    CellRef = cellReference,
-                });
-
-                value = string.Empty;
-                kind = CellValueKind.String;
-                return true;
-            }
-
-            if (cellType == "b")
-            {
-                value = rawValue == "1" || string.Equals(rawValue, "true", StringComparison.OrdinalIgnoreCase);
-                kind = CellValueKind.Boolean;
-                return true;
-            }
-
-            if (cellType == "d")
-            {
-                DateTime dateTime;
-                if (DateTime.TryParse(rawValue, CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind, out dateTime))
-                {
-                    value = dateTime;
-                    kind = CellValueKind.DateTime;
-                    return true;
-                }
-
-                return false;
-            }
-
-            if (cellType == "str")
-            {
-                value = rawValue ?? string.Empty;
-                kind = CellValueKind.String;
-                return true;
-            }
-
-            if (cellType == "e")
-            {
-                value = rawValue ?? string.Empty;
-                kind = CellValueKind.String;
-                return true;
-            }
-
-            if (string.IsNullOrEmpty(rawValue))
-            {
-                return false;
-            }
-
-            var resolvedRawValue = rawValue;
-
-            if (isDateStyle)
-            {
-                double serial;
-                if (double.TryParse(resolvedRawValue, NumberStyles.Float, CultureInfo.InvariantCulture, out serial))
-                {
-                    value = DateSerialConverter.FromSerial(serial, dateSystem);
-                    kind = CellValueKind.DateTime;
-                    return true;
-                }
-
-                AddIssue(diagnostics, options, new LoadIssue("CELL-R002", DiagnosticSeverity.Recoverable, "A formula or numeric cell contained an invalid cached date serial and the cached value was cleared.", repairApplied: true)
-                {
-                    SheetName = sheetName,
-                    CellRef = cellReference,
-                });
-                return false;
-            }
-
-            object numberValue;
-            if (TryParseNumber(resolvedRawValue, out numberValue))
-            {
-                value = numberValue;
-                kind = CellValueKind.Number;
-                return true;
-            }
-
-            return false;
         }
     }
 }

@@ -2,7 +2,6 @@ using System.IO;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Xml.Linq;
 using Aspose.Cells_FOSS.Core;
 using static Aspose.Cells_FOSS.XlsxWorkbookArchiveHelpers;
@@ -111,6 +110,15 @@ namespace Aspose.Cells_FOSS
             {
                 LoadSortState(worksheetModel.AutoFilter.SortState, sortStateElement, stylesheet, diagnostics, options, sheetName, normalizedRange);
             }
+        }
+
+        private static bool HasElements(XElement parent, XName name)
+        {
+            foreach (var _ in parent.Elements(name))
+            {
+                return true;
+            }
+            return false;
         }
 
         private static XElement BuildFilterColumnElement(FilterColumnModel model, int differentialFormatCount)
@@ -442,7 +450,7 @@ namespace Aspose.Cells_FOSS
                 return;
             }
 
-            if (filtersElement.Elements(MainNs + "dateGroupItem").Any())
+            if (HasElements(filtersElement, MainNs + "dateGroupItem"))
             {
                 if (options.StrictMode)
                 {

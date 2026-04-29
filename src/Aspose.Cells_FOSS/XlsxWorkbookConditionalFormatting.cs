@@ -2,7 +2,6 @@ using System.IO;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Xml.Linq;
 using Aspose.Cells_FOSS.Core;
 using static Aspose.Cells_FOSS.XlsxWorkbookArchiveHelpers;
@@ -237,7 +236,7 @@ namespace Aspose.Cells_FOSS
             };
             ApplyDefaults(condition);
 
-            var formulas = ruleElement.Elements(MainNs + "formula").ToList();
+            var formulas = new List<XElement>(ruleElement.Elements(MainNs + "formula"));
             switch (type)
             {
                 case FormatConditionType.Expression:
@@ -457,9 +456,13 @@ namespace Aspose.Cells_FOSS
                 return;
             }
 
-            var cfvoCount = colorScaleElement.Elements(MainNs + "cfvo").Count();
+            var cfvoCount = 0;
+            foreach (var _ in colorScaleElement.Elements(MainNs + "cfvo"))
+            {
+                cfvoCount++;
+            }
             condition.ColorScaleCount = cfvoCount >= 3 ? 3 : 2;
-            var colors = colorScaleElement.Elements(MainNs + "color").ToList();
+            var colors = new List<XElement>(colorScaleElement.Elements(MainNs + "color"));
             if (colors.Count > 0)
             {
                 condition.MinColor = ReadRgbColor(colors[0]);
@@ -849,7 +852,8 @@ namespace Aspose.Cells_FOSS
 
         private static bool IsEmptyColor(ColorValue color)
         {
-            return color.A == 0 && color.R == 0 && color.G == 0 && color.B == 0;
+            return !color.ThemeIndex.HasValue && !color.Indexed.HasValue
+                && color.A == 0 && color.R == 0 && color.G == 0 && color.B == 0;
         }
     }
 }

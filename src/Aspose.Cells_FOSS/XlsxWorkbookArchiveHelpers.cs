@@ -1,4 +1,3 @@
-using System.Linq;
 using System.Collections.Generic;
 using System;
 using System.Globalization;
@@ -52,7 +51,7 @@ namespace Aspose.Cells_FOSS
 
             var document = LoadDocument(entry);
             var relationships = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-            foreach (var relationship in document.Root != null ? document.Root.Elements(XlsxWorkbookSerializerCommon.PackageRelationshipNs + "Relationship") : Enumerable.Empty<XElement>())
+            foreach (var relationship in document.Root != null ? document.Root.Elements(XlsxWorkbookSerializerCommon.PackageRelationshipNs + "Relationship") : new XElement[0])
             {
                 var id = (string)relationship.Attribute("Id");
                 var target = (string)relationship.Attribute("Target");
@@ -121,7 +120,7 @@ namespace Aspose.Cells_FOSS
 
             var document = LoadDocument(entry);
             var items = new List<string>();
-            foreach (var item in document.Root != null ? document.Root.Elements(XlsxWorkbookSerializerCommon.MainNs + "si") : Enumerable.Empty<XElement>())
+            foreach (var item in document.Root != null ? document.Root.Elements(XlsxWorkbookSerializerCommon.MainNs + "si") : new XElement[0])
             {
                 items.Add(ReadInlineString(item));
             }
@@ -146,7 +145,7 @@ namespace Aspose.Cells_FOSS
             var document = LoadDocument(entry);
             var customFormats = new Dictionary<int, string>();
             var numFmtsElement = document.Root != null ? document.Root.Element(XlsxWorkbookSerializerCommon.MainNs + "numFmts") : null;
-            foreach (var numFmt in numFmtsElement != null ? numFmtsElement.Elements(XlsxWorkbookSerializerCommon.MainNs + "numFmt") : Enumerable.Empty<XElement>())
+            foreach (var numFmt in numFmtsElement != null ? numFmtsElement.Elements(XlsxWorkbookSerializerCommon.MainNs + "numFmt") : new XElement[0])
             {
                 var id = ParseIntAttribute(numFmt.Attribute("numFmtId"));
                 var code = (string)numFmt.Attribute("formatCode");
@@ -158,7 +157,7 @@ namespace Aspose.Cells_FOSS
 
             var dateStyleIndexes = new HashSet<int>();
             var cellXfsElement = document.Root != null ? document.Root.Element(XlsxWorkbookSerializerCommon.MainNs + "cellXfs") : null;
-            var cellXfs = cellXfsElement != null ? cellXfsElement.Elements(XlsxWorkbookSerializerCommon.MainNs + "xf").ToList() : new List<XElement>();
+            var cellXfs = cellXfsElement != null ? new List<XElement>(cellXfsElement.Elements(XlsxWorkbookSerializerCommon.MainNs + "xf")) : new List<XElement>();
             for (var index = 0; index < cellXfs.Count; index++)
             {
                 var numFmtId = ParseIntAttribute(cellXfs[index].Attribute("numFmtId"));
@@ -249,9 +248,9 @@ namespace Aspose.Cells_FOSS
         internal static bool TryParseNumber(string rawValue, out object numberValue)
         {
             decimal decimalValue;
-            if (!rawValue.Contains('e') && !rawValue.Contains('E') && decimal.TryParse(rawValue, NumberStyles.Number, CultureInfo.InvariantCulture, out decimalValue))
+            if (!rawValue.Contains("e") && !rawValue.Contains("E") && decimal.TryParse(rawValue, NumberStyles.Number, CultureInfo.InvariantCulture, out decimalValue))
             {
-                if (!rawValue.Contains('.') && !rawValue.Contains(',') && decimal.Truncate(decimalValue) == decimalValue && decimalValue >= int.MinValue && decimalValue <= int.MaxValue)
+                if (!rawValue.Contains(".") && !rawValue.Contains(",") && decimal.Truncate(decimalValue) == decimalValue && decimalValue >= int.MinValue && decimalValue <= int.MaxValue)
                 {
                     numberValue = (int)decimalValue;
                     return true;

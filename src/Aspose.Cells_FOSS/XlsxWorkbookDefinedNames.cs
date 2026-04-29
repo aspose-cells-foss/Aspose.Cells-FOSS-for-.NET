@@ -1,4 +1,3 @@
-using System.Linq;
 using System.IO;
 using System.Collections.Generic;
 using System;
@@ -69,7 +68,7 @@ namespace Aspose.Cells_FOSS
 
         internal static void LoadWorkbookDefinedNames(XElement workbookRoot, WorkbookModel workbookModel, int sheetCount, LoadDiagnostics diagnostics, LoadOptions options)
         {
-            foreach (var element in workbookRoot.Element(MainNs + "definedNames")?.Elements(MainNs + "definedName") ?? Enumerable.Empty<XElement>())
+            foreach (var element in workbookRoot.Element(MainNs + "definedNames")?.Elements(MainNs + "definedName") ?? new XElement[0])
             {
                 var name = ((string)element.Attribute("name") ?? string.Empty).Trim();
                 if (DefinedNameUtility.IsReservedName(name))

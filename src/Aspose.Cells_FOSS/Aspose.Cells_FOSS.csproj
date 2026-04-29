@@ -5,5 +5,7 @@
     <RootNamespace>Aspose.Cells_FOSS</RootNamespace>
     <BuildInParallel>false</BuildInParallel>
     <LangVersion>6</LangVersion>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
   </PropertyGroup>
 </Project>

@@ -1,4 +1,3 @@
-using System.Linq;
 using System.IO;
 using System.Collections.Generic;
 using System;
@@ -68,7 +67,7 @@ namespace Aspose.Cells_FOSS
         internal static List<FontValue> ReadFontValues(XElement root)
         {
             var fonts = new List<FontValue>();
-            foreach (var font in root.Element(MainNs + "fonts")?.Elements(MainNs + "font") ?? Enumerable.Empty<XElement>())
+            foreach (var font in root.Element(MainNs + "fonts")?.Elements(MainNs + "font") ?? new XElement[0])
             {
                 fonts.Add(ReadFontValue(font));
             }
@@ -77,7 +76,7 @@ namespace Aspose.Cells_FOSS
         internal static List<FillValue> ReadFillValues(XElement root)
         {
             var fills = new List<FillValue>();
-            foreach (var fill in root.Element(MainNs + "fills")?.Elements(MainNs + "fill") ?? Enumerable.Empty<XElement>())
+            foreach (var fill in root.Element(MainNs + "fills")?.Elements(MainNs + "fill") ?? new XElement[0])
             {
                 fills.Add(ReadFillValue(fill));
             }
@@ -86,7 +85,7 @@ namespace Aspose.Cells_FOSS
         internal static List<BordersValue> ReadBordersValues(XElement root)
         {
             var borders = new List<BordersValue>();
-            foreach (var border in root.Element(MainNs + "borders")?.Elements(MainNs + "border") ?? Enumerable.Empty<XElement>())
+            foreach (var border in root.Element(MainNs + "borders")?.Elements(MainNs + "border") ?? new XElement[0])
             {
                 borders.Add(ReadBordersValue(border));
             }
@@ -95,7 +94,7 @@ namespace Aspose.Cells_FOSS
         internal static List<StyleValue> ReadDifferentialStyleValues(XElement root)
         {
             var styles = new List<StyleValue>();
-            foreach (var dxf in root.Element(MainNs + "dxfs")?.Elements(MainNs + "dxf") ?? Enumerable.Empty<XElement>())
+            foreach (var dxf in root.Element(MainNs + "dxfs")?.Elements(MainNs + "dxf") ?? new XElement[0])
             {
                 styles.Add(ReadDifferentialStyleValue(dxf));
             }
@@ -571,6 +570,37 @@ namespace Aspose.Cells_FOSS
             {
                 return default(ColorValue);
             }
+
+            var themeAttr = (string)colorElement.Attribute("theme");
+            if (!string.IsNullOrEmpty(themeAttr))
+            {
+                int themeIndex;
+                if (int.TryParse(themeAttr, NumberStyles.Integer, CultureInfo.InvariantCulture, out themeIndex))
+                {
+                    double? tint = null;
+                    var tintAttr = (string)colorElement.Attribute("tint");
+                    if (!string.IsNullOrEmpty(tintAttr))
+                    {
+                        double tintValue;
+                        if (double.TryParse(tintAttr, NumberStyles.Float, CultureInfo.InvariantCulture, out tintValue))
+                        {
+                            tint = tintValue;
+                        }
+                    }
+                    return new ColorValue(themeIndex, tint);
+                }
+            }
+
+            var indexedAttr = (string)colorElement.Attribute("indexed");
+            if (!string.IsNullOrEmpty(indexedAttr))
+            {
+                int indexedValue;
+                if (int.TryParse(indexedAttr, NumberStyles.Integer, CultureInfo.InvariantCulture, out indexedValue))
+                {
+                    return new ColorValue(indexedValue);
+                }
+            }
+
             var rgb = (string)colorElement.Attribute("rgb");
             if (string.IsNullOrWhiteSpace(rgb))
             {
@@ -609,6 +639,21 @@ namespace Aspose.Cells_FOSS
             if (IsEmptyColor(color))
             {
                 return null;
+            }
+            if (color.ThemeIndex.HasValue)
+            {
+                var element = new XElement(MainNs + elementName,
+                    new XAttribute("theme", color.ThemeIndex.Value.ToString(CultureInfo.InvariantCulture)));
+                if (color.Tint.HasValue)
+                {
+                    element.SetAttributeValue("tint", color.Tint.Value.ToString("R", CultureInfo.InvariantCulture));
+                }
+                return element;
+            }
+            if (color.Indexed.HasValue)
+            {
+                return new XElement(MainNs + elementName,
+                    new XAttribute("indexed", color.Indexed.Value.ToString(CultureInfo.InvariantCulture)));
             }
             return new XElement(MainNs + elementName, new XAttribute("rgb", ToArgbHex(color)));
         }

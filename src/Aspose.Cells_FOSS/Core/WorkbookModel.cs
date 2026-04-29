@@ -1,4 +1,3 @@
-using System.Linq;
 using System.IO;
 using System;
 using System.Collections.Generic;
@@ -70,5 +69,17 @@ namespace Aspose.Cells_FOSS.Core
         /// Gets the defined names.
         /// </summary>
         public List<DefinedNameModel> DefinedNames { get; }
+
+        /// <summary>
+        /// Gets or sets the raw XML content of xl/theme/theme1.xml, preserved verbatim on round-trip.
+        /// Null if the workbook has no theme part.
+        /// </summary>
+        internal string RawThemeXml { get; set; }
+
+        /// <summary>
+        /// Gets the list of external link parts, preserved verbatim on round-trip.
+        /// Order matches the order of externalReference elements in workbook.xml.
+        /// </summary>
+        internal List<ExternalLinkModel> ExternalLinks { get; } = new List<ExternalLinkModel>();
     }
 }

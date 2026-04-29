@@ -1,4 +1,3 @@
-using System.Linq;
 using System.IO;
 using System.Collections.Generic;
 using System;
@@ -12,7 +11,7 @@ namespace Aspose.Cells_FOSS
 {
     internal static class XlsxWorkbookHyperlinks
     {
-        private const string HyperlinkRelationshipType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink";
+        internal const string HyperlinkRelationshipType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink";
 
         internal static XElement BuildHyperlinksElement(WorksheetModel worksheet)
         {
@@ -100,7 +99,7 @@ namespace Aspose.Cells_FOSS
 
             var document = LoadDocument(relationshipsEntry);
             var targets = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-            foreach (var relationship in document.Root?.Elements(PackageRelationshipNs + "Relationship") ?? Enumerable.Empty<XElement>())
+            foreach (var relationship in document.Root?.Elements(PackageRelationshipNs + "Relationship") ?? new XElement[0])
             {
                 var id = (string)relationship.Attribute("Id");
                 var type = (string)relationship.Attribute("Type");
@@ -120,7 +119,7 @@ namespace Aspose.Cells_FOSS
         {
             worksheetModel.Hyperlinks.Clear();
 
-            foreach (var hyperlinkElement in worksheetRoot.Element(MainNs + "hyperlinks")?.Elements(MainNs + "hyperlink") ?? Enumerable.Empty<XElement>())
+            foreach (var hyperlinkElement in worksheetRoot.Element(MainNs + "hyperlinks")?.Elements(MainNs + "hyperlink") ?? new XElement[0])
             {
                 var reference = (string)hyperlinkElement.Attribute("ref");
                 HyperlinkModel candidate;
@@ -200,7 +199,7 @@ namespace Aspose.Cells_FOSS
             }
         }
 
-        private static List<HyperlinkModel> GetOrderedHyperlinks(IReadOnlyList<HyperlinkModel> hyperlinks)
+        internal static List<HyperlinkModel> GetOrderedHyperlinks(IReadOnlyList<HyperlinkModel> hyperlinks)
         {
             var ordered = new List<HyperlinkModel>(hyperlinks.Count);
             for (var index = 0; index < hyperlinks.Count; index++)

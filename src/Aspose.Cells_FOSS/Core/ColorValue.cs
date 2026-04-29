@@ -1,4 +1,3 @@
-using System.Linq;
 using System.IO;
 using System.Collections.Generic;
 using System;
@@ -10,61 +9,73 @@ namespace Aspose.Cells_FOSS.Core
     public struct ColorValue : IEquatable<ColorValue>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ColorValue"/> class.
+        /// Initializes an RGB color value.
         /// </summary>
-        /// <param name="a">The a.</param>
-        /// <param name="r">The r.</param>
-        /// <param name="g">The g.</param>
-        /// <param name="b">The b.</param>
         public ColorValue(byte a, byte r, byte g, byte b)
         {
             A = a;
             R = r;
             G = g;
             B = b;
+            ThemeIndex = null;
+            Tint = null;
+            Indexed = null;
         }
 
         /// <summary>
-        /// Gets the a.
+        /// Initializes a theme-based color value.
         /// </summary>
-        public byte A { get; }
-        /// <summary>
-        /// Gets the r.
-        /// </summary>
-        public byte R { get; }
-        /// <summary>
-        /// Gets the g.
-        /// </summary>
-        public byte G { get; }
-        /// <summary>
-        /// Gets the b.
-        /// </summary>
-        public byte B { get; }
+        public ColorValue(int themeIndex, double? tint)
+        {
+            A = 0;
+            R = 0;
+            G = 0;
+            B = 0;
+            ThemeIndex = themeIndex;
+            Tint = tint;
+            Indexed = null;
+        }
 
         /// <summary>
-        /// Determines whether the specified value is equal to the current instance.
+        /// Initializes an indexed color value.
         /// </summary>
-        /// <param name="other">The other.</param>
-        /// <returns><see langword="true"/> if the condition is met; otherwise, <see langword="false"/>.</returns>
+        public ColorValue(int indexed)
+        {
+            A = 0;
+            R = 0;
+            G = 0;
+            B = 0;
+            ThemeIndex = null;
+            Tint = null;
+            Indexed = indexed;
+        }
+
+        /// <summary>Gets the alpha component (0 = transparent, 255 = opaque).</summary>
+        public byte A { get; }
+        /// <summary>Gets the red component.</summary>
+        public byte R { get; }
+        /// <summary>Gets the green component.</summary>
+        public byte G { get; }
+        /// <summary>Gets the blue component.</summary>
+        public byte B { get; }
+        /// <summary>Gets the theme color index, or null if not a theme color.</summary>
+        public int? ThemeIndex { get; }
+        /// <summary>Gets the tint/shade modifier applied to a theme color.</summary>
+        public double? Tint { get; }
+        /// <summary>Gets the indexed color value, or null if not an indexed color.</summary>
+        public int? Indexed { get; }
+
         public bool Equals(ColorValue other)
         {
-            return A == other.A && R == other.R && G == other.G && B == other.B;
+            return A == other.A && R == other.R && G == other.G && B == other.B
+                && ThemeIndex == other.ThemeIndex && Tint == other.Tint && Indexed == other.Indexed;
         }
 
-        /// <summary>
-        /// Determines whether the specified value is equal to the current instance.
-        /// </summary>
-        /// <param name="obj">The obj.</param>
-        /// <returns><see langword="true"/> if the condition is met; otherwise, <see langword="false"/>.</returns>
         public override bool Equals(object obj)
         {
-            return (obj is ColorValue)&& Equals(((ColorValue)obj));
+            return (obj is ColorValue) && Equals(((ColorValue)obj));
         }
 
-        /// <summary>
-        /// Returns a hash code for the current instance.
-        /// </summary>
-        /// <returns>The int.</returns>
         public override int GetHashCode()
         {
             unchecked
@@ -73,6 +84,9 @@ namespace Aspose.Cells_FOSS.Core
                 hash = (hash * 397) ^ R;
                 hash = (hash * 397) ^ G;
                 hash = (hash * 397) ^ B;
+                hash = (hash * 397) ^ (ThemeIndex ?? 0);
+                hash = (hash * 397) ^ (Tint.HasValue ? Tint.Value.GetHashCode() : 0);
+                hash = (hash * 397) ^ (Indexed ?? 0);
                 return hash;
             }
         }

@@ -1,4 +1,3 @@
-using System.Linq;
 using System.IO;
 using System.Collections.Generic;
 using System;
@@ -286,6 +285,9 @@ namespace Aspose.Cells_FOSS
                 _model.ActiveSheetIndex = loadedModel.ActiveSheetIndex;
                 _model.DefinedNames.Clear();
                 _model.DefinedNames.AddRange(loadedModel.DefinedNames);
+                _model.RawThemeXml = loadedModel.RawThemeXml;
+                _model.ExternalLinks.Clear();
+                _model.ExternalLinks.AddRange(loadedModel.ExternalLinks);
             }
             catch (CellsException)
             {

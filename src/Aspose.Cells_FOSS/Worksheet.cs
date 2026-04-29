@@ -1,4 +1,3 @@
-using System.Linq;
 using System.IO;
 using System.Collections.Generic;
 using System;
@@ -32,6 +31,11 @@ namespace Aspose.Cells_FOSS
         private readonly PageSetup _pageSetup;
         private readonly WorksheetProtection _protection;
         private readonly AutoFilter _autoFilter;
+        private readonly ListObjectCollection _listObjects;
+        private readonly PictureCollection _pictures;
+        private readonly ShapeCollection _shapes;
+        private readonly ChartCollection _charts;
+        private readonly CommentCollection _comments;
 
         internal Worksheet(Workbook workbook, WorksheetModel model)
         {
@@ -44,6 +48,11 @@ namespace Aspose.Cells_FOSS
             _pageSetup = new PageSetup(model.PageSetup);
             _protection = new WorksheetProtection(model.Protection);
             _autoFilter = new AutoFilter(model.AutoFilter);
+            _listObjects = new ListObjectCollection(model);
+            _pictures = new PictureCollection(model);
+            _shapes = new ShapeCollection(model);
+            _charts = new ChartCollection(model);
+            _comments = new CommentCollection(model.Comments);
         }
 
         internal WorksheetModel Model
@@ -293,6 +302,61 @@ namespace Aspose.Cells_FOSS
             get
             {
                 return _autoFilter;
+            }
+        }
+
+        /// <summary>
+        /// Gets the collection of Excel tables on this worksheet.
+        /// </summary>
+        public ListObjectCollection ListObjects
+        {
+            get
+            {
+                return _listObjects;
+            }
+        }
+
+        /// <summary>
+        /// Gets the collection of pictures on this worksheet.
+        /// </summary>
+        public PictureCollection Pictures
+        {
+            get
+            {
+                return _pictures;
+            }
+        }
+
+        /// <summary>
+        /// Gets the collection of drawing objects (shapes) on this worksheet.
+        /// </summary>
+        public ShapeCollection Shapes
+        {
+            get
+            {
+                return _shapes;
+            }
+        }
+
+        /// <summary>
+        /// Gets the collection of charts on this worksheet.
+        /// </summary>
+        public ChartCollection Charts
+        {
+            get
+            {
+                return _charts;
+            }
+        }
+
+        /// <summary>
+        /// Gets the collection of comments (legacy notes) on this worksheet.
+        /// </summary>
+        public CommentCollection Comments
+        {
+            get
+            {
+                return _comments;
             }
         }
 

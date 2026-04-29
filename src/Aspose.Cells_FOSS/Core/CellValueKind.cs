@@ -1,4 +1,3 @@
-using System.Linq;
 using System.IO;
 using System.Collections.Generic;
 using System;
@@ -14,6 +13,7 @@ namespace Aspose.Cells_FOSS.Core
         Number,
         Boolean,
         DateTime,
+        Error,
         Formula
     }
 }

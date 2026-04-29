@@ -1,4 +1,3 @@
-using System.Linq;
 using System.IO;
 using System.Collections.Generic;
 using System;
@@ -202,7 +201,7 @@ namespace Aspose.Cells_FOSS
             }
 
             var customFormats = new Dictionary<int, string>();
-            foreach (var numFmt in root.Element(MainNs + "numFmts")?.Elements(MainNs + "numFmt") ?? Enumerable.Empty<XElement>())
+            foreach (var numFmt in root.Element(MainNs + "numFmts")?.Elements(MainNs + "numFmt") ?? new XElement[0])
             {
                 var id = ParseIntAttribute(numFmt.Attribute("numFmtId"));
                 var code = (string)numFmt.Attribute("formatCode");
@@ -235,7 +234,8 @@ namespace Aspose.Cells_FOSS
             context.CellFormats.Clear();
             context.DifferentialFormats.AddRange(ReadDifferentialStyleValues(root));
 
-            var cellXfs = root.Element(MainNs + "cellXfs")?.Elements(MainNs + "xf").ToList() ?? new List<XElement>();
+            var cellXfsContainer = root.Element(MainNs + "cellXfs");
+            var cellXfs = cellXfsContainer != null ? new List<XElement>(cellXfsContainer.Elements(MainNs + "xf")) : new List<XElement>();
             if (cellXfs.Count == 0)
             {
                 context.CellFormats.Add(StyleValue.Default.Clone());
@@ -383,6 +383,15 @@ namespace Aspose.Cells_FOSS
 
         private static string GetColorKey(ColorValue color)
         {
+            if (color.ThemeIndex.HasValue)
+            {
+                return "T" + color.ThemeIndex.Value.ToString(CultureInfo.InvariantCulture)
+                    + (color.Tint.HasValue ? "_" + color.Tint.Value.ToString("R", CultureInfo.InvariantCulture) : string.Empty);
+            }
+            if (color.Indexed.HasValue)
+            {
+                return "I" + color.Indexed.Value.ToString(CultureInfo.InvariantCulture);
+            }
             return ToArgbHex(color);
         }
 

@@ -1,4 +1,3 @@
-using System.Linq;
 using System.IO;
 using System;
 using System.Collections.Generic;
@@ -28,6 +27,12 @@ namespace Aspose.Cells_FOSS.Core
             View = new WorksheetViewModel();
             Protection = new WorksheetProtectionModel();
             AutoFilter = new AutoFilterModel();
+            ListObjects = new List<ListObjectModel>();
+            Pictures = new List<PictureModel>();
+            ShapeImages = new List<ShapeImageModel>();
+            Shapes = new List<ShapeModel>();
+            Charts = new List<ChartModel>();
+            Comments = new List<CommentModel>();
         }
 
         /// <summary>
@@ -76,6 +81,32 @@ namespace Aspose.Cells_FOSS.Core
         /// Gets or sets the auto filter.
         /// </summary>
         public AutoFilterModel AutoFilter { get; }
+        /// <summary>
+        /// Gets the list of table models on this worksheet.
+        /// </summary>
+        public List<ListObjectModel> ListObjects { get; }
+        /// <summary>
+        /// Gets the list of picture models on this worksheet.
+        /// </summary>
+        public List<PictureModel> Pictures { get; }
+
+        /// <summary>
+        /// Gets the list of images embedded inside shape/group-shape raw XML (not top-level worksheet pictures).
+        /// These are written to the drawing rels between pictures and charts so their original rId references remain valid.
+        /// </summary>
+        internal List<ShapeImageModel> ShapeImages { get; }
+        /// <summary>
+        /// Gets the list of shape models on this worksheet.
+        /// </summary>
+        public List<ShapeModel> Shapes { get; }
+        /// <summary>
+        /// Gets the list of chart models on this worksheet.
+        /// </summary>
+        public List<ChartModel> Charts { get; }
+        /// <summary>
+        /// Gets the list of comment models on this worksheet.
+        /// </summary>
+        public List<CommentModel> Comments { get; }
         /// <summary>
         /// Gets or sets the tab color.
         /// </summary>
