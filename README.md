@@ -2,17 +2,17 @@
 
 A powerful, open-source .NET library for creating, editing, and saving Excel `.xlsx` workbooks. No Microsoft Excel installation required. Built with performance and simplicity in mind.
 
-## ⭐ Why Aspose.Cells FOSS?
+## Why Aspose.Cells FOSS?
 
-- 🚀 **Zero Dependencies** - Works without Microsoft Excel or Office
-- 🎯 **Simple API** - Intuitive design modeled after Aspose.Cells
-- ⚡ **High Performance** - Optimized for large workbooks
-- 🛡️ **Reliable** - Recovery-oriented loading with detailed diagnostics
-- 🔧 **Full Feature Set** - Cells, styles, charts, formulas, and more
-- 📦 **Cross-Platform** - Supports .NET Standard 2.0 and .NET 8.0
-- 🆓 **MIT License** - Free for commercial and personal use
+- **Zero Dependencies** - Works without Microsoft Excel or Office
+- **Simple API** - Intuitive design modeled after Aspose.Cells
+- **High Performance** - Optimized for large workbooks
+- **Reliable** - Recovery-oriented loading with detailed diagnostics
+- **Full Feature Set** - Cells, styles, charts, formulas, and more
+- **Cross-Platform** - Supports .NET Standard 2.0 and .NET 8.0
+- **MIT License** - Free for commercial and personal use
 
-## 🎯 Quick Start
+## Quick Start
 
 ### Installation
 
@@ -76,54 +76,54 @@ fcs.AddCondition(FormatConditionType.Expression, OperatorType.Between, "=B2>100"
 workbook.Save("updated.xlsx");
 ```
 
-## ✨ Key Features
+## Key Features
 
 ### Core Excel Operations
-- ✅ Create, load, edit, and save `.xlsx` workbooks
-- ✅ Support for file and stream operations
-- ✅ Cell access by A1 notation and zero-based indexes
-- ✅ Scalar values: string, number, boolean, decimal, DateTime
-- ✅ Formula text storage and evaluation
-- ✅ Shared strings and inline strings
+- Create, load, edit, and save `.xlsx` workbooks
+- Support for file and stream operations
+- Cell access by A1 notation and zero-based indexes
+- Scalar values: string, number, boolean, decimal, DateTime
+- Formula text storage and evaluation
+- Shared strings and inline strings
 
 ### Styling & Formatting
-- ✅ Rich cell styles (fonts, colors, backgrounds)
-- ✅ Borders, fills, and number formats
-- ✅ Cell merging
-- ✅ Conditional formatting rules
-- ✅ Data validation
+- Rich cell styles (fonts, colors, backgrounds)
+- Borders, fills, and number formats
+- Cell merging
+- Conditional formatting rules
+- Data validation
 
 ### Worksheet Management
-- ✅ Multiple worksheets with collection management
-- ✅ Worksheet visibility control
-- ✅ Auto-filter support
-- ✅ Protection and security
-- ✅ View settings and frozen panes
+- Multiple worksheets with collection management
+- Worksheet visibility control
+- Auto-filter support
+- Protection and security
+- View settings and frozen panes
 
 ### Advanced Features
-- ✅ Hyperlinks and defined names
-- ✅ Data validations and rules
-- ✅ Page setup, margins, headers/footers
-- ✅ Print settings
-- ✅ 1900 and 1904 date systems
-- ✅ Workbook and document properties
-- ✅ Recovery-oriented loading with diagnostics
+- Hyperlinks and defined names
+- Data validations and rules
+- Page setup, margins, headers/footers
+- Print settings
+- 1900 and 1904 date systems
+- Workbook and document properties
+- Recovery-oriented loading with diagnostics
 
-## 📦 Compatibility
+## Compatibility
 
 | Target Framework | Support |
 |-----------------|---------|
-| .NET Standard 2.0 | ✅ |
-| .NET 8.0 | ✅ |
-| .NET 6.0 | ✅ |
-| .NET Framework 4.6.1+ | ✅ |
-| .NET Core 2.0+ | ✅ |
+| .NET Standard 2.0 | Yes |
+| .NET 8.0 | Yes |
+| .NET 6.0 | Yes |
+| .NET Framework 4.6.1+ | Yes |
+| .NET Core 2.0+ | Yes |
 
 **Minimum Requirements:**
 - C# 6.0 or higher
 - No external dependencies
 
-## 🏗️ Build from Source
+## Build from Source
 
 ```bash
 # Clone the repository
@@ -137,7 +137,7 @@ dotnet build src\Aspose.Cells_FOSS\Aspose.Cells_FOSS.csproj -c Release
 dotnet run --project samples\Aspose.Cells_FOSS.Samples.Basic\Aspose.Cells_FOSS.Samples.Basic.csproj
 ```
 
-## 📚 Samples
+## Samples
 
 Explore comprehensive examples in the [`samples/`](samples/) directory:
 
@@ -158,22 +158,20 @@ Explore comprehensive examples in the [`samples/`](samples/) directory:
 | [ListObjects](samples/Aspose.Cells_FOSS.Samples.ListObjects/) | Tables and lists |
 | [Pictures](samples/Aspose.Cells_FOSS.Samples.Pictures/) | Image insertion |
 
-## 📄 License
+
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](License/LICENSE.txt) file for details.
 
 
 
-## 📞 Support & Community
+## Support & Community
 
-- 🐛 [Report Issues](https://github.com/aspose-cells-foss/Aspose.Cells-FOSS-for-.NET/issues)
-- 💬 [Discussions](https://github.com/aspose-cells-foss/Aspose.Cells-FOSS-for-.NET/discussions)
-- 📧 [Email Support](mailto:support@aspose.com)
-
-
+- [Report Issues](https://github.com/aspose-cells-foss/Aspose.Cells-FOSS-for-.NET/issues)
+- [Discussions](https://github.com/aspose-cells-foss/Aspose.Cells-FOSS-for-.NET/discussions)
 
 ---
 
-**Made with ❤️ by the Aspose.Cells FOSS Team**
+**Made with love by the Aspose.Cells FOSS Team**
 
-If you find this project useful, please consider giving it a ⭐ on GitHub!
+If you find this project useful, please consider giving it a star on GitHub!
