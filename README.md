@@ -161,14 +161,13 @@ Explore comprehensive examples in the [`samples/`](samples/) directory:
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](License/LICENSE.txt) file for details.
+This project is licensed under the MIT License - see the [LICENSE](https://github.com/aspose-cells-foss/Aspose.Cells-FOSS-for-.NET/blob/master/License/LICENSE.txt) file for details.
 
 
 
 ## Support & Community
 
 - [Report Issues](https://github.com/aspose-cells-foss/Aspose.Cells-FOSS-for-.NET/issues)
-- [Discussions](https://github.com/aspose-cells-foss/Aspose.Cells-FOSS-for-.NET/discussions)
 
 ---
 

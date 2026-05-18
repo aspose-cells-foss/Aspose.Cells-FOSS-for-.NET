@@ -1,11 +1,56 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net8.0</TargetFrameworks>
-    <AssemblyName>Aspose.Cells_FOSS</AssemblyName>
-    <RootNamespace>Aspose.Cells_FOSS</RootNamespace>
+    <AssemblyName>Aspose.Cells.FOSS</AssemblyName>
+    <RootNamespace>Aspose.Cells.FOSS</RootNamespace>
     <BuildInParallel>false</BuildInParallel>
     <LangVersion>6</LangVersion>
     <Nullable>disable</Nullable>
     <ImplicitUsings>disable</ImplicitUsings>
+
+    <PackageId>Aspose.Cells.FOSS</PackageId>
+    <Version>26.4.2.1</Version>
+    <title>Aspose.Cells FOSS for .NET</title>
+    <Authors>Aspose.Cells</Authors>
+    <Company>Aspose</Company>
+    <Description>FOSS package for Aspose.Cells-compatible APIs.</Description>
+    <PackageTags>aspose;cells;excel;xlsx;spreadsheet</PackageTags>
+
+ <PackageProjectUrl>
+    https://github.com/aspose-cells-foss/Aspose.Cells-FOSS-for-.NET
+  </PackageProjectUrl>
+
+  <RepositoryUrl>
+    https://github.com/aspose-cells-foss/Aspose.Cells-FOSS-for-.NET.git
+  </RepositoryUrl>
+
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+
+   
+    <Copyright>Copyright © 2026 Aspose</Copyright>
+    <PackageReleaseNotes>
+https://github.com/aspose-cells-foss/Aspose.Cells-FOSS-for-.NET/releases/tag/v26.4.2
+    </PackageReleaseNotes>
+
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="..\..\README.md">
+      <Pack>true</Pack>
+      <PackagePath>\</PackagePath>
+    </Content>
+    <Content Include="E:\Aspose.Cells_Foss - Github\License\LICENSE.txt">
+      <Pack>true</Pack>
+      <PackagePath>license\</PackagePath>
+    </Content>
+    <Content Include="..\..\documentation\**\*">
+      <Pack>true</Pack>
+      <PackagePath>documentation\%(RecursiveDir)%(Filename)%(Extension)</PackagePath>
+    </Content>
+  </ItemGroup>
 </Project>
