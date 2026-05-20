@@ -7,7 +7,7 @@ namespace Aspose.Cells_FOSS.Core
     /// <summary>
     /// Represents protection value.
     /// </summary>
-    public sealed class ProtectionValue
+    internal sealed class ProtectionValue
     {
         /// <summary>
         /// Gets or sets a value indicating whether locked.
@@ -28,3 +28,4 @@ namespace Aspose.Cells_FOSS.Core
         }
     }
 }
+

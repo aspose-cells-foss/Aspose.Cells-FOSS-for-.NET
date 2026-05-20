@@ -4,8 +4,27 @@ using Aspose.Cells_FOSS.Core;
 namespace Aspose.Cells_FOSS
 {
     /// <summary>
-    /// Represents the collection of drawing objects (shapes) on a worksheet.
+    /// Represents collection of drawing objects (shapes) on a worksheet.
     /// </summary>
+    /// <remarks>
+    /// Shapes include various drawing elements such as rectangles, circles, arrows, text boxes, and connectors.
+    /// They can be used for visual annotations, highlighting, or creating diagrams within worksheets.
+    /// Shapes support multiple geometry types and can be positioned using anchor coordinates.
+    /// Each shape can be independently configured with different types and properties.
+    /// </remarks>
+    /// <example>
+    /// <code>
+    /// var workbook = new Workbook();
+    /// var worksheet = workbook.Worksheets[0];
+    ///
+    /// // Add different shapes
+    /// worksheet.Shapes.Add(5, 5, 7, 7, AutoShapeType.Rectangle);
+    /// worksheet.Shapes.Add(9, 5, 11, 7, AutoShapeType.Ellipse);
+    /// worksheet.Shapes.Add(13, 5, 15, 7, AutoShapeType.RightArrow);
+    ///
+    /// Console.WriteLine($"Added {worksheet.Shapes.Count} shapes");
+    /// </code>
+    /// </example>
     public sealed class ShapeCollection
     {
         private readonly WorksheetModel _worksheetModel;

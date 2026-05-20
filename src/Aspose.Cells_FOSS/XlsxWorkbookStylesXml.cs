@@ -256,7 +256,7 @@ namespace Aspose.Cells_FOSS
                 Size = ParseDoubleAttribute(font.Element(MainNs + "sz")?.Attribute("val")) ?? 11d,
                 Bold = font.Element(MainNs + "b") != null,
                 Italic = font.Element(MainNs + "i") != null,
-                Underline = font.Element(MainNs + "u") != null,
+                Underline = ParseUnderlineType(font.Element(MainNs + "u")),
                 StrikeThrough = font.Element(MainNs + "strike") != null,
                 Color = ReadColorValue(font.Element(MainNs + "color")),
             };
@@ -362,9 +362,9 @@ namespace Aspose.Cells_FOSS
             {
                 element.Add(new XElement(MainNs + "strike"));
             }
-            if (font.Underline)
+            if (font.Underline != FontUnderlineType.None)
             {
-                element.Add(new XElement(MainNs + "u"));
+                element.Add(BuildUnderlineElement(font.Underline));
             }
             element.Add(new XElement(MainNs + "sz", new XAttribute("val", font.Size.ToString("0.####", CultureInfo.InvariantCulture))));
             var colorElement = BuildColorElement("color", font.Color);
@@ -374,6 +374,51 @@ namespace Aspose.Cells_FOSS
             }
             element.Add(new XElement(MainNs + "name", new XAttribute("val", font.Name)));
             return element;
+        }
+
+        private static FontUnderlineType ParseUnderlineType(XElement underlineElement)
+        {
+            if (underlineElement == null)
+            {
+                return FontUnderlineType.None;
+            }
+
+            var value = (string)underlineElement.Attribute("val");
+            if (string.IsNullOrEmpty(value))
+            {
+                return FontUnderlineType.Single;
+            }
+
+            switch (value)
+            {
+                case "single":
+                    return FontUnderlineType.Single;
+                case "double":
+                    return FontUnderlineType.Double;
+                case "singleAccounting":
+                    return FontUnderlineType.Accounting;
+                case "doubleAccounting":
+                    return FontUnderlineType.DoubleAccounting;
+                default:
+                    return FontUnderlineType.Single;
+            }
+        }
+
+        private static XElement BuildUnderlineElement(FontUnderlineType underlineType)
+        {
+            switch (underlineType)
+            {
+                case FontUnderlineType.Double:
+                    return new XElement(MainNs + "u", new XAttribute("val", "double"));
+                case FontUnderlineType.Accounting:
+                    return new XElement(MainNs + "u", new XAttribute("val", "singleAccounting"));
+                case FontUnderlineType.DoubleAccounting:
+                    return new XElement(MainNs + "u", new XAttribute("val", "doubleAccounting"));
+                case FontUnderlineType.Single:
+                    return new XElement(MainNs + "u");
+                default:
+                    return new XElement(MainNs + "u");
+            }
         }
         private static XElement BuildFillElement(FillValue fill)
         {

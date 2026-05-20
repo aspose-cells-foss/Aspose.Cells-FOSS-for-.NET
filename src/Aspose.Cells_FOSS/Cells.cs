@@ -75,6 +75,22 @@ namespace Aspose.Cells_FOSS
         }
 
         /// <summary>
+        /// Gets or sets the default style of the worksheet cells scope.
+        /// </summary>
+        public Style Style
+        {
+            get
+            {
+                return Style.FromCore(_worksheet.Workbook.Model.DefaultStyle.Clone());
+            }
+            set
+            {
+                if (value == null) throw new ArgumentNullException(nameof(value));
+                _worksheet.Workbook.Model.DefaultStyle = value.ToCore();
+            }
+        }
+
+        /// <summary>
         /// Gets column-level settings for the worksheet.
         /// </summary>
         public ColumnCollection Columns
@@ -95,7 +111,7 @@ namespace Aspose.Cells_FOSS
                 var mergedCells = new List<CellArea>(_worksheet.Model.MergeRegions.Count);
                 foreach (var region in _worksheet.Model.MergeRegions)
                 {
-                    mergedCells.Add(new CellArea(region.FirstRow, region.FirstColumn, region.TotalRows, region.TotalColumns));
+                    mergedCells.Add(CellArea.CreateCellArea(region.FirstRow, region.FirstColumn, region.FirstRow + region.TotalRows - 1, region.FirstColumn + region.TotalColumns - 1));
                 }
 
                 return mergedCells;

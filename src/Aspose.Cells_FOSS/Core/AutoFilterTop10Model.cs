@@ -7,7 +7,7 @@ namespace Aspose.Cells_FOSS.Core
     /// <summary>
     /// Represents auto filter top10 model.
     /// </summary>
-    public sealed class AutoFilterTop10Model
+    internal sealed class AutoFilterTop10Model
     {
         /// <summary>
         /// Gets or sets a value indicating whether enabled.
@@ -43,3 +43,4 @@ namespace Aspose.Cells_FOSS.Core
         }
     }
 }
+

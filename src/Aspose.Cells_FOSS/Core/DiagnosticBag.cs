@@ -7,7 +7,7 @@ namespace Aspose.Cells_FOSS.Core
     /// <summary>
     /// Represents diagnostic bag.
     /// </summary>
-    public sealed class DiagnosticBag
+    internal sealed class DiagnosticBag
     {
         private readonly List<DiagnosticEntry> _entries = new List<DiagnosticEntry>();
 
@@ -32,3 +32,4 @@ namespace Aspose.Cells_FOSS.Core
         }
     }
 }
+

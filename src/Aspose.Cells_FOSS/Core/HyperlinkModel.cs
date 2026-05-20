@@ -6,7 +6,7 @@ namespace Aspose.Cells_FOSS.Core
     /// <summary>
     /// Represents hyperlink model.
     /// </summary>
-    public sealed class HyperlinkModel
+    internal sealed class HyperlinkModel
     {
         /// <summary>
         /// Gets or sets the first row.
@@ -42,3 +42,4 @@ namespace Aspose.Cells_FOSS.Core
         public string TextToDisplay { get; set; }
     }
 }
+

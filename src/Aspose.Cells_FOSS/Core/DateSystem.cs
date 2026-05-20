@@ -6,9 +6,10 @@ namespace Aspose.Cells_FOSS.Core
     /// <summary>
     /// Specifies date system.
     /// </summary>
-    public enum DateSystem
+    internal enum DateSystem
     {
         Windows1900,
         Mac1904
     }
 }
+

@@ -6,6 +6,24 @@ namespace Aspose.Cells_FOSS
     /// <summary>
     /// Represents a picture (image) anchored to a worksheet.
     /// </summary>
+    /// <remarks>
+    /// Pictures allow you to embed images directly into Excel worksheets.
+    /// Supported image formats include JPEG, PNG, GIF, and BMP.
+    /// The image format is automatically detected from the file extension or data magic bytes.
+    /// Pictures are positioned by specifying anchor coordinates and can be resized by adjusting the anchor points.
+    /// </remarks>
+    /// <example>
+    /// <code>
+    /// var workbook = new Workbook();
+    /// var worksheet = workbook.Worksheets[0];
+    ///
+    /// // Add a picture from a file
+    /// byte[] imageData = File.ReadAllBytes("logo.png");
+    /// int pictureIndex = worksheet.Pictures.Add(5, 5, 10, 10, imageData);
+    /// var picture = worksheet.Pictures[pictureIndex];
+    /// picture.Name = "Company Logo";
+    /// </code>
+    /// </example>
     public sealed class Picture
     {
         private readonly PictureModel _model;

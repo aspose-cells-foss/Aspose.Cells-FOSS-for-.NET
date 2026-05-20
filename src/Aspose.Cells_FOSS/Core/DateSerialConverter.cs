@@ -6,7 +6,7 @@ namespace Aspose.Cells_FOSS.Core
     /// <summary>
     /// Provides date serial converter operations.
     /// </summary>
-    public static class DateSerialConverter
+    internal static class DateSerialConverter
     {
         private static readonly DateTime Windows1900Epoch = new DateTime(1899, 12, 31);
         private static readonly DateTime Mac1904Epoch = new DateTime(1904, 1, 1);

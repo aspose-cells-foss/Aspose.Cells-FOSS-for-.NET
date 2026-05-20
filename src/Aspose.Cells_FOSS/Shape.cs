@@ -5,6 +5,22 @@ namespace Aspose.Cells_FOSS
     /// <summary>
     /// Represents a drawing object (auto shape) anchored to a worksheet.
     /// </summary>
+    /// <remarks>
+    /// Shapes are visual elements that can be added to worksheets, such as rectangles, circles, arrows, etc.
+    /// They are positioned by specifying anchor coordinates and can be resized by adjusting the anchor points.
+    /// Common uses include highlighting important data, adding annotations, or creating visual indicators.
+    /// </remarks>
+    /// <example>
+    /// <code>
+    /// var workbook = new Workbook();
+    /// var worksheet = workbook.Worksheets[0];
+    ///
+    /// // Add a rectangle shape
+    /// int shapeIndex = worksheet.Shapes.Add(5, 5, 10, 10, AutoShapeType.Rectangle);
+    /// var shape = worksheet.Shapes[shapeIndex];
+    /// shape.Name = "Highlight Rectangle";
+    /// </code>
+    /// </example>
     public sealed class Shape
     {
         private readonly ShapeModel _model;

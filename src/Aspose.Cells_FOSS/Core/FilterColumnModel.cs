@@ -7,7 +7,7 @@ namespace Aspose.Cells_FOSS.Core
     /// <summary>
     /// Represents filter column model.
     /// </summary>
-    public sealed class FilterColumnModel
+    internal sealed class FilterColumnModel
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="FilterColumnModel"/> class.
@@ -83,3 +83,4 @@ namespace Aspose.Cells_FOSS.Core
         }
     }
 }
+

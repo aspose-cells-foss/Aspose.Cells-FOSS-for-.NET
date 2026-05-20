@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Examples - Aspose.Cells FOSS for .NET</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #003399;
+            color: white;
+            padding: 20px;
+            margin: -20px -20px 20px -20px;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #003399;
+            text-decoration: none;
+        }
+        .section {
+            margin-bottom: 30px;
+        }
+        .section-title {
+            color: #003399;
+            border-bottom: 2px solid #003399;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+        .example {
+            background-color: #f9f9f9;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 5px solid #4CAF50;
+            border-radius: 3px;
+        }
+        .example-title {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        .example-description {
+            color: #666;
+            margin-bottom: 15px;
+        }
+        pre {
+            background-color: #f4f4f4;
+            padding: 15px;
+            border-radius: 3px;
+            overflow-x: auto;
+            border: 1px solid #ddd;
+        }
+        code {
+            font-family: 'Courier New', monospace;
+            color: #d63384;
+        }
+        .note {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Code Examples</h1>
+        <p>Practical examples for common scenarios</p>
+    </div>
+
+    <div class="content">
+        <a href="index.html" class="back-link">â†?Back to Index</a>
+
+        <div class="section">
+            <h2 class="section-title">Data Import Examples</h2>
+
+            <div class="example">
+                <div class="example-title">Import Data from Database</div>
+                <div class="example-description">Load data from a database and write it to a worksheet.</div>
+                <pre><code>using (var workbook = new Workbook())
+{
+    var worksheet = workbook.Worksheets[0];
+    worksheet.Name = "Data";
+
+    // Simulating database data
+    var data = new[]
+    {
+        new { Name = "Alice", Age = 30, City = "New York" },
+        new { Name = "Bob", Age = 25, City = "Los Angeles" },
+        new { Name = "Charlie", Age = 35, City = "Chicago" }
+    };
+
+    // Write headers
+    worksheet.Cells["A1"].PutValue("Name");
+    worksheet.Cells["B1"].PutValue("Age");
+    worksheet.Cells["C1"].PutValue("City");
+
+    // Write data
+    for (int i = 0; i < data.Length; i++)
+    {
+        worksheet.Cells[i + 2, 0].PutValue(data[i].Name);
+        worksheet.Cells[i + 2, 1].PutValue(data[i].Age);
+        worksheet.Cells[i + 2, 2].PutValue(data[i].City);
+    }
+
+    workbook.Save("DatabaseImport.xlsx");
+}</code></pre>
+            </div>
+
+            <div class="example">
+                <div class="example-title">Import Data from CSV</div>
+                <div class="example-description">Read data from a CSV file and import into a worksheet.</div>
+                <pre><code>using (var workbook = new Workbook())
+{
+    var worksheet = workbook.Worksheets[0];
+    worksheet.Name = "CSV Data";
+
+    // Read CSV file
+    var lines = File.ReadAllLines("data.csv");
+    for (int row = 0; row < lines.Length; row++)
+    {
+        var columns = lines[row].Split(',');
+        for (int col = 0; col < columns.Length; col++)
+        {
+            worksheet.Cells[row, col].PutValue(columns[col].Trim());
+        }
+    }
+
+    workbook.Save("CSVImport.xlsx");
+}</code></pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Formatting Examples</h2>
+
+            <div class="example">
+                <div class="example-title">Create a Styled Report</div>
+                <div class="example-description">Apply comprehensive formatting to create a professional-looking report.</div>
+                <pre><code>using (var workbook = new Workbook())
+{
+    var worksheet = workbook.Worksheets[0];
+    worksheet.Name = "Quarterly Report";
+
+    // Create title
+    worksheet.Cells["A1"].PutValue("Quarterly Sales Report");
+    var titleStyle = worksheet.Cells["A1"].GetStyle();
+    titleStyle.Font.Size = 16;
+    titleStyle.Font.Bold = true;
+    titleStyle.Font.Color = System.Drawing.Color.White;
+    titleStyle.Pattern = FillPattern.Solid;
+    titleStyle.ForegroundColor = System.Drawing.Color.DarkBlue;
+    titleStyle.HorizontalAlignment = HorizontalAlignmentType.Center;
+    worksheet.Cells["A1"].SetStyle(titleStyle);
+    worksheet.Cells.Merge(0, 0, 1, 4);
+
+    // Create table headers
+    string[] headers = { "Product", "Q1", "Q2", "Q3", "Q4", "Total" };
+    for (int i = 0; i < headers.Length; i++)
+    {
+        worksheet.Cells[2, i].PutValue(headers[i]);
+        var headerStyle = worksheet.Cells[2, i].GetStyle();
+        headerStyle.Font.Bold = true;
+        headerStyle.Font.Color = System.Drawing.Color.White;
+        headerStyle.Pattern = FillPattern.Solid;
+        headerStyle.ForegroundColor = System.Drawing.Color.Gray;
+        worksheet.Cells[2, i].SetStyle(headerStyle);
+    }
+
+    // Add sample data
+    object[,] data = {
+        { "Product A", 10000, 12000, 15000, 18000 },
+        { "Product B", 8000, 9500, 11000, 12500 },
+        { "Product C", 12000, 14000, 16000, 19000 }
+    };
+
+    for (int row = 0; row < data.GetLength(0); row++)
+    {
+        for (int col = 0; col < data.GetLength(1); col++)
+        {
+            worksheet.Cells[row + 3, col].PutValue(data[row, col]);
+        }
+    }
+
+    // Add total formulas
+    for (int row = 0; row < 3; row++)
+    {
+        string formula = $"=SUM(B{row + 4}:E{row + 4})";
+        worksheet.Cells[row + 3, 5].Formula = formula;
+    }
+
+    // Format numbers
+    var numberStyle = worksheet.Cells["B4"].GetStyle();
+    numberStyle.NumberFormat = "$#,##0";
+    for (int row = 3; row < 6; row++)
+    {
+        for (int col = 1; col < 6; col++)
+        {
+            worksheet.Cells[row, col].SetStyle(numberStyle);
+        }
+    }
+
+    // Auto-fit columns
+    worksheet.Cells.Columns[0].AutoFit();
+    worksheet.Cells.Columns[1].AutoFit();
+    worksheet.Cells.Columns[2].AutoFit();
+    worksheet.Cells.Columns[3].AutoFit();
+    worksheet.Cells.Columns[4].AutoFit();
+    worksheet.Cells.Columns[5].AutoFit();
+
+    workbook.Save("QuarterlyReport.xlsx");
+}</code></pre>
+            </div>
+
+            <div class="example">
+                <div class="example-title">Conditional Formatting</div>
+                <div class="example-description">Apply conditional formatting to highlight specific values.</div>
+                <pre><code>using (var workbook = new Workbook())
+{
+    var worksheet = workbook.Worksheets[0];
+
+    // Add sample data
+    worksheet.Cells["A1"].PutValue("Score");
+    for (int i = 0; i < 10; i++)
+    {
+        worksheet.Cells[i + 1, 0].PutValue(new Random().Next(0, 100));
+    }
+
+    // Add conditional formatting for values > 75
+    var condition = worksheet.ConditionalFormattings.Add();
+    var formatCondition = condition.Add(FormatConditionType.CellValue,
+        OperatorType.Greater, "75", "");
+
+    // Set style for high values
+    var style = formatCondition.Style;
+    style.ForegroundColor = System.Drawing.Color.LightGreen;
+    style.Pattern = FillPattern.Solid;
+    formatCondition.Style = style;
+
+    workbook.Save("ConditionalFormatting.xlsx");
+}</code></pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Chart Examples</h2>
+
+            <div class="example">
+                <div class="example-title">Basic Chart Creation</div>
+                <div class="example-description">Create a simple chart from worksheet data.</div>
+                <pre><code>using (var workbook = new Workbook())
+{
+    var worksheet = workbook.Worksheets[0];
+    worksheet.Name = "Sales Data";
+
+    // Add data
+    worksheet.Cells["A1"].PutValue("Month");
+    worksheet.Cells["B1"].PutValue("Sales");
+
+    string[] months = { "Jan", "Feb", "Mar", "Apr", "May", "Jun" };
+    int[] sales = { 45000, 52000, 48000, 61000, 55000, 67000 };
+
+    for (int i = 0; i < months.Length; i++)
+    {
+        worksheet.Cells[i + 1, 0].PutValue(months[i]);
+        worksheet.Cells[i + 1, 1].PutValue(sales[i]);
+    }
+
+    // Create a chart
+    int chartIndex = worksheet.Charts.Add(ChartType.Column, 5, 0, 15, 5);
+    var chart = worksheet.Charts[chartIndex];
+    chart.Title.Text = "Monthly Sales";
+    chart.PlotArea.Area.ForegroundColor = System.Drawing.Color.White;
+
+    // Set data source
+    chart.NSeries.Add("B2:B7", false);
+    chart.NSeries.CategoryData = "A2:A7";
+
+    workbook.Save("SalesChart.xlsx");
+}</code></pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Advanced Examples</h2>
+
+            <div class="example">
+                <div class="example-title">Multiple Worksheets with Cross-Sheet References</div>
+                <div class="example-description">Create a workbook with multiple worksheets and formulas that reference other sheets.</div>
+                <pre><code>using (var workbook = new Workbook())
+{
+    // Create first worksheet - Data
+    var dataSheet = workbook.Worksheets[0];
+    dataSheet.Name = "Data";
+
+    // Add data
+    worksheet.Cells["A1"].PutValue("Product");
+    worksheet.Cells["B1"].PutValue("Price");
+    worksheet.Cells["A2"].PutValue("Apple");
+    worksheet.Cells["B2"].PutValue(1.99);
+    worksheet.Cells["A3"].PutValue("Banana");
+    worksheet.Cells["B3"].PutValue(0.99);
+
+    // Create second worksheet - Summary
+    int summarySheetIndex = workbook.Worksheets.Add("Summary");`r`n    var summarySheet = workbook.Worksheets[summarySheetIndex];
+
+    // Add formula referencing data sheet
+    summarySheet.Cells["A1"].PutValue("Total Value");
+    summarySheet.Cells["A2"].Formula = "=SUM(Data!B2:B3)";
+
+    workbook.Save("MultipleSheets.xlsx");
+}</code></pre>
+            </div>
+
+            <div class="example">
+                <div class="example-title">Data Validation</div>
+                <div class="example-description">Add data validation to restrict user input.</div>
+                <pre><code>using (var workbook = new Workbook())
+{
+    var worksheet = workbook.Worksheets[0];
+
+    // Create a dropdown list
+    worksheet.Cells["A1"].PutValue("Category");
+    worksheet.Cells["A2"].PutValue("Fruit");
+
+    // Add data validation
+    var validation = worksheet.Validations.Add();
+    validation.Type = ValidationType.List;
+    validation.Operator = OperatorType.Between;
+    validation.InCellDropDown = true;
+    validation.Formula1 = "Fruit,Vegetable,Dairy,Meat";
+
+    // Apply validation to cell
+    var area = new CellArea();
+    area.StartRow = 2;
+    area.StartColumn = 0;
+    area.EndRow = 10;
+    area.EndColumn = 0;
+    validation.AddArea(area);
+
+    workbook.Save("DataValidation.xlsx");
+}</code></pre>
+            </div>
+
+            <div class="example">
+                <div class="example-title">Page Setup for Printing</div>
+                <div class="example-description">Configure page setup settings for professional printing.</div>
+                <pre><code>using (var workbook = new Workbook())
+{
+    var worksheet = workbook.Worksheets[0];
+    worksheet.Name = "Print Layout";
+
+    // Add some data
+    for (int row = 0; row < 50; row++)
+    {
+        for (int col = 0; col < 10; col++)
+        {
+            worksheet.Cells[row, col].PutValue($"Cell {row},{col}");
+        }
+    }
+
+    // Configure page setup
+    var pageSetup = worksheet.PageSetup;
+    pageSetup.Orientation = PageOrientationType.Landscape;
+    pageSetup.PaperSize = PaperSizeType.PaperA4;
+    pageSetup.LeftMargin = 0.5;
+    pageSetup.RightMargin = 0.5;
+    pageSetup.TopMargin = 0.75;
+    pageSetup.BottomMargin = 0.75;
+
+    // Add headers and footers
+    pageSetup.SetHeader(0, "&CCompany Name");
+    pageSetup.SetHeader(2, "&D&T");
+    pageSetup.SetFooter(0, "&CPage &P of &N");
+
+    // Set print area
+    pageSetup.PrintArea = "A1:J50";
+
+    workbook.Save("PrintLayout.xlsx");
+}</code></pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Tips and Best Practices</h2>
+
+            <div class="note">
+                <strong>Performance Tips:</strong>
+                <ul>
+                    <li>Use <code>using</code> statement to ensure proper disposal of Workbook objects</li>
+                    <li>Batch cell operations when possible to reduce overhead</li>
+                    <li>Reuse Style objects instead of creating new ones for similar formatting</li>
+                    <li>Consider using cell ranges for bulk operations</li>
+                </ul>
+            </div>
+
+            <div class="note">
+                <strong>Memory Management:</strong>
+                <ul>
+                    <li>Always dispose Workbook objects when done to free resources</li>
+                    <li>For large datasets, process data in chunks</li>
+                    <li>Clear unused worksheets to reduce memory usage</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Additional Resources</h2>
+
+            <ul>
+                <li><a href="api-reference.html">API Reference</a> - Complete API documentation</li>
+                <li><a href="quick-start.html">Quick Start Guide</a> - Getting started guide</li>
+                <li><a href="index.html">Main Documentation</a> - Overview and features</li>
+            </ul>
+        </div>
+
+    </div>
+</body>
+</html>

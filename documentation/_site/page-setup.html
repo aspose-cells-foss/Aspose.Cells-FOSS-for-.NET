@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Setup - Aspose.Cells FOSS for .NET</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #003399;
+            color: white;
+            padding: 20px;
+            margin: -20px -20px 20px -20px;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .section {
+            margin-bottom: 40px;
+        }
+        .section-title {
+            color: #003399;
+            border-bottom: 2px solid #003399;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+        pre {
+            background-color: #f4f4f4;
+            padding: 15px;
+            border-radius: 3px;
+            overflow-x: auto;
+            border: 1px solid #ddd;
+        }
+        code {
+            font-family: 'Courier New', monospace;
+            color: #d63384;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #003399;
+            text-decoration: none;
+        }
+        .method-section {
+            background-color: #f9f9f9;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-left: 4px solid #4CAF50;
+            border-radius: 3px;
+        }
+        .method-name {
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            color: #003399;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Page Setup</h1>
+        <p>Complete documentation for page setup and print settings in Aspose.Cells FOSS for .NET</p>
+    </div>
+
+    <div class="content">
+        <a href="index.html" class="back-link">← Back to Index</a>
+
+        <div class="section">
+            <h2 class="section-title">Page Setup Overview</h2>
+            <p>The <strong>PageSetup</strong> class controls how worksheets appear when printed, including page orientation, paper size, margins, headers, footers, and other print-related settings. Proper page setup ensures your spreadsheets print exactly as intended.</p>
+
+            <div class="method-section">
+                <div class="method-name">Key Page Setup Features:</div>
+                <ul>
+                    <li>Page orientation (portrait or landscape)</li>
+                    <li>Paper size selection (Letter, A4, Legal, etc.)</li>
+                    <li>Margin configuration (top, bottom, left, right, header, footer)</li>
+                    <li>Header and footer customization</li>
+                    <li>Print area specification</li>
+                    <li>Print titles (repeat rows and columns)</li>
+                    <li>Scaling and page order settings</li>
+                    <li>Gridline and heading printing options</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Page Orientation and Size</h2>
+
+            <div class="method-section">
+                <div class="method-name">Page Orientation</div>
+                <pre><code>var pageSetup = worksheet.PageSetup;
+
+// Set page orientation
+pageSetup.Orientation = PageOrientationType.Portrait;   // Vertical (default)
+pageSetup.Orientation = PageOrientationType.Landscape;  // Horizontal</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Paper Size</div>
+                <pre><code>var pageSetup = worksheet.PageSetup;
+
+// Set paper size
+pageSetup.PaperSize = PaperSizeType.PaperLetter;     // 8.5" x 11" (default)
+pageSetup.PaperSize = PaperSizeType.PaperA4;         // 210mm x 297mm
+pageSetup.PaperSize = PaperSizeType.PaperLegal;       // 8.5" x 14"
+pageSetup.PaperSize = PaperSizeType.PaperA3;         // 297mm x 420mm
+pageSetup.PaperSize = PaperSizeType.PaperA5;         // 148mm x 210mm
+pageSetup.PaperSize = PaperSizeType.PaperEnvelope10; // 4.125" x 9.5"</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Custom Paper Size</div>
+                <pre><code>// Set custom dimensions (in inches)
+var pageSetup = worksheet.PageSetup;
+pageSetup.PaperSize = PaperSizeType.PaperLetter;  // Start with a standard size
+pageSetup.PaperWidth = 11.5;  // inches
+pageSetup.PaperHeight = 8.5;  // inches</code></pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Margins</h2>
+
+            <div class="method-section">
+                <div class="method-name">Setting Margins</div>
+                <pre><code>var pageSetup = worksheet.PageSetup;
+
+// Set margins in inches
+pageSetup.LeftMargin = 0.75;    // 0.75 inch
+pageSetup.RightMargin = 0.75;   // 0.75 inch
+pageSetup.TopMargin = 1.0;      // 1.0 inch
+pageSetup.BottomMargin = 1.0;   // 1.0 inch
+
+// Set header and footer margins
+pageSetup.HeaderMargin = 0.5;   // 0.5 inch
+pageSetup.FooterMargin = 0.5;   // 0.5 inch</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Narrow Margins</div>
+                <pre><code>// Narrow margins for maximum content space
+var pageSetup = worksheet.PageSetup;
+pageSetup.LeftMargin = 0.25;
+pageSetup.RightMargin = 0.25;
+pageSetup.TopMargin = 0.75;
+pageSetup.BottomMargin = 0.75;
+pageSetup.HeaderMargin = 0.3;
+pageSetup.FooterMargin = 0.3;</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Wide Margins</div>
+                <pre><code>// Wide margins for documents with binding
+var pageSetup = worksheet.PageSetup;
+pageSetup.LeftMargin = 1.5;    // Extra space for binding
+pageSetup.RightMargin = 0.75;
+pageSetup.TopMargin = 1.25;
+pageSetup.BottomMargin = 1.25;
+pageSetup.HeaderMargin = 0.75;
+pageSetup.FooterMargin = 0.75;</code></pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Headers and Footers</h2>
+
+            <div class="method-section">
+                <div class="method-name">Basic Header and Footer</div>
+                <pre><code>var pageSetup = worksheet.PageSetup;
+
+// Set header text (left, center, right sections)
+pageSetup.SetHeader(0, "Company Report");              // Left section
+pageSetup.SetHeader(1, "&A");                          // Center: Sheet name
+pageSetup.SetHeader(2, "&D");                          // Right: Date
+
+// Set footer text (left, center, right sections)
+pageSetup.SetFooter(0, "&P of &N");                    // Left: Page x of y
+pageSetup.SetFooter(1, "Confidential");                // Center: Text
+pageSetup.SetFooter(2, "&T");                          // Right: Time</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Special Header/Footer Codes</div>
+                <pre><code>// Common formatting codes:
+&F   // File name
+&A   // Sheet name
+&D   // Date
+&T   // Time
+&P   // Page number
+&N   // Total pages
+&Z   // File path
+&L   // Start left section
+&C   // Start center section
+&R   // Start right section
+&"FontName,FontStyle" // Change font (e.g., &"Arial,Bold")
+&nn  // Font size in points (e.g., &10)
+&Kxx // Font color (RGB hex, e.g., &KFF0000 for red)
+&B   // Bold on/off
+&I   // Italic on/off
+&U   // Underline on/off
+&S   // Strikethrough on/off
+&E   // Double underline on/off
+&X   // Superscript on/off
+&Y   // Subscript on/off
+
+// Examples:
+pageSetup.SetHeader(1, "&\"Arial,Bold\"&12&A");    // Bold 12pt Arial, sheet name
+pageSetup.SetFooter(0, "Page &P of &N");          // Page x of y
+pageSetup.SetFooter(1, "&D &T");                  // Date and time
+pageSetup.SetFooter(2, "&F");                     // File name</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Custom Header/Footer</div>
+                <pre><code>// Create a professional header with logo placeholder
+pageSetup.SetHeader(0, "[Logo]");
+pageSetup.SetHeader(1, "&\"Times New Roman,Bold\"&14Quarterly Report");
+pageSetup.SetHeader(2, "&\"Arial\"&10Prepared by: John Doe");
+
+// Create a comprehensive footer
+pageSetup.SetFooter(0, "&\"Arial\"&10&D &T");                    // Date and time
+pageSetup.SetFooter(1, "&\"Arial\"&10Confidential - Internal Use Only");  // Center notice
+pageSetup.SetFooter(2, "&\"Arial\"&10Page &P of &N");           // Page numbers
+
+// Different headers for first page
+pageSetup.DifferentFirst = true;
+pageSetup.SetHeader(0, "");           // First page: no left header
+pageSetup.SetHeader(1, "Cover Page"); // First page: cover title
+pageSetup.SetHeader(2, "");           // First page: no right header</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Odd and Even Pages</div>
+                <pre><code>// Different headers/footers for odd and even pages
+pageSetup.DifferentOddEven = true;
+
+// Odd page header
+pageSetup.SetHeader(0, "Odd Page Left");
+pageSetup.SetHeader(1, "Odd Page Center");
+pageSetup.SetHeader(2, "Odd Page Right");
+
+// Even page header
+pageSetup.SetHeader(0, "Even Page Left");
+pageSetup.SetHeader(1, "Even Page Center");
+pageSetup.SetHeader(2, "Even Page Right");</code></pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Print Area</h2>
+
+            <div class="method-section">
+                <div class="method-name">Set Print Area</div>
+                <pre><code>var pageSetup = worksheet.PageSetup;
+
+// Set print area to specific range
+pageSetup.PrintArea = "A1:F20";
+pageSetup.PrintArea = "Sheet1!A1:F20";
+
+// Set print area using cell references
+pageSetup.PrintArea = "$A$1:$G$30";
+
+// Clear print area (print entire sheet)
+pageSetup.PrintArea = string.Empty;</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Multiple Print Areas</div>
+                <pre><code>// Set multiple non-contiguous print areas (comma-separated)
+pageSetup.PrintArea = "A1:F10,A15:F25,A30:F40";
+
+// Print specific columns only
+pageSetup.PrintArea = "A:C";</code></pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Print Titles</h2>
+
+            <div class="method-section">
+                <div class="method-name">Repeat Rows (Header Rows)</div>
+                <pre><code>var pageSetup = worksheet.PageSetup;
+
+// Repeat top rows on every page
+pageSetup.PrintTitleRows = "$1:$1";           // Repeat row 1
+pageSetup.PrintTitleRows = "$1:$2";           // Repeat rows 1-2
+pageSetup.PrintTitleRows = "$1:$3";           // Repeat rows 1-3</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Repeat Columns</div>
+                <pre><code>var pageSetup = worksheet.PageSetup;
+
+// Repeat left columns on every page
+pageSetup.PrintTitleColumns = "$A:$A";        // Repeat column A
+pageSetup.PrintTitleColumns = "$A:$B";        // Repeat columns A-B
+pageSetup.PrintTitleColumns = "$A:$C";        // Repeat columns A-C</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Combine Rows and Columns</div>
+                <pre><code>// Repeat both header rows and left columns
+var pageSetup = worksheet.PageSetup;
+pageSetup.PrintTitleRows = "$1:$2";     // Repeat header rows
+pageSetup.PrintTitleColumns = "$A:$B";  // Repeat left columns</code></pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Scaling and Page Order</h2>
+
+            <div class="method-section">
+                <div class="method-name">Fit to Page</div>
+                <pre><code>var pageSetup = worksheet.PageSetup;
+
+// Fit to specific number of pages
+pageSetup.FitToPagesWide = 1;    // Fit width to 1 page
+pageSetup.FitToPagesTall = 0;    // Auto for height (0 = auto)
+
+pageSetup.FitToPagesWide = 0;     // Auto for width
+pageSetup.FitToPagesTall = 2;     // Fit height to 2 pages
+
+// Fit to both dimensions
+pageSetup.FitToPagesWide = 1;
+pageSetup.FitToPagesTall = 1;     // Fit entire sheet on one page</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Scaling Percentage</div>
+                <pre><code>// Set scaling percentage (10-400%)
+var pageSetup = worksheet.PageSetup;
+pageSetup.Zoom = 100;    // Normal size (100%)
+pageSetup.Zoom = 75;     // 75% of normal size
+pageSetup.Zoom = 150;    // 150% of normal size</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Page Order</div>
+                <pre><code>var pageSetup = worksheet.PageSetup;
+
+// Set page order for multi-page printing
+pageSetup.Order = PrintOrderType.DownThenOver;  // Down columns, then across rows
+pageSetup.Order = PrintOrderType.OverThenDown;  // Across rows, then down columns</code></pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Print Options</h2>
+
+            <div class="method-section">
+                <div class="method-name">Gridlines and Headings</div>
+                <pre><code>var pageSetup = worksheet.PageSetup;
+
+// Print gridlines
+pageSetup.PrintGridlines = true;
+pageSetup.PrintGridlines = false;
+
+// Print row and column headings
+pageSetup.PrintHeadings = true;
+pageSetup.PrintHeadings = false;</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Black and White</div>
+                <pre><code>var pageSetup = worksheet.PageSetup;
+
+// Print in black and white (ignore colors)
+pageSetup.BlackAndWhite = true;
+pageSetup.BlackAndWhite = false;</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Draft Quality</div>
+                <pre><code>var pageSetup = worksheet.PageSetup;
+
+// Print in draft quality (faster, lower quality)
+pageSetup.IsDraft = true;
+pageSetup.IsDraft = false;</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Comments</div>
+                <pre><code>var pageSetup = worksheet.PageSetup;
+
+// Print comments
+// Options: PrintInPlace, PrintSheetEnd, None
+pageSetup.PrintComments = PrintCommentsType.PrintInPlace;
+pageSetup.PrintComments = PrintCommentsType.PrintSheetEnd;
+pageSetup.PrintComments = PrintCommentsType.None;</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Center on Page</div>
+                <pre><code>var pageSetup = worksheet.PageSetup;
+
+// Center horizontally
+pageSetup.CenterHorizontally = true;
+pageSetup.CenterHorizontally = false;
+
+// Center vertically
+pageSetup.CenterVertically = true;
+pageSetup.CenterVertically = false;</code></pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Complete Example</h2>
+
+            <div class="method-section">
+                <div class="method-name">Professional Report Setup</div>
+                <pre><code>using Aspose.Cells_FOSS;
+using System;
+
+class Program
+{
+    static void Main()
+    {
+        var workbook = new Workbook();
+        var worksheet = workbook.Worksheets[0];
+        var cells = worksheet.Cells;
+
+        // Add sample data
+        cells["A1"].PutValue("Sales Report");
+        cells["A3"].PutValue("Region");
+        cells["B3"].PutValue("Q1");
+        cells["C3"].PutValue("Q2");
+        cells["D3"].PutValue("Q3");
+        cells["E3"].PutValue("Q4");
+        cells["F3"].PutValue("Total");
+
+        cells["A4"].PutValue("North");
+        cells["B4"].PutValue(120000);
+        cells["C4"].PutValue(135000);
+        cells["D4"].PutValue(142000);
+        cells["E4"].PutValue(150000);
+        cells["F4"].Formula = "=SUM(B4:E4)";
+
+        cells["A5"].PutValue("South");
+        cells["B5"].PutValue(98000);
+        cells["C5"].PutValue(112000);
+        cells["D5"].PutValue(125000);
+        cells["E5"].PutValue(138000);
+        cells["F5"].Formula = "=SUM(B5:E5)";
+
+        cells["A6"].PutValue("East");
+        cells["B6"].PutValue(145000);
+        cells["C6"].PutValue(158000);
+        cells["D6"].PutValue(165000);
+        cells["E6"].PutValue(172000);
+        cells["F6"].Formula = "=SUM(B6:E6)";
+
+        cells["A7"].PutValue("West");
+        cells["B7"].PutValue(89000);
+        cells["C7"].PutValue(95000);
+        cells["D7"].PutValue(102000);
+        cells["E7"].PutValue(110000);
+        cells["F7"].Formula = "=SUM(B7:E7)";
+
+        // Configure page setup
+        var pageSetup = worksheet.PageSetup;
+
+        // Page orientation and size
+        pageSetup.Orientation = PageOrientationType.Landscape;
+        pageSetup.PaperSize = PaperSizeType.PaperLetter;
+
+        // Margins
+        pageSetup.LeftMargin = 0.75;
+        pageSetup.RightMargin = 0.75;
+        pageSetup.TopMargin = 1.0;
+        pageSetup.BottomMargin = 1.0;
+        pageSetup.HeaderMargin = 0.5;
+        pageSetup.FooterMargin = 0.5;
+
+        // Headers
+        pageSetup.SetHeader(0, "&\"Arial,Bold\"&10ABC Corporation");
+        pageSetup.SetHeader(1, "&\"Times New Roman,Bold\"&16Quarterly Sales Report");
+        pageSetup.SetHeader(2, "&D");
+
+        // Footers
+        pageSetup.SetFooter(0, "&\"Arial\"&10&F");
+        pageSetup.SetFooter(1, "Confidential - Internal Use Only");
+        pageSetup.SetFooter(2, "&\"Arial\"&10Page &P of &N");
+
+        // Print area
+        pageSetup.PrintArea = "A1:F7";
+
+        // Print titles
+        pageSetup.PrintTitleRows = "$3:$3";  // Repeat header row
+        pageSetup.PrintTitleColumns = "$A:$A";  // Repeat first column
+
+        // Center on page
+        pageSetup.CenterHorizontally = true;
+        pageSetup.CenterVertically = true;
+
+        // Print options
+        pageSetup.PrintGridlines = false;
+        pageSetup.PrintHeadings = false;
+        pageSetup.BlackAndWhite = false;
+
+        // Fit to page
+        pageSetup.FitToPagesWide = 1;
+        pageSetup.FitToPagesTall = 0;
+
+        // Apply styling
+        var titleStyle = cells["A1"].GetStyle();
+        titleStyle.Font.Bold = true;
+        titleStyle.Font.Size = 18;
+        titleStyle.Font.Color = System.Drawing.Color.White;
+        titleStyle.BackgroundColor = System.Drawing.Color.FromArgb(0, 51, 153);
+        cells["A1"].SetStyle(titleStyle);
+
+        var headerStyle = workbook.CreateStyle();
+        headerStyle.Font.Bold = true;
+        headerStyle.Font.Color = System.Drawing.Color.White;
+        headerStyle.BackgroundColor = System.Drawing.Color.FromArgb(0, 102, 204);
+        for (int col = 0; col <= 5; col++)
+        {
+            cells[2, col].SetStyle(headerStyle);
+        }
+
+        var currencyStyle = workbook.CreateStyle();
+        currencyStyle.NumberFormat = "$#,##0";
+        for (int row = 3; row <= 6; row++)
+        {
+            for (int col = 1; col <= 5; col++)
+            {
+                cells[row, col].SetStyle(currencyStyle);
+            }
+        }
+
+        // Auto-fit columns
+        worksheet.AutoFitColumns();
+
+        workbook.Save("sales-report.xlsx");
+        Console.WriteLine("Sales report with professional page setup created!");
+    }
+}</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Invoice Template</div>
+                <pre><code>using Aspose.Cells_FOSS;
+using System;
+
+class Program
+{
+    static void Main()
+    {
+        var workbook = new Workbook();
+        var worksheet = workbook.Worksheets[0];
+        var cells = worksheet.Cells;
+
+        // Set up invoice structure
+        cells["A1"].PutValue("INVOICE");
+        cells["A3"].PutValue("Invoice #");
+        cells["B3"].PutValue("INV-2026-001");
+        cells["A4"].PutValue("Date");
+        cells["B4"].PutValue(DateTime.Now.ToShortDateString());
+        cells["A6"].PutValue("Bill To:");
+        cells["A7"].PutValue("John Doe");
+        cells["A8"].PutValue("123 Main Street");
+        cells["A9"].PutValue("City, State 12345");
+
+        cells["A12"].PutValue("Description");
+        cells["B12"].PutValue("Quantity");
+        cells["C12"].PutValue("Unit Price");
+        cells["D12"].PutValue("Total");
+
+        // Add line items
+        string[] items = { "Product A", "Product B", "Product C", "Product D" };
+        int[] quantities = { 5, 10, 3, 7 };
+        double[] prices = { 25.00, 18.50, 42.00, 15.75 };
+
+        for (int i = 0; i < items.Length; i++)
+        {
+            int row = i + 13;
+            cells[row, 0].PutValue(items[i]);
+            cells[row, 1].PutValue(quantities[i]);
+            cells[row, 2].PutValue(prices[i]);
+            cells[row, 3].Formula = $"=B{row}*C{row}";
+        }
+
+        // Add totals
+        int totalRow = items.Length + 14;
+        cells[totalRow, 2].PutValue("Subtotal:");
+        cells[totalRow, 3].Formula = $"=SUM(D13:D{totalRow - 1})";
+
+        totalRow++;
+        cells[totalRow, 2].PutValue("Tax (8%):");
+        cells[totalRow, 3].Formula = $"=D{totalRow - 1}*0.08";
+
+        totalRow++;
+        cells[totalRow, 2].PutValue("Total:");
+        cells[totalRow, 3].Formula = $"=D{totalRow - 2}+D{totalRow - 1}";
+
+        // Page setup
+        var pageSetup = worksheet.PageSetup;
+
+        // Portrait for standard invoices
+        pageSetup.Orientation = PageOrientationType.Portrait;
+        pageSetup.PaperSize = PaperSizeType.PaperLetter;
+
+        // Narrow margins for invoices
+        pageSetup.LeftMargin = 0.5;
+        pageSetup.RightMargin = 0.5;
+        pageSetup.TopMargin = 0.75;
+        pageSetup.BottomMargin = 0.75;
+        pageSetup.HeaderMargin = 0.3;
+        pageSetup.FooterMargin = 0.3;
+
+        // Invoice header
+        pageSetup.SetHeader(1, "&\"Arial,Bold\"&14Invoice # &F");
+
+        // Invoice footer
+        pageSetup.SetFooter(0, "Thank you for your business!");
+        pageSetup.SetFooter(1, "Payment due within 30 days");
+        pageSetup.SetFooter(2, "&D");
+
+        // Print area
+        pageSetup.PrintArea = "A1:D20";
+
+        // Print titles (header row)
+        pageSetup.PrintTitleRows = "$12:$12";
+
+        // Center on page
+        pageSetup.CenterHorizontally = true;
+
+        // Apply styling
+        var titleStyle = cells["A1"].GetStyle();
+        titleStyle.Font.Bold = true;
+        titleStyle.Font.Size = 20;
+        titleStyle.Font.Color = System.Drawing.Color.White;
+        titleStyle.BackgroundColor = System.Drawing.Color.FromArgb(0, 51, 153);
+        cells["A1"].SetStyle(titleStyle);
+
+        var headerStyle = workbook.CreateStyle();
+        headerStyle.Font.Bold = true;
+        headerStyle.Font.Color = System.Drawing.Color.White;
+        headerStyle.BackgroundColor = System.Drawing.Color.FromArgb(0, 102, 204);
+        for (int col = 0; col <= 3; col++)
+        {
+            cells[11, col].SetStyle(headerStyle);
+        }
+
+        var currencyStyle = workbook.CreateStyle();
+        currencyStyle.NumberFormat = "$#,##0.00";
+        for (int row = 13; row <= items.Length + 12; row++)
+        {
+            cells[row, 2].SetStyle(currencyStyle);
+            cells[row, 3].SetStyle(currencyStyle);
+        }
+
+        for (int row = items.Length + 14; row <= items.Length + 16; row++)
+        {
+            cells[row, 2].SetStyle(currencyStyle);
+            cells[row, 3].SetStyle(currencyStyle);
+        }
+
+        // Auto-fit columns
+        worksheet.AutoFitColumns();
+
+        workbook.Save("invoice-template.xlsx");
+        Console.WriteLine("Invoice template with page setup created!");
+    }
+}</code></pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Important Notes</h2>
+            <ul>
+                <li><strong>Margin Units:</strong> All margins are specified in inches.</li>
+                <li><strong>Header/Footer Sections:</strong> Use 0, 1, and 2 for left, center, and right sections respectively.</li>
+                <li><strong>Print Area:</strong> Use A1 notation or absolute cell references.</li>
+                <li><strong>Fitting Content:</strong> Use FitToPagesWide and FitToPagesTall for automatic scaling.</li>
+                <li><strong>Print Preview:</strong> Always test print settings in Excel to ensure desired output.</li>
+                <li><strong>First Page Options:</strong> Use DifferentFirst to customize headers/footers for the first page.</li>
+                <li><strong>Scaling:</strong> Scaling percentage must be between 10 and 400 percent.</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Related Documentation</h2>
+            <ul>
+                <li><a href="worksheets.html">Worksheet Operations</a> - Managing worksheets</li>
+                <li><a href="styling.html">Styling</a> - Cell formatting and styles</li>
+                <li><a href="api-reference.html">Complete API Reference</a></li>
+                <li><a href="index.html">Back to Main Documentation</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 40px; color: #666; font-size: 0.9em;">
+        <p>&copy; 2026 Aspose.Cells FOSS Project. All rights reserved.</p>
+    </div>
+</body>
+</html>

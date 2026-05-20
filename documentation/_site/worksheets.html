@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Worksheet Operations - Aspose.Cells FOSS for .NET</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #003399;
+            color: white;
+            padding: 20px;
+            margin: -20px -20px 20px -20px;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .section {
+            margin-bottom: 40px;
+        }
+        .section-title {
+            color: #003399;
+            border-bottom: 2px solid #003399;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+        pre {
+            background-color: #f4f4f4;
+            padding: 15px;
+            border-radius: 3px;
+            overflow-x: auto;
+            border: 1px solid #ddd;
+        }
+        code {
+            font-family: 'Courier New', monospace;
+            color: #d63384;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #003399;
+            text-decoration: none;
+        }
+        .method-section {
+            background-color: #f9f9f9;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-left: 4px solid #4CAF50;
+            border-radius: 3px;
+        }
+        .method-name {
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            color: #003399;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Worksheet Operations</h1>
+        <p>Complete documentation for worksheet management in Aspose.Cells FOSS for .NET</p>
+    </div>
+
+    <div class="content">
+        <a href="index.html" class="back-link">â†?Back to Index</a>
+
+        <div class="section">
+            <h2 class="section-title">Worksheet Overview</h2>
+            <p>The <strong>Worksheet</strong> class represents a single sheet in an Excel workbook and provides comprehensive functionality for managing cells, data, formatting, and worksheet-level properties.</p>
+
+            <div class="method-section">
+                <div class="method-name">Key Features:</div>
+                <ul>
+                    <li>Access and modify worksheet properties (name, visibility, tab color, etc.)</li>
+                    <li>Manage cells and cell data through the Cells collection</li>
+                    <li>Handle formulas and calculations</li>
+                    <li>Apply cell formatting and styles</li>
+                    <li>Work with merged cells</li>
+                    <li>Manage hyperlinks, data validation, and conditional formatting</li>
+                    <li>Configure page setup and print settings</li>
+                    <li>Protect and unprotect worksheets</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Accessing Worksheets</h2>
+
+            <div class="method-section">
+                <div class="method-name">By Index</div>
+                <pre><code>// Access worksheet by zero-based index
+var firstWorksheet = workbook.Worksheets[0];
+var secondWorksheet = workbook.Worksheets[1];</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">By Name</div>
+                <pre><code>// Access worksheet by name
+var sheet = workbook.Worksheets["Sheet1"];</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Iterating Worksheets</div>
+                <pre><code>// Iterate through all worksheets
+foreach (var worksheet in workbook.Worksheets)
+{
+    Console.WriteLine($"Worksheet: {worksheet.Name}");
+}</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Creating New Worksheets</div>
+                <pre><code>// Add a new worksheet
+int newSheetIndex = workbook.Worksheets.Add();`r`nvar newSheet = workbook.Worksheets[newSheetIndex];
+
+// Add and name in one operation
+int summarySheetIndex = workbook.Worksheets.Add("Summary");`r`nvar summarySheet = workbook.Worksheets[summarySheetIndex];
+
+// The new sheet is automatically positioned at the end</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Removing Worksheets</div>
+                <pre><code>// Remove by index
+workbook.Worksheets.RemoveAt(0);
+
+// Remove by name
+workbook.Worksheets.RemoveAt("Sheet2");
+
+// Remove worksheet object
+var sheet = workbook.Worksheets[0];
+workbook.Worksheets.RemoveAt(sheet.Name);</code></pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Worksheet Properties</h2>
+
+            <div class="method-section">
+                <div class="method-name">Name Management</div>
+                <pre><code>// Get worksheet name
+string name = worksheet.Name;
+
+// Set worksheet name
+worksheet.Name = "Financial Data";
+
+// Name validation:
+// - Must be unique within workbook
+// - Cannot be empty
+// - Cannot contain special characters: \ / ? * [ ] :</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Visibility Control</div>
+                <pre><code>// Set worksheet visibility
+worksheet.VisibilityType = VisibilityType.Visible;      // Normal sheet
+worksheet.VisibilityType = VisibilityType.Hidden;        // Hidden but accessible by name
+worksheet.VisibilityType = VisibilityType.VeryHidden;    // Completely hidden
+
+// Get current visibility
+VisibilityType visibility = worksheet.VisibilityType;</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Tab Color</div>
+                <pre><code>// Set tab color
+worksheet.TabColor = System.Drawing.Color.Red;
+worksheet.TabColor = System.Drawing.Color.FromArgb(255, 128, 0);
+
+// Remove tab color
+worksheet.TabColor = System.Drawing.Color.Empty;</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Display Options</div>
+                <pre><code>// Show/hide gridlines
+worksheet.ShowGridlines = false;
+worksheet.ShowGridlines = true;
+
+// Show/hide row and column headers
+worksheet.ShowRowColumnHeaders = false;
+
+// Set zoom level (percentage)
+worksheet.Zoom = 150;  // 150% zoom
+worksheet.Zoom = 75;   // 75% zoom</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Worksheet Position</div>
+                <pre><code>// Move worksheet to specific position
+workbook.Worksheets[0].MoveTo(2);  // Move to index 2
+
+// Get worksheet index
+int index = worksheet.Index;</code></pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Cell Operations</h2>
+
+            <div class="method-section">
+                <div class="method-name">Accessing Cells</div>
+                <pre><code>// Access cells collection
+var cells = worksheet.Cells;
+
+// By cell name (A1 notation)
+var cellA1 = cells["A1"];
+var cellB5 = cells["B5"];
+
+// By row and column (zero-based)
+var cell0_0 = cells[0, 0];     // A1
+var cell4_1 = cells[4, 1];     // B5
+
+// Get cell by name directly
+var cell = worksheet.Cells["A1"];</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Setting Cell Values</div>
+                <pre><code>// String value
+cells["A1"].PutValue("Hello World");
+
+// Numeric values
+cells["A2"].PutValue(42);
+cells["A3"].PutValue(3.14159);
+
+// Boolean
+cells["A4"].PutValue(true);
+cells["A5"].PutValue(false);
+
+// DateTime
+cells["A6"].PutValue(DateTime.Now);
+cells["A7"].PutValue(new DateTime(2026, 5, 13));</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Getting Cell Values</div>
+                <pre><code>// Get logical value
+object value = cell.Value;
+
+// Get string representation
+string stringValue = cell.StringValue;
+
+// Get display string with formatting
+string displayString = cell.DisplayStringValue;
+
+// Check cell type
+CellType type = cell.Type;  // IsString, IsNumber, IsBoolean, IsDateTime, etc.</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Batch Cell Operations</div>
+                <pre><code>// Get used data range
+int maxRow = cells.MaxDataRow;
+int maxCol = cells.MaxDataColumn;
+
+// Iterate through used range
+for (int row = 0; row <= maxRow; row++)
+{
+    for (int col = 0; col <= maxCol; col++)
+    {
+        var cell = cells[row, col];
+        if (cell.Value != null)
+        {
+            Console.WriteLine($"{cell.Name}: {cell.StringValue}");
+        }
+    }
+}</code></pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Merged Cells</h2>
+
+            <div class="method-section">
+                <div class="method-name">Merging Cells</div>
+                <pre><code>// Merge a range of cells
+worksheet.Cells.Merge(0, 0, 1, 3);  // Merge A1:C1
+// Parameters: firstRow, firstColumn, totalRows, totalColumns
+
+// Merge for title
+cells["A1"].PutValue("Quarterly Report");
+worksheet.Cells.Merge(0, 0, 1, 5);  // A1:E1
+
+// Merge for subtotal
+cells["A10"].PutValue("Total:");
+worksheet.Cells.Merge(9, 0, 1, 2);  // A10:B10</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Unmerging Cells</div>
+                <pre><code>// Unmerge a specific range
+worksheet.Cells.UnMerge(0, 0, 1, 3);  // Unmerge A1:C1
+
+// Unmerge all merges in worksheet
+worksheet.Cells.UnMerge();</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Checking Merged Cells</div>
+                <pre><code>// Check if cell is merged
+if (cell.IsMerged)
+{
+    Console.WriteLine("Cell is part of a merged range");
+}
+
+// Get merged range
+var mergedRanges = worksheet.Cells.MergedCells;
+foreach (var range in mergedRanges)
+{
+    Console.WriteLine($"Merged range: {range}");
+}</code></pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Worksheet Protection</h2>
+
+            <div class="method-section">
+                <div class="method-name">Protecting Worksheets</div>
+                <pre><code>// Protect worksheet (default protection)
+worksheet.Protect();
+
+// Protect with password
+worksheet.Protect("myPassword");
+
+// Protect with specific options
+worksheet.Protect(
+    password: "secure123",
+    allowFormattingCells: true,
+    allowFormattingColumns: false,
+    allowFormattingRows: false,
+    allowInsertingColumns: false,
+    allowDeletingColumns: false
+);</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Unprotecting Worksheets</div>
+                <pre><code>// Unprotect (no password)
+worksheet.Unprotect();
+
+// Unprotect with password
+worksheet.Unprotect("myPassword");
+
+// Unprotect regardless of password (use with caution)
+worksheet.Unprotect(string.Empty);</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Checking Protection Status</div>
+                <pre><code>// Check if worksheet is protected
+bool isProtected = worksheet.IsProtected;
+bool isPasswordProtected = worksheet.IsPasswordProtected;
+
+if (isProtected)
+{
+    Console.WriteLine("Worksheet is protected");
+}</code></pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Complete Example</h2>
+
+            <div class="method-section">
+                <div class="method-name">Create and Populate Worksheet</div>
+                <pre><code>using Aspose.Cells_FOSS;
+using System;
+
+class Program
+{
+    static void Main()
+    {
+        var workbook = new Workbook();
+
+        // Create new worksheet
+        int worksheetIndex = workbook.Worksheets.Add("Sales Data");`r`n        var worksheet = workbook.Worksheets[worksheetIndex];
+
+        // Set worksheet properties
+        worksheet.TabColor = System.Drawing.Color.Blue;
+        worksheet.Zoom = 110;
+
+        // Create header row
+        cells = worksheet.Cells;
+        cells["A1"].PutValue("Product");
+        cells["B1"].PutValue("Quantity");
+        cells["C1"].PutValue("Price");
+        cells["D1"].PutValue("Total");
+
+        // Merge header cells
+        worksheet.Cells.Merge(0, 0, 1, 4);
+
+        // Apply formatting to header
+        var headerStyle = cells["A1"].GetStyle();
+        headerStyle.Font.Bold = true;
+        headerStyle.Font.Color = System.Drawing.Color.White;
+        headerStyle.BackgroundColor = System.Drawing.Color.FromArgb(0, 51, 153);
+        cells["A1"].SetStyle(headerStyle);
+
+        // Add data rows
+        string[] products = { "Widget A", "Widget B", "Widget C" };
+        int[] quantities = { 100, 150, 200 };
+        double[] prices = { 10.50, 15.75, 8.99 };
+
+        for (int i = 0; i < products.Length; i++)
+        {
+            int row = i + 2;
+            cells[row, 0].PutValue(products[i]);
+            cells[row, 1].PutValue(quantities[i]);
+            cells[row, 2].PutValue(prices[i]);
+
+            // Calculate total
+            cells[row, 3].Formula = $"=B{row}*C{row}";
+        }
+
+        // Add grand total
+        int lastRow = products.Length + 3;
+        cells[lastRow, 0].PutValue("Grand Total:");
+        cells[lastRow, 3].Formula = "=SUM(D2:D" + (lastRow - 1) + ")";
+
+        // Format total row
+        var totalStyle = cells[lastRow, 0].GetStyle();
+        totalStyle.Font.Bold = true;
+        cells[lastRow, 0].SetStyle(totalStyle);
+        cells[lastRow, 3].SetStyle(totalStyle);
+
+        // Save workbook
+        workbook.Save("sales-report.xlsx");
+        Console.WriteLine("Worksheet created successfully!");
+    }
+}</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Process Multiple Worksheets</div>
+                <pre><code>using Aspose.Cells_FOSS;
+using System;
+
+class Program
+{
+    static void Main()
+    {
+        var workbook = new Workbook("multi-sheet-workbook.xlsx");
+
+        // Process each worksheet
+        foreach (var worksheet in workbook.Worksheets)
+        {
+            Console.WriteLine($"Processing: {worksheet.Name}");
+
+            // Skip hidden worksheets
+            if (worksheet.VisibilityType == VisibilityType.VeryHidden)
+            {
+                Console.WriteLine("  Skipped (very hidden)");
+                continue;
+            }
+
+            // Get cells collection
+            var cells = worksheet.Cells;
+
+            // Check if worksheet has data
+            if (cells.MaxDataRow >= 0 && cells.MaxDataColumn >= 0)
+            {
+                Console.WriteLine($"  Data range: A1:{cells.GetCellByIndex(cells.MaxDataRow, cells.MaxDataColumn).Name}");
+
+                // Count non-empty cells
+                int nonEmptyCount = 0;
+                for (int row = 0; row <= cells.MaxDataRow; row++)
+                {
+                    for (int col = 0; col <= cells.MaxDataColumn; col++)
+                    {
+                        if (cells[row, col].Value != null)
+                        {
+                            nonEmptyCount++;
+                        }
+                    }
+                }
+                Console.WriteLine($"  Non-empty cells: {nonEmptyCount}");
+            }
+            else
+            {
+                Console.WriteLine("  No data found");
+            }
+
+            // Update worksheet name if needed
+            if (string.IsNullOrWhiteSpace(worksheet.Name))
+            {
+                worksheet.Name = $"Sheet_{worksheet.Index + 1}";
+            }
+        }
+
+        // Save processed workbook
+        workbook.Save("processed-workbook.xlsx");
+        Console.WriteLine("Processing complete!");
+    }
+}</code></pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Important Notes</h2>
+            <ul>
+                <li><strong>Indexing:</strong> Worksheet and cell indexing is zero-based.</li>
+                <li><strong>Cell Names:</strong> Use A1 notation (e.g., "A1", "B5") for cell references in names and formulas.</li>
+                <li><strong>Merged Cells:</strong> Only the top-left cell in a merged range can have a value.</li>
+                <li><strong>Protection:</strong> Protecting a worksheet does not protect individual cells; cells must be locked individually.</li>
+                <li><strong>Visibility:</strong> VeryHidden worksheets cannot be accessed through the Excel interface, only programmatically.</li>
+                <li><strong>Performance:</strong> Batch operations are more efficient than individual cell operations when working with large datasets.</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Related Documentation</h2>
+            <ul>
+                <li><a href="workbooks.html">Workbook Management</a> - Managing workbooks</li>
+                <li><a href="styling.html">Styling</a> - Cell formatting and styles</li>
+                <li><a href="formulas.html">Formulas</a> - Working with formulas</li>
+                <li><a href="data-validation.html">Data Validation</a> - Cell validation rules</li>
+                <li><a href="page-setup.html">Page Setup</a> - Print and page layout settings</li>
+                <li><a href="api-reference.html">Complete API Reference</a></li>
+                <li><a href="index.html">Back to Main Documentation</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 40px; color: #666; font-size: 0.9em;">
+        <p>&copy; 2026 Aspose.Cells FOSS Project. All rights reserved.</p>
+    </div>
+</body>
+</html>

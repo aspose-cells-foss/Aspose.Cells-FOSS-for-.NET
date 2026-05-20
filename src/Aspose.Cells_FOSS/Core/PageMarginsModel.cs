@@ -7,7 +7,7 @@ namespace Aspose.Cells_FOSS.Core
     /// <summary>
     /// Represents page margins model.
     /// </summary>
-    public sealed class PageMarginsModel
+    internal sealed class PageMarginsModel
     {
         /// <summary>
         /// Gets or sets the left.
@@ -35,3 +35,4 @@ namespace Aspose.Cells_FOSS.Core
         public double Footer { get; set; } = 0.3d;
     }
 }
+

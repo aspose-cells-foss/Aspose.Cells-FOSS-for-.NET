@@ -7,7 +7,7 @@ namespace Aspose.Cells_FOSS.Core
     /// <summary>
     /// Represents auto filter sort condition model.
     /// </summary>
-    public sealed class AutoFilterSortConditionModel
+    internal sealed class AutoFilterSortConditionModel
     {
         /// <summary>
         /// Gets or sets the ref.
@@ -39,3 +39,4 @@ namespace Aspose.Cells_FOSS.Core
         public int? IconId { get; set; }
     }
 }
+

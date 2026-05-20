@@ -7,7 +7,7 @@ namespace Aspose.Cells_FOSS.Core
     /// <summary>
     /// Represents extended document properties model.
     /// </summary>
-    public sealed class ExtendedDocumentPropertiesModel
+    internal sealed class ExtendedDocumentPropertiesModel
     {
         /// <summary>
         /// Gets or sets the application.
@@ -81,3 +81,4 @@ namespace Aspose.Cells_FOSS.Core
         }
     }
 }
+

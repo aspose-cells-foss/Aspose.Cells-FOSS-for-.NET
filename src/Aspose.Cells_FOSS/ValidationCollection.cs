@@ -100,7 +100,7 @@ namespace Aspose.Cells_FOSS
                 throw new CellsException("Row and column indices must be non-negative.");
             }
 
-            RemoveArea(new CellArea(row, column, 1, 1));
+            RemoveArea(CellArea.CreateCellArea(row, column, row, column));
         }
 
         /// <summary>

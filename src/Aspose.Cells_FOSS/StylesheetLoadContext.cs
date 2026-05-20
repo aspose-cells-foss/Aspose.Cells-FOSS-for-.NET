@@ -14,24 +14,20 @@ namespace Aspose.Cells_FOSS
     internal sealed class StylesheetLoadContext
     {
         /// <summary>
-        /// Performs style value.default.clone.
+        /// Gets or sets the default cell style.
         /// </summary>
-        /// <returns>The style value default cell style { get; set; } =.</returns>
         public StyleValue DefaultCellStyle { get; set; } = StyleValue.Default.Clone();
         /// <summary>
-        /// Performs style value.default.clone.
+        /// Gets the loaded cell format styles (xf records).
         /// </summary>
-        /// <returns>The list<style value> cell formats { get; } = new list<style value> {.</returns>
         public List<StyleValue> CellFormats { get; } = new List<StyleValue> { StyleValue.Default.Clone() };
         /// <summary>
-        /// Performs list<style value>.
+        /// Gets the loaded differential styles (dxf records).
         /// </summary>
-        /// <returns>The list<style value> differential formats { get; } = new.</returns>
         public List<StyleValue> DifferentialFormats { get; } = new List<StyleValue>();
         /// <summary>
-        /// Performs hash set<int>.
+        /// Gets style indexes that should be interpreted as date/time styles.
         /// </summary>
-        /// <returns>The set.</returns>
         public HashSet<int> DateStyleIndexes { get; } = new HashSet<int>();
     }
 }

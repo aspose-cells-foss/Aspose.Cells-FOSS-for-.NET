@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulas - Aspose.Cells FOSS for .NET</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #003399;
+            color: white;
+            padding: 20px;
+            margin: -20px -20px 20px -20px;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .section {
+            margin-bottom: 40px;
+        }
+        .section-title {
+            color: #003399;
+            border-bottom: 2px solid #003399;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+        pre {
+            background-color: #f4f4f4;
+            padding: 15px;
+            border-radius: 3px;
+            overflow-x: auto;
+            border: 1px solid #ddd;
+        }
+        code {
+            font-family: 'Courier New', monospace;
+            color: #d63384;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #003399;
+            text-decoration: none;
+        }
+        .method-section {
+            background-color: #f9f9f9;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-left: 4px solid #4CAF50;
+            border-radius: 3px;
+        }
+        .method-name {
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            color: #003399;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Formulas</h1>
+        <p>Complete documentation for Excel formulas in Aspose.Cells FOSS for .NET</p>
+    </div>
+
+    <div class="content">
+        <a href="index.html" class="back-link">← Back to Index</a>
+
+        <div class="section">
+            <h2 class="section-title">Formula Overview</h2>
+            <p>Aspose.Cells FOSS provides comprehensive support for Excel formulas, allowing you to create, read, and calculate formulas just like in Microsoft Excel. Formulas enable powerful calculations, data analysis, and dynamic spreadsheet functionality.</p>
+
+            <div class="method-section">
+                <div class="method-name">Key Formula Features:</div>
+                <ul>
+                    <li>Create formulas using standard Excel syntax</li>
+                    <li>Read existing formulas from workbooks</li>
+                    <li>Support for arithmetic, logical, text, date, and lookup functions</li>
+                    <li>Cell references (absolute and relative)</li>
+                    <li>Range references and operations</li>
+                    <li>Named ranges and defined names</li>
+                    <li>Formula calculation and recalculation</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Setting Formulas</h2>
+
+            <div class="method-section">
+                <div class="method-name">Basic Formula Assignment</div>
+                <pre><code>var cell = worksheet.Cells["A5"];
+
+// Set a simple formula (without '=' prefix)
+cell.Formula = "SUM(A1:A4)";
+
+// Or with '=' prefix
+cell.Formula = "=SUM(A1:A4)";
+
+// Both are valid</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Formula Examples</div>
+                <pre><code>// Arithmetic operations
+cells["A1"].Formula = "=B1 + C1";
+cells["A2"].Formula = "=B2 - C2";
+cells["A3"].Formula = "=B3 * C3";
+cells["A4"].Formula = "=B4 / C4";
+
+// Percentage calculation
+cells["A5"].Formula = "=B5 * 0.10";
+
+// Simple average
+cells["A6"].Formula = "=AVERAGE(A1:A4)";
+
+// Maximum value
+cells["A7"].Formula = "=MAX(A1:A4)";
+
+// Minimum value
+cells["A8"].Formula = "=MIN(A1:A4)";
+
+// Count cells
+cells["A9"].Formula = "=COUNT(A1:A4)";
+
+// Conditional sum
+cells["A10"].Formula = "=SUMIF(A1:A4, \">100\")";</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Cell References</div>
+                <pre><code>// Relative references (change when copied)
+cells["A1"].Formula = "=B1 + C1";
+
+// Absolute references (do not change when copied)
+cells["A2"].Formula = "=$B$1 + $C$1";
+
+// Mixed references
+cells["A3"].Formula = "=$B1 + C$1";  // Column B is absolute, row 1 is relative
+
+// Cross-worksheet references
+cells["A4"].Formula = "=Sheet2!A1";
+cells["A5"].Formula = "='Sheet 2'!A1";  // Spaces in sheet name require quotes
+
+// 3D references (across multiple worksheets)
+cells["A6"].Formula = "=SUM(Sheet1:Sheet3!A1)";</code></pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Getting Formulas</h2>
+
+            <div class="method-section">
+                <div class="method-name">Reading Formula Strings</div>
+                <pre><code>var cell = worksheet.Cells["A5"];
+
+// Check if cell contains a formula
+if (cell.ContainsFormula)
+{
+    // Get the formula string
+    string formula = cell.Formula;
+    Console.WriteLine($"Formula: {formula}");
+}
+else
+{
+    Console.WriteLine("Cell does not contain a formula");
+}
+
+// Check formula type
+if (cell.Type == CellValueType.IsFormula)
+{
+    Console.WriteLine("Cell contains a formula");
+}</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Formula vs Value</div>
+                <pre><code>var cell = worksheet.Cells["A5"];
+
+// Get the formula string
+string formula = cell.Formula;  // e.g., "=SUM(A1:A4)"
+
+// Get the calculated value
+object value = cell.Value;  // e.g., 42.5
+
+// Get the display string
+string displayString = cell.DisplayStringValue;  // e.g., "42.5"
+
+// Get the string representation
+string stringValue = cell.StringValue;  // Same as Value.ToString()
+
+Console.WriteLine($"Formula: {formula}");
+Console.WriteLine($"Value: {value}");
+Console.WriteLine($"Display: {displayString}");</code></pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Common Formula Categories</h2>
+
+            <div class="method-section">
+                <div class="method-name">Arithmetic Functions</div>
+                <pre><code>// Sum
+cells["A1"].Formula = "=SUM(A2:A10)";
+cells["A2"].Formula = "=SUM(A2, A4, A6)";
+
+// Average
+cells["A3"].Formula = "=AVERAGE(A2:A10)";
+
+// Count
+cells["A4"].Formula = "=COUNT(A2:A10)";
+cells["A5"].Formula = "=COUNTA(A2:A10)";  // Count non-empty cells
+
+// Product
+cells["A6"].Formula = "=PRODUCT(A2:A5)";
+
+// Power
+cells["A7"].Formula = "=POWER(A2, 2)";
+cells["A8"].Formula = "=A2^2";
+
+// Square root
+cells["A9"].Formula = "=SQRT(A2)";
+
+// Absolute value
+cells["A10"].Formula = "=ABS(A2)";
+
+// Round
+cells["A11"].Formula = "=ROUND(A2, 2)";  // Round to 2 decimal places
+cells["A12"].Formula = "=ROUNDUP(A2, 0)";
+cells["A13"].Formula = "=ROUNDDOWN(A2, 0)";</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Statistical Functions</div>
+                <pre><code>// Maximum and minimum
+cells["A1"].Formula = "=MAX(A2:A10)";
+cells["A2"].Formula = "=MIN(A2:A10)";
+
+// Median
+cells["A3"].Formula = "=MEDIAN(A2:A10)";
+
+// Mode
+cells["A4"].Formula = "=MODE(A2:A10)";
+
+// Standard deviation
+cells["A5"].Formula = "=STDEV(A2:A10)";
+cells["A6"].Formula = "=STDEVP(A2:A10)";
+
+// Variance
+cells["A7"].Formula = "=VAR(A2:A10)";
+cells["A8"].Formula = "=VARP(A2:A10)";
+
+// Rank
+cells["A9"].Formula = "=RANK(A2, A2:A10)";
+
+// Percentile
+cells["A10"].Formula = "=PERCENTILE(A2:A10, 0.5)";  // 50th percentile</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Logical Functions</div>
+                <pre><code>// IF statement
+cells["A1"].Formula = "=IF(A2 > 100, \"High\", \"Low\")";
+
+// Nested IF
+cells["A2"].Formula = "=IF(A3 > 100, \"Very High\", IF(A3 > 50, \"Medium\", \"Low\"))";
+
+// AND
+cells["A3"].Formula = "=AND(A2 > 10, A2 < 100)";
+
+// OR
+cells["A4"].Formula = "=OR(A2 = 10, A2 = 20, A2 = 30)";
+
+// NOT
+cells["A5"].Formula = "=NOT(A2 > 100)";
+
+// IFERROR
+cells["A6"].Formula = "=IFERROR(A2/B2, \"Division by zero\")";
+
+// TRUE and FALSE
+cells["A7"].Formula = "=TRUE()";
+cells["A8"].Formula = "=FALSE()";</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Text Functions</div>
+                <pre><code>// Concatenate
+cells["A1"].Formula = "=CONCATENATE(A2, \" \", B2)";
+cells["A2"].Formula = "=A2 & \" \" & B2";
+
+// Length
+cells["A3"].Formula = "=LEN(A2)";
+
+// Upper and lower case
+cells["A4"].Formula = "=UPPER(A2)";
+cells["A5"].Formula = "=LOWER(A2)";
+cells["A6"].Formula = "=PROPER(A2)";
+
+// Extract characters
+cells["A7"].Formula = "=LEFT(A2, 5)";
+cells["A8"].Formula = "=RIGHT(A2, 5)";
+cells["A9"].Formula = "=MID(A2, 3, 5)";
+
+// Find and search
+cells["A10"].Formula = "=FIND(\"text\", A2)";
+cells["A11"].Formula = "=SEARCH(\"text\", A2)";
+
+// Replace
+cells["A12"].Formula = "=REPLACE(A2, 1, 5, \"new\")";
+
+// Trim
+cells["A13"].Formula = "=TRIM(A2)";
+
+// Value conversion
+cells["A14"].Formula = "=VALUE(A2)";
+cells["A15"].Formula = "=TEXT(A2, \"yyyy-mm-dd\")";</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Date and Time Functions</div>
+                <pre><code>// Current date and time
+cells["A1"].Formula = "=TODAY()";
+cells["A2"].Formula = "=NOW()";
+
+// Date components
+cells["A3"].Formula = "=YEAR(A1)";
+cells["A4"].Formula = "=MONTH(A1)";
+cells["A5"].Formula = "=DAY(A1)";
+
+// Time components
+cells["A6"].Formula = "=HOUR(A2)";
+cells["A7"].Formula = "=MINUTE(A2)";
+cells["A8"].Formula = "=SECOND(A2)";
+
+// Date arithmetic
+cells["A9"].Formula = "=A1 + 7";  // Add 7 days
+cells["A10"].Formula = "=A1 - A3";  // Days between dates
+
+// Create date
+cells["A11"].Formula = "=DATE(2026, 5, 13)";
+cells["A12"].Formula = "=DATEVALUE(\"2026-05-13\")";
+
+// Workday calculations
+cells["A13"].Formula = "=WORKDAY(A1, 10)";
+cells["A14"].Formula = "=NETWORKDAYS(A1, A10)";
+
+// Weekday
+cells["A15"].Formula = "=WEEKDAY(A1)";
+cells["A16"].Formula = "=TEXT(A1, \"dddd\")";  // Day of week name</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Lookup and Reference Functions</div>
+                <pre><code>// VLOOKUP
+cells["A1"].Formula = "=VLOOKUP(A2, Sheet2!A:C, 3, FALSE)";
+
+// HLOOKUP
+cells["A2"].Formula = "=HLOOKUP(A3, Sheet2!A1:D10, 3, FALSE)";
+
+// INDEX and MATCH
+cells["A3"].Formula = "=INDEX(A2:C10, MATCH(A4, A2:A10, 0), 3)";
+
+// OFFSET
+cells["A4"].Formula = "=OFFSET(A1, 2, 1, 5, 3)";
+
+// ADDRESS
+cells["A5"].Formula = "=ADDRESS(2, 3)";
+
+// INDIRECT
+cells["A6"].Formula = "=INDIRECT(\"A\" & A1)";
+
+// ROW and COLUMN
+cells["A7"].Formula = "=ROW()";
+cells["A8"].Formula = "=COLUMN()";</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Conditional Functions</div>
+                <pre><code>// SUMIF
+cells["A1"].Formula = "=SUMIF(A2:A10, \">100\")";
+cells["A2"].Formula = "=SUMIF(A2:A10, \">100\", B2:B10)";
+
+// COUNTIF
+cells["A3"].Formula = "=COUNTIF(A2:A10, \">100\")";
+cells["A4"].Formula = "=COUNTIF(A2:A10, \"apples\")";
+
+// AVERAGEIF
+cells["A5"].Formula = "=AVERAGEIF(A2:A10, \">100\")";
+
+// SUMIFS (multiple conditions)
+cells["A6"].Formula = "=SUMIFS(B2:B10, A2:A10, \">100\", C2:C10, \"east\")";
+
+// COUNTIFS
+cells["A7"].Formula = "=COUNTIFS(A2:A10, \">100\", B2:B10, \"east\")";
+
+// AVERAGEIFS
+cells["A8"].Formula = "=AVERAGEIFS(B2:B10, A2:A10, \">100\", C2:C10, \"east\")";</code></pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Formula Calculation</h2>
+
+            <div class="method-section">
+                <div class="method-name">Manual Calculation</div>
+                <pre><code>// When you set a formula, the value is automatically calculated
+cells["A5"].Formula = "=SUM(A1:A4)";
+
+// The calculated value is immediately available
+double sum = Convert.ToDouble(cells["A5"].Value);
+Console.WriteLine($"Sum: {sum}");
+
+// You can also trigger recalculation
+worksheet.CalculateFormula();
+
+// Calculate all formulas in workbook
+workbook.CalculateFormula();</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Calculation Order</div>
+                <pre><code>// Formulas are calculated in dependency order
+cells["A1"].PutValue(10);
+cells["A2"].PutValue(20);
+cells["A3"].Formula = "=A1 + A2";  // Result: 30
+
+cells["A4"].Formula = "=A3 * 2";   // Result: 60
+
+// Changing A1 updates all dependent formulas
+cells["A1"].PutValue(15);
+// A3 becomes 35, A4 becomes 70</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Circular References</div>
+                <pre><code>// Circular references are detected and handled
+cells["A1"].Formula = "=A2 + 10";
+cells["A2"].Formula = "=A1 + 5";
+
+// This creates a circular reference
+// Check workbook settings for circular reference handling
+if (workbook.Settings.IterativeCalculation)
+{
+    Console.WriteLine("Iterative calculation enabled");
+}</code></pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Named Ranges and Defined Names</h2>
+
+            <div class="method-section">
+                <div class="method-name">Using Named Ranges</div>
+                <pre><code>// Add a named range
+workbook.DefinedNames.Add("SalesData", "Sheet1!$A$1:$D$10");
+
+// Use named range in formulas
+cells["E1"].Formula = "=SUM(SalesData)";
+cells["E2"].Formula = "=AVERAGE(SalesData)";
+
+// Access named range by name
+var salesData = workbook.DefinedNames["SalesData"];
+Console.WriteLine($"Refers to: {salesData.RefersTo}");</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Dynamic Named Ranges</div>
+                <pre><code>// Create a dynamic named range using OFFSET
+workbook.DefinedNames.Add("DynamicData", "=OFFSET(Sheet1!$A$1, 0, 0, COUNTA(Sheet1!$A:$A), 3)");
+
+// Use in formula
+cells["E3"].Formula = "=SUM(DynamicData)";
+// Automatically adjusts as data is added</code></pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Complete Example</h2>
+
+            <div class="method-section">
+                <div class="method-name">Create Financial Calculator</div>
+                <pre><code>using Aspose.Cells_FOSS;
+using System;
+
+class Program
+{
+    static void Main()
+    {
+        var workbook = new Workbook();
+        var worksheet = workbook.Worksheets[0];
+        var cells = worksheet.Cells;
+
+        // Create header
+        cells["A1"].PutValue("Item");
+        cells["B1"].PutValue("Quantity");
+        cells["C1"].PutValue("Unit Price");
+        cells["D1"].PutValue("Total");
+
+        // Apply header styling
+        var headerStyle = cells["A1"].GetStyle();
+        headerStyle.Font.Bold = true;
+        headerStyle.BackgroundColor = System.Drawing.Color.FromArgb(0, 51, 153);
+        headerStyle.Font.Color = System.Drawing.Color.White;
+        for (int col = 0; col <= 3; col++)
+        {
+            cells[0, col].SetStyle(headerStyle);
+        }
+
+        // Add sample data
+        string[] items = { "Widget A", "Widget B", "Widget C", "Widget D", "Widget E" };
+        int[] quantities = { 10, 15, 20, 8, 12 };
+        double[] prices = { 25.50, 30.75, 18.99, 42.00, 15.50 };
+
+        for (int i = 0; i < items.Length; i++)
+        {
+            int row = i + 2;
+            cells[row, 0].PutValue(items[i]);
+            cells[row, 1].PutValue(quantities[i]);
+            cells[row, 2].PutValue(prices[i]);
+
+            // Add formula for total
+            cells[row, 3].Formula = $"=B{row}*C{row}";
+        }
+
+        // Add summary calculations
+        int summaryRow = items.Length + 3;
+
+        cells[summaryRow, 0].PutValue("Subtotal:");
+        cells[summaryRow, 3].Formula = $"=SUM(D2:D{summaryRow - 1})";
+
+        summaryRow++;
+        cells[summaryRow, 0].PutValue("Tax (10%):");
+        cells[summaryRow, 3].Formula = $"=D{summaryRow - 1} * 0.10";
+
+        summaryRow++;
+        cells[summaryRow, 0].PutValue("Total:");
+        cells[summaryRow, 3].Formula = $"=D{summaryRow - 2} + D{summaryRow - 1}";
+
+        summaryRow++;
+        cells[summaryRow, 0].PutValue("Average Total:");
+        cells[summaryRow, 3].Formula = $"=AVERAGE(D2:D{items.Length + 2})";
+
+        summaryRow++;
+        cells[summaryRow, 0].PutValue("Max Total:");
+        cells[summaryRow, 3].Formula = $"=MAX(D2:D{items.Length + 2})";
+
+        summaryRow++;
+        cells[summaryRow, 0].PutValue("Min Total:");
+        cells[summaryRow, 3].Formula = $"=MIN(D2:D{items.Length + 2})";
+
+        // Apply currency formatting
+        var currencyStyle = workbook.CreateStyle();
+        currencyStyle.NumberFormat = "$#,##0.00";
+
+        for (int row = 2; row <= items.Length + 2; row++)
+        {
+            cells[row, 2].SetStyle(currencyStyle);
+            cells[row, 3].SetStyle(currencyStyle);
+        }
+
+        for (int row = items.Length + 3; row <= summaryRow; row++)
+        {
+            cells[row, 3].SetStyle(currencyStyle);
+        }
+
+        // Auto-fit columns
+        worksheet.AutoFitColumns();
+
+        // Save workbook
+        workbook.Save("financial-calculator.xlsx");
+        Console.WriteLine("Financial calculator created with formulas!");
+    }
+}</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Create Sales Dashboard</div>
+                <pre><code>using Aspose.Cells_FOSS;
+using System;
+
+class Program
+{
+    static void Main()
+    {
+        var workbook = new Workbook();
+        var worksheet = workbook.Worksheets[0];
+        var cells = worksheet.Cells;
+
+        // Set up data
+        string[] months = { "Jan", "Feb", "Mar", "Apr", "May", "Jun" };
+        int[] sales = { 1200, 1500, 1100, 1800, 2000, 1700 };
+
+        // Add data
+        for (int i = 0; i < months.Length; i++)
+        {
+            cells[i + 2, 0].PutValue(months[i]);
+            cells[i + 2, 1].PutValue(sales[i]);
+        }
+
+        // Add formulas
+        int formulasStartRow = months.Length + 4;
+
+        cells[formulasStartRow, 0].PutValue("Total Sales:");
+        cells[formulasStartRow, 1].Formula = "=SUM(B2:B7)";
+
+        formulasStartRow++;
+        cells[formulasStartRow, 0].PutValue("Average Sales:");
+        cells[formulasStartRow, 1].Formula = "=AVERAGE(B2:B7)";
+
+        formulasStartRow++;
+        cells[formulasStartRow, 0].PutValue("Max Sales:");
+        cells[formulasStartRow, 1].Formula = "=MAX(B2:B7)";
+
+        formulasStartRow++;
+        cells[formulasStartRow, 0].PutValue("Min Sales:");
+        cells[formulasStartRow, 1].Formula = "=MIN(B2:B7)";
+
+        formulasStartRow++;
+        cells[formulasStartRow, 0].PutValue("Sales Variance:");
+        cells[formulasStartRow, 1].Formula = "=MAX(B2:B7)-MIN(B2:B7)";
+
+        formulasStartRow++;
+        cells[formulasStartRow, 0].PutValue("Months > 1500:");
+        cells[formulasStartRow, 1].Formula = "=COUNTIF(B2:B7, \">1500\")";
+
+        // Conditional formatting based on formulas
+        formulasStartRow++;
+        cells[formulasStartRow, 0].PutValue("Performance:");
+        cells[formulasStartRow, 1].Formula = "=IF(B10>1500,\"Excellent\",\"Good\")";
+
+        workbook.Save("sales-dashboard.xlsx");
+        Console.WriteLine("Sales dashboard created!");
+    }
+}</code></pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Important Notes</h2>
+            <ul>
+                <li><strong>Formula Syntax:</strong> Use standard Excel formula syntax without the '=' prefix when setting formulas.</li>
+                <li><strong>Cell References:</strong> Both A1 notation (e.g., "A1") and R1C1 notation are supported.</li>
+                <li><strong>Calculation:</strong> Formulas are calculated automatically when cells are modified.</li>
+                <li><strong>Circular References:</strong> Circular references are detected and handled according to workbook settings.</li>
+                <li><strong>Performance:</strong> For large worksheets, consider using manual calculation mode.</li>
+                <li><strong>Named Ranges:</strong> Use named ranges for cleaner, more maintainable formulas.</li>
+                <li><strong>Error Handling:</strong> Use IFERROR function to handle formula errors gracefully.</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Related Documentation</h2>
+            <ul>
+                <li><a href="worksheets.html">Worksheet Operations</a> - Managing worksheets and cells</li>
+                <li><a href="styling.html">Styling</a> - Cell formatting for formulas</li>
+                <li><a href="data-validation.html">Data Validation</a> - Cell validation rules</li>
+                <li><a href="conditional-formatting.html">Conditional Formatting</a> - Advanced formatting based on formulas</li>
+                <li><a href="api-reference.html">Complete API Reference</a></li>
+                <li><a href="index.html">Back to Main Documentation</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 40px; color: #666; font-size: 0.9em;">
+        <p>&copy; 2026 Aspose.Cells FOSS Project. All rights reserved.</p>
+    </div>
+</body>
+</html>

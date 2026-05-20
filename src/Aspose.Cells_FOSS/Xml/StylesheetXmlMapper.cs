@@ -6,7 +6,7 @@ namespace Aspose.Cells_FOSS.Xml
     /// <summary>
     /// Represents stylesheet xml mapper.
     /// </summary>
-    public sealed class StylesheetXmlMapper
+    internal sealed class StylesheetXmlMapper
     {
         /// <summary>
         /// Reads data from the specified source.
@@ -29,3 +29,4 @@ namespace Aspose.Cells_FOSS.Xml
         }
     }
 }
+

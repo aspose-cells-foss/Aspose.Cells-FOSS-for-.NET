@@ -21,7 +21,7 @@ namespace Aspose.Cells_FOSS
         /// Creates a copy of the current instance.
         /// </summary>
         /// <returns>The border.</returns>
-        public Border Clone()
+        internal Border Clone()
         {
             return new Border
             {

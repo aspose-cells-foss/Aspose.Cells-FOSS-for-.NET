@@ -6,7 +6,7 @@ namespace Aspose.Cells_FOSS.Core
     /// <summary>
     /// Specifies fill pattern kind.
     /// </summary>
-    public enum FillPatternKind
+    internal enum FillPatternKind
     {
         None,
         Solid,
@@ -28,3 +28,4 @@ namespace Aspose.Cells_FOSS.Core
         LightTrellis
     }
 }
+

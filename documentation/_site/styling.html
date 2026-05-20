@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Styling - Aspose.Cells FOSS for .NET</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #003399;
+            color: white;
+            padding: 20px;
+            margin: -20px -20px 20px -20px;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .section {
+            margin-bottom: 40px;
+        }
+        .section-title {
+            color: #003399;
+            border-bottom: 2px solid #003399;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+        pre {
+            background-color: #f4f4f4;
+            padding: 15px;
+            border-radius: 3px;
+            overflow-x: auto;
+            border: 1px solid #ddd;
+        }
+        code {
+            font-family: 'Courier New', monospace;
+            color: #d63384;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #003399;
+            text-decoration: none;
+        }
+        .method-section {
+            background-color: #f9f9f9;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-left: 4px solid #4CAF50;
+            border-radius: 3px;
+        }
+        .method-name {
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            color: #003399;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Styling</h1>
+        <p>Complete documentation for cell formatting and styling in Aspose.Cells FOSS for .NET</p>
+    </div>
+
+    <div class="content">
+        <a href="index.html" class="back-link">← Back to Index</a>
+
+        <div class="section">
+            <h2 class="section-title">Style Overview</h2>
+            <p>The <strong>Style</strong> class represents the complete set of formatting properties that can be applied to cells in a worksheet. Styles control how cells look and behave, including fonts, colors, borders, alignment, number formats, and protection.</p>
+
+            <div class="method-section">
+                <div class="method-name">Key Style Components:</div>
+                <ul>
+                    <li><strong>Font:</strong> Font family, size, weight, color, and effects</li>
+                    <li><strong>Borders:</strong> Line style, color, and weight for all four sides</li>
+                    <li><strong>Fill:</strong> Pattern type, foreground color, and background color</li>
+                    <li><strong>Alignment:</strong> Horizontal and vertical alignment, text wrapping, and indentation</li>
+                    <li><strong>Number Format:</strong> Built-in or custom number format strings</li>
+                    <li><strong>Protection:</strong> Locked and hidden states</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Getting and Setting Styles</h2>
+
+            <div class="method-section">
+                <div class="method-name">Basic Style Operations</div>
+                <pre><code>// Get style from a cell
+var style = cell.GetStyle();
+
+// Modify style properties
+style.Font.Bold = true;
+style.Font.Color = System.Drawing.Color.Red;
+style.BackgroundColor = System.Drawing.Color.Yellow;
+
+// Apply style back to cell
+cell.SetStyle(style);
+
+// Combine into one line
+cell.GetStyle().Font.Bold = true;
+cell.SetStyle(style);</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Style Best Practices</div>
+                <pre><code>// GOOD: Get style once, modify, then apply
+var style = cell.GetStyle();
+style.Font.Bold = true;
+style.Font.Size = 12;
+style.Font.Color = System.Drawing.Color.Blue;
+cell.SetStyle(style);
+
+// AVOID: Multiple Get/Set calls
+cell.GetStyle().Font.Bold = true;      // Inefficient
+cell.GetStyle().Font.Size = 12;        // Creates new style each time
+cell.GetStyle().Font.Color = System.Drawing.Color.Blue;
+cell.SetStyle(cell.GetStyle());        // Multiple style creations</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Reusing Styles</div>
+                <pre><code>// Create a header style once
+var headerStyle = workbook.CreateStyle();
+headerStyle.Font.Bold = true;
+headerStyle.Font.Size = 14;
+headerStyle.Font.Color = System.Drawing.Color.White;
+headerStyle.BackgroundColor = System.Drawing.Color.FromArgb(0, 51, 153);
+headerStyle.HorizontalAlignment = TextAlignmentType.Center;
+
+// Apply to multiple cells
+for (int col = 0; col < 5; col++)
+{
+    worksheet.Cells[0, col].SetStyle(headerStyle);
+}</code></pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Font Formatting</h2>
+
+            <div class="method-section">
+                <div class="method-name">Basic Font Properties</div>
+                <pre><code>var style = cell.GetStyle();
+
+// Font name and size
+style.Font.Name = "Arial";
+style.Font.Size = 12;
+
+// Font weight
+style.Font.Bold = true;
+style.Font.Bold = false;
+
+// Font style
+style.Font.Italic = true;
+style.Font.Italic = false;
+
+// Font underline
+style.Font.Underline = FontUnderlineType.Single;
+style.Font.Underline = FontUnderlineType.Double;
+style.Font.Underline = FontUnderlineType.None;
+
+// Strikeout
+style.Font.Strikeout = true;
+
+// Font color
+style.Font.Color = System.Drawing.Color.Red;
+style.Font.Color = System.Drawing.Color.FromArgb(255, 0, 0);
+
+cell.SetStyle(style);</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Font Examples</div>
+                <pre><code>// Bold red header
+var boldRedStyle = cell.GetStyle();
+boldRedStyle.Font.Bold = true;
+boldRedStyle.Font.Color = System.Drawing.Color.Red;
+boldRedStyle.Font.Size = 14;
+
+// Italic blue text
+var italicBlueStyle = cell.GetStyle();
+italicBlueStyle.Font.Italic = true;
+italicBlueStyle.Font.Color = System.Drawing.Color.Blue;
+
+// Underlined green text
+var underlinedStyle = cell.GetStyle();
+underlinedStyle.Font.Underline = FontUnderlineType.Single;
+underlinedStyle.Font.Color = System.Drawing.Color.Green;
+
+// Strikeout gray text
+var strikeoutStyle = cell.GetStyle();
+strikeoutStyle.Font.Strikeout = true;
+strikeoutStyle.Font.Color = System.Drawing.Color.Gray;</code></pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Borders</h2>
+
+            <div class="method-section">
+                <div class="method-name">Border Properties</div>
+                <pre><code>var style = cell.GetStyle();
+
+// Border line types
+style.Borders[BorderType.LeftBorder].LineStyle = CellBorderType.Thin;
+style.Borders[BorderType.RightBorder].LineStyle = CellBorderType.Thin;
+style.Borders[BorderType.TopBorder].LineStyle = CellBorderType.Thin;
+style.Borders[BorderType.BottomBorder].LineStyle = CellBorderType.Thin;
+
+// Border line styles available:
+// - None
+// - Thin
+// - Medium
+// - Dashed
+// - Dotted
+// - Thick
+// - Double
+// - Hair
+// - MediumDashed
+// - DashDot
+// - MediumDashDot
+// - DashDotDot
+// - MediumDashDotDot
+// - SlantedDashDot
+
+// Border colors
+style.Borders[BorderType.LeftBorder].Color = System.Drawing.Color.Black;
+style.Borders[BorderType.RightBorder].Color = System.Drawing.Color.Black;
+style.Borders[BorderType.TopBorder].Color = System.Drawing.Color.Black;
+style.Borders[BorderType.BottomBorder].Color = System.Drawing.Color.Black;
+
+cell.SetStyle(style);</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Border Patterns</div>
+                <pre><code>// All borders thin
+var allBordersStyle = cell.GetStyle();
+foreach (BorderType border in new[] { BorderType.LeftBorder, BorderType.RightBorder,
+                                        BorderType.TopBorder, BorderType.BottomBorder })
+{
+    allBordersStyle.Borders[border].LineStyle = CellBorderType.Thin;
+    allBordersStyle.Borders[border].Color = System.Drawing.Color.Black;
+}
+
+// Thick border outline
+var thickOutlineStyle = cell.GetStyle();
+thickOutlineStyle.Borders[BorderType.LeftBorder].LineStyle = CellBorderType.Thick;
+thickOutlineStyle.Borders[BorderType.RightBorder].LineStyle = CellBorderType.Thick;
+thickOutlineStyle.Borders[BorderType.TopBorder].LineStyle = CellBorderType.Thick;
+thickOutlineStyle.Borders[BorderType.BottomBorder].LineStyle = CellBorderType.Thick;
+
+// Dashed border
+var dashedStyle = cell.GetStyle();
+dashedStyle.Borders[BorderType.AllBorders].LineStyle = CellBorderType.Dashed;
+dashedStyle.Borders[BorderType.AllBorders].Color = System.Drawing.Color.Blue;</code></pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Fill and Background</h2>
+
+            <div class="method-section">
+                <div class="method-name">Solid Fill</div>
+                <pre><code>var style = cell.GetStyle();
+
+// Set solid pattern
+style.Pattern = BackgroundType.Solid;
+
+// Set background color (used with Solid pattern)
+style.BackgroundColor = System.Drawing.Color.Yellow;
+style.BackgroundColor = System.Drawing.Color.FromArgb(255, 255, 0);
+
+// Alternative approach
+style.ForegroundColor = System.Drawing.Color.Yellow;
+
+cell.SetStyle(style);</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Pattern Fill</div>
+                <pre><code>var style = cell.GetStyle();
+
+// Pattern types available:
+// - None
+// - Solid
+// - Gray50
+// - Gray75
+// - Gray125
+// - Gray25
+// - HorizontalStripe
+// - VerticalStripe
+// - ReverseDiagonalStripe
+// - DiagonalStripe
+// - DiagonalCrosshatch
+// - ThickDiagonalCrosshatch
+// - ThinHorizontalStripe
+// - ThinVerticalStripe
+// - ThinReverseDiagonalStripe
+// - ThinDiagonalStripe
+// - ThinHorizontalCrosshatch
+// - ThinDiagonalCrosshatch
+// - 12.5% Gray
+// - 6.25% Gray
+
+// Set pattern and colors
+style.Pattern = BackgroundType.HorizontalStripe;
+style.ForegroundColor = System.Drawing.Color.Blue;   // Foreground color
+style.BackgroundColor = System.Drawing.Color.White;  // Background color
+
+cell.SetStyle(style);</code></pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Alignment</h2>
+
+            <div class="method-section">
+                <div class="method-name">Horizontal Alignment</div>
+                <pre><code>var style = cell.GetStyle();
+
+// Horizontal alignment options:
+// - General
+// - Left
+// - Center
+// - Right
+// - Fill
+// - Justify
+// - CenterAcross
+// - Distributed
+
+style.HorizontalAlignment = TextAlignmentType.Center;
+style.HorizontalAlignment = TextAlignmentType.Left;
+style.HorizontalAlignment = TextAlignmentType.Right;
+
+cell.SetStyle(style);</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Vertical Alignment</div>
+                <pre><code>var style = cell.GetStyle();
+
+// Vertical alignment options:
+// - Top
+// - Center
+// - Bottom
+// - Justify
+// - Distributed
+
+style.VerticalAlignment = TextAlignmentType.Center;
+style.VerticalAlignment = TextAlignmentType.Top;
+
+cell.SetStyle(style);</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Text Wrapping and Indentation</div>
+                <pre><code>var style = cell.GetStyle();
+
+// Enable text wrapping
+style.WrapText = true;
+style.WrapText = false;
+
+// Text indentation (in character widths)
+style.IndentLevel = 1;
+style.IndentLevel = 2;
+style.IndentLevel = 0;  // No indentation
+
+// Text rotation (degrees)
+style.RotationAngle = 45;    // 45 degrees clockwise
+style.RotationAngle = -45;   // 45 degrees counter-clockwise
+style.RotationAngle = 90;    // 90 degrees
+
+cell.SetStyle(style);</code></pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Number Formatting</h2>
+
+            <div class="method-section">
+                <div class="method-name">Built-in Number Formats</div>
+                <pre><code>var style = cell.GetStyle();
+
+// Built-in format index
+style.Number = 0;      // General
+style.Number = 1;      // 0
+style.Number = 2;      // 0.00
+style.Number = 3;      // #,##0
+style.Number = 4;      // #,##0.00
+style.Number = 5;      // $#,##0;$#,##0
+style.Number = 6;      // $#,##0;[Red]$#,##0
+style.Number = 7;      // $#,##0.00;$#,##0.00
+style.Number = 8;      // $#,##0.00;[Red]$#,##0.00
+style.Number = 9;      // 0%
+style.Number = 10;     // 0.00%
+style.Number = 11;     // 0.00E+00
+style.Number = 12;     // # ?/?
+style.Number = 13;     # ??/??
+style.Number = 14;     // m/d/yy
+style.Number = 15;     // d-mmm-yy
+style.Number = 16;     // d-mmm
+style.Number = 17;     // mmm-yy
+style.Number = 18;     // h:mm AM/PM
+style.Number = 19;     // h:mm:ss AM/PM
+style.Number = 20;     // h:mm
+style.Number = 21;     // h:mm:ss
+style.Number = 22;     // m/d/yy h:mm
+style.Number = 37;     // #,##0 ;(#,##0)
+style.Number = 38;     // #,##0 ;[Red](#,##0)
+style.Number = 39;     // #,##0.00;(#,##0.00)
+style.Number = 40;     // #,##0.00;[Red](#,##0.00)
+style.Number = 44;     // _,(* #,##0.00_);_(* (#,##0.00);_(* "-"_);_(@_)
+
+cell.SetStyle(style);</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Custom Number Formats</div>
+                <pre><code>var style = cell.GetStyle();
+
+// Currency format
+style.Custom = "$#,##0.00";
+style.Custom = "€#,##0.00";
+
+// Percentage format
+style.Custom = "0.00%";
+style.Custom = "0.0%";
+
+// Date format
+style.Custom = "yyyy-MM-dd";
+style.Custom = "MM/dd/yyyy";
+style.Custom = "dd-MMM-yyyy";
+
+// Time format
+style.Custom = "hh:mm:ss";
+style.Custom = "HH:mm";
+
+// Phone number format
+style.Custom = "(###) ###-####";
+
+// Scientific notation
+style.Custom = "0.00E+00";
+
+// Custom text with conditions
+style.Custom = "[>1000]\"Large\";[>100]\"Medium\";\"Small\"";
+
+cell.SetStyle(style);</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">NumberFormat Property</div>
+                <pre><code>var style = cell.GetStyle();
+
+// Alternative way to set number format
+style.NumberFormat = "$#,##0.00";
+style.NumberFormat = "0.00%";
+style.NumberFormat = "yyyy-MM-dd";
+
+cell.SetStyle(style);</code></pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Protection</h2>
+
+            <div class="method-section">
+                <div class="method-name">Cell Protection Settings</div>
+                <pre><code>var style = cell.GetStyle();
+
+// Lock cell (default is true)
+style.IsLocked = true;   // Cell is locked when worksheet is protected
+style.IsLocked = false;  // Cell can be edited when worksheet is protected
+
+// Hide formula (default is false)
+style.IsHidden = true;   // Formula is hidden when worksheet is protected
+style.IsHidden = false;  // Formula is visible
+
+cell.SetStyle(style);
+
+// IMPORTANT: Cell protection only works when worksheet is protected
+worksheet.Protect("password");</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Protection Example</div>
+                <pre><code>// Create a form with protected cells and editable cells
+var workbook = new Workbook();
+var worksheet = workbook.Worksheets[0];
+
+// Set up header row (protected, read-only)
+for (int col = 0; col < 3; col++)
+{
+    var cell = worksheet.Cells[0, col];
+    cell.PutValue($"Column {col + 1}");
+
+    var style = cell.GetStyle();
+    style.Font.Bold = true;
+    style.IsLocked = true;  // Read-only
+    cell.SetStyle(style);
+}
+
+// Set up data entry area (unlocked, editable)
+for (int row = 1; row <= 5; row++)
+{
+    for (int col = 0; col < 3; col++)
+    {
+        var cell = worksheet.Cells[row, col];
+        var style = cell.GetStyle();
+        style.IsLocked = false;  // Editable
+        cell.SetStyle(style);
+    }
+}
+
+// Protect the worksheet
+worksheet.Protect("form_password");</code></pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Complete Example</h2>
+
+            <div class="method-section">
+                <div class="method-name">Create Styled Report</div>
+                <pre><code>using Aspose.Cells_FOSS;
+using System;
+
+class Program
+{
+    static void Main()
+    {
+        var workbook = new Workbook();
+        var worksheet = workbook.Worksheets[0];
+        var cells = worksheet.Cells;
+
+        // Create header style
+        var headerStyle = workbook.CreateStyle();
+        headerStyle.Font.Bold = true;
+        headerStyle.Font.Size = 14;
+        headerStyle.Font.Color = System.Drawing.Color.White;
+        headerStyle.BackgroundColor = System.Drawing.Color.FromArgb(0, 51, 153);
+        headerStyle.HorizontalAlignment = TextAlignmentType.Center;
+        headerStyle.VerticalAlignment = TextAlignmentType.Center;
+        headerStyle.Borders[BorderType.AllBorders].LineStyle = CellBorderType.Thin;
+        headerStyle.Borders[BorderType.AllBorders].Color = System.Drawing.Color.White;
+
+        // Create data style
+        var dataStyle = workbook.CreateStyle();
+        dataStyle.Font.Size = 11;
+        dataStyle.HorizontalAlignment = TextAlignmentType.Center;
+        dataStyle.VerticalAlignment = TextAlignmentType.Center;
+        dataStyle.Borders[BorderType.AllBorders].LineStyle = CellBorderType.Thin;
+        dataStyle.Borders[BorderType.AllBorders].Color = System.Drawing.Color.Black;
+
+        // Create currency style
+        var currencyStyle = workbook.CreateStyle();
+        currencyStyle.Font.Size = 11;
+        currencyStyle.HorizontalAlignment = TextAlignmentType.Right;
+        currencyStyle.VerticalAlignment = TextAlignmentType.Center;
+        currencyStyle.NumberFormat = "$#,##0.00";
+        currencyStyle.Borders[BorderType.AllBorders].LineStyle = CellBorderType.Thin;
+        currencyStyle.Borders[BorderType.AllBorders].Color = System.Drawing.Color.Black;
+
+        // Create total style
+        var totalStyle = workbook.CreateStyle();
+        totalStyle.Font.Bold = true;
+        totalStyle.Font.Size = 12;
+        totalStyle.Font.Color = System.Drawing.Color.White;
+        totalStyle.BackgroundColor = System.Drawing.Color.FromArgb(0, 102, 204);
+        totalStyle.HorizontalAlignment = TextAlignmentType.Right;
+        totalStyle.VerticalAlignment = TextAlignmentType.Center;
+        totalStyle.NumberFormat = "$#,##0.00";
+        totalStyle.Borders[BorderType.AllBorders].LineStyle = CellBorderType.Medium;
+        totalStyle.Borders[BorderType.AllBorders].Color = System.Drawing.Color.White;
+
+        // Apply header style
+        cells["A1"].PutValue("Product");
+        cells["B1"].PutValue("Quantity");
+        cells["C1"].PutValue("Unit Price");
+        cells["D1"].PutValue("Total");
+
+        for (int col = 0; col <= 3; col++)
+        {
+            cells[0, col].SetStyle(headerStyle);
+        }
+
+        // Add sample data
+        string[] products = { "Widget A", "Widget B", "Widget C", "Widget D" };
+        int[] quantities = { 100, 150, 200, 75 };
+        double[] prices = { 10.50, 15.75, 8.99, 25.00 };
+
+        for (int i = 0; i < products.Length; i++)
+        {
+            int row = i + 2;
+
+            cells[row, 0].PutValue(products[i]);
+            cells[row, 0].SetStyle(dataStyle);
+
+            cells[row, 1].PutValue(quantities[i]);
+            cells[row, 1].SetStyle(dataStyle);
+
+            cells[row, 2].PutValue(prices[i]);
+            cells[row, 2].SetStyle(currencyStyle);
+
+            // Calculate total
+            cells[row, 3].Formula = $"=B{row}*C{row}";
+            cells[row, 3].SetStyle(currencyStyle);
+        }
+
+        // Add total row
+        int totalRow = products.Length + 3;
+        cells[totalRow, 2].PutValue("Grand Total:");
+        cells[totalRow, 2].SetStyle(totalStyle);
+
+        cells[totalRow, 3].Formula = $"=SUM(D2:D{totalRow - 1})";
+        cells[totalRow, 3].SetStyle(totalStyle);
+
+        // Auto-fit columns
+        worksheet.AutoFitColumns();
+
+        // Save workbook
+        workbook.Save("styled-report.xlsx");
+        Console.WriteLine("Styled report created successfully!");
+    }
+}</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Conditional Formatting Example</div>
+                <pre><code>using Aspose.Cells_FOSS;
+using System;
+
+class Program
+{
+    static void Main()
+    {
+        var workbook = new Workbook();
+        var worksheet = workbook.Worksheets[0];
+        var cells = worksheet.Cells;
+
+        // Add sample scores
+        for (int i = 0; i < 10; i++)
+        {
+            cells[i, 0].PutValue(new Random().Next(50, 100));
+        }
+
+        // Create conditional formatting
+        var condition = new FormatCondition();
+        condition.Type = ConditionType.CellValue;
+        condition.Operator = OperatorType.Greater;
+        condition.Formula1 = "80";
+        condition.Style.ForegroundColor = System.Drawing.Color.Green;
+        condition.Style.Pattern = BackgroundType.Solid;
+
+        worksheet.ConditionalFormattings.Add(cells.Area("A1:A10"), condition);
+
+        workbook.Save("conditional-format.xlsx");
+        Console.WriteLine("Conditional formatting applied!");
+    }
+}</code></pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Important Notes</h2>
+            <ul>
+                <li><strong>Style Efficiency:</strong> Get the style once, modify all properties, then set it back to minimize style object creation.</li>
+                <li><strong>Style Reuse:</strong> Create and reuse style objects when applying the same formatting to multiple cells.</li>
+                <li><strong>Number Formats:</strong> Use built-in formats when possible for better compatibility; use custom formats for specific requirements.</li>
+                <li><strong>Protection:</strong> Cell protection only takes effect when the worksheet is protected.</li>
+                <li><strong>Borders:</strong> Use BorderType.AllBorders for uniform borders on all sides.</li>
+                <li><strong>Colors:</strong> Use System.Drawing.Color for all color specifications in styles.</li>
+                <li><strong>Date Formatting:</strong> Cells containing DateTime values require appropriate number formats to display correctly.</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Related Documentation</h2>
+            <ul>
+                <li><a href="worksheets.html">Worksheet Operations</a> - Managing worksheets</li>
+                <li><a href="conditional-formatting.html">Conditional Formatting</a> - Advanced formatting rules</li>
+                <li><a href="data-validation.html">Data Validation</a> - Cell validation rules</li>
+                <li><a href="api-reference.html">Complete API Reference</a></li>
+                <li><a href="index.html">Back to Main Documentation</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 40px; color: #666; font-size: 0.9em;">
+        <p>&copy; 2026 Aspose.Cells FOSS Project. All rights reserved.</p>
+    </div>
+</body>
+</html>

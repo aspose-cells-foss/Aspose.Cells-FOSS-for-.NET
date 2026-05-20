@@ -1,0 +1,30 @@
+/* Emphasize "In this article" anchors as clearly clickable links */
+#affix ul li a,
+.bs-docs-sidebar .nav > li > a,
+.bs-docs-sidebar .nav .nav > li > a {
+  color: #0b63c9;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-thickness: 1px;
+  cursor: pointer;
+}
+
+#affix ul li a:hover,
+#affix ul li a:focus,
+.bs-docs-sidebar .nav > li > a:hover,
+.bs-docs-sidebar .nav > li > a:focus,
+.bs-docs-sidebar .nav .nav > li > a:hover,
+.bs-docs-sidebar .nav .nav > li > a:focus {
+  color: #084a98;
+  text-decoration-thickness: 2px;
+}
+
+#affix ul li.active > a,
+.bs-docs-sidebar .nav > li.active > a,
+.bs-docs-sidebar .nav .nav > li.active > a {
+  color: #063a78;
+  font-weight: 600;
+}
+
+/* Hide breadcrumb/subnav row under top navbar */
+.subnav.navbar.navbar-default { display: none !important; }

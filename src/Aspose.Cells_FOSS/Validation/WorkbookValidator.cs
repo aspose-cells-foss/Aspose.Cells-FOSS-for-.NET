@@ -6,7 +6,7 @@ namespace Aspose.Cells_FOSS.InternalValidation
     /// <summary>
     /// Represents workbook validator.
     /// </summary>
-    public sealed class WorkbookValidator
+    internal sealed class WorkbookValidator
     {
         /// <summary>
         /// Validates the current state.
@@ -20,3 +20,4 @@ namespace Aspose.Cells_FOSS.InternalValidation
         }
     }
 }
+

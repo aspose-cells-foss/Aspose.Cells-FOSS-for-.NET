@@ -6,7 +6,7 @@ namespace Aspose.Cells_FOSS.Packaging
     /// <summary>
     /// Represents package load context.
     /// </summary>
-    public sealed class PackageLoadContext
+    internal sealed class PackageLoadContext
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="PackageLoadContext"/> class.
@@ -29,3 +29,4 @@ namespace Aspose.Cells_FOSS.Packaging
         public PackageModel Package { get; }
     }
 }
+

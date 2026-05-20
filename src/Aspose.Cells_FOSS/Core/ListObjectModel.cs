@@ -8,7 +8,7 @@ namespace Aspose.Cells_FOSS.Core
     /// StartRow/StartColumn/EndRow/EndColumn are zero-based inclusive bounds
     /// covering the full table range including header and totals rows.
     /// </summary>
-    public sealed class ListObjectModel
+    internal sealed class ListObjectModel
     {
         /// <summary>
         /// Initializes a new instance with an empty column list.
@@ -105,3 +105,4 @@ namespace Aspose.Cells_FOSS.Core
         public List<ListColumnModel> Columns { get; }
     }
 }
+

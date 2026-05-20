@@ -7,7 +7,7 @@ namespace Aspose.Cells_FOSS.Core
     /// <summary>
     /// Represents diagnostic entry.
     /// </summary>
-    public sealed class DiagnosticEntry
+    internal sealed class DiagnosticEntry
     {
         /// <summary>
         /// Gets or sets the code.
@@ -31,3 +31,4 @@ namespace Aspose.Cells_FOSS.Core
         public bool DataLossRisk { get; set; }
     }
 }
+

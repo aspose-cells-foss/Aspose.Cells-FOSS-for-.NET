@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+
+  <head>
+    <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+      <title>Class Cell | Aspose.Cells FOSS for .NET API Documentation </title>
+      <meta name="viewport" content="width=device-width">
+      <meta name="title" content="Class Cell | Aspose.Cells FOSS for .NET API Documentation ">
+    
+    <meta name="description" content="Represents a single worksheet cell and exposes value, formula, and style operations.">
+      <link rel="shortcut icon" href="../https://www.aspose.cloud/templates/aspose/App_Themes/V3/images/favicon.ico">
+      <link rel="stylesheet" href="../styles/docfx.vendor.min.css">
+      <link rel="stylesheet" href="../styles/docfx.css">
+      <link rel="stylesheet" href="../styles/main.css">
+      <meta property="docfx:navrel" content="../toc.html">
+      <meta property="docfx:tocrel" content="toc.html">
+    
+    <meta property="docfx:rel" content="../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../https://www.aspose.cloud/templates/aspose/App_Themes/V3/images/total/header/aspose_logo-for-total.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+
+        <div id="search-results">
+          <div class="search-list">Search Results for <span></span></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination" data-first=First data-prev=Previous data-next=Next data-last=Last></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Aspose.Cells_FOSS.Cell">
+
+
+
+  <h1 id="Aspose_Cells_FOSS_Cell" data-uid="Aspose.Cells_FOSS.Cell" class="text-break">Class Cell</h1>
+  <div class="markdown level0 summary"><p>Represents a single worksheet cell and exposes value, formula, and style operations.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
+    <div class="level1"><span class="xref">Cell</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">object.Equals(object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">object.Equals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gethashcode">object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gettype">object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone">object.MemberwiseClone()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.referenceequals">object.ReferenceEquals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.tostring">object.ToString()</a>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Aspose.html">Aspose</a>.<a class="xref" href="Aspose.Cells_FOSS.html">Cells_FOSS</a></h6>
+  <h6><strong>Assembly</strong>: Aspose.Cells.FOSS.dll</h6>
+  <h5 id="Aspose_Cells_FOSS_Cell_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class Cell</code></pre>
+  </div>
+  <h5 id="Aspose_Cells_FOSS_Cell_examples"><strong>Examples</strong></h5>
+  <pre><code class="lang-csharp">var workbook = new Workbook();
+var cell = workbook.Worksheets[0].Cells["B2"];
+
+cell.PutValue(12.5);
+cell.Formula = "=SUM(B2:B10)";
+
+var style = cell.GetStyle();
+style.NumberFormat = "$#,##0.00";
+cell.SetStyle(style);</code></pre>
+
+  <h3 id="properties">Properties
+</h3>
+
+
+  <a id="Aspose_Cells_FOSS_Cell_DisplayStringValue_" data-uid="Aspose.Cells_FOSS.Cell.DisplayStringValue*"></a>
+  <h4 id="Aspose_Cells_FOSS_Cell_DisplayStringValue" data-uid="Aspose.Cells_FOSS.Cell.DisplayStringValue">DisplayStringValue</h4>
+  <div class="markdown level1 summary"><p>Gets the display text generated from the cell value, style, and workbook culture.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string DisplayStringValue { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <a id="Aspose_Cells_FOSS_Cell_Formula_" data-uid="Aspose.Cells_FOSS.Cell.Formula*"></a>
+  <h4 id="Aspose_Cells_FOSS_Cell_Formula" data-uid="Aspose.Cells_FOSS.Cell.Formula">Formula</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the cell formula.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string Formula { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Aspose_Cells_FOSS_Cell_Formula_remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>Formulas are stored and round-tripped in v0.1, but they are not recalculated automatically.</p>
+</div>
+
+
+  <a id="Aspose_Cells_FOSS_Cell_StringValue_" data-uid="Aspose.Cells_FOSS.Cell.StringValue*"></a>
+  <h4 id="Aspose_Cells_FOSS_Cell_StringValue" data-uid="Aspose.Cells_FOSS.Cell.StringValue">StringValue</h4>
+  <div class="markdown level1 summary"><p>Gets a stable string representation of the cell value without applying style-based display formatting.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string StringValue { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <a id="Aspose_Cells_FOSS_Cell_Type_" data-uid="Aspose.Cells_FOSS.Cell.Type*"></a>
+  <h4 id="Aspose_Cells_FOSS_Cell_Type" data-uid="Aspose.Cells_FOSS.Cell.Type">Type</h4>
+  <div class="markdown level1 summary"><p>Gets the current logical cell value type.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public CellValueType Type { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Aspose.Cells_FOSS.CellValueType.html">CellValueType</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <a id="Aspose_Cells_FOSS_Cell_Value_" data-uid="Aspose.Cells_FOSS.Cell.Value*"></a>
+  <h4 id="Aspose_Cells_FOSS_Cell_Value" data-uid="Aspose.Cells_FOSS.Cell.Value">Value</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the logical cell value.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public object Value { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Aspose_Cells_FOSS_Cell_Value_remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>Supported assignments in v0.1 include strings, booleans, numbers, <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.datetime">DateTime</a>, and <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</div>
+  <h3 id="methods">Methods
+</h3>
+
+
+  <a id="Aspose_Cells_FOSS_Cell_GetStyle_" data-uid="Aspose.Cells_FOSS.Cell.GetStyle*"></a>
+  <h4 id="Aspose_Cells_FOSS_Cell_GetStyle" data-uid="Aspose.Cells_FOSS.Cell.GetStyle">GetStyle()</h4>
+  <div class="markdown level1 summary"><p>Gets a detached copy of the cell style.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Style GetStyle()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Aspose.Cells_FOSS.Style.html">Style</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <a id="Aspose_Cells_FOSS_Cell_GetStyle_" data-uid="Aspose.Cells_FOSS.Cell.GetStyle*"></a>
+  <h4 id="Aspose_Cells_FOSS_Cell_GetStyle_System_Boolean_" data-uid="Aspose.Cells_FOSS.Cell.GetStyle(System.Boolean)">GetStyle(bool)</h4>
+  <div class="markdown level1 summary"><p>Gets a detached copy of the cell style.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Style GetStyle(bool checkBorders)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></td>
+        <td><span class="parametername">checkBorders</span></td>
+        <td><p>Whether to consider surrounding border effects.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Aspose.Cells_FOSS.Style.html">Style</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <a id="Aspose_Cells_FOSS_Cell_PutValue_" data-uid="Aspose.Cells_FOSS.Cell.PutValue*"></a>
+  <h4 id="Aspose_Cells_FOSS_Cell_PutValue_System_Boolean_" data-uid="Aspose.Cells_FOSS.Cell.PutValue(System.Boolean)">PutValue(bool)</h4>
+  <div class="markdown level1 summary"><p>Sets the cell value to a boolean.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void PutValue(bool value)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></td>
+        <td><span class="parametername">value</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <a id="Aspose_Cells_FOSS_Cell_PutValue_" data-uid="Aspose.Cells_FOSS.Cell.PutValue*"></a>
+  <h4 id="Aspose_Cells_FOSS_Cell_PutValue_System_DateTime_" data-uid="Aspose.Cells_FOSS.Cell.PutValue(System.DateTime)">PutValue(DateTime)</h4>
+  <div class="markdown level1 summary"><p>Sets the cell value to a <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.datetime">DateTime</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void PutValue(DateTime value)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.datetime">DateTime</a></td>
+        <td><span class="parametername">value</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Aspose_Cells_FOSS_Cell_PutValue_System_DateTime__remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>Date serialization honors <a class="xref" href="Aspose.Cells_FOSS.WorkbookSettings.html#Aspose_Cells_FOSS_WorkbookSettings_Date1904">Date1904</a> when the workbook is saved.</p>
+</div>
+
+
+  <a id="Aspose_Cells_FOSS_Cell_PutValue_" data-uid="Aspose.Cells_FOSS.Cell.PutValue*"></a>
+  <h4 id="Aspose_Cells_FOSS_Cell_PutValue_System_Decimal_" data-uid="Aspose.Cells_FOSS.Cell.PutValue(System.Decimal)">PutValue(decimal)</h4>
+  <div class="markdown level1 summary"><p>Sets the cell value to a decimal number.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void PutValue(decimal value)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.decimal">decimal</a></td>
+        <td><span class="parametername">value</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <a id="Aspose_Cells_FOSS_Cell_PutValue_" data-uid="Aspose.Cells_FOSS.Cell.PutValue*"></a>
+  <h4 id="Aspose_Cells_FOSS_Cell_PutValue_System_Double_" data-uid="Aspose.Cells_FOSS.Cell.PutValue(System.Double)">PutValue(double)</h4>
+  <div class="markdown level1 summary"><p>Sets the cell value to a floating-point number.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void PutValue(double value)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></td>
+        <td><span class="parametername">value</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <a id="Aspose_Cells_FOSS_Cell_PutValue_" data-uid="Aspose.Cells_FOSS.Cell.PutValue*"></a>
+  <h4 id="Aspose_Cells_FOSS_Cell_PutValue_System_Int32_" data-uid="Aspose.Cells_FOSS.Cell.PutValue(System.Int32)">PutValue(int)</h4>
+  <div class="markdown level1 summary"><p>Sets the cell value to an integer.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void PutValue(int value)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></td>
+        <td><span class="parametername">value</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <a id="Aspose_Cells_FOSS_Cell_PutValue_" data-uid="Aspose.Cells_FOSS.Cell.PutValue*"></a>
+  <h4 id="Aspose_Cells_FOSS_Cell_PutValue_System_Object_" data-uid="Aspose.Cells_FOSS.Cell.PutValue(System.Object)">PutValue(object)</h4>
+  <div class="markdown level1 summary"><p>Puts an object value into the cell.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void PutValue(object value)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></td>
+        <td><span class="parametername">value</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <a id="Aspose_Cells_FOSS_Cell_PutValue_" data-uid="Aspose.Cells_FOSS.Cell.PutValue*"></a>
+  <h4 id="Aspose_Cells_FOSS_Cell_PutValue_System_String_" data-uid="Aspose.Cells_FOSS.Cell.PutValue(System.String)">PutValue(string)</h4>
+  <div class="markdown level1 summary"><p>Sets the cell value to a string.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void PutValue(string value)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></td>
+        <td><span class="parametername">value</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <a id="Aspose_Cells_FOSS_Cell_PutValue_" data-uid="Aspose.Cells_FOSS.Cell.PutValue*"></a>
+  <h4 id="Aspose_Cells_FOSS_Cell_PutValue_System_String_System_Boolean_" data-uid="Aspose.Cells_FOSS.Cell.PutValue(System.String,System.Boolean)">PutValue(string, bool)</h4>
+  <div class="markdown level1 summary"><p>Puts a string value into the cell and converts the value when appropriate.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void PutValue(string value, bool isConverted)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></td>
+        <td><span class="parametername">value</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></td>
+        <td><span class="parametername">isConverted</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <a id="Aspose_Cells_FOSS_Cell_PutValue_" data-uid="Aspose.Cells_FOSS.Cell.PutValue*"></a>
+  <h4 id="Aspose_Cells_FOSS_Cell_PutValue_System_String_System_Boolean_System_Boolean_" data-uid="Aspose.Cells_FOSS.Cell.PutValue(System.String,System.Boolean,System.Boolean)">PutValue(string, bool, bool)</h4>
+  <div class="markdown level1 summary"><p>Puts a string value into the cell and converts the value when appropriate.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void PutValue(string value, bool isConverted, bool setStyle)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></td>
+        <td><span class="parametername">value</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></td>
+        <td><span class="parametername">isConverted</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></td>
+        <td><span class="parametername">setStyle</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <a id="Aspose_Cells_FOSS_Cell_SetStyle_" data-uid="Aspose.Cells_FOSS.Cell.SetStyle*"></a>
+  <h4 id="Aspose_Cells_FOSS_Cell_SetStyle_Aspose_Cells_FOSS_Style_" data-uid="Aspose.Cells_FOSS.Cell.SetStyle(Aspose.Cells_FOSS.Style)">SetStyle(Style)</h4>
+  <div class="markdown level1 summary"><p>Replaces the cell style with the supplied style object.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void SetStyle(Style style)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Aspose.Cells_FOSS.Style.html">Style</a></td>
+        <td><span class="parametername">style</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <a id="Aspose_Cells_FOSS_Cell_SetStyle_" data-uid="Aspose.Cells_FOSS.Cell.SetStyle*"></a>
+  <h4 id="Aspose_Cells_FOSS_Cell_SetStyle_Aspose_Cells_FOSS_Style_Aspose_Cells_FOSS_StyleFlag_" data-uid="Aspose.Cells_FOSS.Cell.SetStyle(Aspose.Cells_FOSS.Style,Aspose.Cells_FOSS.StyleFlag)">SetStyle(Style, StyleFlag)</h4>
+  <div class="markdown level1 summary"><p>Applies the cell style based on style flags.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void SetStyle(Style style, StyleFlag flag)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Aspose.Cells_FOSS.Style.html">Style</a></td>
+        <td><span class="parametername">style</span></td>
+        <td><p>The cell style.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Aspose.Cells_FOSS.StyleFlag.html">StyleFlag</a></td>
+        <td><span class="parametername">flag</span></td>
+        <td><p>The style flag.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <a id="Aspose_Cells_FOSS_Cell_SetStyle_" data-uid="Aspose.Cells_FOSS.Cell.SetStyle*"></a>
+  <h4 id="Aspose_Cells_FOSS_Cell_SetStyle_Aspose_Cells_FOSS_Style_System_Boolean_" data-uid="Aspose.Cells_FOSS.Cell.SetStyle(Aspose.Cells_FOSS.Style,System.Boolean)">SetStyle(Style, bool)</h4>
+  <div class="markdown level1 summary"><p>Applies the cell style with Aspose-compatible overload shape.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void SetStyle(Style style, bool explicitFlag)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Aspose.Cells_FOSS.Style.html">Style</a></td>
+        <td><span class="parametername">style</span></td>
+        <td><p>The cell style.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></td>
+        <td><span class="parametername">explicitFlag</span></td>
+        <td><p>Reserved for explicit-only application semantics.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+
+</article>
+          </div>
+
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In this article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+      Aspose.Cells FOSS for .NET - API Documentation
+      
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script type="text/javascript" src="../styles/docfx.vendor.min.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

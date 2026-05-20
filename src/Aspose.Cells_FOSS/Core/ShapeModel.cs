@@ -4,7 +4,7 @@ namespace Aspose.Cells_FOSS.Core
     /// Represents the internal model for a drawing object (shape) anchored to a worksheet.
     /// Row and column values are zero-based. EMU offset values are in English Metric Units.
     /// </summary>
-    public sealed class ShapeModel
+    internal sealed class ShapeModel
     {
         /// <summary>
         /// Initializes a new instance with default field values.
@@ -93,3 +93,4 @@ namespace Aspose.Cells_FOSS.Core
         public string RawElementXml { get; set; }
     }
 }
+

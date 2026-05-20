@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+
+  <head>
+    <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+      <title>Class PageSetup | Aspose.Cells FOSS for .NET API Documentation </title>
+      <meta name="viewport" content="width=device-width">
+      <meta name="title" content="Class PageSetup | Aspose.Cells FOSS for .NET API Documentation ">
+    
+    <meta name="description" content="Represents worksheet print and page-layout settings.">
+      <link rel="shortcut icon" href="../https://www.aspose.cloud/templates/aspose/App_Themes/V3/images/favicon.ico">
+      <link rel="stylesheet" href="../styles/docfx.vendor.min.css">
+      <link rel="stylesheet" href="../styles/docfx.css">
+      <link rel="stylesheet" href="../styles/main.css">
+      <meta property="docfx:navrel" content="../toc.html">
+      <meta property="docfx:tocrel" content="toc.html">
+    
+    <meta property="docfx:rel" content="../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../https://www.aspose.cloud/templates/aspose/App_Themes/V3/images/total/header/aspose_logo-for-total.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+
+        <div id="search-results">
+          <div class="search-list">Search Results for <span></span></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination" data-first=First data-prev=Previous data-next=Next data-last=Last></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Aspose.Cells_FOSS.PageSetup">
+
+
+
+  <h1 id="Aspose_Cells_FOSS_PageSetup" data-uid="Aspose.Cells_FOSS.PageSetup" class="text-break">Class PageSetup</h1>
+  <div class="markdown level0 summary"><p>Represents worksheet print and page-layout settings.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
+    <div class="level1"><span class="xref">PageSetup</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">object.Equals(object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">object.Equals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gethashcode">object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gettype">object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.referenceequals">object.ReferenceEquals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.tostring">object.ToString()</a>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Aspose.html">Aspose</a>.<a class="xref" href="Aspose.Cells_FOSS.html">Cells_FOSS</a></h6>
+  <h6><strong>Assembly</strong>: Aspose.Cells.FOSS.dll</h6>
+  <h5 id="Aspose_Cells_FOSS_PageSetup_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public sealed class PageSetup</code></pre>
+  </div>
+  <h5 id="Aspose_Cells_FOSS_PageSetup_examples"><strong>Examples</strong></h5>
+  <pre><code class="lang-csharp">var workbook = new Workbook();
+var pageSetup = workbook.Worksheets[0].PageSetup;
+
+pageSetup.Orientation = PageOrientationType.Landscape;
+pageSetup.LeftMargin = 1.5;
+pageSetup.RightMargin = 1.5;
+pageSetup.PrintTitleRows = "$1:$1";
+pageSetup.AddHorizontalPageBreak(40);</code></pre>
+
+  <h3 id="properties">Properties
+</h3>
+
+
+  <a id="Aspose_Cells_FOSS_PageSetup_BottomMargin_" data-uid="Aspose.Cells_FOSS.PageSetup.BottomMargin*"></a>
+  <h4 id="Aspose_Cells_FOSS_PageSetup_BottomMargin" data-uid="Aspose.Cells_FOSS.PageSetup.BottomMargin">BottomMargin</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the bottom margin in centimeters.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public double BottomMargin { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <a id="Aspose_Cells_FOSS_PageSetup_BottomMarginInch_" data-uid="Aspose.Cells_FOSS.PageSetup.BottomMarginInch*"></a>
+  <h4 id="Aspose_Cells_FOSS_PageSetup_BottomMarginInch" data-uid="Aspose.Cells_FOSS.PageSetup.BottomMarginInch">BottomMarginInch</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the bottom margin in inches.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public double BottomMarginInch { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <a id="Aspose_Cells_FOSS_PageSetup_CenterFooter_" data-uid="Aspose.Cells_FOSS.PageSetup.CenterFooter*"></a>
+  <h4 id="Aspose_Cells_FOSS_PageSetup_CenterFooter" data-uid="Aspose.Cells_FOSS.PageSetup.CenterFooter">CenterFooter</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the center footer text.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string CenterFooter { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <a id="Aspose_Cells_FOSS_PageSetup_CenterHeader_" data-uid="Aspose.Cells_FOSS.PageSetup.CenterHeader*"></a>
+  <h4 id="Aspose_Cells_FOSS_PageSetup_CenterHeader" data-uid="Aspose.Cells_FOSS.PageSetup.CenterHeader">CenterHeader</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the center header text.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string CenterHeader { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <a id="Aspose_Cells_FOSS_PageSetup_CenterHorizontally_" data-uid="Aspose.Cells_FOSS.PageSetup.CenterHorizontally*"></a>
+  <h4 id="Aspose_Cells_FOSS_PageSetup_CenterHorizontally" data-uid="Aspose.Cells_FOSS.PageSetup.CenterHorizontally">CenterHorizontally</h4>
+  <div class="markdown level1 summary"><p>Gets or sets whether content is centered horizontally on the page.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool CenterHorizontally { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <a id="Aspose_Cells_FOSS_PageSetup_CenterVertically_" data-uid="Aspose.Cells_FOSS.PageSetup.CenterVertically*"></a>
+  <h4 id="Aspose_Cells_FOSS_PageSetup_CenterVertically" data-uid="Aspose.Cells_FOSS.PageSetup.CenterVertically">CenterVertically</h4>
+  <div class="markdown level1 summary"><p>Gets or sets whether content is centered vertically on the page.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool CenterVertically { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <a id="Aspose_Cells_FOSS_PageSetup_FirstPageNumber_" data-uid="Aspose.Cells_FOSS.PageSetup.FirstPageNumber*"></a>
+  <h4 id="Aspose_Cells_FOSS_PageSetup_FirstPageNumber" data-uid="Aspose.Cells_FOSS.PageSetup.FirstPageNumber">FirstPageNumber</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the first printed page number.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int? FirstPageNumber { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a>?</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <a id="Aspose_Cells_FOSS_PageSetup_FitToPagesTall_" data-uid="Aspose.Cells_FOSS.PageSetup.FitToPagesTall*"></a>
+  <h4 id="Aspose_Cells_FOSS_PageSetup_FitToPagesTall" data-uid="Aspose.Cells_FOSS.PageSetup.FitToPagesTall">FitToPagesTall</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the number of pages tall to fit when printing.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int? FitToPagesTall { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a>?</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <a id="Aspose_Cells_FOSS_PageSetup_FitToPagesWide_" data-uid="Aspose.Cells_FOSS.PageSetup.FitToPagesWide*"></a>
+  <h4 id="Aspose_Cells_FOSS_PageSetup_FitToPagesWide" data-uid="Aspose.Cells_FOSS.PageSetup.FitToPagesWide">FitToPagesWide</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the number of pages wide to fit when printing.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int? FitToPagesWide { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a>?</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <a id="Aspose_Cells_FOSS_PageSetup_FooterMargin_" data-uid="Aspose.Cells_FOSS.PageSetup.FooterMargin*"></a>
+  <h4 id="Aspose_Cells_FOSS_PageSetup_FooterMargin" data-uid="Aspose.Cells_FOSS.PageSetup.FooterMargin">FooterMargin</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the footer margin in centimeters.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public double FooterMargin { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <a id="Aspose_Cells_FOSS_PageSetup_FooterMarginInch_" data-uid="Aspose.Cells_FOSS.PageSetup.FooterMarginInch*"></a>
+  <h4 id="Aspose_Cells_FOSS_PageSetup_FooterMarginInch" data-uid="Aspose.Cells_FOSS.PageSetup.FooterMarginInch">FooterMarginInch</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the footer margin in inches.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public double FooterMarginInch { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <a id="Aspose_Cells_FOSS_PageSetup_HeaderMargin_" data-uid="Aspose.Cells_FOSS.PageSetup.HeaderMargin*"></a>
+  <h4 id="Aspose_Cells_FOSS_PageSetup_HeaderMargin" data-uid="Aspose.Cells_FOSS.PageSetup.HeaderMargin">HeaderMargin</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the header margin in centimeters.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public double HeaderMargin { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <a id="Aspose_Cells_FOSS_PageSetup_HeaderMarginInch_" data-uid="Aspose.Cells_FOSS.PageSetup.HeaderMarginInch*"></a>
+  <h4 id="Aspose_Cells_FOSS_PageSetup_HeaderMarginInch" data-uid="Aspose.Cells_FOSS.PageSetup.HeaderMarginInch">HeaderMarginInch</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the header margin in inches.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public double HeaderMarginInch { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <a id="Aspose_Cells_FOSS_PageSetup_HorizontalPageBreaks_" data-uid="Aspose.Cells_FOSS.PageSetup.HorizontalPageBreaks*"></a>
+  <h4 id="Aspose_Cells_FOSS_PageSetup_HorizontalPageBreaks" data-uid="Aspose.Cells_FOSS.PageSetup.HorizontalPageBreaks">HorizontalPageBreaks</h4>
+  <div class="markdown level1 summary"><p>Gets the horizontal page breaks as sorted zero-based row indexes.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IReadOnlyList&lt;int&gt; HorizontalPageBreaks { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1">IReadOnlyList</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <a id="Aspose_Cells_FOSS_PageSetup_LeftFooter_" data-uid="Aspose.Cells_FOSS.PageSetup.LeftFooter*"></a>
+  <h4 id="Aspose_Cells_FOSS_PageSetup_LeftFooter" data-uid="Aspose.Cells_FOSS.PageSetup.LeftFooter">LeftFooter</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the left footer text.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string LeftFooter { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <a id="Aspose_Cells_FOSS_PageSetup_LeftHeader_" data-uid="Aspose.Cells_FOSS.PageSetup.LeftHeader*"></a>
+  <h4 id="Aspose_Cells_FOSS_PageSetup_LeftHeader" data-uid="Aspose.Cells_FOSS.PageSetup.LeftHeader">LeftHeader</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the left header text.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string LeftHeader { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <a id="Aspose_Cells_FOSS_PageSetup_LeftMargin_" data-uid="Aspose.Cells_FOSS.PageSetup.LeftMargin*"></a>
+  <h4 id="Aspose_Cells_FOSS_PageSetup_LeftMargin" data-uid="Aspose.Cells_FOSS.PageSetup.LeftMargin">LeftMargin</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the left margin in centimeters.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public double LeftMargin { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <a id="Aspose_Cells_FOSS_PageSetup_LeftMarginInch_" data-uid="Aspose.Cells_FOSS.PageSetup.LeftMarginInch*"></a>
+  <h4 id="Aspose_Cells_FOSS_PageSetup_LeftMarginInch" data-uid="Aspose.Cells_FOSS.PageSetup.LeftMarginInch">LeftMarginInch</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the left margin in inches.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public double LeftMarginInch { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <a id="Aspose_Cells_FOSS_PageSetup_Orientation_" data-uid="Aspose.Cells_FOSS.PageSetup.Orientation*"></a>
+  <h4 id="Aspose_Cells_FOSS_PageSetup_Orientation" data-uid="Aspose.Cells_FOSS.PageSetup.Orientation">Orientation</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the page orientation.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public PageOrientationType Orientation { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Aspose.Cells_FOSS.PageOrientationType.html">PageOrientationType</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <a id="Aspose_Cells_FOSS_PageSetup_PaperSize_" data-uid="Aspose.Cells_FOSS.PageSetup.PaperSize*"></a>
+  <h4 id="Aspose_Cells_FOSS_PageSetup_PaperSize" data-uid="Aspose.Cells_FOSS.PageSetup.PaperSize">PaperSize</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the paper size.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public PaperSizeType PaperSize { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Aspose.Cells_FOSS.PaperSizeType.html">PaperSizeType</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <a id="Aspose_Cells_FOSS_PageSetup_PrintArea_" data-uid="Aspose.Cells_FOSS.PageSetup.PrintArea*"></a>
+  <h4 id="Aspose_Cells_FOSS_PageSetup_PrintArea" data-uid="Aspose.Cells_FOSS.PageSetup.PrintArea">PrintArea</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the print area reference.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string PrintArea { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <a id="Aspose_Cells_FOSS_PageSetup_PrintGridlines_" data-uid="Aspose.Cells_FOSS.PageSetup.PrintGridlines*"></a>
+  <h4 id="Aspose_Cells_FOSS_PageSetup_PrintGridlines" data-uid="Aspose.Cells_FOSS.PageSetup.PrintGridlines">PrintGridlines</h4>
+  <div class="markdown level1 summary"><p>Gets or sets whether gridlines are printed.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool PrintGridlines { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <a id="Aspose_Cells_FOSS_PageSetup_PrintHeadings_" data-uid="Aspose.Cells_FOSS.PageSetup.PrintHeadings*"></a>
+  <h4 id="Aspose_Cells_FOSS_PageSetup_PrintHeadings" data-uid="Aspose.Cells_FOSS.PageSetup.PrintHeadings">PrintHeadings</h4>
+  <div class="markdown level1 summary"><p>Gets or sets whether row and column headings are printed.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool PrintHeadings { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <a id="Aspose_Cells_FOSS_PageSetup_PrintTitleColumns_" data-uid="Aspose.Cells_FOSS.PageSetup.PrintTitleColumns*"></a>
+  <h4 id="Aspose_Cells_FOSS_PageSetup_PrintTitleColumns" data-uid="Aspose.Cells_FOSS.PageSetup.PrintTitleColumns">PrintTitleColumns</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the repeating title columns reference.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string PrintTitleColumns { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <a id="Aspose_Cells_FOSS_PageSetup_PrintTitleRows_" data-uid="Aspose.Cells_FOSS.PageSetup.PrintTitleRows*"></a>
+  <h4 id="Aspose_Cells_FOSS_PageSetup_PrintTitleRows" data-uid="Aspose.Cells_FOSS.PageSetup.PrintTitleRows">PrintTitleRows</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the repeating title rows reference.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string PrintTitleRows { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <a id="Aspose_Cells_FOSS_PageSetup_RightFooter_" data-uid="Aspose.Cells_FOSS.PageSetup.RightFooter*"></a>
+  <h4 id="Aspose_Cells_FOSS_PageSetup_RightFooter" data-uid="Aspose.Cells_FOSS.PageSetup.RightFooter">RightFooter</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the right footer text.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string RightFooter { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <a id="Aspose_Cells_FOSS_PageSetup_RightHeader_" data-uid="Aspose.Cells_FOSS.PageSetup.RightHeader*"></a>
+  <h4 id="Aspose_Cells_FOSS_PageSetup_RightHeader" data-uid="Aspose.Cells_FOSS.PageSetup.RightHeader">RightHeader</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the right header text.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string RightHeader { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <a id="Aspose_Cells_FOSS_PageSetup_RightMargin_" data-uid="Aspose.Cells_FOSS.PageSetup.RightMargin*"></a>
+  <h4 id="Aspose_Cells_FOSS_PageSetup_RightMargin" data-uid="Aspose.Cells_FOSS.PageSetup.RightMargin">RightMargin</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the right margin in centimeters.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public double RightMargin { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <a id="Aspose_Cells_FOSS_PageSetup_RightMarginInch_" data-uid="Aspose.Cells_FOSS.PageSetup.RightMarginInch*"></a>
+  <h4 id="Aspose_Cells_FOSS_PageSetup_RightMarginInch" data-uid="Aspose.Cells_FOSS.PageSetup.RightMarginInch">RightMarginInch</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the right margin in inches.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public double RightMarginInch { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <a id="Aspose_Cells_FOSS_PageSetup_Scale_" data-uid="Aspose.Cells_FOSS.PageSetup.Scale*"></a>
+  <h4 id="Aspose_Cells_FOSS_PageSetup_Scale" data-uid="Aspose.Cells_FOSS.PageSetup.Scale">Scale</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the print scaling percentage.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int? Scale { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a>?</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <a id="Aspose_Cells_FOSS_PageSetup_TopMargin_" data-uid="Aspose.Cells_FOSS.PageSetup.TopMargin*"></a>
+  <h4 id="Aspose_Cells_FOSS_PageSetup_TopMargin" data-uid="Aspose.Cells_FOSS.PageSetup.TopMargin">TopMargin</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the top margin in centimeters.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public double TopMargin { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <a id="Aspose_Cells_FOSS_PageSetup_TopMarginInch_" data-uid="Aspose.Cells_FOSS.PageSetup.TopMarginInch*"></a>
+  <h4 id="Aspose_Cells_FOSS_PageSetup_TopMarginInch" data-uid="Aspose.Cells_FOSS.PageSetup.TopMarginInch">TopMarginInch</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the top margin in inches.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public double TopMarginInch { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <a id="Aspose_Cells_FOSS_PageSetup_VerticalPageBreaks_" data-uid="Aspose.Cells_FOSS.PageSetup.VerticalPageBreaks*"></a>
+  <h4 id="Aspose_Cells_FOSS_PageSetup_VerticalPageBreaks" data-uid="Aspose.Cells_FOSS.PageSetup.VerticalPageBreaks">VerticalPageBreaks</h4>
+  <div class="markdown level1 summary"><p>Gets the vertical page breaks as sorted zero-based column indexes.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IReadOnlyList&lt;int&gt; VerticalPageBreaks { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1">IReadOnlyList</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+</h3>
+
+
+  <a id="Aspose_Cells_FOSS_PageSetup_AddHorizontalPageBreak_" data-uid="Aspose.Cells_FOSS.PageSetup.AddHorizontalPageBreak*"></a>
+  <h4 id="Aspose_Cells_FOSS_PageSetup_AddHorizontalPageBreak_System_Int32_" data-uid="Aspose.Cells_FOSS.PageSetup.AddHorizontalPageBreak(System.Int32)">AddHorizontalPageBreak(int)</h4>
+  <div class="markdown level1 summary"><p>Adds a horizontal page break at the specified zero-based row index.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void AddHorizontalPageBreak(int rowIndex)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></td>
+        <td><span class="parametername">rowIndex</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <a id="Aspose_Cells_FOSS_PageSetup_AddVerticalPageBreak_" data-uid="Aspose.Cells_FOSS.PageSetup.AddVerticalPageBreak*"></a>
+  <h4 id="Aspose_Cells_FOSS_PageSetup_AddVerticalPageBreak_System_Int32_" data-uid="Aspose.Cells_FOSS.PageSetup.AddVerticalPageBreak(System.Int32)">AddVerticalPageBreak(int)</h4>
+  <div class="markdown level1 summary"><p>Adds a vertical page break at the specified zero-based column index.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void AddVerticalPageBreak(int columnIndex)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></td>
+        <td><span class="parametername">columnIndex</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <a id="Aspose_Cells_FOSS_PageSetup_ClearHorizontalPageBreaks_" data-uid="Aspose.Cells_FOSS.PageSetup.ClearHorizontalPageBreaks*"></a>
+  <h4 id="Aspose_Cells_FOSS_PageSetup_ClearHorizontalPageBreaks" data-uid="Aspose.Cells_FOSS.PageSetup.ClearHorizontalPageBreaks">ClearHorizontalPageBreaks()</h4>
+  <div class="markdown level1 summary"><p>Removes all horizontal page breaks.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void ClearHorizontalPageBreaks()</code></pre>
+  </div>
+
+
+  <a id="Aspose_Cells_FOSS_PageSetup_ClearVerticalPageBreaks_" data-uid="Aspose.Cells_FOSS.PageSetup.ClearVerticalPageBreaks*"></a>
+  <h4 id="Aspose_Cells_FOSS_PageSetup_ClearVerticalPageBreaks" data-uid="Aspose.Cells_FOSS.PageSetup.ClearVerticalPageBreaks">ClearVerticalPageBreaks()</h4>
+  <div class="markdown level1 summary"><p>Removes all vertical page breaks.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void ClearVerticalPageBreaks()</code></pre>
+  </div>
+
+</article>
+          </div>
+
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In this article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+      Aspose.Cells FOSS for .NET - API Documentation
+      
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script type="text/javascript" src="../styles/docfx.vendor.min.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

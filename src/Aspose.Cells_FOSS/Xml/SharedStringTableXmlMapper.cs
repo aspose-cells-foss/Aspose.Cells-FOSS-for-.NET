@@ -6,7 +6,7 @@ namespace Aspose.Cells_FOSS.Xml
     /// <summary>
     /// Represents shared string table xml mapper.
     /// </summary>
-    public sealed class SharedStringTableXmlMapper
+    internal sealed class SharedStringTableXmlMapper
     {
         /// <summary>
         /// Reads data from the specified source.
@@ -29,3 +29,4 @@ namespace Aspose.Cells_FOSS.Xml
         }
     }
 }
+

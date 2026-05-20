@@ -6,7 +6,7 @@ namespace Aspose.Cells_FOSS.Core
     /// <summary>
     /// Specifies border style.
     /// </summary>
-    public enum BorderStyle
+    internal enum BorderStyle
     {
         None,
         Thin,
@@ -24,3 +24,4 @@ namespace Aspose.Cells_FOSS.Core
         SlantedDashDot
     }
 }
+

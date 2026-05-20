@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conditional Formatting - Aspose.Cells FOSS for .NET</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #003399;
+            color: white;
+            padding: 20px;
+            margin: -20px -20px 20px -20px;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .section {
+            margin-bottom: 40px;
+        }
+        .section-title {
+            color: #003399;
+            border-bottom: 2px solid #003399;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+        pre {
+            background-color: #f4f4f4;
+            padding: 15px;
+            border-radius: 3px;
+            overflow-x: auto;
+            border: 1px solid #ddd;
+        }
+        code {
+            font-family: 'Courier New', monospace;
+            color: #d63384;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #003399;
+            text-decoration: none;
+        }
+        .method-section {
+            background-color: #f9f9f9;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-left: 4px solid #4CAF50;
+            border-radius: 3px;
+        }
+        .method-name {
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            color: #003399;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Conditional Formatting</h1>
+        <p>Complete documentation for conditional formatting in Aspose.Cells FOSS for .NET</p>
+    </div>
+
+    <div class="content">
+        <a href="index.html" class="back-link">← Back to Index</a>
+
+        <div class="section">
+            <h2 class="section-title">Conditional Formatting Overview</h2>
+            <p>Conditional formatting allows you to automatically format cells based on their values or formulas. This powerful feature helps highlight important data, identify trends, and make your spreadsheets more visually informative and easier to understand.</p>
+
+            <div class="method-section">
+                <div class="method-name">Key Features:</div>
+                <ul>
+                    <li>Highlight cells based on value comparisons (greater than, less than, between, etc.)</li>
+                    <li>Apply data bars, color scales, and icon sets for visual data analysis</li>
+                    <li>Use formulas for complex conditional logic</li>
+                    <li>Apply different styles based on multiple conditions</li>
+                    <li>Create top/bottom rules (top 10, bottom 10, above average, etc.)</li>
+                    <li>Duplicate value highlighting</li>
+                    <li>Text contains specific strings</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Condition Types</h2>
+
+            <div class="method-section">
+                <div class="method-name">Cell Value Conditions</div>
+                <pre><code>// Create condition based on cell value
+var condition = new FormatCondition();
+condition.Type = ConditionType.CellValue;
+condition.Operator = OperatorType.GreaterThan;
+condition.Formula1 = "100";
+condition.Style.ForegroundColor = System.Drawing.Color.Green;
+condition.Style.Pattern = BackgroundType.Solid;</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Expression Conditions</div>
+                <pre><code>// Create condition based on formula/expression
+var condition = new FormatCondition();
+condition.Type = ConditionType.Expression;
+condition.Formula1 = "=MOD(A1, 2) = 0";
+condition.Style.ForegroundColor = System.Drawing.Color.LightBlue;
+condition.Style.Pattern = BackgroundType.Solid;</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Comparison Operators</div>
+                <pre><code>// Available operators for cell value conditions:
+// - Equal
+// - NotEqual
+// - GreaterThan
+// - LessThan
+// - GreaterThanOrEqual
+// - LessThanOrEqual
+// - Between
+// - NotBetween
+
+condition.Operator = OperatorType.GreaterThan;
+condition.Operator = OperatorType.Between;
+condition.Operator = OperatorType.Equal;
+// ... and more</code></pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Basic Conditional Formatting</h2>
+
+            <div class="method-section">
+                <div class="method-name">Highlight Values Greater Than</div>
+                <pre><code>// Highlight values greater than 100
+var condition = new FormatCondition();
+condition.Type = ConditionType.CellValue;
+condition.Operator = OperatorType.GreaterThan;
+condition.Formula1 = "100";
+condition.Style.ForegroundColor = System.Drawing.Color.LightGreen;
+condition.Style.Pattern = BackgroundType.Solid;
+
+worksheet.ConditionalFormattings.Add(cells.CreateRange(0, 0, 10, 1), condition);</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Highlight Values Between Range</div>
+                <pre><code>// Highlight values between 50 and 100
+var condition = new FormatCondition();
+condition.Type = ConditionType.CellValue;
+condition.Operator = OperatorType.Between;
+condition.Formula1 = "50";
+condition.Formula2 = "100";
+condition.Style.ForegroundColor = System.Drawing.Color.Yellow;
+condition.Style.Pattern = BackgroundType.Solid;
+
+worksheet.ConditionalFormattings.Add(cells.CreateRange(0, 1, 10, 1), condition);</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Highlight Equal Values</div>
+                <pre><code>// Highlight cells equal to a specific value
+var condition = new FormatCondition();
+condition.Type = ConditionType.CellValue;
+condition.Operator = OperatorType.Equal;
+condition.Formula1 = "\"Complete\"";
+condition.Style.ForegroundColor = System.Drawing.Color.Green;
+condition.Style.Font.Color = System.Drawing.Color.White;
+condition.Style.Font.Bold = true;
+condition.Style.Pattern = BackgroundType.Solid;
+
+worksheet.ConditionalFormattings.Add(cells.CreateRange(0, 2, 10, 1), condition);</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Highlight Top Values</div>
+                <pre><code>// Highlight top 10 values
+var condition = new FormatCondition();
+condition.Type = ConditionType.Top10;
+condition.Operator = OperatorType.Top10;
+condition.Style.ForegroundColor = System.Drawing.Color.Blue;
+condition.Style.Font.Color = System.Drawing.Color.White;
+condition.Style.Font.Bold = true;
+condition.Style.Pattern = BackgroundType.Solid;
+
+worksheet.ConditionalFormattings.Add(cells.CreateRange(0, 0, 20, 1), condition);</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Highlight Above Average</div>
+                <pre><code>// Highlight values above average
+var condition = new FormatCondition();
+condition.Type = ConditionType.AboveAverage;
+condition.Operator = OperatorType.AboveAverage;
+condition.Style.ForegroundColor = System.Drawing.Color.LightBlue;
+condition.Style.Pattern = BackgroundType.Solid;
+
+worksheet.ConditionalFormattings.Add(cells.CreateRange(0, 1, 20, 1), condition);</code></pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Formula-Based Formatting</h2>
+
+            <div class="method-section">
+                <div class="method-name">Even/Odd Numbers</div>
+                <pre><code>// Highlight even numbers
+var evenCondition = new FormatCondition();
+evenCondition.Type = ConditionType.Expression;
+evenCondition.Formula1 = "=MOD(A1, 2) = 0";
+evenCondition.Style.ForegroundColor = System.Drawing.Color.LightBlue;
+evenCondition.Style.Pattern = BackgroundType.Solid;
+
+// Highlight odd numbers
+var oddCondition = new FormatCondition();
+oddCondition.Type = ConditionType.Expression;
+oddCondition.Formula1 = "=MOD(A1, 2) <> 0";
+oddCondition.Style.ForegroundColor = System.Drawing.Color.LightGreen;
+oddCondition.Style.Pattern = BackgroundType.Solid;
+
+worksheet.ConditionalFormattings.Add(cells.CreateRange(0, 0, 10, 1), evenCondition);
+worksheet.ConditionalFormattings.Add(cells.CreateRange(0, 0, 10, 1), oddCondition);</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Duplicate Values</div>
+                <pre><code>// Highlight duplicate values
+var condition = new FormatCondition();
+condition.Type = ConditionType.Expression;
+condition.Formula1 = "=COUNTIF($A$1:$A$10, A1) > 1";
+condition.Style.ForegroundColor = System.Drawing.Color.Red;
+condition.Style.Font.Color = System.Drawing.Color.White;
+condition.Style.Font.Bold = true;
+condition.Style.Pattern = BackgroundType.Solid;
+
+worksheet.ConditionalFormattings.Add(cells.CreateRange(0, 0, 10, 1), condition);</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Unique Values</div>
+                <pre><code>// Highlight unique values
+var condition = new FormatCondition();
+condition.Type = ConditionType.Expression;
+condition.Formula1 = "=COUNTIF($A$1:$A$10, A1) = 1";
+condition.Style.ForegroundColor = System.Drawing.Color.LightYellow;
+condition.Style.Pattern = BackgroundType.Solid;
+
+worksheet.ConditionalFormattings.Add(cells.CreateRange(0, 0, 10, 1), condition);</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Text Contains</div>
+                <pre><code>// Highlight cells containing specific text
+var condition = new FormatCondition();
+condition.Type = ConditionType.Expression;
+condition.Formula1 = "=ISNUMBER(FIND(\"urgent\", A1))";
+condition.Style.ForegroundColor = System.Drawing.Color.Red;
+condition.Style.Font.Color = System.Drawing.Color.White;
+condition.Style.Font.Bold = true;
+condition.Style.Pattern = BackgroundType.Solid;
+
+worksheet.ConditionalFormattings.Add(cells.CreateRange(0, 0, 20, 1), condition);</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Date-Based Conditions</div>
+                <pre><code>// Highlight dates within last 7 days
+var recentCondition = new FormatCondition();
+recentCondition.Type = ConditionType.Expression;
+recentCondition.Formula1 = "=AND(A1 > TODAY() - 7, A1 <= TODAY())";
+recentCondition.Style.ForegroundColor = System.Drawing.Color.LightGreen;
+recentCondition.Style.Pattern = BackgroundType.Solid;
+
+// Highlight dates older than 30 days
+var oldCondition = new FormatCondition();
+oldCondition.Type = ConditionType.Expression;
+oldCondition.Formula1 = "=A1 < TODAY() - 30";
+oldCondition.Style.ForegroundColor = System.Drawing.Color.Gray;
+oldCondition.Style.Font.Color = System.Drawing.Color.White;
+oldCondition.Style.Pattern = BackgroundType.Solid;
+
+worksheet.ConditionalFormattings.Add(cells.CreateRange(0, 2, 20, 1), recentCondition);
+worksheet.ConditionalFormattings.Add(cells.CreateRange(0, 2, 20, 1), oldCondition);</code></pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Advanced Conditional Formatting</h2>
+
+            <div class="method-section">
+                <div class="method-name">Multiple Conditions</div>
+                <pre><code>// Apply multiple conditions to the same range
+var highCondition = new FormatCondition();
+highCondition.Type = ConditionType.CellValue;
+highCondition.Operator = OperatorType.GreaterThan;
+highCondition.Formula1 = "1000";
+highCondition.Style.ForegroundColor = System.Drawing.Color.Red;
+highCondition.Style.Font.Color = System.Drawing.Color.White;
+highCondition.Style.Font.Bold = true;
+highCondition.Style.Pattern = BackgroundType.Solid;
+
+var mediumCondition = new FormatCondition();
+mediumCondition.Type = ConditionType.CellValue;
+mediumCondition.Operator = OperatorType.Between;
+mediumCondition.Formula1 = "500";
+mediumCondition.Formula2 = "1000";
+mediumCondition.Style.ForegroundColor = System.Drawing.Color.Yellow;
+mediumCondition.Style.Pattern = BackgroundType.Solid;
+
+var lowCondition = new FormatCondition();
+lowCondition.Type = ConditionType.CellValue;
+lowCondition.Operator = OperatorType.LessThan;
+lowCondition.Formula1 = "500";
+lowCondition.Style.ForegroundColor = System.Drawing.Color.Green;
+lowCondition.Style.Font.Color = System.Drawing.Color.White;
+lowCondition.Style.Pattern = BackgroundType.Solid;
+
+// Apply all conditions to the same range
+var range = cells.CreateRange(0, 0, 10, 1);
+worksheet.ConditionalFormattings.Add(range, highCondition);
+worksheet.ConditionalFormattings.Add(range, mediumCondition);
+worksheet.ConditionalFormattings.Add(range, lowCondition);</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Row-Based Formatting</div>
+                <pre><code>// Highlight entire row based on cell value
+var condition = new FormatCondition();
+condition.Type = ConditionType.Expression;
+condition.Formula1 = "=$C1 > 1000";  // Column C determines highlighting
+condition.Style.ForegroundColor = System.Drawing.Color.LightBlue;
+condition.Style.Pattern = BackgroundType.Solid;
+
+// Apply to entire row range
+worksheet.ConditionalFormattings.Add(cells.CreateRange(0, 0, 10, 5), condition);</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Data Validation Status</div>
+                <pre><code>// Highlight cells that fail validation (simple example)
+var condition = new FormatCondition();
+condition.Type = ConditionType.Expression;
+condition.Formula1 = "=OR(A1 < 0, A1 > 100)";
+condition.Style.ForegroundColor = System.Drawing.Color.Red;
+condition.Style.Font.Color = System.Drawing.Color.White;
+condition.Style.Pattern = BackgroundType.Solid;
+
+worksheet.ConditionalFormattings.Add(cells.CreateRange(0, 0, 10, 1), condition);</code></pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Managing Conditional Formatting</h2>
+
+            <div class="method-section">
+                <div class="method-name">Accessing and Modifying</div>
+                <pre><code>// Access conditional formatting collection
+var formatting = worksheet.ConditionalFormattings;
+
+// Get count
+int count = formatting.Count;
+
+// Access specific formatting by index
+var firstFormat = formatting[0];
+
+// Remove formatting
+formatting.RemoveAt(0);
+
+// Clear all formatting
+formatting.Clear();</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Condition Priority</div>
+                <pre><code>// Conditions are evaluated in the order they are added
+// First matching condition is applied
+
+// Add higher priority conditions first
+var urgentCondition = new FormatCondition();
+urgentCondition.Type = ConditionType.Expression;
+urgentCondition.Formula1 = "=$B1 = \"Urgent\"";
+urgentCondition.Style.ForegroundColor = System.Drawing.Color.Red;
+urgentCondition.Style.Pattern = BackgroundType.Solid;
+
+var normalCondition = new FormatCondition();
+normalCondition.Type = ConditionType.Expression;
+normalCondition.Formula1 = "=$B1 = \"Normal\"";
+normalCondition.Style.ForegroundColor = System.Drawing.Color.Green;
+normalCondition.Style.Pattern = BackgroundType.Solid;
+
+// Add in order of priority
+worksheet.ConditionalFormattings.Add(range, urgentCondition);   // Higher priority
+worksheet.ConditionalFormattings.Add(range, normalCondition);   // Lower priority</code></pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Complete Example</h2>
+
+            <div class="method-section">
+                <div class="method-name">Sales Performance Dashboard</div>
+                <pre><code>using Aspose.Cells_FOSS;
+using System;
+
+class Program
+{
+    static void Main()
+    {
+        var workbook = new Workbook();
+        var worksheet = workbook.Worksheets[0];
+        var cells = worksheet.Cells;
+
+        // Add header
+        cells["A1"].PutValue("Sales Person");
+        cells["B1"].PutValue("Region");
+        cells["C1"].PutValue("Sales");
+        cells["D1"].PutValue("Target");
+        cells["E1"].PutValue("Achievement %");
+
+        // Add sample data
+        string[] salespeople = { "John", "Jane", "Bob", "Alice", "Charlie", "Diana" };
+        string[] regions = { "East", "West", "North", "South", "East", "West" };
+        int[] sales = { 12000, 8500, 15000, 9200, 11000, 7500 };
+        int[] targets = { 10000, 10000, 10000, 10000, 10000, 10000 };
+
+        for (int i = 0; i < salespeople.Length; i++)
+        {
+            cells[i + 2, 0].PutValue(salespeople[i]);
+            cells[i + 2, 1].PutValue(regions[i]);
+            cells[i + 2, 2].PutValue(sales[i]);
+            cells[i + 2, 3].PutValue(targets[i]);
+            cells[i + 2, 4].Formula = $"=C{i + 2}/D{i + 2}*100";
+        }
+
+        // Apply header styling
+        var headerStyle = workbook.CreateStyle();
+        headerStyle.Font.Bold = true;
+        headerStyle.Font.Color = System.Drawing.Color.White;
+        headerStyle.BackgroundColor = System.Drawing.Color.FromArgb(0, 51, 153);
+        for (int col = 0; col <= 4; col++)
+        {
+            cells[0, col].SetStyle(headerStyle);
+        }
+
+        // Conditional formatting for achievement > 100% (Green)
+        var aboveTargetCondition = new FormatCondition();
+        aboveTargetCondition.Type = ConditionType.CellValue;
+        aboveTargetCondition.Operator = OperatorType.GreaterThan;
+        aboveTargetCondition.Formula1 = "100";
+        aboveTargetCondition.Style.ForegroundColor = System.Drawing.Color.LightGreen;
+        aboveTargetCondition.Style.Pattern = BackgroundType.Solid;
+
+        worksheet.ConditionalFormattings.Add(cells.CreateRange(1, 4, 6, 1), aboveTargetCondition);
+
+        // Conditional formatting for achievement 90-100% (Yellow)
+        var nearTargetCondition = new FormatCondition();
+        nearTargetCondition.Type = ConditionType.CellValue;
+        nearTargetCondition.Operator = OperatorType.Between;
+        nearTargetCondition.Formula1 = "90";
+        nearTargetCondition.Formula2 = "100";
+        nearTargetCondition.Style.ForegroundColor = System.Drawing.Color.Yellow;
+        nearTargetCondition.Style.Pattern = BackgroundType.Solid;
+
+        worksheet.ConditionalFormattings.Add(cells.CreateRange(1, 4, 6, 1), nearTargetCondition);
+
+        // Conditional formatting for achievement < 90% (Red)
+        var belowTargetCondition = new FormatCondition();
+        belowTargetCondition.Type = ConditionType.CellValue;
+        belowTargetCondition.Operator = OperatorType.LessThan;
+        belowTargetCondition.Formula1 = "90";
+        belowTargetCondition.Style.ForegroundColor = System.Drawing.Color.Red;
+        belowTargetCondition.Style.Font.Color = System.Drawing.Color.White;
+        belowTargetCondition.Style.Pattern = BackgroundType.Solid;
+
+        worksheet.ConditionalFormattings.Add(cells.CreateRange(1, 4, 6, 1), belowTargetCondition);
+
+        // Highlight top performer
+        var topCondition = new FormatCondition();
+        topCondition.Type = ConditionType.Expression;
+        topCondition.Formula1 = "=$C2 = MAX($C$2:$C$7)";
+        topCondition.Style.ForegroundColor = System.Drawing.Color.Blue;
+        topCondition.Style.Font.Color = System.Drawing.Color.White;
+        topCondition.Style.Font.Bold = true;
+        topCondition.Style.Pattern = BackgroundType.Solid;
+
+        worksheet.ConditionalFormattings.Add(cells.CreateRange(1, 0, 6, 5), topCondition);
+
+        // Apply currency formatting
+        var currencyStyle = workbook.CreateStyle();
+        currencyStyle.NumberFormat = "$#,##0";
+        for (int row = 2; row <= 7; row++)
+        {
+            cells[row, 2].SetStyle(currencyStyle);
+            cells[row, 3].SetStyle(currencyStyle);
+        }
+
+        // Apply percentage formatting
+        var percentStyle = workbook.CreateStyle();
+        percentStyle.NumberFormat = "0.0%";
+        for (int row = 2; row <= 7; row++)
+        {
+            cells[row, 4].SetStyle(percentStyle);
+        }
+
+        // Auto-fit columns
+        worksheet.AutoFitColumns();
+
+        workbook.Save("sales-dashboard.xlsx");
+        Console.WriteLine("Sales performance dashboard with conditional formatting created!");
+    }
+}</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Project Status Tracker</div>
+                <pre><code>using Aspose.Cells_FOSS;
+using System;
+
+class Program
+{
+    static void Main()
+    {
+        var workbook = new Workbook();
+        var worksheet = workbook.Worksheets[0];
+        var cells = worksheet.Cells;
+
+        // Create header
+        cells["A1"].PutValue("Project");
+        cells["B1"].PutValue("Status");
+        cells["C1"].PutValue("Due Date");
+        cells["D1"].PutValue("Priority");
+
+        // Add sample projects
+        string[] projects = { "Website Redesign", "Mobile App", "Database Migration", "API Integration", "Testing" };
+        string[] statuses = { "Complete", "In Progress", "Pending", "In Progress", "Complete" };
+        DateTime[] dueDates = {
+            DateTime.Now.AddDays(-10),
+            DateTime.Now.AddDays(5),
+            DateTime.Now.AddDays(20),
+            DateTime.Now.AddDays(-5),
+            DateTime.Now.AddDays(-15)
+        };
+        string[] priorities = { "High", "Medium", "Low", "High", "Medium" };
+
+        for (int i = 0; i < projects.Length; i++)
+        {
+            cells[i + 2, 0].PutValue(projects[i]);
+            cells[i + 2, 1].PutValue(statuses[i]);
+            cells[i + 2, 2].PutValue(dueDates[i]);
+            cells[i + 2, 3].PutValue(priorities[i]);
+        }
+
+        // Status-based conditional formatting
+        var completeCondition = new FormatCondition();
+        completeCondition.Type = ConditionType.CellValue;
+        completeCondition.Operator = OperatorType.Equal;
+        completeCondition.Formula1 = "\"Complete\"";
+        completeCondition.Style.ForegroundColor = System.Drawing.Color.LightGreen;
+        completeCondition.Style.Pattern = BackgroundType.Solid;
+
+        worksheet.ConditionalFormattings.Add(cells.CreateRange(1, 1, 5, 1), completeCondition);
+
+        var progressCondition = new FormatCondition();
+        progressCondition.Type = ConditionType.CellValue;
+        progressCondition.Operator = OperatorType.Equal;
+        progressCondition.Formula1 = "\"In Progress\"";
+        progressCondition.Style.ForegroundColor = System.Drawing.Color.Yellow;
+        progressCondition.Style.Pattern = BackgroundType.Solid;
+
+        worksheet.ConditionalFormattings.Add(cells.CreateRange(1, 1, 5, 1), progressCondition);
+
+        var pendingCondition = new FormatCondition();
+        pendingCondition.Type = ConditionType.CellValue;
+        pendingCondition.Operator = OperatorType.Equal;
+        pendingCondition.Formula1 = "\"Pending\"";
+        pendingCondition.Style.ForegroundColor = System.Drawing.Color.Red;
+        pendingCondition.Style.Font.Color = System.Drawing.Color.White;
+        pendingCondition.Style.Pattern = BackgroundType.Solid;
+
+        worksheet.ConditionalFormattings.Add(cells.CreateRange(1, 1, 5, 1), pendingCondition);
+
+        // Date-based conditional formatting
+        var overdueCondition = new FormatCondition();
+        overdueCondition.Type = ConditionType.Expression;
+        overdueCondition.Formula1 = "=AND(C2 < TODAY(), B2 <> \"Complete\")";
+        overdueCondition.Style.ForegroundColor = System.Drawing.Color.Red;
+        overdueCondition.Style.Font.Color = System.Drawing.Color.White;
+        overdueCondition.Style.Font.Bold = true;
+        overdueCondition.Style.Pattern = BackgroundType.Solid;
+
+        worksheet.ConditionalFormattings.Add(cells.CreateRange(1, 0, 5, 4), overdueCondition);
+
+        // Priority-based conditional formatting
+        var highPriorityCondition = new FormatCondition();
+        highPriorityCondition.Type = ConditionType.CellValue;
+        highPriorityCondition.Operator = OperatorType.Equal;
+        highPriorityCondition.Formula1 = "\"High\"";
+        highPriorityCondition.Style.ForegroundColor = System.Drawing.Color.Red;
+        highPriorityCondition.Style.Font.Color = System.Drawing.Color.White;
+        highPriorityCondition.Style.Font.Bold = true;
+        highPriorityCondition.Style.Pattern = BackgroundType.Solid;
+
+        worksheet.ConditionalFormattings.Add(cells.CreateRange(1, 3, 5, 1), highPriorityCondition);
+
+        var mediumPriorityCondition = new FormatCondition();
+        mediumPriorityCondition.Type = ConditionType.CellValue;
+        mediumPriorityCondition.Operator = OperatorType.Equal;
+        mediumPriorityCondition.Formula1 = "\"Medium\"";
+        mediumPriorityCondition.Style.ForegroundColor = System.Drawing.Color.Yellow;
+        mediumPriorityCondition.Style.Pattern = BackgroundType.Solid;
+
+        worksheet.ConditionalFormattings.Add(cells.CreateRange(1, 3, 5, 1), mediumPriorityCondition);
+
+        var lowPriorityCondition = new FormatCondition();
+        lowPriorityCondition.Type = ConditionType.CellValue;
+        lowPriorityCondition.Operator = OperatorType.Equal;
+        lowPriorityCondition.Formula1 = "\"Low\"";
+        lowPriorityCondition.Style.ForegroundColor = System.Drawing.Color.LightGreen;
+        lowPriorityCondition.Style.Pattern = BackgroundType.Solid;
+
+        worksheet.ConditionalFormattings.Add(cells.CreateRange(1, 3, 5, 1), lowPriorityCondition);
+
+        // Apply header styling
+        var headerStyle = workbook.CreateStyle();
+        headerStyle.Font.Bold = true;
+        headerStyle.Font.Color = System.Drawing.Color.White;
+        headerStyle.BackgroundColor = System.Drawing.Color.FromArgb(0, 51, 153);
+        for (int col = 0; col <= 3; col++)
+        {
+            cells[0, col].SetStyle(headerStyle);
+        }
+
+        // Auto-fit columns
+        worksheet.AutoFitColumns();
+
+        workbook.Save("project-tracker.xlsx");
+        Console.WriteLine("Project status tracker with conditional formatting created!");
+    }
+}</code></pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Important Notes</h2>
+            <ul>
+                <li><strong>Priority Order:</strong> Conditions are evaluated in the order they are added. First matching condition is applied.</li>
+                <li><strong>Formula References:</strong> In formulas, use relative references (A1) not absolute references ($A$1) for cell-specific conditions.</li>
+                <li><strong>Range Coverage:</strong> Conditional formatting applies to the entire specified range, even if not all cells meet the condition.</li>
+                <li><strong>Performance:</strong> Too many conditional formatting rules can impact workbook performance.</li>
+                <li><strong>Style Conflicts:</strong> When multiple conditions match, only the first matching condition's style is applied.</li>
+                <li><strong>Excel Compatibility:</strong> All conditional formatting rules are fully compatible with Microsoft Excel.</li>
+                <li><strong>Complex Formulas:</strong> Keep formulas simple for better performance and readability.</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Related Documentation</h2>
+            <ul>
+                <li><a href="worksheets.html">Worksheet Operations</a> - Managing worksheets and cells</li>
+                <li><a href="styling.html">Styling</a> - Cell formatting and styles</li>
+                <li><a href="formulas.html">Formulas</a> - Using formulas in conditions</li>
+                <li><a href="data-validation.html">Data Validation</a> - Controlling cell input</li>
+                <li><a href="api-reference.html">Complete API Reference</a></li>
+                <li><a href="index.html">Back to Main Documentation</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 40px; color: #666; font-size: 0.9em;">
+        <p>&copy; 2026 Aspose.Cells FOSS Project. All rights reserved.</p>
+    </div>
+</body>
+</html>

@@ -7,7 +7,7 @@ namespace Aspose.Cells_FOSS.Core
     /// <summary>
     /// Represents workbook model.
     /// </summary>
-    public sealed class WorkbookModel
+    internal sealed class WorkbookModel
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="WorkbookModel"/> class.
@@ -83,3 +83,4 @@ namespace Aspose.Cells_FOSS.Core
         internal List<ExternalLinkModel> ExternalLinks { get; } = new List<ExternalLinkModel>();
     }
 }
+

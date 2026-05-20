@@ -6,7 +6,7 @@ namespace Aspose.Cells_FOSS.Packaging
     /// <summary>
     /// Provides packaging conventions operations.
     /// </summary>
-    public static class PackagingConventions
+    internal static class PackagingConventions
     {
         /// <summary>
         /// Gets the content types part.

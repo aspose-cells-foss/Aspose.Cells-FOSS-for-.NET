@@ -6,7 +6,7 @@ namespace Aspose.Cells_FOSS.Core
     /// <summary>
     /// Represents color value.
     /// </summary>
-    public struct ColorValue : IEquatable<ColorValue>
+    internal struct ColorValue : IEquatable<ColorValue>
     {
         /// <summary>
         /// Initializes an RGB color value.
@@ -92,3 +92,4 @@ namespace Aspose.Cells_FOSS.Core
         }
     }
 }
+

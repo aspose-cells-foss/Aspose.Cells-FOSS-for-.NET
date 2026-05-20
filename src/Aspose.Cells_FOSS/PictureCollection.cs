@@ -6,8 +6,32 @@ using Aspose.Cells_FOSS.Core;
 namespace Aspose.Cells_FOSS
 {
     /// <summary>
-    /// Represents the collection of pictures anchored to a worksheet.
+    /// Represents collection of pictures anchored to a worksheet.
     /// </summary>
+    /// <remarks>
+    /// Pictures allow embedding images directly into Excel worksheets from various sources.
+    /// Supported image formats include JPEG, PNG, GIF, and BMP.
+    /// Pictures can be loaded from files, streams, or byte arrays.
+    /// Each picture can be independently positioned and sized using anchor coordinates.
+    /// The collection provides methods to add, remove, and access pictures by index.
+    /// </remarks>
+    /// <example>
+    /// <code>
+    /// var workbook = new Workbook();
+    /// var worksheet = workbook.Worksheets[0];
+    ///
+    /// // Add pictures from different sources
+    /// byte[] logoData = File.ReadAllBytes("logo.png");
+    /// worksheet.Pictures.Add(2, 2, 5, 5, logoData);
+    ///
+    /// using (var stream = File.OpenRead("image.jpg"))
+    /// {
+    ///     worksheet.Pictures.Add(10, 2, 15, 10, stream);
+    /// }
+    ///
+    /// Console.WriteLine($"Added {worksheet.Pictures.Count} pictures");
+    /// </code>
+    /// </example>
     public sealed class PictureCollection
     {
         private readonly WorksheetModel _worksheetModel;

@@ -6,7 +6,7 @@ namespace Aspose.Cells_FOSS.Core
     /// <summary>
     /// Represents defined name model.
     /// </summary>
-    public sealed class DefinedNameModel
+    internal sealed class DefinedNameModel
     {
         /// <summary>
         /// Gets or sets the name.
@@ -30,3 +30,4 @@ namespace Aspose.Cells_FOSS.Core
         public string Comment { get; set; } = string.Empty;
     }
 }
+

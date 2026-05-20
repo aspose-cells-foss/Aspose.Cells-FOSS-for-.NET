@@ -201,7 +201,7 @@ namespace Aspose.Cells_FOSS
                     continue;
                 }
 
-                formatting.Areas.Add(new CellArea(region.FirstRow, region.FirstColumn, region.TotalRows, region.TotalColumns));
+                formatting.Areas.Add(CellArea.CreateCellArea(region.FirstRow, region.FirstColumn, region.FirstRow + region.TotalRows - 1, region.FirstColumn + region.TotalColumns - 1));
             }
 
             FormatConditionCollection.SortAreas(formatting.Areas);

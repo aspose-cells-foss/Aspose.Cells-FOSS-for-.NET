@@ -9,30 +9,25 @@ namespace Aspose.Cells_FOSS
     public class Borders
     {
         /// <summary>
-        /// Performs border.
+        /// Gets the left border settings.
         /// </summary>
-        /// <returns>The border left { get; set; } = new.</returns>
-        public Border Left { get; set; } = new Border();
+        public Border Left { get; internal set; } = new Border();
         /// <summary>
-        /// Performs border.
+        /// Gets the right border settings.
         /// </summary>
-        /// <returns>The border right { get; set; } = new.</returns>
-        public Border Right { get; set; } = new Border();
+        public Border Right { get; internal set; } = new Border();
         /// <summary>
-        /// Performs border.
+        /// Gets the top border settings.
         /// </summary>
-        /// <returns>The border top { get; set; } = new.</returns>
-        public Border Top { get; set; } = new Border();
+        public Border Top { get; internal set; } = new Border();
         /// <summary>
-        /// Performs border.
+        /// Gets the bottom border settings.
         /// </summary>
-        /// <returns>The border bottom { get; set; } = new.</returns>
-        public Border Bottom { get; set; } = new Border();
+        public Border Bottom { get; internal set; } = new Border();
         /// <summary>
-        /// Performs border.
+        /// Gets the diagonal border settings.
         /// </summary>
-        /// <returns>The border diagonal { get; set; } = new.</returns>
-        public Border Diagonal { get; set; } = new Border();
+        public Border Diagonal { get; internal set; } = new Border();
         /// <summary>
         /// Gets or sets a value indicating whether diagonal up.
         /// </summary>
@@ -46,7 +41,7 @@ namespace Aspose.Cells_FOSS
         /// Creates a copy of the current instance.
         /// </summary>
         /// <returns>The borders.</returns>
-        public Borders Clone()
+        internal Borders Clone()
         {
             return new Borders
             {

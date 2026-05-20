@@ -6,7 +6,7 @@ namespace Aspose.Cells_FOSS.Core
     /// <summary>
     /// Specifies cell value kind.
     /// </summary>
-    public enum CellValueKind
+    internal enum CellValueKind
     {
         Blank,
         String,
@@ -17,3 +17,4 @@ namespace Aspose.Cells_FOSS.Core
         Formula
     }
 }
+

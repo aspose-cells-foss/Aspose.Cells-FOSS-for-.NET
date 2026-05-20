@@ -7,7 +7,7 @@ namespace Aspose.Cells_FOSS.Core
     /// <summary>
     /// Represents shared string repository.
     /// </summary>
-    public sealed class SharedStringRepository
+    internal sealed class SharedStringRepository
     {
         private readonly Dictionary<string, int> _indices = new Dictionary<string, int>(StringComparer.Ordinal);
         private readonly List<string> _values = new List<string>();
@@ -66,3 +66,4 @@ namespace Aspose.Cells_FOSS.Core
         }
     }
 }
+

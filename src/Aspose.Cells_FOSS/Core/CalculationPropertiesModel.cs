@@ -7,7 +7,7 @@ namespace Aspose.Cells_FOSS.Core
     /// <summary>
     /// Represents calculation properties model.
     /// </summary>
-    public sealed class CalculationPropertiesModel
+    internal sealed class CalculationPropertiesModel
     {
         /// <summary>
         /// Gets or sets the calculation id.
@@ -99,3 +99,4 @@ namespace Aspose.Cells_FOSS.Core
         }
     }
 }
+

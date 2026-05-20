@@ -7,7 +7,7 @@ namespace Aspose.Cells_FOSS.Core
     /// <summary>
     /// Represents print options model.
     /// </summary>
-    public sealed class PrintOptionsModel
+    internal sealed class PrintOptionsModel
     {
         /// <summary>
         /// Gets or sets a value indicating whether grid lines.
@@ -27,3 +27,4 @@ namespace Aspose.Cells_FOSS.Core
         public bool VerticalCentered { get; set; }
     }
 }
+

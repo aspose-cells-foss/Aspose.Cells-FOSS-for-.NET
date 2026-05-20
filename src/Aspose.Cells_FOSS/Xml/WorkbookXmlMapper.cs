@@ -6,7 +6,7 @@ namespace Aspose.Cells_FOSS.Xml
     /// <summary>
     /// Represents workbook xml mapper.
     /// </summary>
-    public sealed class WorkbookXmlMapper
+    internal sealed class WorkbookXmlMapper
     {
         /// <summary>
         /// Reads data from the specified source.
@@ -31,3 +31,4 @@ namespace Aspose.Cells_FOSS.Xml
         }
     }
 }
+

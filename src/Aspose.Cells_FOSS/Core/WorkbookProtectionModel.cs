@@ -7,7 +7,7 @@ namespace Aspose.Cells_FOSS.Core
     /// <summary>
     /// Represents workbook protection model.
     /// </summary>
-    public sealed class WorkbookProtectionModel
+    internal sealed class WorkbookProtectionModel
     {
         /// <summary>
         /// Gets or sets a value indicating whether lock structure.
@@ -57,3 +57,4 @@ namespace Aspose.Cells_FOSS.Core
         }
     }
 }
+

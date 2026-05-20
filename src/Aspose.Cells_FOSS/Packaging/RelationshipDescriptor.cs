@@ -6,7 +6,7 @@ namespace Aspose.Cells_FOSS.Packaging
     /// <summary>
     /// Represents relationship descriptor.
     /// </summary>
-    public sealed class RelationshipDescriptor
+    internal sealed class RelationshipDescriptor
     {
         /// <summary>
         /// Gets or sets the id.
@@ -26,3 +26,4 @@ namespace Aspose.Cells_FOSS.Packaging
         public bool IsExternal { get; set; }
     }
 }
+

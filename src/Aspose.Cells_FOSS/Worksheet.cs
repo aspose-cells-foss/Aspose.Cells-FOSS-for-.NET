@@ -211,6 +211,23 @@ namespace Aspose.Cells_FOSS
         /// <summary>
         /// Gets or sets the worksheet zoom percentage.
         /// </summary>
+        /// <remarks>
+        /// Valid zoom values range from 10 to 400, representing 10% to 400% zoom level.
+        /// A value of 100 represents normal zoom (100%), lower values zoom out, higher values zoom in.
+        /// The zoom setting affects the visual display of the worksheet but does not change the actual cell data.
+        /// </remarks>
+        /// <example>
+        /// <code>
+        /// var workbook = new Workbook();
+        /// var worksheet = workbook.Worksheets[0];
+        ///
+        /// // Set zoom to 150% for better visibility
+        /// worksheet.Zoom = 150;
+        ///
+        /// // Set zoom to 50% for overview
+        /// worksheet.Zoom = 50;
+        /// </code>
+        /// </example>
         public int Zoom
         {
             get

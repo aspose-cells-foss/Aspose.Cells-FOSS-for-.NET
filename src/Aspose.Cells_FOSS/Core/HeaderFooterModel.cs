@@ -7,7 +7,7 @@ namespace Aspose.Cells_FOSS.Core
     /// <summary>
     /// Represents header footer model.
     /// </summary>
-    public sealed class HeaderFooterModel
+    internal sealed class HeaderFooterModel
     {
         /// <summary>
         /// Gets or sets the left header.
@@ -35,3 +35,4 @@ namespace Aspose.Cells_FOSS.Core
         public string RightFooter { get; set; }
     }
 }
+

@@ -6,7 +6,7 @@ namespace Aspose.Cells_FOSS.Core
     /// <summary>
     /// Specifies vertical alignment.
     /// </summary>
-    public enum VerticalAlignment
+    internal enum VerticalAlignment
     {
         Bottom,
         Center,
@@ -15,3 +15,4 @@ namespace Aspose.Cells_FOSS.Core
         Distributed
     }
 }
+

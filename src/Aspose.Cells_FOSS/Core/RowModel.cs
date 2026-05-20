@@ -7,7 +7,7 @@ namespace Aspose.Cells_FOSS.Core
     /// <summary>
     /// Represents row model.
     /// </summary>
-    public sealed class RowModel
+    internal sealed class RowModel
     {
         /// <summary>
         /// Gets or sets the height.
@@ -23,3 +23,4 @@ namespace Aspose.Cells_FOSS.Core
         public int? StyleIndex { get; set; }
     }
 }
+

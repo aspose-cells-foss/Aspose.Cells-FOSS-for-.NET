@@ -6,7 +6,7 @@ namespace Aspose.Cells_FOSS.InternalValidation
     /// <summary>
     /// Represents validation message.
     /// </summary>
-    public sealed class ValidationMessage
+    internal sealed class ValidationMessage
     {
         /// <summary>
         /// Gets or sets the code.
@@ -22,3 +22,4 @@ namespace Aspose.Cells_FOSS.InternalValidation
         public string Message { get; set; } = string.Empty;
     }
 }
+

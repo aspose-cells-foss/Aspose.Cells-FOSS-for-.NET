@@ -7,7 +7,7 @@ namespace Aspose.Cells_FOSS.Core
     /// <summary>
     /// Represents auto filter dynamic filter model.
     /// </summary>
-    public sealed class AutoFilterDynamicFilterModel
+    internal sealed class AutoFilterDynamicFilterModel
     {
         /// <summary>
         /// Gets or sets a value indicating whether enabled.
@@ -38,3 +38,4 @@ namespace Aspose.Cells_FOSS.Core
         }
     }
 }
+

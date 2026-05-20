@@ -6,7 +6,7 @@ namespace Aspose.Cells_FOSS.Packaging
     /// <summary>
     /// Represents an error that occurs during relationship resolution.
     /// </summary>
-    public class RelationshipResolutionException : PackageStructureException
+    internal class RelationshipResolutionException : PackageStructureException
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="RelationshipResolutionException"/> class.
@@ -15,3 +15,4 @@ namespace Aspose.Cells_FOSS.Packaging
         public RelationshipResolutionException(string message) : base(message) { }
     }
 }
+

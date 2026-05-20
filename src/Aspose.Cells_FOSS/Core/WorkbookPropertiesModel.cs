@@ -7,7 +7,7 @@ namespace Aspose.Cells_FOSS.Core
     /// <summary>
     /// Represents workbook properties model.
     /// </summary>
-    public sealed class WorkbookPropertiesModel
+    internal sealed class WorkbookPropertiesModel
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="WorkbookPropertiesModel"/> class.
@@ -112,3 +112,4 @@ namespace Aspose.Cells_FOSS.Core
         }
     }
 }
+

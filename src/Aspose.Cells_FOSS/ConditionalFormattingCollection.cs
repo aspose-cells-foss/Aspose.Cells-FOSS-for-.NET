@@ -77,7 +77,7 @@ namespace Aspose.Cells_FOSS
         /// <param name="totalColumns">The total number of columns.</param>
         public void RemoveArea(int startRow, int startColumn, int totalRows, int totalColumns)
         {
-            var area = new CellArea(startRow, startColumn, totalRows, totalColumns);
+            var area = CellArea.CreateCellArea(startRow, startColumn, startRow + totalRows - 1, startColumn + totalColumns - 1);
             for (var index = _collections.Count - 1; index >= 0; index--)
             {
                 var collection = new FormatConditionCollection(_collections, _collections[index]);

@@ -1,0 +1,1413 @@
+{
+  "source_base_path": "E:/Aspose.Cells_Foss/documentation",
+  "xrefmap": "xrefmap.yml",
+  "files": [
+    {
+      "type": "Resource",
+      "output": {
+        "resource": {
+          "relative_path": "index.json"
+        }
+      }
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.AutoFilter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.AutoFilter.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.AutoFilter",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.AutoFilter.yml\" sourcestartlinenumber=\"1\">Represents auto filter.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.AutoFilterColorFilter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.AutoFilterColorFilter.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.AutoFilterColorFilter",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.AutoFilterColorFilter.yml\" sourcestartlinenumber=\"1\">Represents auto filter color filter.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.AutoFilterCustomFilter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.AutoFilterCustomFilter.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.AutoFilterCustomFilter",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.AutoFilterCustomFilter.yml\" sourcestartlinenumber=\"1\">Represents auto filter custom filter.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.AutoFilterCustomFilterCollection.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.AutoFilterCustomFilterCollection.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.AutoFilterCustomFilterCollection",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.AutoFilterCustomFilterCollection.yml\" sourcestartlinenumber=\"1\">Represents a collection of auto filter custom filter objects.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.AutoFilterDynamicFilter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.AutoFilterDynamicFilter.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.AutoFilterDynamicFilter",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.AutoFilterDynamicFilter.yml\" sourcestartlinenumber=\"1\">Represents auto filter dynamic filter.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.AutoFilterSortCondition.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.AutoFilterSortCondition.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.AutoFilterSortCondition",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.AutoFilterSortCondition.yml\" sourcestartlinenumber=\"1\">Represents auto filter sort condition.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.AutoFilterSortConditionCollection.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.AutoFilterSortConditionCollection.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.AutoFilterSortConditionCollection",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.AutoFilterSortConditionCollection.yml\" sourcestartlinenumber=\"1\">Represents a collection of auto filter sort condition objects.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.AutoFilterSortState.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.AutoFilterSortState.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.AutoFilterSortState",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.AutoFilterSortState.yml\" sourcestartlinenumber=\"1\">Represents auto filter sort state.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.AutoFilterTop10.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.AutoFilterTop10.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.AutoFilterTop10",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.AutoFilterTop10.yml\" sourcestartlinenumber=\"1\">Represents auto filter top10.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.AutoShapeType.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.AutoShapeType.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.AutoShapeType",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.AutoShapeType.yml\" sourcestartlinenumber=\"1\">Specifies the type of an auto shape (preset geometry).</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.Border.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.Border.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.Border",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.Border.yml\" sourcestartlinenumber=\"1\">Represents border.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.BorderStyleType.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.BorderStyleType.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.BorderStyleType",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.BorderStyleType.yml\" sourcestartlinenumber=\"1\">Specifies border style type.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.Borders.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.Borders.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.Borders",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.Borders.yml\" sourcestartlinenumber=\"1\">Represents borders.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.CalculationProperties.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.CalculationProperties.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.CalculationProperties",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.CalculationProperties.yml\" sourcestartlinenumber=\"1\">Represents calculation properties.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.Cell.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.Cell.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.Cell",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.Cell.yml\" sourcestartlinenumber=\"1\">Represents a single worksheet cell and exposes value, formula, and style operations.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.CellArea.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.CellArea.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.CellArea",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.CellArea.yml\" sourcestartlinenumber=\"1\">Represents cell area.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.CellValueType.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.CellValueType.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.CellValueType",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.CellValueType.yml\" sourcestartlinenumber=\"1\">Specifies cell value type.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.Cells.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.Cells.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.Cells",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.Cells.yml\" sourcestartlinenumber=\"1\">Provides access to worksheet cells, rows, columns, and merged ranges.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.CellsException.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.CellsException.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.CellsException",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.CellsException.yml\" sourcestartlinenumber=\"1\">Represents an error that occurs during cells.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.Chart.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.Chart.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.Chart",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.Chart.yml\" sourcestartlinenumber=\"1\">Represents a chart embedded in a worksheet.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.ChartCollection.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.ChartCollection.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.ChartCollection",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.ChartCollection.yml\" sourcestartlinenumber=\"1\">Represents collection of charts on a worksheet.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.ChartType.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.ChartType.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.ChartType",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.ChartType.yml\" sourcestartlinenumber=\"1\">Specifies the chart type.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.Color.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.Color.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.Color",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.Color.yml\" sourcestartlinenumber=\"1\">Represents color.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.Column.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.Column.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.Column",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.Column.yml\" sourcestartlinenumber=\"1\">Represents column.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.ColumnCollection.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.ColumnCollection.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.ColumnCollection",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.ColumnCollection.yml\" sourcestartlinenumber=\"1\">Represents a collection of column objects.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.Comment.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.Comment.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.Comment",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.Comment.yml\" sourcestartlinenumber=\"1\">Represents a worksheet comment (legacy note) anchored to a single cell.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.CommentCollection.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.CommentCollection.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.CommentCollection",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.CommentCollection.yml\" sourcestartlinenumber=\"1\">Represents the collection of comments (legacy notes) on a worksheet.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.ConditionalFormattingCollection.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.ConditionalFormattingCollection.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.ConditionalFormattingCollection",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.ConditionalFormattingCollection.yml\" sourcestartlinenumber=\"1\">Represents a collection of conditional formatting objects.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.CoreDocumentProperties.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.CoreDocumentProperties.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.CoreDocumentProperties",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.CoreDocumentProperties.yml\" sourcestartlinenumber=\"1\">Represents core document properties.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.DefinedName.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.DefinedName.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.DefinedName",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.DefinedName.yml\" sourcestartlinenumber=\"1\">Represents defined name.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.DefinedNameCollection.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.DefinedNameCollection.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.DefinedNameCollection",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.DefinedNameCollection.yml\" sourcestartlinenumber=\"1\">Represents a collection of defined name objects.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.DiagnosticSeverity.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.DiagnosticSeverity.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.DiagnosticSeverity",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.DiagnosticSeverity.yml\" sourcestartlinenumber=\"1\">Specifies diagnostic severity.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.DocumentProperties.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.DocumentProperties.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.DocumentProperties",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.DocumentProperties.yml\" sourcestartlinenumber=\"1\">Represents document properties.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.ExtendedDocumentProperties.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.ExtendedDocumentProperties.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.ExtendedDocumentProperties",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.ExtendedDocumentProperties.yml\" sourcestartlinenumber=\"1\">Represents extended document properties.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.FillPattern.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.FillPattern.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.FillPattern",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.FillPattern.yml\" sourcestartlinenumber=\"1\">Specifies fill pattern.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.FilterColumn.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.FilterColumn.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.FilterColumn",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.FilterColumn.yml\" sourcestartlinenumber=\"1\">Represents filter column.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.FilterColumnCollection.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.FilterColumnCollection.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.FilterColumnCollection",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.FilterColumnCollection.yml\" sourcestartlinenumber=\"1\">Represents a collection of filter column objects.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.FilterOperatorType.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.FilterOperatorType.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.FilterOperatorType",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.FilterOperatorType.yml\" sourcestartlinenumber=\"1\">Specifies filter operator type.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.FilterValueCollection.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.FilterValueCollection.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.FilterValueCollection",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.FilterValueCollection.yml\" sourcestartlinenumber=\"1\">Represents a collection of filter value objects.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.Font.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.Font.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.Font",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.Font.yml\" sourcestartlinenumber=\"1\">Represents font.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.FontUnderlineType.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.FontUnderlineType.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.FontUnderlineType",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.FontUnderlineType.yml\" sourcestartlinenumber=\"1\">Enumerates font underline types.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.FormatCondition.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.FormatCondition.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.FormatCondition",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.FormatCondition.yml\" sourcestartlinenumber=\"1\">Represents format condition.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.FormatConditionCollection.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.FormatConditionCollection.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.FormatConditionCollection",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.FormatConditionCollection.yml\" sourcestartlinenumber=\"1\">Represents a collection of format condition objects.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.FormatConditionType.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.FormatConditionType.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.FormatConditionType",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.FormatConditionType.yml\" sourcestartlinenumber=\"1\">Specifies format condition type.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.FormulaException.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.FormulaException.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.FormulaException",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.FormulaException.yml\" sourcestartlinenumber=\"1\">Represents an error that occurs during formula.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.HorizontalAlignmentType.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.HorizontalAlignmentType.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.HorizontalAlignmentType",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.HorizontalAlignmentType.yml\" sourcestartlinenumber=\"1\">Specifies horizontal alignment type.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.Hyperlink.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.Hyperlink.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.Hyperlink",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.Hyperlink.yml\" sourcestartlinenumber=\"1\">Represents hyperlink.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.HyperlinkCollection.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.HyperlinkCollection.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.HyperlinkCollection",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.HyperlinkCollection.yml\" sourcestartlinenumber=\"1\">Encapsulates the hyperlinks defined for a worksheet.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.IWarningCallback.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.IWarningCallback.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.IWarningCallback",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.IWarningCallback.yml\" sourcestartlinenumber=\"1\">Defines a callback that receives load warnings.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.ImageType.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.ImageType.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.ImageType",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.ImageType.yml\" sourcestartlinenumber=\"1\">Represents the format of an image stored in a worksheet.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.InvalidFileFormatException.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.InvalidFileFormatException.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.InvalidFileFormatException",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.InvalidFileFormatException.yml\" sourcestartlinenumber=\"1\">Represents an error that occurs during invalid file format.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.ListColumn.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.ListColumn.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.ListColumn",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.ListColumn.yml\" sourcestartlinenumber=\"1\">Represents a single column in an Excel table.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.ListColumnCollection.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.ListColumnCollection.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.ListColumnCollection",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.ListColumnCollection.yml\" sourcestartlinenumber=\"1\">Represents the ordered collection of columns in an Excel table.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.ListObject.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.ListObject.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.ListObject",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.ListObject.yml\" sourcestartlinenumber=\"1\">Represents an Excel table (structured reference / ListObject).</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.ListObjectCollection.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.ListObjectCollection.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.ListObjectCollection",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.ListObjectCollection.yml\" sourcestartlinenumber=\"1\">Represents the collection of Excel tables on a worksheet.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.LoadDiagnostics.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.LoadDiagnostics.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.LoadDiagnostics",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.LoadDiagnostics.yml\" sourcestartlinenumber=\"1\">Represents load diagnostics.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.LoadFormat.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.LoadFormat.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.LoadFormat",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.LoadFormat.yml\" sourcestartlinenumber=\"1\">Specifies load format.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.LoadIssue.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.LoadIssue.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.LoadIssue",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.LoadIssue.yml\" sourcestartlinenumber=\"1\">Represents load issue.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.LoadOptions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.LoadOptions.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.LoadOptions",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.LoadOptions.yml\" sourcestartlinenumber=\"1\">Specifies how a workbook should be loaded.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.NumberFormat.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.NumberFormat.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.NumberFormat",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.NumberFormat.yml\" sourcestartlinenumber=\"1\">Provides number format operations.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.OperatorType.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.OperatorType.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.OperatorType",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.OperatorType.yml\" sourcestartlinenumber=\"1\">Specifies operator type.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.PageOrientationType.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.PageOrientationType.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.PageOrientationType",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.PageOrientationType.yml\" sourcestartlinenumber=\"1\">Specifies page orientation type.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.PageSetup.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.PageSetup.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.PageSetup",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.PageSetup.yml\" sourcestartlinenumber=\"1\">Represents worksheet print and page-layout settings.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.PaperSizeType.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.PaperSizeType.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.PaperSizeType",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.PaperSizeType.yml\" sourcestartlinenumber=\"1\">Specifies paper size type.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.Picture.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.Picture.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.Picture",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.Picture.yml\" sourcestartlinenumber=\"1\">Represents a picture (image) anchored to a worksheet.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.PictureCollection.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.PictureCollection.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.PictureCollection",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.PictureCollection.yml\" sourcestartlinenumber=\"1\">Represents collection of pictures anchored to a worksheet.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.Row.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.Row.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.Row",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.Row.yml\" sourcestartlinenumber=\"1\">Represents row.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.RowCollection.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.RowCollection.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.RowCollection",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.RowCollection.yml\" sourcestartlinenumber=\"1\">Represents a collection of row objects.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.SaveFormat.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.SaveFormat.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.SaveFormat",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.SaveFormat.yml\" sourcestartlinenumber=\"1\">Specifies save format.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.SaveOptions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.SaveOptions.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.SaveOptions",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.SaveOptions.yml\" sourcestartlinenumber=\"1\">Specifies how a workbook should be saved.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.Shape.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.Shape.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.Shape",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.Shape.yml\" sourcestartlinenumber=\"1\">Represents a drawing object (auto shape) anchored to a worksheet.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.ShapeCollection.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.ShapeCollection.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.ShapeCollection",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.ShapeCollection.yml\" sourcestartlinenumber=\"1\">Represents collection of drawing objects (shapes) on a worksheet.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.Style.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.Style.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.Style",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.Style.yml\" sourcestartlinenumber=\"1\">Represents a mutable cell style facade that can be applied to one or more cells.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.StyleException.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.StyleException.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.StyleException",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.StyleException.yml\" sourcestartlinenumber=\"1\">Represents an error that occurs during style.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.StyleFlag.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.StyleFlag.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.StyleFlag",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.StyleFlag.yml\" sourcestartlinenumber=\"1\">Represents flags which indicate applied formatting properties.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.TableStyleType.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.TableStyleType.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.TableStyleType",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.TableStyleType.yml\" sourcestartlinenumber=\"1\">Represents the built-in Excel table style types.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.TargetModeType.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.TargetModeType.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.TargetModeType",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.TargetModeType.yml\" sourcestartlinenumber=\"1\">Specifies target mode type.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.TotalsCalculation.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.TotalsCalculation.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.TotalsCalculation",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.TotalsCalculation.yml\" sourcestartlinenumber=\"1\">Represents the aggregation function shown in a table totals row cell.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.UnsupportedFeatureException.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.UnsupportedFeatureException.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.UnsupportedFeatureException",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.UnsupportedFeatureException.yml\" sourcestartlinenumber=\"1\">Represents an error that occurs during unsupported feature.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.Validation.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.Validation.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.Validation",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.Validation.yml\" sourcestartlinenumber=\"1\">Represents validation.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.ValidationAlertType.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.ValidationAlertType.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.ValidationAlertType",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.ValidationAlertType.yml\" sourcestartlinenumber=\"1\">Specifies validation alert type.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.ValidationCollection.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.ValidationCollection.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.ValidationCollection",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.ValidationCollection.yml\" sourcestartlinenumber=\"1\">Represents a collection of validation objects.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.ValidationType.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.ValidationType.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.ValidationType",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.ValidationType.yml\" sourcestartlinenumber=\"1\">Specifies validation type.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.VerticalAlignmentType.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.VerticalAlignmentType.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.VerticalAlignmentType",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.VerticalAlignmentType.yml\" sourcestartlinenumber=\"1\">Specifies vertical alignment type.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.VisibilityType.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.VisibilityType.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.VisibilityType",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.VisibilityType.yml\" sourcestartlinenumber=\"1\">Specifies visibility type.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.WarningInfo.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.WarningInfo.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.WarningInfo",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.WarningInfo.yml\" sourcestartlinenumber=\"1\">Represents warning info.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.Workbook.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.Workbook.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.Workbook",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.Workbook.yml\" sourcestartlinenumber=\"1\">Represents the root spreadsheet object used to create, load, modify, and save an XLSX workbook.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.WorkbookLoadException.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.WorkbookLoadException.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.WorkbookLoadException",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.WorkbookLoadException.yml\" sourcestartlinenumber=\"1\">Represents an error that occurs during workbook load.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.WorkbookProperties.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.WorkbookProperties.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.WorkbookProperties",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.WorkbookProperties.yml\" sourcestartlinenumber=\"1\">Represents workbook properties.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.WorkbookProtection.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.WorkbookProtection.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.WorkbookProtection",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.WorkbookProtection.yml\" sourcestartlinenumber=\"1\">Represents workbook protection.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.WorkbookSaveException.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.WorkbookSaveException.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.WorkbookSaveException",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.WorkbookSaveException.yml\" sourcestartlinenumber=\"1\">Represents an error that occurs during workbook save.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.WorkbookSettings.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.WorkbookSettings.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.WorkbookSettings",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.WorkbookSettings.yml\" sourcestartlinenumber=\"1\">Represents workbook-level settings that affect date handling and display formatting.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.WorkbookView.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.WorkbookView.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.WorkbookView",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.WorkbookView.yml\" sourcestartlinenumber=\"1\">Represents workbook view.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.Worksheet.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.Worksheet.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.Worksheet",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.Worksheet.yml\" sourcestartlinenumber=\"1\">Encapsulates a single worksheet and its supported v0.1 worksheet features.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.WorksheetCollection.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.WorksheetCollection.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.WorksheetCollection",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.WorksheetCollection.yml\" sourcestartlinenumber=\"1\">Encapsulates the workbook's worksheets and active-sheet state.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.WorksheetProtection.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.WorksheetProtection.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS.WorksheetProtection",
+      "Summary": "<p sourcefile=\"api/Aspose.Cells_FOSS.WorksheetProtection.yml\" sourcestartlinenumber=\"1\">Represents worksheet protection.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Aspose.Cells_FOSS.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Aspose.Cells_FOSS.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Aspose.Cells_FOSS",
+      "Summary": null
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "api/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/toc.html"
+        },
+        ".json": {
+          "relative_path": "api/toc.json"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "index.md",
+      "output": {
+        ".html": {
+          "relative_path": "index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "toc.html"
+        },
+        ".json": {
+          "relative_path": "toc.json"
+        }
+      },
+      "version": ""
+    }
+  ],
+  "groups": [
+    {
+      "xrefmap": "xrefmap.yml"
+    }
+  ]
+}

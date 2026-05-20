@@ -6,7 +6,7 @@ namespace Aspose.Cells_FOSS.Packaging
     /// <summary>
     /// Defines a writer for package models.
     /// </summary>
-    public interface IPackageWriter
+    internal interface IPackageWriter
     {
         /// <summary>
         /// Writes the specified package model to the target stream.

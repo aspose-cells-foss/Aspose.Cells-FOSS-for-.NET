@@ -7,7 +7,7 @@ namespace Aspose.Cells_FOSS.Core
     /// <summary>
     /// Represents border side value.
     /// </summary>
-    public sealed class BorderSideValue
+    internal sealed class BorderSideValue
     {
         /// <summary>
         /// Gets or sets the style.
@@ -27,3 +27,4 @@ namespace Aspose.Cells_FOSS.Core
         }
     }
 }
+

@@ -8,7 +8,7 @@ namespace Aspose.Cells_FOSS
     /// <summary>
     /// Represents hyperlink.
     /// </summary>
-    public sealed class Hyperlink
+    public class Hyperlink
     {
         private readonly IList<HyperlinkModel> _owner;
         private readonly HyperlinkModel _model;
@@ -17,6 +17,16 @@ namespace Aspose.Cells_FOSS
         {
             _owner = owner;
             _model = model;
+        }
+
+        internal bool BelongsTo(IList<HyperlinkModel> owner)
+        {
+            return ReferenceEquals(_owner, owner);
+        }
+
+        internal HyperlinkModel GetModel()
+        {
+            return _model;
         }
 
         /// <summary>
@@ -112,7 +122,12 @@ namespace Aspose.Cells_FOSS
         {
             get
             {
-                return _model.TextToDisplay ?? string.Empty;
+                if (!string.IsNullOrEmpty(_model.TextToDisplay))
+                {
+                    return _model.TextToDisplay;
+                }
+
+                return Address;
             }
             set
             {

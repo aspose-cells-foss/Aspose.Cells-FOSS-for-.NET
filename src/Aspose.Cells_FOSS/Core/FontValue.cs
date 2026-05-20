@@ -1,13 +1,14 @@
 using System.IO;
 using System;
 using System.Collections.Generic;
+using Aspose.Cells_FOSS;
 
 namespace Aspose.Cells_FOSS.Core
 {
     /// <summary>
     /// Represents font value.
     /// </summary>
-    public sealed class FontValue
+    internal sealed class FontValue
     {
         /// <summary>
         /// Gets or sets the name.
@@ -26,9 +27,9 @@ namespace Aspose.Cells_FOSS.Core
         /// </summary>
         public bool Italic { get; set; }
         /// <summary>
-        /// Gets or sets a value indicating whether underline.
+        /// Gets or sets the underline type.
         /// </summary>
-        public bool Underline { get; set; }
+        public FontUnderlineType Underline { get; set; }
         /// <summary>
         /// Gets or sets a value indicating whether strike through.
         /// </summary>
@@ -57,3 +58,4 @@ namespace Aspose.Cells_FOSS.Core
         }
     }
 }
+

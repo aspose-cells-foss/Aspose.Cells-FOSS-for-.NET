@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Validation - Aspose.Cells FOSS for .NET</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #003399;
+            color: white;
+            padding: 20px;
+            margin: -20px -20px 20px -20px;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .section {
+            margin-bottom: 40px;
+        }
+        .section-title {
+            color: #003399;
+            border-bottom: 2px solid #003399;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+        pre {
+            background-color: #f4f4f4;
+            padding: 15px;
+            border-radius: 3px;
+            overflow-x: auto;
+            border: 1px solid #ddd;
+        }
+        code {
+            font-family: 'Courier New', monospace;
+            color: #d63384;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #003399;
+            text-decoration: none;
+        }
+        .method-section {
+            background-color: #f9f9f9;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-left: 4px solid #4CAF50;
+            border-radius: 3px;
+        }
+        .method-name {
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            color: #003399;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Data Validation</h1>
+        <p>Complete documentation for data validation in Aspose.Cells FOSS for .NET</p>
+    </div>
+
+    <div class="content">
+        <a href="index.html" class="back-link">â†?Back to Index</a>
+
+        <div class="section">
+            <h2 class="section-title">Data Validation Overview</h2>
+            <p>Data validation allows you to control what users can enter into cells in your worksheets. You can restrict input to specific values, ranges, data types, or custom formulas, and provide error messages when users enter invalid data.</p>
+
+            <div class="method-section">
+                <div class="method-name">Key Validation Features:</div>
+                <ul>
+                    <li>Restrict cell input to specific data types (whole numbers, decimals, dates, times, text length, etc.)</li>
+                    <li>Create in-cell dropdown lists</li>
+                    <li>Set value ranges (minimum, maximum, between, not between)</li>
+                    <li>Use custom formulas for complex validation rules</li>
+                    <li>Display input prompts to guide users</li>
+                    <li>Show error messages when validation fails</li>
+                    <li>Choose between warning or error styles</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Validation Types</h2>
+
+            <div class="method-section">
+                <div class="method-name">Available Validation Types</div>
+                <pre><code>// Whole number validation
+var validation = worksheet.Validations.Add(ValidationType.WholeNumber);
+
+// Decimal validation
+var validation = worksheet.Validations.Add(ValidationType.Decimal);
+
+// List validation (dropdown)
+var validation = worksheet.Validations.Add(ValidationType.List);
+
+// Date validation
+var validation = worksheet.Validations.Add(ValidationType.Date);
+
+// Time validation
+var validation = worksheet.Validations.Add(ValidationType.Time);
+
+// Text length validation
+var validation = worksheet.Validations.Add(ValidationType.TextLength);
+
+// Custom formula validation
+var validation = worksheet.Validations.Add(ValidationType.Custom);
+
+// Any value (no restriction)
+var validation = worksheet.Validations.Add(ValidationType.AnyValue);</code></pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Creating Data Validations</h2>
+
+            <div class="method-section">
+                <div class="method-name">Whole Number Validation</div>
+                <pre><code>// Create whole number validation for range A1:A10
+var validation = worksheet.Validations.Add(ValidationType.WholeNumber);
+validation.Operator = OperatorType.Between;
+validation.Formula1 = "1";
+validation.Formula2 = "100";
+validation.ErrorMessage = "Please enter a whole number between 1 and 100";
+validation.ErrorTitle = "Invalid Input";
+validation.ShowError = true;
+validation.AlertStyle = ValidationAlertType.Stop;
+
+// Apply validation to range
+validation.AreaList.Add(worksheet.Cells.CreateRange(0, 0, 10, 1));  // A1:A10</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Decimal Validation</div>
+                <pre><code>// Create decimal validation
+var validation = worksheet.Validations.Add(ValidationType.Decimal);
+validation.Operator = OperatorType.GreaterThanOrEqual;
+validation.Formula1 = "0.01";
+validation.ErrorMessage = "Please enter a value greater than or equal to 0.01";
+validation.ShowError = true;
+validation.AlertStyle = ValidationAlertType.Stop;
+
+// Apply to cell B1
+validation.AreaList.Add(worksheet.Cells.CreateRange(0, 1, 1, 1));  // B1</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Date Validation</div>
+                <pre><code>// Create date validation for future dates only
+var validation = worksheet.Validations.Add(ValidationType.Date);
+validation.Operator = OperatorType.GreaterThan;
+validation.Formula1 = "TODAY()";
+validation.ErrorMessage = "Please enter a future date";
+validation.ShowError = true;
+validation.AlertStyle = ValidationAlertType.Warning;
+
+// Apply to date entry cells
+validation.AreaList.Add(worksheet.Cells.CreateRange(2, 0, 10, 1));  // A3:A12</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Time Validation</div>
+                <pre><code>// Create time validation for business hours (9 AM - 5 PM)
+var validation = worksheet.Validations.Add(ValidationType.Time);
+validation.Operator = OperatorType.Between;
+validation.Formula1 = "9:00";
+validation.Formula2 = "17:00";
+validation.ErrorMessage = "Please enter a time between 9:00 AM and 5:00 PM";
+validation.ShowError = true;
+
+// Apply to time entry cells
+validation.AreaList.Add(worksheet.Cells.CreateRange(3, 2, 10, 1));  // C4:C13</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Text Length Validation</div>
+                <pre><code>// Create text length validation (must be between 3 and 50 characters)
+var validation = worksheet.Validations.Add(ValidationType.TextLength);
+validation.Operator = OperatorType.Between;
+validation.Formula1 = "3";
+validation.Formula2 = "50";
+validation.ErrorMessage = "Text must be between 3 and 50 characters";
+validation.ShowError = true;
+validation.AlertStyle = ValidationAlertType.Stop;
+
+// Apply to description cells
+validation.AreaList.Add(worksheet.Cells.CreateRange(4, 1, 20, 1));  // B5:B24</code></pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">List Validation (Dropdown)</h2>
+
+            <div class="method-section">
+                <div class="method-name">Static List</div>
+                <pre><code>// Create dropdown list with static values
+var validation = worksheet.Validations.Add(ValidationType.List);
+validation.Formula1 = "Apple,Banana,Orange,Grape,Mango";
+validation.ErrorMessage = "Please select a valid fruit from the list";
+validation.ShowError = true;
+
+// Apply to cell A1
+validation.AreaList.Add(worksheet.Cells.CreateRange(0, 0, 1, 1));
+
+// Add input prompt
+validation.InputMessage = "Select a fruit from the dropdown list";
+validation.InputTitle = "Fruit Selection";
+validation.ShowInput = true;</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Dynamic List (Cell Range)</div>
+                <pre><code>// First, populate a list of options in a range
+string[] departments = { "HR", "Finance", "IT", "Sales", "Marketing", "Operations" };
+for (int i = 0; i < departments.Length; i++)
+{
+    worksheet.Cells[i + 20, 0].PutValue(departments[i]);
+}
+
+// Create dropdown list referencing the range
+var validation = worksheet.Validations.Add(ValidationType.List);
+validation.Formula1 = "=$A$20:$A$25";  // Reference to department list
+validation.ErrorMessage = "Please select a valid department";
+validation.ShowError = true;
+
+// Apply to department selection cells
+validation.AreaList.Add(worksheet.Cells.CreateRange(1, 0, 10, 1));  // A2:A11</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Dynamic List (Named Range)</div>
+                <pre><code>// Create a named range for the list
+workbook.DefinedNames.Add("DepartmentList", "Sheet1!$A$20:$A$25");
+
+// Use named range in validation
+var validation = worksheet.Validations.Add(ValidationType.List);
+validation.Formula1 = "DepartmentList";
+validation.ErrorMessage = "Please select a department";
+validation.ShowInput = true;
+validation.InputMessage = "Select from available departments";
+
+// Apply to cells
+validation.AreaList.Add(worksheet.Cells.CreateRange(2, 1, 15, 1));  // B3:B17</code></pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Validation Operators</h2>
+
+            <div class="method-section">
+                <div class="method-name">Comparison Operators</div>
+                <pre><code>// Between (requires Formula1 and Formula2)
+validation.Operator = OperatorType.Between;
+
+// Not between (requires Formula1 and Formula2)
+validation.Operator = OperatorType.NotBetween;
+
+// Equal to
+validation.Operator = OperatorType.Equal;
+
+// Not equal to
+validation.Operator = OperatorType.NotEqual;
+
+// Greater than
+validation.Operator = OperatorType.GreaterThan;
+
+// Less than
+validation.Operator = OperatorType.LessThan;
+
+// Greater than or equal to
+validation.Operator = OperatorType.GreaterThanOrEqual;
+
+// Less than or equal to
+validation.Operator = OperatorType.LessThanOrEqual;</code></pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Custom Formula Validation</h2>
+
+            <div class="method-section">
+                <div class="method-name">Formula-Based Rules</div>
+                <pre><code>// Create custom validation using formula
+var validation = worksheet.Validations.Add(ValidationType.Custom);
+
+// Ensure cell value is even number
+validation.Formula1 = "=MOD(A1, 2) = 0";
+validation.ErrorMessage = "Please enter an even number";
+validation.ShowError = true;
+validation.AlertStyle = ValidationAlertType.Stop;
+validation.AreaList.Add(worksheet.Cells.CreateRange(0, 0, 10, 1));
+
+// Ensure cell value is not empty
+var validation2 = worksheet.Validations.Add(ValidationType.Custom);
+validation2.Formula1 = "=LEN(TRIM(A1)) > 0";
+validation2.ErrorMessage = "This field cannot be empty";
+validation2.ShowError = true;
+validation2.AlertStyle = ValidationAlertType.Stop;
+validation2.AreaList.Add(worksheet.Cells.CreateRange(1, 2, 10, 1));
+
+// Ensure email format (simple check for @ symbol)
+var validation3 = worksheet.Validations.Add(ValidationType.Custom);
+validation3.Formula1 = "=ISNUMBER(FIND(\"@\", A1))";
+validation3.ErrorMessage = "Please enter a valid email address";
+validation3.ShowError = true;
+validation3.AlertStyle = ValidationAlertType.Warning;
+validation3.AreaList.Add(worksheet.Cells.CreateRange(2, 0, 20, 1));</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Complex Custom Validations</div>
+                <pre><code>// Validate product code (starts with PRD followed by 5 digits)
+var validation = worksheet.Validations.Add(ValidationType.Custom);
+validation.Formula1 = "=AND(LEFT(A1,3)=\"PRD\", LEN(A1)=8, ISNUMBER(VALUE(RIGHT(A1,5))))";
+validation.ErrorMessage = "Product code must be PRD followed by 5 digits (e.g., PRD12345)";
+validation.ShowError = true;
+validation.AlertStyle = ValidationAlertType.Stop;
+validation.AreaList.Add(worksheet.Cells.CreateRange(0, 0, 50, 1));
+
+// Validate phone number format (###-###-####)
+var validation2 = worksheet.Validations.Add(ValidationType.Custom);
+validation2.Formula1 = "=AND(LEN(A1)=12, ISNUMBER(VALUE(LEFT(A1,3))), MID(A1,4,1)=\"-\", ISNUMBER(VALUE(MID(A1,5,3))), MID(A1,8,1)=\"-\", ISNUMBER(VALUE(RIGHT(A1,4))))";
+validation2.ErrorMessage = "Phone number format must be ###-###-####";
+validation2.ShowError = true;
+validation2.AlertStyle = ValidationAlertType.Stop;
+validation2.AreaList.Add(worksheet.Cells.CreateRange(1, 1, 50, 1));</code></pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Error Messages and Alerts</h2>
+
+            <div class="method-section">
+                <div class="method-name">Alert Styles</div>
+                <pre><code>// Stop - Prevents invalid entry
+validation.AlertStyle = ValidationAlertType.Stop;
+validation.ErrorMessage = "This value is not allowed";
+validation.ErrorTitle = "Error";
+validation.ShowError = true;
+
+// Warning - Warns but allows invalid entry
+validation.AlertStyle = ValidationAlertType.Warning;
+validation.ErrorMessage = "This value may not be appropriate";
+validation.ErrorTitle = "Warning";
+validation.ShowError = true;
+
+// Information - Provides information but allows invalid entry
+validation.AlertStyle = ValidationAlertType.Information;
+validation.ErrorMessage = "Note about this value";
+validation.ErrorTitle = "Information";
+validation.ShowError = true;</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Input Messages</div>
+                <pre><code>// Show input message when cell is selected
+validation.ShowInput = true;
+validation.InputTitle = "Instructions";
+validation.InputMessage = "Please enter a value between 1 and 100";
+
+// Example with dropdown
+validation.ShowInput = true;
+validation.InputTitle = "Select Option";
+validation.InputMessage = "Click the arrow to select from the dropdown list";
+
+// Hide input message
+validation.ShowInput = false;</code></pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Managing Validations</h2>
+
+            <div class="method-section">
+                <div class="method-name">Accessing Validations</div>
+                <pre><code>// Access validation collection
+var validations = worksheet.Validations;
+
+// Get validation count
+int count = validations.Count;
+
+// Access specific validation by index
+var firstValidation = validations[0];
+
+// Remove validation from a specific cell
+validations.RemoveACell(4, 0);
+
+// Remove validation from an area
+validations.RemoveArea(CellArea.CreateCellArea("A5", "A10"));</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Check Cell Validation</div>
+                <pre><code>// Check validation in a specific cell`r`nvar validation = worksheet.Validations.GetValidationInCell(4, 0);`r`n`r`nif (validation != null)
+{
+    Console.WriteLine("Cell has data validation");
+}</code></pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Complete Example</h2>
+
+            <div class="method-section">
+                <div class="method-name">Employee Data Entry Form</div>
+                <pre><code>using Aspose.Cells_FOSS;
+using System;
+
+class Program
+{
+    static void Main()
+    {
+        var workbook = new Workbook();
+        var worksheet = workbook.Worksheets[0];
+        var cells = worksheet.Cells;
+
+        // Create header
+        cells["A1"].PutValue("Employee Data Entry");
+        var headerStyle = cells["A1"].GetStyle();
+        headerStyle.Font.Bold = true;
+        headerStyle.Font.Size = 14;
+        headerStyle.Font.Color = System.Drawing.Color.White;
+        headerStyle.BackgroundColor = System.Drawing.Color.FromArgb(0, 51, 153);
+        cells["A1"].SetStyle(headerStyle);
+
+        // Create labels
+        cells["A3"].PutValue("Employee ID:");
+        cells["A4"].PutValue("Full Name:");
+        cells["A5"].PutValue("Department:");
+        cells["A6"].PutValue("Hire Date:");
+        cells["A7"].PutValue("Salary:");
+        cells["A8"].PutValue("Email:");
+        cells["A9"].PutValue("Phone:");
+
+        // Apply label styling
+        var labelStyle = workbook.CreateStyle();
+        labelStyle.Font.Bold = true;
+        for (int row = 3; row <= 9; row++)
+        {
+            cells[row, 0].SetStyle(labelStyle);
+        }
+
+        // Validation for Employee ID (must be EMP followed by 4 digits)
+        var empIdValidation = worksheet.Validations.Add(ValidationType.Custom);
+        empIdValidation.Formula1 = "=AND(LEFT(B3,3)=\"EMP\", LEN(B3)=7, ISNUMBER(VALUE(RIGHT(B3,4))))";
+        empIdValidation.ErrorMessage = "Employee ID must be EMP followed by 4 digits (e.g., EMP1234)";
+        empIdValidation.ErrorTitle = "Invalid Employee ID";
+        empIdValidation.ShowInput = true;
+        empIdValidation.InputMessage = "Enter employee ID (format: EMP####)";
+        empIdValidation.ShowError = true;
+        empIdValidation.AlertStyle = ValidationAlertType.Stop;
+        empIdValidation.AreaList.Add(cells.CreateRange(2, 1, 1, 1));
+
+        // Validation for Department (dropdown list)
+        var deptValidation = worksheet.Validations.Add(ValidationType.List);
+        deptValidation.Formula1 = "HR,Finance,IT,Sales,Marketing,Operations,Engineering";
+        deptValidation.ErrorMessage = "Please select a valid department";
+        deptValidation.ErrorTitle = "Invalid Department";
+        deptValidation.ShowInput = true;
+        deptValidation.InputMessage = "Select department from dropdown";
+        deptValidation.ShowError = true;
+        deptValidation.AlertStyle = ValidationAlertType.Stop;
+        deptValidation.AreaList.Add(cells.CreateRange(4, 1, 1, 1));
+
+        // Validation for Hire Date (must be future date)
+        var dateValidation = worksheet.Validations.Add(ValidationType.Date);
+        dateValidation.Operator = OperatorType.GreaterThan;
+        dateValidation.Formula1 = "TODAY()";
+        dateValidation.ErrorMessage = "Hire date must be a future date";
+        dateValidation.ErrorTitle = "Invalid Date";
+        dateValidation.ShowInput = true;
+        dateValidation.InputMessage = "Enter future hire date";
+        dateValidation.ShowError = true;
+        dateValidation.AlertStyle = ValidationAlertType.Warning;
+        dateValidation.AreaList.Add(cells.CreateRange(5, 1, 1, 1));
+
+        // Validation for Salary (between 30000 and 200000)
+        var salaryValidation = worksheet.Validations.Add(ValidationType.WholeNumber);
+        salaryValidation.Operator = OperatorType.Between;
+        salaryValidation.Formula1 = "30000";
+        salaryValidation.Formula2 = "200000";
+        salaryValidation.ErrorMessage = "Salary must be between $30,000 and $200,000";
+        salaryValidation.ErrorTitle = "Invalid Salary";
+        salaryValidation.ShowInput = true;
+        salaryValidation.InputMessage = "Enter annual salary ($30,000 - $200,000)";
+        salaryValidation.ShowError = true;
+        salaryValidation.AlertStyle = ValidationAlertType.Stop;
+        salaryValidation.AreaList.Add(cells.CreateRange(6, 1, 1, 1));
+
+        // Validation for Email (must contain @)
+        var emailValidation = worksheet.Validations.Add(ValidationType.Custom);
+        emailValidation.Formula1 = "=AND(ISNUMBER(FIND(\"@\", B8)), ISNUMBER(FIND(\".\", B8)), LEN(B8) > 5)";
+        emailValidation.ErrorMessage = "Please enter a valid email address";
+        emailValidation.ErrorTitle = "Invalid Email";
+        emailValidation.ShowInput = true;
+        emailValidation.InputMessage = "Enter email address (must contain @ and .)";
+        emailValidation.ShowError = true;
+        emailValidation.AlertStyle = ValidationAlertType.Warning;
+        emailValidation.AreaList.Add(cells.CreateRange(7, 1, 1, 1));
+
+        // Validation for Phone (format ###-###-####)
+        var phoneValidation = worksheet.Validations.Add(ValidationType.Custom);
+        phoneValidation.Formula1 = "=AND(LEN(B9)=12, ISNUMBER(VALUE(LEFT(B9,3))), MID(B9,4,1)=\"-\", ISNUMBER(VALUE(MID(B9,5,3))), MID(B9,8,1)=\"-\", ISNUMBER(VALUE(RIGHT(B9,4))))";
+        phoneValidation.ErrorMessage = "Phone number must be in format ###-###-####";
+        phoneValidation.ErrorTitle = "Invalid Phone";
+        phoneValidation.ShowInput = true;
+        phoneValidation.InputMessage = "Enter phone number (format: ###-###-####)";
+        phoneValidation.ShowError = true;
+        phoneValidation.AlertStyle = ValidationAlertType.Stop;
+        phoneValidation.AreaList.Add(cells.CreateRange(8, 1, 1, 1));
+
+        // Auto-fit columns
+        worksheet.AutoFitColumns();
+
+        // Save workbook
+        workbook.Save("employee-entry-form.xlsx");
+        Console.WriteLine("Employee data entry form created with validations!");
+    }
+}</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Product Inventory System</div>
+                <pre><code>using Aspose.Cells_FOSS;
+using System;
+
+class Program
+{
+    static void Main()
+    {
+        var workbook = new Workbook();
+        var worksheet = workbook.Worksheets[0];
+        var cells = worksheet.Cells;
+
+        // Create inventory header
+        cells["A1"].PutValue("Product Inventory");
+        cells["B1"].PutValue("Quantity");
+        cells["C1"].PutValue("Price");
+        cells["D1"].PutValue("Total");
+
+        // Create department dropdown (static list)
+        var categoryValidation = worksheet.Validations.Add(ValidationType.List);
+        categoryValidation.Formula1 = "Electronics,Clothing,Home,Garden,Books,Sports";
+        categoryValidation.ShowInput = true;
+        categoryValidation.InputMessage = "Select product category";
+        categoryValidation.ErrorMessage = "Please select a valid category";
+        categoryValidation.ShowError = true;
+        categoryValidation.AlertStyle = ValidationAlertType.Stop;
+
+        // Create quantity validation (positive whole numbers)
+        var quantityValidation = worksheet.Validations.Add(ValidationType.WholeNumber);
+        quantityValidation.Operator = OperatorType.GreaterThan;
+        quantityValidation.Formula1 = "0";
+        quantityValidation.ShowInput = true;
+        quantityValidation.InputMessage = "Enter quantity (must be positive)";
+        quantityValidation.ErrorMessage = "Quantity must be a positive number";
+        quantityValidation.ShowError = true;
+        quantityValidation.AlertStyle = ValidationAlertType.Stop;
+
+        // Create price validation (positive decimals)
+        var priceValidation = worksheet.Validations.Add(ValidationType.Decimal);
+        priceValidation.Operator = OperatorType.GreaterThan;
+        priceValidation.Formula1 = "0";
+        priceValidation.ShowInput = true;
+        priceValidation.InputMessage = "Enter unit price (must be positive)";
+        priceValidation.ErrorMessage = "Price must be a positive number";
+        priceValidation.ShowError = true;
+        priceValidation.AlertStyle = ValidationAlertType.Stop;
+
+        // Apply validations to data entry rows
+        for (int row = 2; row <= 20; row++)
+        {
+            // Category dropdown
+            categoryValidation.AreaList.Add(cells.CreateRange(row - 1, 0, 1, 1));
+
+            // Quantity validation
+            quantityValidation.AreaList.Add(cells.CreateRange(row - 1, 1, 1, 1));
+
+            // Price validation
+            priceValidation.AreaList.Add(cells.CreateRange(row - 1, 2, 1, 1));
+
+            // Add total formula
+            cells[row - 1, 3].Formula = $"=B{row}*C{row}";
+        }
+
+        // Save workbook
+        workbook.Save("product-inventory.xlsx");
+        Console.WriteLine("Product inventory system with validations created!");
+    }
+}</code></pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Important Notes</h2>
+            <ul>
+                <li><strong>Validation Persistence:</strong> Data validation rules are saved with the workbook and work when the file is opened in Excel.</li>
+                <li><strong>Cell References:</strong> In custom formulas, use cell references relative to the validated cell.</li>
+                <li><strong>List Values:</strong> List values can be comma-separated strings or cell range references.</li>
+                <li><strong>Alert Styles:</strong> Use Stop for strict validation, Warning for soft warnings, and Information for helpful messages.</li>
+                <li><strong>Performance:</strong> Too many validations can impact performance; use only where necessary.</li>
+                <li><strong>Named Ranges:</strong> Use named ranges for dynamic lists to make validation rules more maintainable.</li>
+                <li><strong>Circular References:</strong> Avoid circular references in custom validation formulas.</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Related Documentation</h2>
+            <ul>
+                <li><a href="worksheets.html">Worksheet Operations</a> - Managing worksheets and cells</li>
+                <li><a href="conditional-formatting.html">Conditional Formatting</a> - Visual formatting based on cell values</li>
+                <li><a href="formulas.html">Formulas</a> - Working with formulas in validations</li>
+                <li><a href="styling.html">Styling</a> - Cell formatting for data entry forms</li>
+                <li><a href="api-reference.html">Complete API Reference</a></li>
+                <li><a href="index.html">Back to Main Documentation</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 40px; color: #666; font-size: 0.9em;">
+        <p>&copy; 2026 Aspose.Cells FOSS Project. All rights reserved.</p>
+    </div>
+</body>
+</html>
+
+

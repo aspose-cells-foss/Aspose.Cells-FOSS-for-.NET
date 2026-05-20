@@ -7,7 +7,7 @@ namespace Aspose.Cells_FOSS.Core
     /// <summary>
     /// Represents document properties model.
     /// </summary>
-    public sealed class DocumentPropertiesModel
+    internal sealed class DocumentPropertiesModel
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="DocumentPropertiesModel"/> class.
@@ -47,3 +47,4 @@ namespace Aspose.Cells_FOSS.Core
         }
     }
 }
+

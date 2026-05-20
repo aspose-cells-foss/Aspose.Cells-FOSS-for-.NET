@@ -355,7 +355,7 @@ namespace Aspose.Cells_FOSS
         {
             return string.Concat(
                 font.Name, '|', font.Size.ToString("0.####", CultureInfo.InvariantCulture), '|',
-                font.Bold ? '1' : '0', '|', font.Italic ? '1' : '0', '|', font.Underline ? '1' : '0', '|', font.StrikeThrough ? '1' : '0', '|',
+                font.Bold ? '1' : '0', '|', font.Italic ? '1' : '0', '|', (int)font.Underline, '|', font.StrikeThrough ? '1' : '0', '|',
                 GetColorKey(font.Color));
         }
 

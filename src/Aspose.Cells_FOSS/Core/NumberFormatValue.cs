@@ -7,7 +7,7 @@ namespace Aspose.Cells_FOSS.Core
     /// <summary>
     /// Represents number format value.
     /// </summary>
-    public sealed class NumberFormatValue
+    internal sealed class NumberFormatValue
     {
         /// <summary>
         /// Gets or sets the number.
@@ -28,3 +28,4 @@ namespace Aspose.Cells_FOSS.Core
         }
     }
 }
+

@@ -156,7 +156,7 @@ namespace Aspose.Cells_FOSS
         /// <param name="totalColumns">The total number of columns.</param>
         public void RemoveArea(int startRow, int startColumn, int totalRows, int totalColumns)
         {
-            RemoveArea(new CellArea(startRow, startColumn, totalRows, totalColumns));
+            RemoveArea(CellArea.CreateCellArea(startRow, startColumn, startRow + totalRows - 1, startColumn + totalColumns - 1));
         }
 
         internal void RemoveArea(CellArea area)

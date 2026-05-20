@@ -8,9 +8,9 @@ namespace Aspose.Cells_FOSS
     /// </summary>
     public enum TargetModeType
     {
-        External,
-        FilePath,
-        Email,
-        CellReference
+        External = 0,
+        FilePath = 1,
+        Email = 2,
+        CellReference = 3
     }
 }

@@ -6,7 +6,7 @@ namespace Aspose.Cells_FOSS.Packaging
     /// <summary>
     /// Represents package part descriptor.
     /// </summary>
-    public sealed class PackagePartDescriptor
+    internal sealed class PackagePartDescriptor
     {
         /// <summary>
         /// Gets or sets the part uri.
@@ -22,3 +22,4 @@ namespace Aspose.Cells_FOSS.Packaging
         public string Category { get; set; } = string.Empty;
     }
 }
+

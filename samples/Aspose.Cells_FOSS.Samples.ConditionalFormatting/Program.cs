@@ -31,7 +31,7 @@ namespace Aspose.Cells_FOSS.Samples.ConditionalFormatting
             var betweenStyle = betweenRule.Style;
             betweenStyle.Pattern = FillPattern.Solid;
             betweenStyle.ForegroundColor = Color.FromArgb(255, 255, 199, 206);
-            betweenStyle.Font.Bold = true;
+            betweenStyle.Font.IsBold = true;
             betweenStyle.Font.Color = Color.FromArgb(255, 156, 0, 6);
             betweenRule.Style = betweenStyle;
 
@@ -40,7 +40,7 @@ namespace Aspose.Cells_FOSS.Samples.ConditionalFormatting
             var expressionRule = expressionCollection[expressionCollection.AddCondition(FormatConditionType.Expression, OperatorType.None, "MOD(B1,20)=0", string.Empty)];
             expressionRule.Priority = 2;
             var expressionStyle = expressionRule.Style;
-            expressionStyle.Font.Italic = true;
+            expressionStyle.Font.IsItalic = true;
             expressionStyle.Font.Color = Color.FromArgb(255, 0, 0, 255);
             expressionRule.Style = expressionStyle;
 

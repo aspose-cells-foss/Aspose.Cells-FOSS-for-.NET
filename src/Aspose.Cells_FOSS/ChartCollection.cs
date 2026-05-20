@@ -3,8 +3,32 @@ using Aspose.Cells_FOSS.Core;
 namespace Aspose.Cells_FOSS
 {
     /// <summary>
-    /// Represents the collection of charts on a worksheet.
+    /// Represents collection of charts on a worksheet.
     /// </summary>
+    /// <remarks>
+    /// Charts provide visual data representation and support various chart types including bar, line, pie, etc.
+    /// Charts are positioned by specifying anchor coordinates and reference worksheet data using formulas.
+    /// Each chart can be independently configured with different types and styles.
+    /// </remarks>
+    /// <example>
+    /// <code>
+    /// var workbook = new Workbook();
+    /// var worksheet = workbook.Worksheets[0];
+    ///
+    /// // Prepare data
+    /// worksheet.Cells["A1"].PutValue("Month");
+    /// worksheet.Cells["B1"].PutValue("Sales");
+    /// // ... add more data ...
+    ///
+    /// // Create a bar chart
+    /// int chartIndex = worksheet.Charts.Add(
+    ///     ChartType.Column,
+    ///     "Sheet1!$B$1:$B$12",  // data range formula
+    ///     5, 1, 20, 5);     // anchor coordinates
+    ///
+    /// Console.WriteLine($"Chart {chartIndex} added: {worksheet.Charts[chartIndex].Name}");
+    /// </code>
+    /// </example>
     public sealed class ChartCollection
     {
         private readonly WorksheetModel _model;

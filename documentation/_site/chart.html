@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chart Support - Aspose.Cells FOSS for .NET</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #003399;
+            color: white;
+            padding: 20px;
+            margin: -20px -20px 20px -20px;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .section {
+            margin-bottom: 40px;
+        }
+        .section-title {
+            color: #003399;
+            border-bottom: 2px solid #003399;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+        pre {
+            background-color: #f4f4f4;
+            padding: 15px;
+            border-radius: 3px;
+            overflow-x: auto;
+            border: 1px solid #ddd;
+        }
+        code {
+            font-family: 'Courier New', monospace;
+            color: #d63384;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #003399;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Chart Support</h1>
+        <p>Complete documentation for charts in Aspose.Cells FOSS for .NET</p>
+    </div>
+
+    <div class="content">
+        <a href="index.html" class="back-link">← Back to Index</a>
+
+        <div class="section">
+            <h2 class="section-title">Chart Overview</h2>
+            <p>The <strong>Chart</strong> class represents a chart embedded in a worksheet and provides access to chart properties and data visualization capabilities.</p>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Chart Types</h2>
+            <p>Aspose.Cells FOSS supports the following chart types:</p>
+            <ul>
+                <li><strong>2D Charts:</strong> Bar, Column, Line, Area, Pie, Doughnut, Scatter, Bubble, Radar, Stock</li>
+                <li><strong>3D Charts:</strong> Bar3D, Column3D, Line3D, Area3D, Pie3D, Surface3D, SurfaceWireframe3D, Contour</li>
+                <li><strong>Modern Chart Types:</strong> Waterfall, Treemap, Sunburst, Histogram, BoxAndWhisker, Funnel, Map</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Usage Examples</h2>
+
+            <div class="section">
+                <h3>Creating a Simple Chart</h3>
+                <pre><code>using Aspose.Cells_FOSS;
+
+var workbook = new Workbook();
+var worksheet = workbook.Worksheets[0];
+
+// Add sample data
+worksheet.Cells["A1"].PutValue("Month");
+worksheet.Cells["B1"].PutValue("Sales");
+for (int i = 0; i < 6; i++)
+{
+    worksheet.Cells[i + 2, 0].PutValue($"Month {i + 1}");
+    worksheet.Cells[i + 2, 1].PutValue(new Random().Next(1000, 5000));
+}
+
+// Create a column chart
+int chartIndex = worksheet.Charts.Add(
+    ChartType.Column,
+    "Sheet1!$B$1:$B$6",
+    5, 1, 20, 5);</pre>
+            </div>
+
+            <div class="section">
+                <h3>Creating a Line Chart</h3>
+                <pre><code>using Aspose.Cells_FOSS;
+
+var workbook = new Workbook();
+var worksheet = workbook.Worksheets[0];
+
+// Add data
+worksheet.Cells["A1"].PutValue("X");
+for (int i = 0; i < 10; i++)
+{
+    worksheet.Cells[i + 2, 0].PutValue(i * 10);
+    worksheet.Cells[i + 2, 1].PutValue(Math.Sin(i) * 100);
+}
+
+// Create a line chart
+int chartIndex = worksheet.Charts.Add(
+    ChartType.Line,
+    "Sheet1!$B$1:$B$10",
+    5, 1, 10, 1);</pre>
+            </div>
+
+            <div class="section">
+                <h3>Creating a Pie Chart</h3>
+                <pre><code>using Aspose.Cells_FOSS;
+
+var workbook = new Workbook();
+var worksheet = workbook.Worksheets[0];
+
+// Add data
+worksheet.Cells["A1"].PutValue("Category");
+worksheet.Cells["B1"].PutValue("Value");
+worksheet.Cells["A2"].PutValue(25);
+worksheet.Cells["A3"].PutValue(30);
+worksheet.Cells["A4"].PutValue(45);
+
+// Create a pie chart
+int chartIndex = worksheet.Charts.Add(
+    ChartType.Pie,
+    "Sheet1!$B$1:$B$4",
+    2, 2, 12, 2);</pre>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">Chart Properties</h2>
+                <p>The <strong>Chart</strong> class provides the following properties:</p>
+                <ul>
+                    <li><strong>Name</strong> - Gets the chart display name</li>
+                    <li><strong>ChartType</strong> - Gets the chart type</li>
+                    <li><strong>UpperLeftRow</strong> - Zero-based row of upper-left anchor</li>
+                    <li><strong>UpperLeftColumn</strong> - Zero-based column of upper-left anchor</li>
+                    <li><strong>LowerRightRow</strong> - Zero-based row of lower-right anchor</li>
+                    <li><strong>LowerRightColumn</strong> - Zero-based column of lower-right anchor</li>
+                    <li><strong>ExtentCx</strong> - Width extent in EMU</li>
+                    <li><strong>ExtentCy</strong> - Height extent in EMU</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">ChartCollection</h2>
+                <p>The <strong>ChartCollection</strong> class manages all charts in a worksheet:</p>
+                <ul>
+                    <li><strong>Count</strong> - Gets the number of charts</li>
+                    <li><strong>this[int]</strong> - Gets chart at specified index</li>
+                    <li><strong>Add()</strong> - Adds a new chart of specified type</li>
+                    <li><strong>Parameters:</strong> chart type, data range formula, anchor coordinates</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">ChartType Enumeration</h2>
+                <p>Complete enumeration of supported chart types:</p>
+                <ul>
+                    <li><strong>2D Types:</strong> Bar, Column, Line, Area, Pie, Doughnut, Scatter, Bubble, Radar, Stock</li>
+                    <li><strong>3D Types:</strong> Bar3D, Column3D, Line3D, Area3D, Pie3D, Surface3D, SurfaceWireframe3D, Contour</li>
+                    <li><strong>Modern Types:</strong> Waterfall, Treemap, Sunburst, Histogram, BoxAndWhisker, Funnel, Map</li>
+                </ul>
+            </div>
+
+        <div class="section">
+                <h2 class="section-title">Important Notes</h2>
+                <ul>
+                    <li><strong>Modern Chart Types:</strong> Advanced chart types (Waterfall, Treemap, etc.) must be loaded from existing XLSX files; they cannot be created programmatically using the Add() method.</li>
+                    <li><strong>Chart Positioning:</strong> Charts are positioned using anchor coordinates (upper-left and lower-right).</li>
+                    <li><strong>Data Binding:</strong> Charts reference worksheet data using formulas like "Sheet1!$A$1:$A$10".</li>
+                </ul>
+            </div>
+
+        <div class="section">
+            <h2 class="section-title">Related Documentation</h2>
+                <ul>
+                    <li><a href="api-reference.html">Complete API Reference</a></li>
+                    <li><a href="index.html">Back to Main Documentation</a></li>
+                    <li><a href="examples.html">More Examples</a></li>
+                    <li><a href="features.html">Features Overview</a></li>
+                </ul>
+            </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 40px; color: #666; font-size: 0.9em;">
+        <p>&copy; 2026 Aspose.Cells FOSS Project. All rights reserved.</p>
+    </div>
+</body>
+</html>

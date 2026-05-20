@@ -7,7 +7,7 @@ namespace Aspose.Cells_FOSS.Core
     /// <summary>
     /// Represents worksheet model.
     /// </summary>
-    public sealed class WorksheetModel
+    internal sealed class WorksheetModel
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="WorksheetModel"/> class.
@@ -113,3 +113,4 @@ namespace Aspose.Cells_FOSS.Core
         public ColorValue? TabColor { get; set; }
     }
 }
+

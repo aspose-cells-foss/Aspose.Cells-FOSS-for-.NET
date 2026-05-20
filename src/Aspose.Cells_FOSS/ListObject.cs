@@ -6,6 +6,30 @@ namespace Aspose.Cells_FOSS
     /// <summary>
     /// Represents an Excel table (structured reference / ListObject).
     /// </summary>
+    /// <remarks>
+    /// Tables provide structured data with built-in filtering, sorting, and styling.
+    /// They automatically create filters for table headers and support various table styles.
+    /// Tables can include header rows, total rows, and banding for better readability.
+    /// Structured references allow you to reference table data by name in formulas.
+    /// </remarks>
+    /// <example>
+    /// <code>
+    /// var workbook = new Workbook();
+    /// var worksheet = workbook.Worksheets[0];
+    ///
+    /// // Add sample data
+    /// worksheet.Cells["A1"].PutValue("Name");
+    /// worksheet.Cells["B1"].PutValue("Age");
+    /// worksheet.Cells["A2"].PutValue("Alice");
+    /// worksheet.Cells["B2"].PutValue(30);
+    ///
+    /// // Create a table
+    /// int tableIndex = worksheet.ListObjects.Add(0, 0, 2, 1, true);
+    /// var table = worksheet.ListObjects[tableIndex];
+    /// table.DisplayName = "People Data";
+    /// table.ShowHeaderRow = true;
+    /// </code>
+    /// </example>
     public sealed class ListObject
     {
         private readonly ListObjectModel _model;

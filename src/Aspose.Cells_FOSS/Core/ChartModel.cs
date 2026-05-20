@@ -5,7 +5,7 @@ namespace Aspose.Cells_FOSS.Core
     /// <summary>
     /// Represents a chart embedded in a worksheet drawing layer.
     /// </summary>
-    public sealed class ChartModel
+    internal sealed class ChartModel
     {
         /// <summary>Gets or sets the chart display name.</summary>
         public string Name { get; set; } = string.Empty;
@@ -62,7 +62,7 @@ namespace Aspose.Cells_FOSS.Core
     /// <summary>
     /// Represents a companion file (style, colors) linked from a chart's relationship file.
     /// </summary>
-    public sealed class ChartCompanionFile
+    internal sealed class ChartCompanionFile
     {
         /// <summary>Gets or sets the relationship ID (e.g. "rId1").</summary>
         public string RelationshipId { get; set; }
@@ -77,3 +77,4 @@ namespace Aspose.Cells_FOSS.Core
         public string RawContent { get; set; }
     }
 }
+

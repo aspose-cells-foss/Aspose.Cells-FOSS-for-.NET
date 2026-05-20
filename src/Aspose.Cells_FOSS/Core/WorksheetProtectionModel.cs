@@ -6,7 +6,7 @@ namespace Aspose.Cells_FOSS.Core
     /// <summary>
     /// Represents worksheet protection model.
     /// </summary>
-    public sealed class WorksheetProtectionModel
+    internal sealed class WorksheetProtectionModel
     {
         /// <summary>
         /// Gets or sets a value indicating whether protected.
@@ -151,3 +151,4 @@ namespace Aspose.Cells_FOSS.Core
         }
     }
 }
+

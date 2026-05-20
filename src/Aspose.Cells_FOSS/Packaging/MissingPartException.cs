@@ -6,7 +6,7 @@ namespace Aspose.Cells_FOSS.Packaging
     /// <summary>
     /// Represents an error that occurs during missing part.
     /// </summary>
-    public class MissingPartException : PackageStructureException
+    internal class MissingPartException : PackageStructureException
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="MissingPartException"/> class.
@@ -15,3 +15,4 @@ namespace Aspose.Cells_FOSS.Packaging
         public MissingPartException(string message) : base(message) { }
     }
 }
+

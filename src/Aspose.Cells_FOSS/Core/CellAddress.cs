@@ -7,7 +7,7 @@ namespace Aspose.Cells_FOSS.Core
     /// <summary>
     /// Represents cell address.
     /// </summary>
-    public struct CellAddress : IEquatable<CellAddress>
+    internal struct CellAddress : IEquatable<CellAddress>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="CellAddress"/> class.
@@ -122,3 +122,4 @@ namespace Aspose.Cells_FOSS.Core
         }
     }
 }
+

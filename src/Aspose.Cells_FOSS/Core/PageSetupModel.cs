@@ -7,22 +7,19 @@ namespace Aspose.Cells_FOSS.Core
     /// <summary>
     /// Represents page setup model.
     /// </summary>
-    public sealed class PageSetupModel
+    internal sealed class PageSetupModel
     {
         /// <summary>
-        /// Performs page margins model.
+        /// Gets the page margin settings.
         /// </summary>
-        /// <returns>The page margins model margins { get; } = new.</returns>
         public PageMarginsModel Margins { get; } = new PageMarginsModel();
         /// <summary>
-        /// Performs print options model.
+        /// Gets the print option settings.
         /// </summary>
-        /// <returns>The print options model print options { get; } = new.</returns>
         public PrintOptionsModel PrintOptions { get; } = new PrintOptionsModel();
         /// <summary>
-        /// Performs header footer model.
+        /// Gets the header and footer settings.
         /// </summary>
-        /// <returns>The header footer model header footer { get; } = new.</returns>
         public HeaderFooterModel HeaderFooter { get; } = new HeaderFooterModel();
         /// <summary>
         /// Gets or sets the paper size.
@@ -61,14 +58,13 @@ namespace Aspose.Cells_FOSS.Core
         /// </summary>
         public string PrintTitleColumns { get; set; }
         /// <summary>
-        /// Performs list<int>.
+        /// Gets the horizontal manual page break row indexes.
         /// </summary>
-        /// <returns>The list<int> horizontal page breaks { get; } = new.</returns>
         public List<int> HorizontalPageBreaks { get; } = new List<int>();
         /// <summary>
-        /// Performs list<int>.
+        /// Gets the vertical manual page break column indexes.
         /// </summary>
-        /// <returns>The list<int> vertical page breaks { get; } = new.</returns>
         public List<int> VerticalPageBreaks { get; } = new List<int>();
     }
 }
+

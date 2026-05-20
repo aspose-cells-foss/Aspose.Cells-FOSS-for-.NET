@@ -8,7 +8,7 @@ namespace Aspose.Cells_FOSS.Core
     /// <summary>
     /// Represents workbook settings model.
     /// </summary>
-    public sealed class WorkbookSettingsModel
+    internal sealed class WorkbookSettingsModel
     {
         /// <summary>
         /// Gets or sets the date system.
@@ -21,3 +21,4 @@ namespace Aspose.Cells_FOSS.Core
         public CultureInfo DisplayCulture { get; set; } = CultureInfo.InvariantCulture;
     }
 }
+

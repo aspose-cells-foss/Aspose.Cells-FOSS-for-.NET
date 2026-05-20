@@ -15,7 +15,9 @@ namespace Aspose.Cells_FOSS
         /// <param name="code">The code.</param>
         /// <param name="severity">The severity.</param>
         /// <param name="message">The message.</param>
-        public LoadIssue(string code, DiagnosticSeverity severity, string message, bool repairApplied = false, bool dataLossRisk = false)
+        /// <param name="repairApplied">Whether a repair was applied during load.</param>
+        /// <param name="dataLossRisk">Whether the issue may cause data loss.</param>
+        internal LoadIssue(string code, DiagnosticSeverity severity, string message, bool repairApplied = false, bool dataLossRisk = false)
         {
             if (code == null) throw new ArgumentNullException(nameof(code));
             Code = code;

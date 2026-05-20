@@ -8,11 +8,12 @@ namespace Aspose.Cells_FOSS
     /// </summary>
     public enum CellValueType
     {
-        Blank,
-        String,
-        Number,
-        Boolean,
-        DateTime,
-        Formula
+        IsUnknown = 0,
+        IsNull = 1,
+        IsNumeric = 2,
+        IsDateTime = 4,
+        IsString = 8,
+        IsBool = 16,
+        IsError = 32
     }
 }

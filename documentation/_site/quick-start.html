@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick Start - Aspose.Cells FOSS for .NET</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #003399;
+            color: white;
+            padding: 20px;
+            margin: -20px -20px 20px -20px;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #003399;
+            text-decoration: none;
+        }
+        .section {
+            margin-bottom: 30px;
+        }
+        .section-title {
+            color: #003399;
+            border-bottom: 2px solid #003399;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+        .step {
+            background-color: #f9f9f9;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-left: 4px solid #4CAF50;
+            border-radius: 3px;
+        }
+        .step-number {
+            font-weight: bold;
+            color: #4CAF50;
+            margin-bottom: 10px;
+        }
+        pre {
+            background-color: #f4f4f4;
+            padding: 15px;
+            border-radius: 3px;
+            overflow-x: auto;
+            border: 1px solid #ddd;
+        }
+        code {
+            font-family: 'Courier New', monospace;
+            color: #d63384;
+        }
+        .note {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 3px;
+        }
+        .tip {
+            background-color: #d1ecf1;
+            border-left: 4px solid #0dcaf0;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Quick Start Guide</h1>
+        <p>Get started with Aspose.Cells FOSS for .NET in minutes</p>
+    </div>
+
+    <div class="content">
+        <a href="index.html" class="back-link">← Back to Index</a>
+
+        <div class="section">
+            <h2 class="section-title">Installation</h2>
+
+            <div class="step">
+                <div class="step-number">Step 1: Install the NuGet Package</div>
+                <p>Open your project directory and run the following command:</p>
+                <pre><code>dotnet add package Aspose.Cells_FOSS</code></pre>
+            </div>
+
+            <div class="step">
+                <div class="step-number">Step 2: Add Using Directive</div>
+                <p>Add the following using directive to your C# files:</p>
+                <pre><code>using Aspose.Cells_FOSS;</code></pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Creating Your First Workbook</h2>
+
+            <div class="step">
+                <div class="step-number">Step 1: Create a New Workbook</div>
+                <pre><code>// Create a new workbook with one default worksheet
+var workbook = new Workbook();</code></pre>
+            </div>
+
+            <div class="step">
+                <div class="step-number">Step 2: Access a Worksheet</div>
+                <pre><code>// Get the first worksheet (zero-based index)
+var worksheet = workbook.Worksheets[0];</code></pre>
+            </div>
+
+            <div class="step">
+                <div class="step-number">Step 3: Write Data to Cells</div>
+                <pre><code>// Write headers
+worksheet.Cells["A1"].PutValue("Name");
+worksheet.Cells["B1"].PutValue("Age");
+worksheet.Cells["C1"].PutValue("City");
+
+// Write data rows
+worksheet.Cells["A2"].PutValue("John Doe");
+worksheet.Cells["B2"].PutValue(30);
+worksheet.Cells["C2"].PutValue("New York");
+
+worksheet.Cells["A3"].PutValue("Jane Smith");
+worksheet.Cells["B3"].PutValue(25);
+worksheet.Cells["C3"].PutValue("London");</code></pre>
+            </div>
+
+            <div class="step">
+                <div class="step-number">Step 4: Apply Basic Formatting</div>
+                <pre><code>// Get the style of the header row
+var headerStyle = worksheet.Cells["A1"].GetStyle();
+headerStyle.Font.Bold = true;
+headerStyle.Font.Color = System.Drawing.Color.White;
+headerStyle.Pattern = FillPattern.Solid;
+headerStyle.ForegroundColor = System.Drawing.Color.DarkBlue;
+
+// Apply style to header cells
+worksheet.Cells["A1"].SetStyle(headerStyle);
+worksheet.Cells["B1"].SetStyle(headerStyle);
+worksheet.Cells["C1"].SetStyle(headerStyle);</code></pre>
+            </div>
+
+            <div class="step">
+                <div class="step-number">Step 5: Save the Workbook</div>
+                <pre><code>// Save to a file
+workbook.Save("MyFirstWorkbook.xlsx");</code></pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Opening an Existing Workbook</h2>
+
+            <div class="step">
+                <div class="step-number">From File Path</div>
+                <pre><code>// Open an existing workbook
+var workbook = new Workbook("ExistingFile.xlsx");
+
+// Access and modify data
+var worksheet = workbook.Worksheets[0];
+worksheet.Cells["A1"].PutValue("Updated Value");
+
+// Save changes
+workbook.Save("UpdatedFile.xlsx");</code></pre>
+            </div>
+
+            <div class="step">
+                <div class="step-number">From Stream</div>
+                <pre><code>// Open from a stream (useful for web applications)
+using (var stream = File.OpenRead("ExistingFile.xlsx"))
+{
+    var workbook = new Workbook(stream);
+    // ... work with the workbook
+}</code></pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Working with Formulas</h2>
+
+            <div class="step">
+                <div class="step-number">Add Formulas to Cells</div>
+                <pre><code>// Write values
+worksheet.Cells["A1"].PutValue(10);
+worksheet.Cells["A2"].PutValue(20);
+worksheet.Cells["A3"].PutValue(30);
+
+// Add a sum formula
+worksheet.Cells["A4"].Formula = "=SUM(A1:A3)";
+
+// Add an average formula
+worksheet.Cells["A5"].Formula = "=AVERAGE(A1:A3)";</code></pre>
+            </div>
+
+            <div class="note">
+                <strong>Note:</strong> Formulas are stored as strings and will be calculated when the workbook is opened in Excel.
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Working with Dates</h2>
+
+            <div class="step">
+                <div class="step-number">Set Date Values</div>
+                <pre><code>// Set a date value
+var today = DateTime.Today;
+worksheet.Cells["A1"].PutValue(today);
+
+// Format the cell as a date
+var style = worksheet.Cells["A1"].GetStyle();
+style.NumberFormat = "yyyy-MM-dd";
+worksheet.Cells["A1"].SetStyle(style);</code></pre>
+            </div>
+
+            <div class="tip">
+                <strong>Tip:</strong> You can use standard Excel number format strings like "yyyy-MM-dd", "MM/dd/yyyy", "dd-MMM-yyyy", etc.
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Common Tasks</h2>
+
+            <div class="step">
+                <div class="step-number">Add a New Worksheet</div>
+                <pre><code>// Add a new worksheet and get its index
+int newIndex = workbook.Worksheets.Add("NewSheet");
+
+// Access the new worksheet
+var newWorksheet = workbook.Worksheets[newIndex];</code></pre>
+            </div>
+
+            <div class="step">
+                <div class="step-number">Delete a Worksheet</div>
+                <pre><code>// Remove a worksheet by name
+workbook.Worksheets.RemoveAt("Sheet1");
+
+// Or by index
+workbook.Worksheets.RemoveAt(0);</code></pre>
+            </div>
+
+            <div class="step">
+                <div class="step-number">Merge Cells</div>
+                <pre><code>// Merge cells A1:C1 (row 0, column 0, 1 row, 3 columns)
+worksheet.Cells.Merge(0, 0, 1, 3);
+worksheet.Cells["A1"].PutValue("Merged Header");</code></pre>
+            </div>
+
+            <div class="step">
+                <div class="step-number">Set Cell Colors</div>
+                <pre><code>// Get cell style
+var style = worksheet.Cells["B2"].GetStyle();
+
+// Set background color
+style.Pattern = FillPattern.Solid;
+style.ForegroundColor = System.Drawing.Color.LightBlue;
+
+// Set font color
+style.Font.Color = System.Drawing.Color.DarkBlue;
+
+// Apply style
+worksheet.Cells["B2"].SetStyle(style);</code></pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Complete Example</h2>
+
+            <div class="step">
+                <div class="step-number">Sample Application</div>
+                <pre><code>using System;
+using Aspose.Cells_FOSS;
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        // Create a new workbook
+        using (var workbook = new Workbook())
+        {
+            // Get the first worksheet
+            var worksheet = workbook.Worksheets[0];
+            worksheet.Name = "Sales Data";
+
+            // Write headers
+            worksheet.Cells["A1"].PutValue("Product");
+            worksheet.Cells["B1"].PutValue("Price");
+            worksheet.Cells["C1"].PutValue("Quantity");
+            worksheet.Cells["D1"].PutValue("Total");
+
+            // Write data
+            worksheet.Cells["A2"].PutValue("Apple");
+            worksheet.Cells["B2"].PutValue(1.99);
+            worksheet.Cells["C2"].PutValue(10);
+
+            worksheet.Cells["A3"].PutValue("Banana");
+            worksheet.Cells["B3"].PutValue(0.99);
+            worksheet.Cells["C3"].PutValue(15);
+
+            // Add formulas for totals
+            worksheet.Cells["D2"].Formula = "=B2*C2";
+            worksheet.Cells["D3"].Formula = "=B3*C3";
+
+            // Format headers
+            var headerStyle = worksheet.Cells["A1"].GetStyle();
+            headerStyle.Font.Bold = true;
+            headerStyle.Font.Color = System.Drawing.Color.White;
+            headerStyle.Pattern = FillPattern.Solid;
+            headerStyle.ForegroundColor = System.Drawing.Color.DarkBlue;
+            worksheet.Cells["A1"].SetStyle(headerStyle);
+            worksheet.Cells["B1"].SetStyle(headerStyle);
+            worksheet.Cells["C1"].SetStyle(headerStyle);
+            worksheet.Cells["D1"].SetStyle(headerStyle);
+
+            // Format numbers
+            var numberStyle = worksheet.Cells["B2"].GetStyle();
+            numberStyle.NumberFormat = "$#,##0.00";
+            worksheet.Cells["B2"].SetStyle(numberStyle);
+            worksheet.Cells["B3"].SetStyle(numberStyle);
+            worksheet.Cells["D2"].SetStyle(numberStyle);
+            worksheet.Cells["D3"].SetStyle(numberStyle);
+
+            // Save the workbook
+            workbook.Save("SalesReport.xlsx");
+
+            Console.WriteLine("Workbook created successfully!");
+        }
+    }
+}</code></pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Next Steps</h2>
+
+            <ul>
+                <li>Explore the <a href="api-reference.html">API Reference</a> for detailed documentation</li>
+                <li>Check out the <a href="examples.html">Examples</a> page for more code samples</li>
+                <li>Review the <a href="index.html">main documentation</a> for advanced features</li>
+            </ul>
+        </div>
+
+    </div>
+</body>
+</html>

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comment Support - Aspose.Cells FOSS for .NET</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #003399;
+            color: white;
+            padding: 20px;
+            margin: -20px -20px 20px -20px;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .section {
+            margin-bottom: 40px;
+        }
+        .section-title {
+            color: #003399;
+            border-bottom: 2px solid #003399;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+        pre {
+            background-color: #f4f4f4;
+            padding: 15px;
+            border-radius: 3px;
+            overflow-x: auto;
+            border: 1px solid #ddd;
+        }
+        code {
+            font-family: 'Courier New', monospace;
+            color: #d63384;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #003399;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Comment Support</h1>
+        <p>Complete documentation for cell comments (legacy notes) in Aspose.Cells FOSS for .NET</p>
+    </div>
+
+    <div class="content">
+        <a href="index.html" class="back-link">← Back to Index</a>
+
+        <div class="section">
+            <h2 class="section-title">Comment Overview</h2>
+            <p>The <strong>Comment</strong> class represents a worksheet comment (legacy note) anchored to a single cell with support for rich text content, author information, and visibility control.</p>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Comment Features</h2>
+            <ul>
+                <li><strong>Rich Text:</strong> Supports plain text with formatting</li>
+                <li><strong>Author Information:</strong> Display and set author name</li>
+                <li><strong>Visibility Control:</strong> Show or hide comments on hover or always visible</li>
+                <li><strong>Custom Box Size:</strong> Set custom width and height in pixels</li>
+                <li><strong>Multiple Comments:</strong> Add multiple comments per sheet</li>
+                <li><strong>Cell Anchoring:</strong> Comments are tied to specific cells</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Usage Examples</h2>
+
+            <div class="section">
+                <h3>Adding Comments to Cells</h3>
+                <pre><code>using Aspose.Cells_FOSS;
+
+var workbook = new Workbook();
+var worksheet = workbook.Worksheets[0];
+
+// Add comments to different cells
+int comment1 = worksheet.Comments.Add("A1");
+int comment2 = worksheet.Comments.Add("B1");
+int comment3 = worksheet.Comments.Add("C1");
+int comment4 = worksheet.Comments.Add("D1");
+
+// Configure comments
+worksheet.Comments["A1"].Author = "Reviewer 1";
+worksheet.Comments["A1"].Note = "Please verify this calculation";
+worksheet.Comments["A1"].IsVisible = true;
+
+worksheet.Comments["B1"].Author = "Reviewer 2";
+worksheet.Comments["B1"].Note = "Update needed by Friday";
+worksheet.Comments["B1"].IsVisible = false;
+
+// Hide comment by default
+worksheet.Comments["C1"].IsVisible = false;
+
+Console.WriteLine($"Added {worksheet.Comments.Count} comments");</code></pre>
+            </div>
+
+            <div class="section">
+                <h3>Accessing Comment Properties</h3>
+                <pre><code>// Access a comment
+var comment = worksheet.Comments["A1"];
+
+Console.WriteLine($"Author: {comment.Author}");
+Console.WriteLine($"Note: {comment.Note}");
+Console.WriteLine($"Visible: {comment.IsVisible}");
+Console.WriteLine($"Position: Row {comment.Row}, Column {comment.Column}");
+
+// Modify comment
+comment.Author = "Updated Author";
+comment.Note = "This has been reviewed and approved";
+comment.IsVisible = true;</code></pre>
+            </div>
+
+            <div class="section">
+                <h3>Customizing Comment Appearance</h3>
+                <pre><code>using Aspose.Cells_FOSS;
+
+var workbook = new Workbook();
+var worksheet = workbook.Worksheets[0];
+
+// Add comment with custom sizing
+int commentIndex = worksheet.Comments.Add("B2");
+
+var comment = worksheet.Comments[commentIndex];
+comment.Author = "Designer";
+comment.Note = "Please check the formatting";
+comment.Width = 200;  // Width in pixels
+comment.Height = 100; // Height in pixels
+comment.IsVisible = true;
+
+Console.WriteLine($"Created styled comment");</code></pre>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">Comment Properties</h2>
+                <p>The <strong>Comment</strong> class provides the following properties and methods:</p>
+                <ul>
+                    <li><strong>Row</strong> - Zero-based row of annotated cell (read-only)</li>
+                    <li><strong>Column</strong> - Zero-based column of annotated cell (read-only)</li>
+                    <li><strong>Author</strong> - Comment author name</li>
+                    <li><strong>Note</strong> - Plain text content of the comment</li>
+                    <li><strong>IsVisible</strong> - Visibility state (show/hide)</li>
+                    <li><strong>Width</strong> - Comment box width in pixels (min: 1)</li>
+                    <li><strong>Height</strong> - Comment box height in pixels (min: 1)</li>
+                </ul>
+            </div>
+
+        <div class="section">
+                <h2 class="section-title">CommentCollection</h2>
+                <p>The <strong>CommentCollection</strong> class manages all comments in a worksheet:</p>
+                <ul>
+                    <li><strong>Count</strong> - Number of comments</li>
+                    <li><strong>this[int]</strong> - Access comment by index</li>
+                    <li><strong>this[string]</strong> - Access comment by cell reference (e.g., "A1")</li>
+                    <li><strong>Add()</strong> - Add comment by coordinates or cell reference</li>
+                    <li><strong>RemoveAt(int)</strong> - Remove comment by index</li>
+                    <li><strong>RemoveAt(string)</strong> - Remove comment by cell reference</li>
+                    <li><strong>Parameters:</strong> Coordinates or cell name for Add; index for RemoveAt(int); cell name for RemoveAt(string)</li>
+                </ul>
+            </div>
+
+        <div class="section">
+                <h2 class="section-title">Important Notes</h2>
+                <ul>
+                    <li><strong>Read-only Properties:</strong> Row and Column are read-only after the comment is added</li>
+                    <li><strong>Unique Comments:</strong> Each cell can only have one comment</li>
+                    <li><strong>Memory Management:</strong> Comments are stored efficiently in the worksheet model</li>
+                    <li><strong>Cell Reference:</strong> Comments use zero-based row and column coordinates</li>
+                    <li><strong>Rich Text:</strong> Comments support plain text but not HTML or markdown</li>
+                </ul>
+            </div>
+
+        <div class="section">
+                <h2 class="section-title">Related Documentation</h2>
+                <ul>
+                    <li><a href="api-reference.html">Complete API Reference</a></li>
+                    <li><a href="chart.html">Chart Documentation</a></li>
+                    <li><a href="shape.html">Shape Documentation</a></li>
+                    <li><a href="picture.html">Picture Documentation</a></li>
+                    <li><a href="tables.html">Table Documentation</a></li>
+                    <li><a href="index.html">Back to Main Documentation</a></li>
+                    <li><a href="examples.html">More Examples</a></li>
+                </ul>
+            </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 40px; color: #666; font-size: 0.9em;">
+        <p>&copy; 2026 Aspose.Cells FOSS Project. All rights reserved.</p>
+    </div>
+</body>
+</html>

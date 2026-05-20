@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shape Support - Aspose.Cells FOSS for .NET</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #003399;
+            color: white;
+            padding: 20px;
+            margin: -20px -20px 20px -20px;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .section {
+            margin-bottom: 40px;
+        }
+        .section-title {
+            color: #003399;
+            border-bottom: 2px solid #003399;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+        pre {
+            background-color: #f4f4f4;
+            padding: 15px;
+            border-radius: 3px;
+            overflow-x: auto;
+            border: 1px solid #ddd;
+        }
+        code {
+            font-family: 'Courier New', monospace;
+            color: #d63384;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #003399;
+            text-decoration: none;
+        }
+        .shape-types {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .shape-card {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #4CAF50;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Shape Support</h1>
+        <p>Complete documentation for shapes in Aspose.Cells FOSS for .NET</p>
+    </div>
+
+    <div class="content">
+        <a href="index.html" class="back-link">← Back to Index</a>
+
+        <div class="section">
+            <h2 class="section-title">Shape Overview</h2>
+            <p>The <strong>Shape</strong> class represents a drawing object (auto shape) anchored to a worksheet with customizable geometry and properties.</p>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Shape Types</h2>
+            <p>Aspose.Cells FOSS supports 30+ different shape types:</p>
+
+            <div class="shape-types">
+                <div class="shape-card">
+                    <div class="section-title">Basic Shapes</div>
+                    <ul>
+                        <li><strong>Rectangle:</strong> Standard rectangle</li>
+                        <li><strong>Rounded Rectangle:</strong> Rectangle with rounded corners</li>
+                        <li><strong>Ellipse:</strong> Oval/circle</li>
+                        <li><strong>Triangle:</strong> Triangle</li>
+                        <li><strong>Diamond:</strong> Diamond shape</li>
+                        <li><strong>Pentagon:</strong> Five-sided polygon</li>
+                        <li><strong>Hexagon:</strong> Six-sided polygon</li>
+                        <li><strong>Octagon:</strong> Eight-sided polygon</li>
+                    </ul>
+                </div>
+
+                <div class="shape-card">
+                    <div class="section-title">Arrows</div>
+                    <ul>
+                        <li><strong>Right Arrow:</strong> Arrow pointing right</li>
+                        <li><strong>Left Arrow:</strong> Arrow pointing left</li>
+                        <li><strong>Up Arrow:</strong> Arrow pointing up</li>
+                        <li><strong>Down Arrow:</strong> Arrow pointing down</li>
+                        <li><strong>Left-Right Arrow:</strong> Double-headed arrow (left and right)</li>
+                        <li><strong>Up-Down Arrow:</strong> Double-headed arrow (up and down)</li>
+                    </ul>
+                </div>
+
+                <div class="shape-card">
+                    <div class="section-title">Connectors</div>
+                    <ul>
+                        <li><strong>Straight Connector:</strong> Straight line</li>
+                        <li><strong>Bent Connector:</strong> Elbow connector</li>
+                        <li><strong>Curved Connector:</strong> Curved line</li>
+                    </ul>
+                </div>
+
+                <div class="shape-card">
+                    <div class="section-title">Symbols</div>
+                    <ul>
+                        <li><strong>Plus:</strong> Plus sign</li>
+                        <li><strong>Cube:</strong> 3D cube</li>
+                        <li><strong>Cylinder:</strong> Cylinder</li>
+                        <li><strong>Heart:</strong> Heart shape</li>
+                        <li><strong>Lightning:</strong> Lightning bolt</li>
+                        <li><strong>Sun:</strong> Sun</li>
+                        <li><strong>Moon:</strong> Crescent moon</li>
+                        <li><strong>Cloud:</strong> Cloud</li>
+                    </ul>
+                </div>
+
+                <div class="shape-card">
+                    <div class="section-title">Stars</div>
+                    <ul>
+                        <li><strong>Star 4 to 32 Points:</strong> Various star shapes</li>
+                    </ul>
+                </div>
+
+                <div class="shape-card">
+                    <div class="section-title">Advanced</div>
+                    <ul>
+                        <li><strong>Text Box:</strong> For adding text</li>
+                        <li><strong>Math Plus:</strong> Plus mathematical symbol</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Usage Examples</h2>
+
+            <div class="section">
+                <h3>Creating Various Shapes</h3>
+                <pre><code>using Aspose.Cells_FOSS;
+
+var workbook = new Workbook();
+var worksheet = workbook.Worksheets[0];
+
+// Add different shapes
+worksheet.Shapes.Add(5, 5, 7, 7, AutoShapeType.Rectangle);
+worksheet.Shapes.Add(15, 5, 12, 7, AutoShapeType.Ellipse);
+worksheet.Shapes.Add(25, 5, 17, 7, AutoShapeType.Triangle);
+worksheet.Shapes.Add(35, 5, 22, 7, AutoShapeType.RightArrow);
+worksheet.Shapes.Add(5, 5, 27, 7, AutoShapeType.TextBox);
+worksheet.Shapes.Add(15, 5, 32, 7, AutoShapeType.Star5Point);
+
+Console.WriteLine($"Added {worksheet.Shapes.Count} shapes");</code></pre>
+            </div>
+
+            <div class="section">
+                <h3>Accessing Shape Properties</h3>
+                <pre><code>// Access a shape
+var shape = worksheet.Shapes[0];
+
+Console.WriteLine($"Shape: {shape.Name}");
+Console.WriteLine($"Type: {shape.AutoShapeType}");
+Console.WriteLine($"Position: ({shape.UpperLeftRow}, {shape.UpperLeftColumn}) - ({shape.LowerRightRow}, {shape.LowerRightColumn})");
+
+// Modify shape properties
+shape.Name = "Updated Shape";
+shape.UpperLeftRow = 10;
+shape.UpperLeftColumn = 10;   // Move to row 10, column 10
+</code></pre>
+            </div>
+
+        <div class="section">
+            <h2 class="section-title">Shape Properties</h2>
+                <p>The <strong>Shape</strong> class provides the following properties:</p>
+                <ul>
+                    <li><strong>Name</strong> - Display name of the shape</li>
+                    <li><strong>AutoShapeType</strong> - Geometry type (Rectangle, Ellipse, Triangle, etc.)</li>
+                    <li><strong>GeometryType</strong> - Raw DrawingML prst string</li>
+                    <li><strong>UpperLeftRow</strong> - Zero-based row of upper-left anchor</li>
+                    <li><strong>UpperLeftColumn</strong> - Zero-based column of upper-left anchor</li>
+                    <li><strong>LowerRightRow</strong> - Zero-based row of lower-right anchor</li>
+                    <li><strong>LowerRightColumn</strong> - Zero-based column of lower-right anchor</li>
+                    <li><strong>Position</strong> - Anchor position (row and column)</li>
+                </ul>
+            </div>
+
+        <div class="section">
+            <h2 class="section-title">ShapeCollection</h2>
+                <p>The <strong>ShapeCollection</strong> class manages all shapes in a worksheet:</p>
+                <ul>
+                    <li><strong>Count</strong> - Number of shapes</li>
+                    <li><strong>this[int]</strong> - Access shape by index</li>
+                    <li><strong>Add()</strong> - Add new shape with type and coordinates</li>
+                    <li><strong>RemoveAt()</strong> - Remove shape at index</li>
+                    <li><strong>Parameters:</strong> position coordinates and shape type</li>
+                </ul>
+            </div>
+
+        <div class="section">
+            <h2 class="section-title">AutoShapeType Enumeration</h2>
+                <p>Complete enumeration of 30+ supported shape types:</p>
+                <ul>
+                    <li><strong>Basic:</strong> Rectangle, Ellipse, Triangle, Diamond, Pentagon, Hexagon, Octagon</li>
+                    <li><strong>Stars:</strong> Star4, Star5, Star6, Star7, Star8, Star10, Star12, Star16, Star24, Star32</li>
+                    <li><strong>Arrows:</strong> Right, Left, Up, Down, Left-Right, Up-Down</li>
+                    <li><strong>Connectors:</strong> Straight, Bent, Curved</li>
+                    <li><strong>Symbols:</strong> Plus, Cube, Cylinder, Heart, Lightning, Sun, Moon, Cloud</li>
+                    <li><strong>Text Box:</strong> TextBox (distinct type)</li>
+                    <li><strong>Math:</strong> Math Plus (distinct type)</li>
+                </ul>
+            </div>
+
+        <div class="section">
+            <h2 class="section-title">Important Notes</h2>
+                <ul>
+                    <li><strong>Positioning:</strong> Shapes are positioned using zero-based row and column coordinates</li>
+                    <li><strong>Anchor Points:</strong> Upper-left and lower-right coordinates define the shape's position</li>
+                    <li><strong>Shape Size:</strong> The size is determined by the distance between anchor points</li>
+                    <li><strong>Geometry Types:</strong> Setting AutoShapeType automatically updates the GeometryType property</li>
+                </ul>
+            </div>
+
+        <div class="section">
+            <h2 class="section-title">Related Documentation</h2>
+                <ul>
+                    <li><a href="api-reference.html">Complete API Reference</a></li>
+                    <li><a href="chart.html">Chart Documentation</a></li>
+                    <li><a href="index.html">Back to Main Documentation</a></li>
+                    <li><a href="examples.html">More Examples</a></li>
+                </ul>
+            </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 40px; color: #666; font-size: 0.9em;">
+        <p>&copy; 2026 Aspose.Cells FOSS Project. All rights reserved.</p>
+    </div>
+</body>
+</html>

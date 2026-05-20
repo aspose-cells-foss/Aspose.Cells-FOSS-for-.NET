@@ -7,7 +7,7 @@ namespace Aspose.Cells_FOSS.Core
     /// <summary>
     /// Represents cell record.
     /// </summary>
-    public sealed class CellRecord
+    internal sealed class CellRecord
     {
         /// <summary>
         /// Gets or sets the value.
@@ -31,3 +31,4 @@ namespace Aspose.Cells_FOSS.Core
         public bool IsExplicitlyStored { get; set; }
     }
 }
+

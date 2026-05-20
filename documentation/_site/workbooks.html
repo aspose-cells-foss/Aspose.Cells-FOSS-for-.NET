@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workbook Management - Aspose.Cells FOSS for .NET</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #003399;
+            color: white;
+            padding: 20px;
+            margin: -20px -20px 20px -20px;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .section {
+            margin-bottom: 40px;
+        }
+        .section-title {
+            color: #003399;
+            border-bottom: 2px solid #003399;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+        pre {
+            background-color: #f4f4f4;
+            padding: 15px;
+            border-radius: 3px;
+            overflow-x: auto;
+            border: 1px solid #ddd;
+        }
+        code {
+            font-family: 'Courier New', monospace;
+            color: #d63384;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #003399;
+            text-decoration: none;
+        }
+        .method-section {
+            background-color: #f9f9f9;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-left: 4px solid #4CAF50;
+            border-radius: 3px;
+        }
+        .method-name {
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            color: #003399;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Workbook Management</h1>
+        <p>Complete documentation for workbook operations in Aspose.Cells FOSS for .NET</p>
+    </div>
+
+    <div class="content">
+        <a href="index.html" class="back-link">â†?Back to Index</a>
+
+        <div class="section">
+            <h2 class="section-title">Workbook Overview</h2>
+            <p>The <strong>Workbook</strong> class is the root object for all spreadsheet operations in Aspose.Cells FOSS. It represents a complete Excel workbook and provides methods to create, load, modify, and save XLSX files.</p>
+
+            <div class="method-section">
+                <div class="method-name">Key Features:</div>
+                <ul>
+                    <li>Create new workbooks from scratch</li>
+                    <li>Load existing XLSX files from disk or stream</li>
+                    <li>Manage multiple worksheets</li>
+                    <li>Access and modify workbook settings</li>
+                    <li>Handle document properties and metadata</li>
+                    <li>Support for both file and stream operations</li>
+                    <li>Resource management through IDisposable pattern</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Creating Workbooks</h2>
+
+            <div class="method-section">
+                <div class="method-name">Empty Workbook</div>
+                <pre><code>// Create a new workbook with one default worksheet
+var workbook = new Workbook();
+
+// Access the first worksheet (zero-based index)
+var worksheet = workbook.Worksheets[0];
+
+// Save the workbook
+workbook.Save("new-workbook.xlsx");</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Loading from File</div>
+                <pre><code>// Load workbook from file path
+var workbook = new Workbook("existing-file.xlsx");
+
+// Or specify load options
+var options = new LoadOptions();
+var workbook = new Workbook("existing-file.xlsx", options);</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Loading from Stream</div>
+                <pre><code>// Load workbook from file stream
+using (var stream = new FileStream("data.xlsx", FileMode.Open))
+{
+    var workbook = new Workbook(stream);
+
+    // Process the workbook
+    // ...
+
+    // Save back to stream
+    using (var outputStream = new MemoryStream())
+    {
+        workbook.Save(outputStream, SaveFormat.Xlsx);
+    }
+}</code></pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Saving Workbooks</h2>
+
+            <div class="method-section">
+                <div class="method-name">Basic Save</div>
+                <pre><code>// Save with default format (XLSX)
+workbook.Save("output.xlsx");
+
+// Save with specified format
+workbook.Save("output.xlsx", SaveFormat.Xlsx);</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Advanced Save Options</div>
+                <pre><code>// Use SaveOptions for more control
+var saveOptions = new SaveOptions
+{
+    SaveFormat = SaveFormat.Xlsx,
+    // Additional options as needed
+};
+
+workbook.Save("custom-output.xlsx", saveOptions);</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Saving to Stream</div>
+                <pre><code>// Save to memory stream
+using (var stream = new MemoryStream())
+{
+    workbook.Save(stream, SaveFormat.Xlsx);
+
+    // Use the stream as needed
+    byte[] data = stream.ToArray();
+}</code></pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Workbook Properties</h2>
+
+            <div class="method-section">
+                <div class="method-name">Worksheets Collection</div>
+                <pre><code>// Access worksheets collection
+var worksheets = workbook.Worksheets;
+
+// Get worksheet count
+int count = worksheets.Count;
+
+// Access specific worksheet (zero-based index)
+var firstSheet = worksheets[0];
+var secondSheet = worksheets[1];
+
+// Add new worksheet
+var newSheet = worksheets.Add();
+
+// Remove worksheet
+worksheets.RemoveAt(2); // Remove worksheet at index 2</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Workbook Settings</div>
+                <pre><code>// Access workbook settings
+var settings = workbook.Settings;
+
+// Common settings include:
+// - Calculation mode
+// - Display settings
+// - Protection settings
+// - And other workbook-level configurations</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Document Properties</div>
+                <pre><code>// Access document properties
+var properties = workbook.DocumentProperties;
+
+// Set basic properties
+properties.Title = "Annual Report";
+properties.Author = "John Doe";
+properties.Subject = "Financial Summary";
+properties.Comments = "Generated with Aspose.Cells FOSS";
+
+// Get property values
+string title = properties.Title;
+string author = properties.Author;</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Defined Names (Named Ranges)</div>
+                <pre><code>// Access defined names
+var names = workbook.DefinedNames;
+
+// Add a named range
+names.Add("SalesData", "Sheet1!$A$1:$D$10");
+
+// Access a named range
+var namedRange = names["SalesData"];</code></pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Load Options</h2>
+
+            <div class="method-section">
+                <div class="method-name">LoadOptions Overview</div>
+                <pre><code>// Create load options for control over loading behavior
+var options = new LoadOptions
+{
+    // Configure loading options as needed
+    // - Password protection
+    // - Data handling
+    // - Memory optimization
+    // - And other load-time configurations
+};
+
+var workbook = new Workbook("protected.xlsx", options);</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Load Diagnostics</div>
+                <pre><code>// Access load diagnostics after loading
+var workbook = new Workbook("file-with-issues.xlsx");
+
+if (workbook.LoadDiagnostics != null)
+{
+    // Check for warnings and errors
+    foreach (var warning in workbook.LoadDiagnostics.Warnings)
+    {
+        Console.WriteLine($"Warning: {warning.Message}");
+    }
+}</code></pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Complete Example</h2>
+
+            <div class="method-section">
+                <div class="method-name">Create and Modify Workbook</div>
+                <pre><code>using Aspose.Cells_FOSS;
+using System;
+
+class Program
+{
+    static void Main()
+    {
+        // Create a new workbook
+        using (var workbook = new Workbook())
+        {
+            // Access the first worksheet
+            var worksheet = workbook.Worksheets[0];
+
+            // Set cell values
+            worksheet.Cells["A1"].PutValue("Name");
+            worksheet.Cells["B1"].PutValue("Age");
+            worksheet.Cells["C1"].PutValue("Salary");
+
+            worksheet.Cells["A2"].PutValue("John Doe");
+            worksheet.Cells["B2"].PutValue(30);
+            worksheet.Cells["C2"].PutValue(50000.00);
+
+            worksheet.Cells["A3"].PutValue("Jane Smith");
+            worksheet.Cells["B3"].PutValue(28);
+            worksheet.Cells["C3"].PutValue(55000.00);
+
+            // Set document properties
+            workbook.DocumentProperties.Title = "Employee Data";
+            workbook.DocumentProperties.Author = "HR Department";
+            workbook.DocumentProperties.Comments = "Generated on: " + DateTime.Now;
+
+            // Save the workbook
+            workbook.Save("employee-data.xlsx");
+
+            Console.WriteLine("Workbook created successfully!");
+        }
+    }
+}</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Load and Process Workbook</div>
+                <pre><code>using Aspose.Cells_FOSS;
+using System;
+
+class Program
+{
+    static void Main()
+    {
+        // Load existing workbook
+        using (var workbook = new Workbook("existing-workbook.xlsx"))
+        {
+            // Check load diagnostics
+            if (workbook.LoadDiagnostics != null &&
+                workbook.LoadDiagnostics.Warnings.Count > 0)
+            {
+                Console.WriteLine("Load warnings:");
+                foreach (var warning in workbook.LoadDiagnostics.Warnings)
+                {
+                    Console.WriteLine($"  - {warning.Message}");
+                }
+            }
+
+            // Access worksheets
+            foreach (var worksheet in workbook.Worksheets)
+            {
+                Console.WriteLine($"Processing worksheet: {worksheet.Name}");
+
+                // Process each cell in the used range
+                for (int row = 0; row <= worksheet.Cells.MaxDataRow; row++)
+                {
+                    for (int col = 0; col <= worksheet.Cells.MaxDataColumn; col++)
+                    {
+                        var cell = worksheet.Cells[row, col];
+                        if (cell.Value != null)
+                        {
+                            Console.WriteLine($"  {cell.Name}: {cell.StringValue}");
+                        }
+                    }
+                }
+            }
+
+            // Save modified workbook
+            workbook.Save("modified-workbook.xlsx");
+            Console.WriteLine("Workbook processed successfully!");
+        }
+    }
+}</code></pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Important Notes</h2>
+            <ul>
+                <li><strong>Resource Management:</strong> Always use 'using' statements or call Dispose() to properly release workbook resources.</li>
+                <li><strong>File Format:</strong> The default save format is XLSX. Specify other formats explicitly using SaveFormat enumeration.</li>
+                <li><strong>Worksheet Indexing:</strong> Worksheets are accessed using zero-based indices.</li>
+                <li><strong>Load Diagnostics:</strong> Always check LoadDiagnostics after loading files to handle warnings and errors appropriately.</li>
+                <li><strong>Stream Operations:</strong> Both loading and saving support streams for better integration with web applications and in-memory processing.</li>
+                <li><strong>Thread Safety:</strong> Workbook objects are not thread-safe. Use separate workbook instances for concurrent operations.</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Related Documentation</h2>
+            <ul>
+                <li><a href="worksheets.html">Worksheet Operations</a> - Managing worksheets</li>
+                <li><a href="document-properties.html">Document Properties</a> - Workbook metadata</li>
+                <li><a href="api-reference.html">Complete API Reference</a></li>
+                <li><a href="index.html">Back to Main Documentation</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 40px; color: #666; font-size: 0.9em;">
+        <p>&copy; 2026 Aspose.Cells FOSS Project. All rights reserved.</p>
+    </div>
+</body>
+</html>

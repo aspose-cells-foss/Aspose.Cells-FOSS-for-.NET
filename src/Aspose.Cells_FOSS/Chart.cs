@@ -5,6 +5,35 @@ namespace Aspose.Cells_FOSS
     /// <summary>
     /// Represents a chart embedded in a worksheet.
     /// </summary>
+    /// <remarks>
+    /// Charts provide visual representation of data and can be created programmatically or loaded from existing XLSX files.
+    /// Note that modern chartex types (Waterfall, Treemap, Sunburst, etc.) must be loaded from existing files;
+    /// they cannot be created using the <see cref="ChartCollection.Add"/> method.
+    /// </remarks>
+    /// <example>
+    /// <code>
+    /// var workbook = new Workbook();
+    /// var worksheet = workbook.Worksheets[0];
+    ///
+    /// // Add sample data
+    /// worksheet.Cells["A1"].PutValue("Month");
+    /// worksheet.Cells["B1"].PutValue("Sales");
+    /// worksheet.Cells["A2"].PutValue("Jan");
+    /// worksheet.Cells["B2"].PutValue(1000);
+    /// worksheet.Cells["A3"].PutValue("Feb");
+    /// worksheet.Cells["B3"].PutValue(1200);
+    ///
+    /// // Add a bar chart
+    /// int chartIndex = worksheet.Charts.Add(
+    ///     ChartType.Column,
+    ///     "Sheet1!$B$1:$B$3",
+    ///     5, 1, 10, 3);
+    ///
+    /// // Access and configure the chart
+    /// var chart = worksheet.Charts[chartIndex];
+    /// Console.WriteLine($"Chart: {chart.Name}");
+    /// </code>
+    /// </example>
     public sealed class Chart
     {
         private readonly ChartModel _model;

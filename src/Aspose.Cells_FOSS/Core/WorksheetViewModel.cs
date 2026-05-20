@@ -6,7 +6,7 @@ namespace Aspose.Cells_FOSS.Core
     /// <summary>
     /// Represents worksheet view model.
     /// </summary>
-    public sealed class WorksheetViewModel
+    internal sealed class WorksheetViewModel
     {
         /// <summary>
         /// Gets or sets a value indicating whether show grid lines.
@@ -30,3 +30,4 @@ namespace Aspose.Cells_FOSS.Core
         public int ZoomScale { get; set; } = 100;
     }
 }
+

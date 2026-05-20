@@ -187,7 +187,7 @@ namespace Aspose.Cells_FOSS
                     continue;
                 }
 
-                var area = new CellArea(region.FirstRow, region.FirstColumn, region.TotalRows, region.TotalColumns);
+                var area = CellArea.CreateCellArea(region.FirstRow, region.FirstColumn, region.FirstRow + region.TotalRows - 1, region.FirstColumn + region.TotalColumns - 1);
                 if (ConflictsWithExisting(existingValidations, candidate, area))
                 {
                     if (options.StrictMode)

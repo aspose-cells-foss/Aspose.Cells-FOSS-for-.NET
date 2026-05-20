@@ -5,6 +5,25 @@ namespace Aspose.Cells_FOSS
     /// <summary>
     /// Represents a worksheet comment (legacy note) anchored to a single cell.
     /// </summary>
+    /// <remarks>
+    /// Comments are text annotations attached to cells that provide additional information or context.
+    /// They are commonly used for review notes, explanations, or collaboration feedback.
+    /// Comments can be visible or hidden, and can display author information.
+    /// The comment box size can be customized, and comments support rich text content.
+    /// </remarks>
+    /// <example>
+    /// <code>
+    /// var workbook = new Workbook();
+    /// var worksheet = workbook.Worksheets[0];
+    ///
+    /// // Add a comment
+    /// int commentIndex = worksheet.Comments.Add("A1");
+    /// var comment = worksheet.Comments[commentIndex];
+    /// comment.Author = "John Doe";
+    /// comment.Note = "Please review this data for accuracy.";
+    /// comment.IsVisible = true;
+    /// </code>
+    /// </example>
     public sealed class Comment
     {
         private readonly CommentModel _model;

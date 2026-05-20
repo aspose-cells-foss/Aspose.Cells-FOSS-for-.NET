@@ -17,7 +17,7 @@ namespace Aspose.Cells_FOSS
     /// links.Add("B2", "B3", "#Sheet1!A1", "Jump", "Go to start");
     /// </code>
     /// </example>
-    public sealed class HyperlinkCollection
+    public class HyperlinkCollection
     {
         private readonly List<HyperlinkModel> _hyperlinks;
 
@@ -38,7 +38,27 @@ namespace Aspose.Cells_FOSS
         }
 
         /// <summary>
-        /// Gets the hyperlink at the specified zero-based index.
+        /// Gets or sets the number of elements the collection can contain before resizing.
+        /// </summary>
+        public int Capacity
+        {
+            get
+            {
+                return _hyperlinks.Capacity;
+            }
+            set
+            {
+                if (value < _hyperlinks.Count)
+                {
+                    throw new CellsException("Capacity cannot be less than Count.");
+                }
+
+                _hyperlinks.Capacity = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the hyperlink at the specified zero-based index.
         /// </summary>
         public Hyperlink this[int index]
         {
@@ -50,6 +70,39 @@ namespace Aspose.Cells_FOSS
                 }
 
                 return new Hyperlink(_hyperlinks, _hyperlinks[index]);
+            }
+            set
+            {
+                if (index < 0 || index >= _hyperlinks.Count)
+                {
+                    throw new CellsException("Hyperlink index was out of range.");
+                }
+
+                if (value == null)
+                {
+                    throw new ArgumentNullException(nameof(value));
+                }
+
+                if (!value.BelongsTo(_hyperlinks))
+                {
+                    throw new CellsException("Assigned hyperlink must belong to the same worksheet hyperlink collection.");
+                }
+
+                var replacement = CloneModel(value.GetModel());
+                for (var i = 0; i < _hyperlinks.Count; i++)
+                {
+                    if (i == index)
+                    {
+                        continue;
+                    }
+
+                    if (Overlaps(_hyperlinks[i], replacement))
+                    {
+                        throw new CellsException("Hyperlink ranges must not overlap.");
+                    }
+                }
+
+                _hyperlinks[index] = replacement;
             }
         }
 
@@ -140,6 +193,14 @@ namespace Aspose.Cells_FOSS
             _hyperlinks.RemoveAt(index);
         }
 
+        /// <summary>
+        /// Removes all hyperlinks from the worksheet.
+        /// </summary>
+        public void Clear()
+        {
+            _hyperlinks.Clear();
+        }
+
         private int AddInternal(string cellName, int totalRows, int totalColumns, string address, int? firstRowOverride = null, int? firstColumnOverride = null)
         {
             if (totalRows <= 0 || totalColumns <= 0)
@@ -227,6 +288,21 @@ namespace Aspose.Cells_FOSS
                 && right.FirstRow <= leftLastRow
                 && left.FirstColumn <= rightLastColumn
                 && right.FirstColumn <= leftLastColumn;
+        }
+
+        private static HyperlinkModel CloneModel(HyperlinkModel source)
+        {
+            return new HyperlinkModel
+            {
+                FirstRow = source.FirstRow,
+                FirstColumn = source.FirstColumn,
+                TotalRows = source.TotalRows,
+                TotalColumns = source.TotalColumns,
+                Address = source.Address,
+                SubAddress = source.SubAddress,
+                TextToDisplay = source.TextToDisplay,
+                ScreenTip = source.ScreenTip,
+            };
         }
 
         private static string NormalizeText(string value)

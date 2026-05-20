@@ -6,7 +6,7 @@ namespace Aspose.Cells_FOSS.Packaging
     /// <summary>
     /// Represents an error that occurs during package structure.
     /// </summary>
-    public class PackageStructureException : Exception
+    internal class PackageStructureException : Exception
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="PackageStructureException"/> class.
@@ -15,3 +15,4 @@ namespace Aspose.Cells_FOSS.Packaging
         public PackageStructureException(string message) : base(message) { }
     }
 }
+

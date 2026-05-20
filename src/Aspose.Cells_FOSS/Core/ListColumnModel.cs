@@ -5,7 +5,7 @@ namespace Aspose.Cells_FOSS.Core
     /// <summary>
     /// Represents the internal model for a single column in a table.
     /// </summary>
-    public sealed class ListColumnModel
+    internal sealed class ListColumnModel
     {
         /// <summary>
         /// Initializes a new instance with the given one-based id and name.
@@ -45,3 +45,4 @@ namespace Aspose.Cells_FOSS.Core
         public string TotalsRowFormula { get; set; }
     }
 }
+

@@ -12,12 +12,12 @@ namespace Aspose.Cells_FOSS.Samples.Styles
             cell.PutValue("Styled");
 
             var style = cell.GetStyle();
-            style.Font.Bold = true;
+            style.Font.IsBold = true;
             style.Pattern = FillPattern.Solid;
             style.ForegroundColor = Color.FromArgb(255, 241, 196, 15);
             cell.SetStyle(style);
 
-            Console.WriteLine("{0} / Bold={1}", cell.StringValue, cell.GetStyle().Font.Bold);
+            Console.WriteLine("{0} / Bold={1}", cell.StringValue, cell.GetStyle().Font.IsBold);
         }
     }
 }

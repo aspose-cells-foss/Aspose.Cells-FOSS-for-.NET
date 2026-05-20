@@ -14,7 +14,7 @@ namespace Aspose.Cells_FOSS
     /// var cell = workbook.Worksheets[0].Cells["C3"];
     ///
     /// var style = cell.GetStyle();
-    /// style.Font.Bold = true;
+    /// style.Font.IsBold = true;
     /// style.NumberFormat = "$#,##0.00";
     /// style.HorizontalAlignment = HorizontalAlignmentType.Center;
     /// cell.SetStyle(style);
@@ -36,14 +36,41 @@ namespace Aspose.Cells_FOSS
         }
 
         /// <summary>
+        /// Copies data from another style object.
+        /// </summary>
+        public void Copy(Style source)
+        {
+            if (source == null) throw new ArgumentNullException(nameof(source));
+
+            Font = source.Font.Clone();
+            Borders = source.Borders.Clone();
+            Pattern = source.Pattern;
+            ForegroundColor = source.ForegroundColor;
+            BackgroundColor = source.BackgroundColor;
+            Number = source.Number;
+            Custom = source.Custom;
+            HorizontalAlignment = source.HorizontalAlignment;
+            VerticalAlignment = source.VerticalAlignment;
+            WrapText = source.WrapText;
+            IndentLevel = source.IndentLevel;
+            TextRotation = source.TextRotation;
+            ShrinkToFit = source.ShrinkToFit;
+            ReadingOrder = source.ReadingOrder;
+            RelativeIndent = source.RelativeIndent;
+            IsLocked = source.IsLocked;
+            IsHidden = source.IsHidden;
+            QuotePrefix = source.QuotePrefix;
+        }
+
+        /// <summary>
         /// Gets or sets the font settings.
         /// </summary>
-        public Font Font { get; set; }
+        public Font Font { get; private set; }
 
         /// <summary>
         /// Gets or sets border settings.
         /// </summary>
-        public Borders Borders { get; set; }
+        public Borders Borders { get; private set; }
 
         /// <summary>
         /// Gets or sets the fill pattern.
@@ -190,9 +217,14 @@ namespace Aspose.Cells_FOSS
         public bool IsHidden { get; set; }
 
         /// <summary>
+        /// Gets or sets whether the cell value starts with a single quote mark.
+        /// </summary>
+        public bool QuotePrefix { get; set; }
+
+        /// <summary>
         /// Creates a copy of the current style.
         /// </summary>
-        public Style Clone()
+        internal Style Clone()
         {
             return new Style
             {
@@ -213,7 +245,66 @@ namespace Aspose.Cells_FOSS
                 RelativeIndent = RelativeIndent,
                 IsLocked = IsLocked,
                 IsHidden = IsHidden,
+                QuotePrefix = QuotePrefix,
             };
+        }
+
+        /// <summary>
+        /// Determines whether two style instances are equal.
+        /// </summary>
+        public override bool Equals(object obj)
+        {
+            var other = obj as Style;
+            if (other == null)
+            {
+                return false;
+            }
+
+            return Font.Equals(other.Font)
+                && BordersEqual(Borders, other.Borders)
+                && Pattern == other.Pattern
+                && ForegroundColor.Equals(other.ForegroundColor)
+                && BackgroundColor.Equals(other.BackgroundColor)
+                && Number == other.Number
+                && string.Equals(Custom, other.Custom, StringComparison.Ordinal)
+                && HorizontalAlignment == other.HorizontalAlignment
+                && VerticalAlignment == other.VerticalAlignment
+                && WrapText == other.WrapText
+                && IndentLevel == other.IndentLevel
+                && TextRotation == other.TextRotation
+                && ShrinkToFit == other.ShrinkToFit
+                && ReadingOrder == other.ReadingOrder
+                && RelativeIndent == other.RelativeIndent
+                && IsLocked == other.IsLocked
+                && IsHidden == other.IsHidden
+                && QuotePrefix == other.QuotePrefix;
+        }
+
+        /// <summary>
+        /// Serves as a hash function for a style object.
+        /// </summary>
+        public override int GetHashCode()
+        {
+            var hash = 17;
+            hash = hash * 31 + Font.GetHashCode();
+            hash = hash * 31 + GetBordersHashCode(Borders);
+            hash = hash * 31 + Pattern.GetHashCode();
+            hash = hash * 31 + ForegroundColor.GetHashCode();
+            hash = hash * 31 + BackgroundColor.GetHashCode();
+            hash = hash * 31 + Number.GetHashCode();
+            hash = hash * 31 + (Custom == null ? 0 : Custom.GetHashCode());
+            hash = hash * 31 + HorizontalAlignment.GetHashCode();
+            hash = hash * 31 + VerticalAlignment.GetHashCode();
+            hash = hash * 31 + WrapText.GetHashCode();
+            hash = hash * 31 + IndentLevel.GetHashCode();
+            hash = hash * 31 + TextRotation.GetHashCode();
+            hash = hash * 31 + ShrinkToFit.GetHashCode();
+            hash = hash * 31 + ReadingOrder.GetHashCode();
+            hash = hash * 31 + RelativeIndent.GetHashCode();
+            hash = hash * 31 + IsLocked.GetHashCode();
+            hash = hash * 31 + IsHidden.GetHashCode();
+            hash = hash * 31 + QuotePrefix.GetHashCode();
+            return hash;
         }
 
         internal StyleValue ToCore()
@@ -224,10 +315,10 @@ namespace Aspose.Cells_FOSS
                 {
                     Name = Font.Name,
                     Size = Font.Size,
-                    Bold = Font.Bold,
-                    Italic = Font.Italic,
+                    Bold = Font.IsBold,
+                    Italic = Font.IsItalic,
                     Underline = Font.Underline,
-                    StrikeThrough = Font.StrikeThrough,
+                    StrikeThrough = Font.IsStrikeout,
                     Color = Font.Color.ToCore(),
                 },
                 Pattern = (FillPatternKind)Pattern,
@@ -264,6 +355,7 @@ namespace Aspose.Cells_FOSS
                     Number = Number,
                     Custom = Custom,
                 },
+                QuotePrefix = QuotePrefix,
             };
         }
 
@@ -280,10 +372,10 @@ namespace Aspose.Cells_FOSS
                 {
                     Name = value.Font.Name,
                     Size = value.Font.Size,
-                    Bold = value.Font.Bold,
-                    Italic = value.Font.Italic,
+                    IsBold = value.Font.Bold,
+                    IsItalic = value.Font.Italic,
                     Underline = value.Font.Underline,
-                    StrikeThrough = value.Font.StrikeThrough,
+                    IsStrikeout = value.Font.StrikeThrough,
                     Color = Color.FromCore(value.Font.Color),
                 },
                 Pattern = (FillPattern)value.Pattern,
@@ -311,6 +403,7 @@ namespace Aspose.Cells_FOSS
                 IsHidden = value.Protection.IsHidden,
                 Number = value.NumberFormat.Number,
                 Custom = value.NumberFormat.Custom,
+                QuotePrefix = value.QuotePrefix,
             };
         }
 
@@ -323,6 +416,64 @@ namespace Aspose.Cells_FOSS
             };
         }
 
+        private static bool BordersEqual(Borders left, Borders right)
+        {
+            if (left == null || right == null)
+            {
+                return left == right;
+            }
+
+            return BorderEqual(left.Left, right.Left)
+                && BorderEqual(left.Right, right.Right)
+                && BorderEqual(left.Top, right.Top)
+                && BorderEqual(left.Bottom, right.Bottom)
+                && BorderEqual(left.Diagonal, right.Diagonal)
+                && left.DiagonalUp == right.DiagonalUp
+                && left.DiagonalDown == right.DiagonalDown;
+        }
+
+        private static bool BorderEqual(Border left, Border right)
+        {
+            if (left == null || right == null)
+            {
+                return left == right;
+            }
+
+            return left.LineStyle == right.LineStyle
+                && left.Color.Equals(right.Color);
+        }
+
+        private static int GetBordersHashCode(Borders borders)
+        {
+            if (borders == null)
+            {
+                return 0;
+            }
+
+            var hash = 17;
+            hash = hash * 31 + GetBorderHashCode(borders.Left);
+            hash = hash * 31 + GetBorderHashCode(borders.Right);
+            hash = hash * 31 + GetBorderHashCode(borders.Top);
+            hash = hash * 31 + GetBorderHashCode(borders.Bottom);
+            hash = hash * 31 + GetBorderHashCode(borders.Diagonal);
+            hash = hash * 31 + borders.DiagonalUp.GetHashCode();
+            hash = hash * 31 + borders.DiagonalDown.GetHashCode();
+            return hash;
+        }
+
+        private static int GetBorderHashCode(Border border)
+        {
+            if (border == null)
+            {
+                return 0;
+            }
+
+            var hash = 17;
+            hash = hash * 31 + border.LineStyle.GetHashCode();
+            hash = hash * 31 + border.Color.GetHashCode();
+            return hash;
+        }
+
         private static Border FromCoreBorder(BorderSideValue value)
         {
             return new Border
@@ -333,3 +484,4 @@ namespace Aspose.Cells_FOSS
         }
     }
 }
+

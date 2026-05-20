@@ -6,7 +6,7 @@ namespace Aspose.Cells_FOSS.Core
     /// <summary>
     /// Specifies diagnostic severity.
     /// </summary>
-    public enum DiagnosticSeverity
+    internal enum DiagnosticSeverity
     {
         Warning,
         Recoverable,
@@ -14,3 +14,4 @@ namespace Aspose.Cells_FOSS.Core
         Fatal
     }
 }
+

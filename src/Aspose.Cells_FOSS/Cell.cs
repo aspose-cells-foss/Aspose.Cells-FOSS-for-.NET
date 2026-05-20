@@ -1,6 +1,7 @@
 using System.IO;
 using System.Collections.Generic;
 using System;
+using System.Globalization;
 using Aspose.Cells_FOSS.Core;
 
 namespace Aspose.Cells_FOSS
@@ -126,28 +127,28 @@ namespace Aspose.Cells_FOSS
                 var record = TryGetRecord();
                 if (record == null)
                 {
-                    return CellValueType.Blank;
+                    return CellValueType.IsNull;
                 }
 
                 if (!string.IsNullOrEmpty(record.Formula))
                 {
-                    return CellValueType.Formula;
+                    return CellValueType.IsUnknown;
                 }
 
                 switch (record.Kind)
                 {
                     case CellValueKind.String:
-                        return CellValueType.String;
+                        return CellValueType.IsString;
                     case CellValueKind.Number:
-                        return CellValueType.Number;
+                        return CellValueType.IsNumeric;
                     case CellValueKind.Boolean:
-                        return CellValueType.Boolean;
+                        return CellValueType.IsBool;
                     case CellValueKind.DateTime:
-                        return CellValueType.DateTime;
+                        return CellValueType.IsDateTime;
                     case CellValueKind.Formula:
-                        return CellValueType.Formula;
+                        return CellValueType.IsUnknown;
                     default:
-                        return CellValueType.Blank;
+                        return CellValueType.IsNull;
                 }
             }
         }
@@ -170,17 +171,17 @@ namespace Aspose.Cells_FOSS
         }
 
         /// <summary>
-        /// Sets the cell value to a decimal number.
+        /// Sets the cell value to a floating-point number.
         /// </summary>
-        public void PutValue(decimal value)
+        public void PutValue(double value)
         {
             SetScalar(value, CellValueKind.Number);
         }
 
         /// <summary>
-        /// Sets the cell value to a floating-point number.
+        /// Sets the cell value to a decimal number.
         /// </summary>
-        public void PutValue(double value)
+        public void PutValue(decimal value)
         {
             SetScalar(value, CellValueKind.Number);
         }
@@ -205,6 +206,71 @@ namespace Aspose.Cells_FOSS
         }
 
         /// <summary>
+        /// Puts a string value into the cell and converts the value when appropriate.
+        /// </summary>
+        public void PutValue(string value, bool isConverted)
+        {
+            PutValue(value, isConverted, true);
+        }
+
+        /// <summary>
+        /// Puts a string value into the cell and converts the value when appropriate.
+        /// </summary>
+        public void PutValue(string value, bool isConverted, bool setStyle)
+        {
+            if (value == null) throw new ArgumentNullException(nameof(value));
+            if (setStyle)
+            {
+                // Keep API-compatible signature. Number-format side effects are not
+                // applied in the current v0.1 implementation.
+            }
+
+            if (!isConverted)
+            {
+                PutValue(value);
+                return;
+            }
+
+            int intValue;
+            if (int.TryParse(value, NumberStyles.Integer, CultureInfo.InvariantCulture, out intValue))
+            {
+                PutValue(intValue);
+                return;
+            }
+
+            double doubleValue;
+            if (double.TryParse(value, NumberStyles.Float | NumberStyles.AllowThousands, CultureInfo.InvariantCulture, out doubleValue))
+            {
+                PutValue(doubleValue);
+                return;
+            }
+
+            bool boolValue;
+            if (bool.TryParse(value, out boolValue))
+            {
+                PutValue(boolValue);
+                return;
+            }
+
+            DateTime dateTimeValue;
+            if (DateTime.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.None, out dateTimeValue))
+            {
+                PutValue(dateTimeValue);
+                return;
+            }
+
+            PutValue(value);
+        }
+
+        /// <summary>
+        /// Puts an object value into the cell.
+        /// </summary>
+        public void PutValue(object value)
+        {
+            AssignValue(value);
+        }
+
+        /// <summary>
         /// Gets a detached copy of the cell style.
         /// </summary>
         public Style GetStyle()
@@ -215,12 +281,234 @@ namespace Aspose.Cells_FOSS
         }
 
         /// <summary>
+        /// Gets a detached copy of the cell style.
+        /// </summary>
+        /// <param name="checkBorders">Whether to consider surrounding border effects.</param>
+        public Style GetStyle(bool checkBorders)
+        {
+            if (checkBorders)
+            {
+                // Kept for Aspose-compatible overload shape. Merge-aware resolution
+                // is not differentiated in the current implementation.
+            }
+
+            return GetStyle();
+        }
+
+        /// <summary>
         /// Replaces the cell style with the supplied style object.
         /// </summary>
         public void SetStyle(Style style)
         {
             if (style == null) throw new ArgumentNullException(nameof(style));
             GetOrCreateRecord().Style = style.ToCore();
+        }
+
+        /// <summary>
+        /// Applies the cell style with Aspose-compatible overload shape.
+        /// </summary>
+        /// <param name="style">The cell style.</param>
+        /// <param name="explicitFlag">Reserved for explicit-only application semantics.</param>
+        public void SetStyle(Style style, bool explicitFlag)
+        {
+            if (explicitFlag)
+            {
+                // Kept for Aspose-compatible overload shape. Explicit-only style
+                // application is not differentiated in the current implementation.
+            }
+
+            SetStyle(style);
+        }
+
+        /// <summary>
+        /// Applies the cell style based on style flags.
+        /// </summary>
+        /// <param name="style">The cell style.</param>
+        /// <param name="flag">The style flag.</param>
+        public void SetStyle(Style style, StyleFlag flag)
+        {
+            if (style == null) throw new ArgumentNullException(nameof(style));
+            if (flag == null) throw new ArgumentNullException(nameof(flag));
+
+            if (flag.All)
+            {
+                SetStyle(style);
+                return;
+            }
+
+            var target = GetStyle();
+
+            if (flag.NumberFormat)
+            {
+                target.Number = style.Number;
+                target.Custom = style.Custom;
+            }
+
+            if (flag.CellShading)
+            {
+                target.Pattern = style.Pattern;
+                target.ForegroundColor = style.ForegroundColor;
+                target.BackgroundColor = style.BackgroundColor;
+            }
+
+            if (flag.Font)
+            {
+                target.Font.Name = style.Font.Name;
+                target.Font.Size = style.Font.Size;
+                target.Font.IsBold = style.Font.IsBold;
+                target.Font.IsItalic = style.Font.IsItalic;
+                target.Font.Underline = style.Font.Underline;
+                target.Font.IsStrikeout = style.Font.IsStrikeout;
+                target.Font.Color = style.Font.Color;
+            }
+            else
+            {
+                if (flag.FontName)
+                {
+                    target.Font.Name = style.Font.Name;
+                }
+
+                if (flag.FontSize)
+                {
+                    target.Font.Size = style.Font.Size;
+                }
+
+                if (flag.FontBold)
+                {
+                    target.Font.IsBold = style.Font.IsBold;
+                }
+
+                if (flag.FontItalic)
+                {
+                    target.Font.IsItalic = style.Font.IsItalic;
+                }
+
+                if (flag.FontUnderline)
+                {
+                    target.Font.Underline = style.Font.Underline;
+                }
+
+                if (flag.FontStrike)
+                {
+                    target.Font.IsStrikeout = style.Font.IsStrikeout;
+                }
+
+                if (flag.FontColor)
+                {
+                    target.Font.Color = style.Font.Color;
+                }
+            }
+
+            if (flag.Borders)
+            {
+                target.Borders.Left = style.Borders.Left.Clone();
+                target.Borders.Right = style.Borders.Right.Clone();
+                target.Borders.Top = style.Borders.Top.Clone();
+                target.Borders.Bottom = style.Borders.Bottom.Clone();
+                target.Borders.Diagonal = style.Borders.Diagonal.Clone();
+                target.Borders.DiagonalUp = style.Borders.DiagonalUp;
+                target.Borders.DiagonalDown = style.Borders.DiagonalDown;
+            }
+            else
+            {
+                if (flag.LeftBorder)
+                {
+                    target.Borders.Left = style.Borders.Left.Clone();
+                }
+
+                if (flag.RightBorder)
+                {
+                    target.Borders.Right = style.Borders.Right.Clone();
+                }
+
+                if (flag.TopBorder)
+                {
+                    target.Borders.Top = style.Borders.Top.Clone();
+                }
+
+                if (flag.BottomBorder)
+                {
+                    target.Borders.Bottom = style.Borders.Bottom.Clone();
+                }
+
+                if (flag.DiagonalUpBorder)
+                {
+                    target.Borders.Diagonal = style.Borders.Diagonal.Clone();
+                    target.Borders.DiagonalUp = style.Borders.DiagonalUp;
+                }
+
+                if (flag.DiagonalDownBorder)
+                {
+                    target.Borders.Diagonal = style.Borders.Diagonal.Clone();
+                    target.Borders.DiagonalDown = style.Borders.DiagonalDown;
+                }
+            }
+
+            if (flag.Alignments)
+            {
+                target.HorizontalAlignment = style.HorizontalAlignment;
+                target.VerticalAlignment = style.VerticalAlignment;
+                target.WrapText = style.WrapText;
+                target.IndentLevel = style.IndentLevel;
+                target.TextRotation = style.TextRotation;
+                target.ReadingOrder = style.ReadingOrder;
+                target.RelativeIndent = style.RelativeIndent;
+                target.ShrinkToFit = style.ShrinkToFit;
+            }
+            else
+            {
+                if (flag.HorizontalAlignment)
+                {
+                    target.HorizontalAlignment = style.HorizontalAlignment;
+                }
+
+                if (flag.Indent)
+                {
+                    target.IndentLevel = style.IndentLevel;
+                }
+
+                if (flag.VerticalAlignment)
+                {
+                    target.VerticalAlignment = style.VerticalAlignment;
+                }
+
+                if (flag.WrapText)
+                {
+                    target.WrapText = style.WrapText;
+                }
+
+                if (flag.Rotation)
+                {
+                    target.TextRotation = style.TextRotation;
+                }
+
+                if (flag.TextDirection)
+                {
+                    target.ReadingOrder = style.ReadingOrder;
+                }
+
+                if (flag.ShrinkToFit)
+                {
+                    target.ShrinkToFit = style.ShrinkToFit;
+                }
+            }
+
+            if (flag.Locked)
+            {
+                target.IsLocked = style.IsLocked;
+            }
+
+            if (flag.Hidden)
+            {
+                target.IsHidden = style.IsHidden;
+            }
+
+            if (flag.QuotePrefix)
+            {
+                target.QuotePrefix = style.QuotePrefix;
+            }
+
+            SetStyle(target);
         }
 
         private void AssignValue(object value)
@@ -278,7 +566,7 @@ namespace Aspose.Cells_FOSS
             }
             if (value is decimal)
             {
-                PutValue((decimal)value);
+                SetScalar((decimal)value, CellValueKind.Number);
                 return;
             }
             if (value is char)

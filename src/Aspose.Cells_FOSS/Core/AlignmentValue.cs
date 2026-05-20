@@ -7,7 +7,7 @@ namespace Aspose.Cells_FOSS.Core
     /// <summary>
     /// Represents alignment value.
     /// </summary>
-    public sealed class AlignmentValue
+    internal sealed class AlignmentValue
     {
         /// <summary>
         /// Gets or sets the horizontal.
@@ -62,3 +62,4 @@ namespace Aspose.Cells_FOSS.Core
         }
     }
 }
+

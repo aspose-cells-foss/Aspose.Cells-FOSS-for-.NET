@@ -7,7 +7,7 @@ namespace Aspose.Cells_FOSS.Core
     /// <summary>
     /// Represents workbook view model.
     /// </summary>
-    public sealed class WorkbookViewModel
+    internal sealed class WorkbookViewModel
     {
         /// <summary>
         /// Gets or sets the x window.
@@ -101,3 +101,4 @@ namespace Aspose.Cells_FOSS.Core
         }
     }
 }
+

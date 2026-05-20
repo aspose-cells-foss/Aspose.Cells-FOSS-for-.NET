@@ -6,7 +6,7 @@ namespace Aspose.Cells_FOSS.Packaging
     /// <summary>
     /// Defines a reader for package models.
     /// </summary>
-    public interface IPackageReader
+    internal interface IPackageReader
     {
         /// <summary>
         /// Reads a package model from the specified stream.

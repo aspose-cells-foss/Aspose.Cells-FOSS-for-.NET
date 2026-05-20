@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Table Support - Aspose.Cells FOSS for .NET</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #003399;
+            color: white;
+            padding: 20px;
+            margin: -20px -20px 20px -20px;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .section {
+            margin-bottom: 40px;
+        }
+        .section-title {
+            color: #003399;
+            border-bottom: 2px solid #003399;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+        pre {
+            background-color: #f4f4f4;
+            padding: 15px;
+            border-radius: 3px;
+            overflow-x: auto;
+            border: 1px solid #ddd;
+        }
+        code {
+            font-family: 'Courier New', monospace;
+            color: #d63384;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #003399;
+            text-decoration: none;
+        }
+        .style-types {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .style-card {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #4CAF50;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Table Support</h1>
+        <p>Complete documentation for Excel tables (ListObjects) in Aspose.Cells FOSS for .NET</p>
+    </div>
+
+    <div class="content">
+        <a href="index.html" class="back-link">← Back to Index</a>
+
+        <div class="section">
+            <h2 class="section-title">Table Overview</h2>
+            <p>The <strong>ListObject</strong> class represents an Excel table (structured reference / ListObject) with built-in filtering, sorting, and styling capabilities.</p>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Table Features</h2>
+            <ul>
+                <li><strong>Built-in Filters:</strong> Auto-filter dropdown buttons for table headers</li>
+                <li><strong>Built-in Styles:</strong> 60+ professional table styles with banding options</li>
+                <li><strong>Total Row:</strong> Support for totals row with built-in calculations</li>
+                <li><strong>Table Styles:</strong> Style first and last columns, row and column stripes</li>
+                <li><strong>Structured References:</strong> Refer to table data using table name in formulas</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Usage Examples</h2>
+
+            <div class="section">
+                <h3>Creating a Simple Table</h3>
+                <pre><code>using Aspose.Cells_FOSS;
+
+var workbook = new Workbook();
+var worksheet = workbook.Worksheets[0];
+
+// Add headers
+worksheet.Cells["A1"].PutValue("Name");
+worksheet.Cells["B1"].PutValue("Age");
+worksheet.Cells["C1"].PutValue("City");
+
+// Add data rows
+for (int i = 0; i < 5; i++)
+{
+    worksheet.Cells[i + 2, 0].PutValue($"Person {i + 1}");
+    worksheet.Cells[i + 2, 1].PutValue(new Random().Next(20, 60));
+    worksheet.Cells[i + 2, 2].PutValue($"City {new Random().Next(10, 20)}");
+}
+
+// Create a table
+int tableIndex = worksheet.ListObjects.Add(0, 0, 3, 1, true);
+
+// Configure table
+var table = worksheet.ListObjects[tableIndex];
+table.DisplayName = "People Data";
+table.ShowHeaderRow = true;
+table.ShowTotals = false;
+
+Console.WriteLine($"Table '{table.DisplayName}' created");</code></pre>
+            </div>
+
+            <div class="section">
+                <h3>Adding Multiple Columns</h3>
+                <pre><code>// Access a specific column
+var table = worksheet.ListObjects[0];
+
+// Add data to column
+for (int i = 0; i < 10; i++)
+{
+    var column = table.ListColumns[i];
+    if (column != null)
+    {
+        Console.WriteLine($"Column {i}: Not defined");
+        continue;
+    }
+    column.Name = $"Column {i + 1}";
+
+    // Set formula for totals calculation
+    column.TotalsCalculation = TotalsCalculation.Sum;
+    column.NumberFormat = "#,##0";
+}
+
+Console.WriteLine($"Added {table.ListColumns.Count} columns");</code></pre>
+            </div>
+
+            <div class="section">
+                <h3>Using Table Styles</h3>
+                <pre><code>using Aspose.Cells_FOSS;
+
+var workbook = new Workbook();
+var worksheet = workbook.Worksheets[0];
+
+// Add data
+for (int i = 0; i < 10; i++)
+{
+    worksheet.Cells[i, 0].PutValue($"Item {i + 1}");
+    worksheet.Cells[i, 1].PutValue(new Random().Next(100, 1000));
+}
+
+// Create a table with style
+int tableIndex = worksheet.ListObjects.Add(0, 0, 3, 1, true);
+
+// Apply a built-in style
+var table = worksheet.ListObjects[tableIndex];
+table.TableStyleType = TableStyleType.TableStyleMedium9;
+table.ShowTableStyleFirstColumn = true;
+table.ShowTableStyleLastColumn = true;
+table.ShowTableStyleRowStripes = true;
+table.ShowTableStyleColumnStripes = false;
+
+Console.WriteLine($"Applied style: {table.TableStyleType}");</code></pre>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">Table Properties</h2>
+                <p>The <strong>ListObject</strong> class provides the following properties:</p>
+                
+                <div class="style-types">
+                    <div class="style-card">
+                        <div class="section-title">Basic Properties</div>
+                        <ul>
+                            <li><strong>DisplayName:</strong> User-visible table name</li>
+                            <li><strong>Comment:</strong> Optional table description</li>
+                            <li><strong>StartRow/Column:</strong> Top-left cell position</li>
+                            <li><strong>EndRow/Column:</strong> Bottom-right cell position</li>
+                            <li><strong>ShowHeaderRow:</strong> Show/hide header row</li>
+                            <li><strong>ShowTotals:</strong> Show/hide totals row</li>
+                        </ul>
+                    </div>
+
+                    <div class="style-card">
+                        <div class="section-title">Advanced Properties</div>
+                        <ul>
+                            <li><strong>TableStyleType:</strong> Built-in table style</li>
+                            <li><strong>TableStyleName:</strong> Raw table style name</li>
+                            <li><strong>ShowTableStyleFirstColumn:</strong> Style first column</li>
+                            <li><strong>ShowTableStyleLastColumn:</strong> Style last column</li>
+                            <li><strong>ShowTableStyleRowStripes:</strong> Row banding</li>
+                            <li><strong>ShowTableStyleColumnStripes:</strong> Column banding</li>
+                        </ul>
+                    </div>
+
+                    <div class="style-card">
+                        <div class="section-title">Methods</div>
+                        <ul>
+                            <li><strong>ListColumns:</strong> Get all table columns</li>
+                            <li><strong>Resize:</strong> Resize table to new range</li>
+                            <li><strong>ShowAutoFilter:</strong> Enable auto filter</li>
+                            <li><strong>RemoveAutoFilter:</strong> Disable auto filter</li>
+                            <li><strong>ConvertToRange:</strong> Convert table to data range</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">ListObjectCollection</h2>
+                <p>The <strong>ListObjectCollection</strong> class manages all tables in a worksheet:</p>
+                <ul>
+                    <li><strong>Count:</strong> Number of tables</li>
+                    <li><strong>this[int]:</strong> Access table by index</li>
+                    <li><strong>Add()</strong> - Add a new table</li>
+                    <li><strong>Parameters:</strong> table range and headers flag</li>
+                </ul>
+            </div>
+
+        <div class="section">
+                <h2 class="section-title">ListColumnCollection</h2>
+                <p>The <strong>ListColumnCollection</strong> class manages columns within a table:</p>
+                <ul>
+                    <li><strong>Properties:</strong> Name, NumberFormat, Formula, TotalsCalculation</li>
+                    <li><strong>Methods:</strong> Add new column, get column by name</li>
+                </ul>
+            </div>
+
+        <div class="section">
+            <h2 class="section-title">TableStyleType Enumeration</h2>
+                <p>Built-in table styles:</p>
+                
+                <div class="style-types">
+                    <div class="style-card">
+                        <div class="section-title">Default Styles</div>
+                        <ul>
+                            <li><strong>None:</strong> No special formatting</li>
+                            <li><strong>TableStyleMedium9:</strong> Medium blue style</li>
+                            <li><strong>TableStyleLight1:</strong> Light blue style</li>
+                            <li><strong>TableStyleLight9:</strong> Light gray style</li>
+                            <li><strong>TableStyleMedium7:</strong> Medium green style</li>
+                            <li><strong>TableStyleDark1:</strong> Medium dark gray style</li>
+                            <li><strong>TableStyleDark11:</strong> Dark gray style</li>
+                            <li><strong>TableStyleLight6:</strong> Light green style</li>
+                            <li><strong>TableStyleLight11:</strong> Light gray style</li>
+                            <li><strong>TableStyleMedium2:</strong> Medium green style</li>
+                            <li><strong>TableStyleLight3:</strong> Light red style</li>
+                            <li><strong>TableStyleMedium3:</strong> Medium red style</li>
+                            <li><strong>TableStyleDark3:</strong> Dark red style</li>
+                        </ul>
+                    </div>
+
+                    <div class="style-card">
+                        <div class="section-title">Color Styles</div>
+                        <ul>
+                            <li><strong>TableStyleLight2:</strong> Light blue style</li>
+                            <li><strong>TableStyleDark4:</strong> Dark blue style</li>
+                            <li><strong>TableStyleDark6:</strong> Dark purple style</li>
+                            <li><strong>TableStyleLight8:</strong> Light green style</li>
+                            <li><strong>TableStyleDark8:</strong> Dark green style</li>
+                        </ul>
+                    </div>
+
+                    <div class="style-card">
+                        <div class="section-title">Professional Styles</div>
+                        <ul>
+                            <li><strong>TableStyleLight11:</strong> Light gray style</li>
+                            <li><strong>TableStyleDark11:</strong> Dark gray style</li>
+                            <li><strong>TableStyleLight13:</strong> Light blue style</li>
+                            <li><strong>TableStyleDark13:</strong> Dark blue style</li>
+                        </ul>
+                    </div>
+
+                    <div class="style-card">
+                        <div class="section-title">Custom Styles</div>
+                        <ul>
+                            <li><strong>TableStyleType.Custom:</strong> Custom table style</li>
+                            <li><strong>TableStyleName:</strong> Custom style name</li>
+                            <li><strong>Preserves:</strong> Setting Custom preserves current TableStyleName</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        <div class="section">
+                <h2 class="section-title">TotalsCalculation Enumeration</h2>
+                <p>Totals calculation methods for table columns:</p>
+                <ul>
+                    <li><strong>None:</strong> No calculation</li>
+                    <li><strong>Sum:</strong> Sum of values</li>
+                    <li><strong>Average:</strong> Average of values</li>
+                    <li><strong>Count:</strong> Count of non-empty cells</li>
+                    <li><strong>CountNums:</strong> Count of numeric cells</li>
+                    <li><strong>Min:</strong> Minimum value</li>
+                    <li><strong>Max:</strong> Maximum value</li>
+                    <li><strong>StdDev:</strong> Standard deviation</li>
+                    <li><strong>Var:</strong> Variance</li>
+                </ul>
+            </div>
+
+        <div class="section">
+                <h2 class="section-title">Important Notes</h2>
+                <ul>
+                    <li><strong>Modern Chart Types:</strong> Not supported for programmatic table creation</li>
+                    <li><strong>Formula References:</strong> Tables support structured references in formulas</li>
+                    <li><strong>Resize Behavior:</strong> Resizing a table updates the underlying data range</li>
+                    <li><strong>Multiple Tables:</strong> Worksheets can contain multiple tables</li>
+                    <li><strong>Table Persistence:</strong> Table data is persisted in the worksheet model</li>
+                </ul>
+            </div>
+
+        <div class="section">
+            <h2 class="section-title">Related Documentation</h2>
+                <ul>
+                    <li><a href="api-reference.html">Complete API Reference</a></li>
+                    <li><a href="chart.html">Chart Documentation</a></li>
+                    <li><a href="shape.html">Shape Documentation</a></li>
+                    <li><a href="picture.html">Picture Documentation</a></li>
+                    <li><a href="comments.html">Comment Documentation</a></li>
+                    <li><a href="index.html">Back to Main Documentation</a></li>
+                    <li><a href="examples.html">More Examples</a></li>
+                </ul>
+            </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 40px; color: # #666; font-size: 0.9em;">
+        <p>&copy; 2026 Aspose.Cells FOSS Project. All rights reserved.</p>
+    </div>
+</body>
+</html>

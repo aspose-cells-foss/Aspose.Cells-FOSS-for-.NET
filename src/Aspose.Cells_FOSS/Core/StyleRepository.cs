@@ -7,7 +7,7 @@ namespace Aspose.Cells_FOSS.Core
     /// <summary>
     /// Represents style repository.
     /// </summary>
-    public sealed class StyleRepository
+    internal sealed class StyleRepository
     {
         /// <summary>
         /// Normalizes the specified value.
@@ -20,3 +20,4 @@ namespace Aspose.Cells_FOSS.Core
         }
     }
 }
+

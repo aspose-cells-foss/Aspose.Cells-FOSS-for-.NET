@@ -6,7 +6,7 @@ namespace Aspose.Cells_FOSS.Core
     /// <summary>
     /// Represents merge region.
     /// </summary>
-    public struct MergeRegion
+    internal struct MergeRegion
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="MergeRegion"/> class.
@@ -41,3 +41,4 @@ namespace Aspose.Cells_FOSS.Core
         public int TotalColumns { get; }
     }
 }
+

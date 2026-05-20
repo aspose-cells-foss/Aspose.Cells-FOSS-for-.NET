@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document Properties - Aspose.Cells FOSS for .NET</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #003399;
+            color: white;
+            padding: 20px;
+            margin: -20px -20px 20px -20px;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .section {
+            margin-bottom: 40px;
+        }
+        .section-title {
+            color: #003399;
+            border-bottom: 2px solid #003399;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+        pre {
+            background-color: #f4f4f4;
+            padding: 15px;
+            border-radius: 3px;
+            overflow-x: auto;
+            border: 1px solid #ddd;
+        }
+        code {
+            font-family: 'Courier New', monospace;
+            color: #d63384;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #003399;
+            text-decoration: none;
+        }
+        .method-section {
+            background-color: #f9f9f9;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-left: 4px solid #4CAF50;
+            border-radius: 3px;
+        }
+        .method-name {
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            color: #003399;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Document Properties</h1>
+        <p>Complete documentation for document properties in Aspose.Cells FOSS for .NET</p>
+    </div>
+
+    <div class="content">
+        <a href="index.html" class="back-link">← Back to Index</a>
+
+        <div class="section">
+            <h2 class="section-title">Document Properties Overview</h2>
+            <p>Document properties (metadata) provide information about your Excel workbooks, such as title, author, creation date, and custom properties. These properties help organize documents, improve searchability, and provide context about the workbook's purpose and origin.</p>
+
+            <div class="method-section">
+                <div class="method-name">Property Types:</div>
+                <ul>
+                    <li><strong>Core Properties:</strong> Standard metadata like title, author, subject, keywords, etc.</li>
+                    <li><strong>Extended Properties:</strong> Application-specific information like application name, version, etc.</li>
+                    <li><strong>Custom Properties:</strong> User-defined properties for specific needs</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Accessing Document Properties</h2>
+
+            <div class="method-section">
+                <div class="method-name">Accessing Properties</div>
+                <pre><code>var workbook = new Workbook();
+
+// Access document properties
+var properties = workbook.DocumentProperties;
+
+// Access through different entry points
+var properties2 = workbook.Properties;  // Alternative access</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Core vs Extended Properties</div>
+                <pre><code>var properties = workbook.DocumentProperties;
+
+// Core properties (standard metadata)
+var coreProperties = properties.Core;
+
+// Extended properties (application-specific)
+var extendedProperties = properties.Extended;</code></pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Core Properties</h2>
+
+            <div class="method-section">
+                <div class="method-name">Basic Core Properties</div>
+                <pre><code>var properties = workbook.DocumentProperties;
+
+// Title
+properties.Title = "Annual Financial Report";
+string title = properties.Title;
+
+// Author
+properties.Author = "John Doe";
+string author = properties.Author;
+
+// Subject
+properties.Subject = "Financial Summary for FY2026";
+string subject = properties.Subject;
+
+// Keywords
+properties.Keywords = "financial, report, summary, 2026";
+string keywords = properties.Keywords;
+
+// Comments
+properties.Comments = "Prepared by the Finance Department. Generated using Aspose.Cells FOSS.";
+string comments = properties.Comments;
+
+// Company
+properties.Company = "ABC Corporation";
+string company = properties.Company;
+
+// Category
+properties.Category = "Finance";
+string category = properties.Category;</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Manager and Status</div>
+                <pre><code>var properties = workbook.DocumentProperties;
+
+// Manager (document manager)
+properties.Manager = "Jane Smith";
+string manager = properties.Manager;
+
+// Status (document status)
+properties.Status = "Final";
+string status = properties.Status;
+
+// Hyperlink base (for relative hyperlinks)
+properties.HyperlinkBase = "https://www.example.com/documents/";
+string hyperlinkBase = properties.HyperlinkBase;</code></pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Extended Properties</h2>
+
+            <div class="method-section">
+                <div class="method-name">Application Information</div>
+                <pre><code>var properties = workbook.DocumentProperties;
+var extended = properties.Extended;
+
+// Application that created the document
+extended.Application = "Aspose.Cells FOSS";
+string application = extended.Application;
+
+// Document manager
+extended.Manager = "Document Management System";
+string manager = extended.Manager;
+
+// Company
+extended.Company = "ABC Corporation";
+string company = extended.Company;
+
+// Version
+extended.Version = "1.0";
+string version = extended.Version;</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Document Statistics</div>
+                <pre><code>var properties = workbook.DocumentProperties;
+var extended = properties.Extended;
+
+// Number of pages (calculated)
+int pages = extended.Pages;
+
+// Number of words (calculated)
+int words = extended.Words;
+
+// Number of characters (calculated)
+int characters = extended.Characters;
+
+// Number of paragraphs (calculated)
+int paragraphs = extended.Paragraphs;
+
+// Note: These statistics are automatically calculated by Excel</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Security Settings</div>
+                <pre><code>var properties = workbook.DocumentProperties;
+var extended = properties.Extended;
+
+// Security classification
+extended.Security = "Internal";
+string security = extended.Security;
+
+// Document template
+extended.Template = "Standard Financial Report";
+string template = extended.Template;</code></pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Custom Properties</h2>
+
+            <div class="method-section">
+                <div class="method-name">Adding Custom Properties</div>
+                <pre><code>var properties = workbook.DocumentProperties;
+
+// Add custom property - String
+properties.Add("ProjectCode", "PRJ-2026-001");
+
+// Add custom property - Integer
+properties.Add("ReviewCount", 3);
+
+// Add custom property - DateTime
+properties.Add("ReviewDate", DateTime.Now);
+
+// Add custom property - Boolean
+properties.Add("Approved", true);
+
+// Add custom property - Double
+properties.Add("Budget", 50000.00);</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Reading Custom Properties</div>
+                <pre><code>var properties = workbook.DocumentProperties;
+
+// Get property by name
+if (properties.Contains("ProjectCode"))
+{
+    string projectCode = properties["ProjectCode"].Value as string;
+    Console.WriteLine($"Project Code: {projectCode}");
+}
+
+// Get property value directly
+object reviewCount = properties["ReviewCount"].Value;
+object reviewDate = properties["ReviewDate"].Value;
+object approved = properties["Approved"].Value;
+object budget = properties["Budget"].Value;</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Updating Custom Properties</div>
+                <pre><code>var properties = workbook.DocumentProperties;
+
+// Update existing custom property
+properties["ReviewCount"].Value = 4;
+properties["ReviewDate"].Value = DateTime.Now.AddDays(5);
+properties["Approved"].Value = false;
+
+// Or remove and re-add
+properties.Remove("ProjectCode");
+properties.Add("ProjectCode", "PRJ-2026-002");</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Listing Custom Properties</div>
+                <pre><code>var properties = workbook.DocumentProperties;
+
+// Iterate through all custom properties
+foreach (var property in properties)
+{
+    Console.WriteLine($"Name: {property.Name}");
+    Console.WriteLine($"Type: {property.Type}");
+    Console.WriteLine($"Value: {property.Value}");
+    Console.WriteLine();
+}
+
+// Get count
+int customPropertyCount = properties.Count;</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Removing Custom Properties</div>
+                <pre><code>var properties = workbook.DocumentProperties;
+
+// Remove specific property
+properties.Remove("ProjectCode");
+
+// Remove all custom properties
+properties.Clear();</code></pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Property Types</h2>
+
+            <div class="method-section">
+                <div class="method-name">Available Data Types</div>
+                <pre><code>// Supported data types for custom properties:
+// - String (text)
+properties.Add("Department", "Finance");
+
+// - Integer (32-bit)
+properties.Add("Version", 1);
+properties.Add("Year", 2026);
+
+// - Double (floating point)
+properties.Add("Amount", 1234.56);
+
+// - Boolean (true/false)
+properties.Add("Archived", true);
+properties.Add("Published", false);
+
+// - DateTime (date and time)
+properties.Add("CreatedDate", DateTime.Now);
+properties.Add("DueDate", new DateTime(2026, 12, 31));</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Type Checking</div>
+                <pre><code>var properties = workbook.DocumentProperties;
+
+// Check property type
+var property = properties["ProjectCode"];
+PropertyType type = property.Type;
+
+switch (type)
+{
+    case PropertyType.String:
+        Console.WriteLine("String property");
+        break;
+    case PropertyType.Int:
+        Console.WriteLine("Integer property");
+        break;
+    case PropertyType.Double:
+        Console.WriteLine("Double property");
+        break;
+    case PropertyType.Boolean:
+        Console.WriteLine("Boolean property");
+        break;
+    case PropertyType.DateTime:
+        Console.WriteLine("DateTime property");
+        break;
+}</code></pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Best Practices</h2>
+
+            <div class="method-section">
+                <div class="method-name">Property Management</div>
+                <pre><code>// Always check if property exists before accessing
+var properties = workbook.DocumentProperties;
+
+if (properties.Contains("ProjectCode"))
+{
+    string code = properties["ProjectCode"].Value as string;
+    // Use the property
+}
+else
+{
+    Console.WriteLine("ProjectCode property not found");
+}
+
+// Use descriptive property names
+properties.Add("ProjectCode", "PRJ-001");        // Good
+properties.Add("ReviewDate", DateTime.Now);      // Good
+properties.Add("p1", "value1");                 // Bad - not descriptive
+
+// Use appropriate data types
+properties.Add("ReviewCount", 3);               // Good - integer
+properties.Add("ReviewCount", "3");              // Avoid - string for number
+
+// Keep property names consistent
+properties.Add("ProjectCode", "PRJ-001");       // camelCase
+properties.Add("ReviewDate", DateTime.Now);      // camelCase
+properties.Add("Approved", true);               // camelCase</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Property Validation</div>
+                <pre><code>// Validate property values before setting
+var properties = workbook.DocumentProperties;
+
+// Validate project code format
+string projectCode = "PRJ-2026-001";
+if (projectCode.StartsWith("PRJ-"))
+{
+    properties.Add("ProjectCode", projectCode);
+}
+else
+{
+    Console.WriteLine("Invalid project code format");
+}
+
+// Validate date range
+DateTime dueDate = DateTime.Now.AddMonths(6);
+if (dueDate > DateTime.Now)
+{
+    properties.Add("DueDate", dueDate);
+}
+else
+{
+    Console.WriteLine("Due date must be in the future");
+}</code></pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Complete Example</h2>
+
+            <div class="method-section">
+                <div class="method-name">Document Metadata Setup</div>
+                <pre><code>using Aspose.Cells_FOSS;
+using System;
+
+class Program
+{
+    static void Main()
+    {
+        var workbook = new Workbook();
+        var properties = workbook.DocumentProperties;
+
+        // Set core properties
+        properties.Title = "Annual Financial Report 2026";
+        properties.Author = "John Doe";
+        properties.Subject = "Comprehensive financial analysis for fiscal year 2026";
+        properties.Keywords = "finance, report, annual, 2026, revenue, expenses, profit";
+        properties.Comments = "Prepared by Finance Department. Version 1.0. Final approved version.";
+        properties.Company = "ABC Corporation";
+        properties.Category = "Financial Reports";
+        properties.Manager = "Jane Smith";
+        properties.Status = "Final";
+        properties.HyperlinkBase = "https://www.abccorp.com/reports/2026/";
+
+        // Set extended properties
+        var extended = properties.Extended;
+        extended.Application = "Aspose.Cells FOSS";
+        extended.Manager = "Document Management System";
+        extended.Company = "ABC Corporation";
+        extended.Version = "1.0";
+        extended.Template = "Standard Financial Report Template v2.0";
+        extended.Security = "Internal Use Only";
+
+        // Add custom properties
+        properties.Add("ProjectCode", "FIN-2026-001");
+        properties.Add("ReportType", "Annual");
+        properties.Add("FiscalYear", 2026);
+        properties.Add("Currency", "USD");
+        properties.Add("PreparedDate", DateTime.Now);
+        properties.Add("ReviewDate", DateTime.Now.AddDays(-5));
+        properties.Add("ApprovedDate", DateTime.Now);
+        properties.Add("ApprovedBy", "Jane Smith");
+        properties.Add("ApproverTitle", "CFO");
+        properties.Add("ReviewCycle", 3);
+        properties.Add("DataSources", 5);
+        properties.Add("Confidential", true);
+        properties.Add("PublicRelease", false);
+        properties.Add("BudgetAllocation", 150000.00);
+        properties.Add("ActualSpending", 145500.00);
+        properties.Add("VariancePercentage", 3.0);
+
+        // Display all properties
+        Console.WriteLine("=== Document Properties ===");
+        Console.WriteLine($"Title: {properties.Title}");
+        Console.WriteLine($"Author: {properties.Author}");
+        Console.WriteLine($"Subject: {properties.Subject}");
+        Console.WriteLine($"Company: {properties.Company}");
+        Console.WriteLine($"Status: {properties.Status}");
+        Console.WriteLine();
+
+        Console.WriteLine("=== Custom Properties ===");
+        foreach (var property in properties)
+        {
+            Console.WriteLine($"{property.Name}: {property.Value} ({property.Type})");
+        }
+
+        // Save workbook
+        workbook.Save("financial-report-with-metadata.xlsx");
+        Console.WriteLine();
+        Console.WriteLine("Workbook saved with complete metadata!");
+    }
+}</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Reading Document Properties</div>
+                <pre><code>using Aspose.Cells_FOSS;
+using System;
+
+class Program
+{
+    static void Main()
+    {
+        var workbook = new Workbook("financial-report-with-metadata.xlsx");
+        var properties = workbook.DocumentProperties;
+
+        // Read core properties
+        Console.WriteLine("=== Core Properties ===");
+        Console.WriteLine($"Title: {properties.Title}");
+        Console.WriteLine($"Author: {properties.Author}");
+        Console.WriteLine($"Subject: {properties.Subject}");
+        Console.WriteLine($"Keywords: {properties.Keywords}");
+        Console.WriteLine($"Comments: {properties.Comments}");
+        Console.WriteLine($"Company: {properties.Company}");
+        Console.WriteLine($"Category: {properties.Category}");
+        Console.WriteLine($"Manager: {properties.Manager}");
+        Console.WriteLine($"Status: {properties.Status}");
+        Console.WriteLine();
+
+        // Read extended properties
+        Console.WriteLine("=== Extended Properties ===");
+        var extended = properties.Extended;
+        Console.WriteLine($"Application: {extended.Application}");
+        Console.WriteLine($"Version: {extended.Version}");
+        Console.WriteLine($"Template: {extended.Template}");
+        Console.WriteLine($"Security: {extended.Security}");
+        Console.WriteLine();
+
+        // Read custom properties
+        Console.WriteLine("=== Custom Properties ===");
+        if (properties.Count > 0)
+        {
+            foreach (var property in properties)
+            {
+                string valueDisplay;
+                switch (property.Type)
+                {
+                    case PropertyType.DateTime:
+                        valueDisplay = ((DateTime)property.Value).ToString("yyyy-MM-dd HH:mm:ss");
+                        break;
+                    case PropertyType.Double:
+                        valueDisplay = ((double)property.Value).ToString("F2");
+                        break;
+                    default:
+                        valueDisplay = property.Value?.ToString() ?? "null";
+                        break;
+                }
+                Console.WriteLine($"{property.Name}: {valueDisplay}");
+            }
+        }
+        else
+        {
+            Console.WriteLine("No custom properties found.");
+        }
+
+        // Check specific properties
+        Console.WriteLine();
+        Console.WriteLine("=== Specific Property Checks ===");
+
+        if (properties.Contains("ProjectCode"))
+        {
+            Console.WriteLine($"Project Code: {properties["ProjectCode"].Value}");
+        }
+
+        if (properties.Contains("Approved"))
+        {
+            bool approved = (bool)properties["Approved"].Value;
+            Console.WriteLine($"Approved: {(approved ? "Yes" : "No")}");
+        }
+
+        if (properties.Contains("ReviewCycle"))
+        {
+            int cycles = (int)properties["ReviewCycle"].Value;
+            Console.WriteLine($"Review Cycles: {cycles}");
+        }
+
+        Console.WriteLine();
+        Console.WriteLine("Document properties read successfully!");
+    }
+}</code></pre>
+            </div>
+
+            <div class="method-section">
+                <div class="method-name">Property Search and Filtering</div>
+                <pre><code>using Aspose.Cells_FOSS;
+using System;
+using System.Linq;
+
+class Program
+{
+    static void Main()
+    {
+        var workbook = new Workbook("financial-report-with-metadata.xlsx");
+        var properties = workbook.DocumentProperties;
+
+        // Search for properties by name pattern
+        Console.WriteLine("=== Properties containing 'Date' ===");
+        foreach (var property in properties.Where(p => p.Name.Contains("Date")))
+        {
+            Console.WriteLine($"{property.Name}: {property.Value}");
+        }
+
+        // Find all boolean properties
+        Console.WriteLine("\n=== Boolean Properties ===");
+        foreach (var property in properties.Where(p => p.Type == PropertyType.Boolean))
+        {
+            Console.WriteLine($"{property.Name}: {property.Value}");
+        }
+
+        // Find all numeric properties
+        Console.WriteLine("\n=== Numeric Properties ===");
+        foreach (var property in properties.Where(p =>
+            p.Type == PropertyType.Int || p.Type == PropertyType.Double))
+        {
+            Console.WriteLine($"{property.Name}: {property.Value}");
+        }
+
+        // Find property by partial name
+        Console.WriteLine("\n=== Property Search ===");
+        var result = properties.FirstOrDefault(p =>
+            p.Name.Equals("ProjectCode", StringComparison.OrdinalIgnoreCase));
+        if (result != null)
+        {
+            Console.WriteLine($"Found: {result.Name} = {result.Value}");
+        }
+    }
+}</code></pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Important Notes</h2>
+            <ul>
+                <li><strong>Property Persistence:</strong> All properties are saved with the workbook and persist across file loads and saves.</li>
+                <li><strong>Property Limits:</strong> There's no strict limit on the number of custom properties, but keep them manageable.</li>
+                <li><strong>Data Types:</strong> Use appropriate data types for custom properties to maintain data integrity.</li>
+                <li><strong>Case Sensitivity:</strong> Property names are case-sensitive when accessing by name.</li>
+                <li><strong>Property Size:</strong> String property values have length limits (typically around 255 characters).</li>
+                <li><strong>Automatic Properties:</strong> Some properties (like Pages, Words) are automatically calculated by Excel.</li>
+                <li><strong>Compatibility:</strong> Properties are fully compatible with Microsoft Excel.</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Related Documentation</h2>
+            <ul>
+                <li><a href="workbooks.html">Workbook Management</a> - Managing workbooks</li>
+                <li><a href="api-reference.html">Complete API Reference</a></li>
+                <li><a href="index.html">Back to Main Documentation</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 40px; color: #666; font-size: 0.9em;">
+        <p>&copy; 2026 Aspose.Cells FOSS Project. All rights reserved.</p>
+    </div>
+</body>
+</html>

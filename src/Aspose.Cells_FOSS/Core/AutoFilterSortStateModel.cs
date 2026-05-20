@@ -7,7 +7,7 @@ namespace Aspose.Cells_FOSS.Core
     /// <summary>
     /// Represents auto filter sort state model.
     /// </summary>
-    public sealed class AutoFilterSortStateModel
+    internal sealed class AutoFilterSortStateModel
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="AutoFilterSortStateModel"/> class.
@@ -66,3 +66,4 @@ namespace Aspose.Cells_FOSS.Core
         }
     }
 }
+

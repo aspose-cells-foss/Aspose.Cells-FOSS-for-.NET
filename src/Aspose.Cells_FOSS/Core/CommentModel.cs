@@ -4,7 +4,7 @@ namespace Aspose.Cells_FOSS.Core
     /// Represents the internal model for a worksheet comment (legacy note).
     /// Row and column values are zero-based.
     /// </summary>
-    public sealed class CommentModel
+    internal sealed class CommentModel
     {
         /// <summary>
         /// Initializes a new instance with default field values.
@@ -59,3 +59,4 @@ namespace Aspose.Cells_FOSS.Core
         internal string RawVmlShapeXml { get; set; }
     }
 }
+

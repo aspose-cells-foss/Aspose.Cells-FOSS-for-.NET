@@ -7,7 +7,7 @@ namespace Aspose.Cells_FOSS.Core
     /// <summary>
     /// Represents auto filter model.
     /// </summary>
-    public sealed class AutoFilterModel
+    internal sealed class AutoFilterModel
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="AutoFilterModel"/> class.
@@ -52,3 +52,4 @@ namespace Aspose.Cells_FOSS.Core
         }
     }
 }
+

@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Picture Support - Aspose.Cells FOSS for .NET</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #003399;
+            color: white;
+            padding: 20px;
+            margin: -20px -20px 20px -20px;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .section {
+            margin-bottom: 40px;
+        }
+        .section-title {
+            color: #003399;
+            border-bottom: 2px solid #003399;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+        pre {
+            background-color: #f4f4f4;
+            padding: 15px;
+            border-radius: 3px;
+            overflow-x: auto;
+            border: 1px solid #ddd;
+        }
+        code {
+            font-family: 'Courier New', monospace;
+            color: #d63384;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #003399;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Picture Support</h1>
+        <p>Complete documentation for pictures in Aspose.Cells FOSS for .NET</p>
+    </div>
+
+    <div class="content">
+        <a href="index.html" class="back-link">← Back to Index</a>
+
+        <div class="section">
+            <h2 class="section-title">Picture Overview</h2>
+            <p>The <strong>Picture</strong> class represents a picture (image) anchored to a worksheet with support for JPEG, PNG, GIF, and BMP formats.</p>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Supported Image Formats</h2>
+            <p>Aspose.Cells FOSS automatically detects image format from file extension or data bytes:</p>
+            <ul>
+                <li><strong>JPEG:</strong> .jpg, .jpeg</li>
+                <li><strong>PNG:</strong> .png</li>
+                <li><strong>GIF:</strong> .gif</li>
+                <li><strong>BMP:</strong> .bmp</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Usage Examples</h2>
+
+            <div class="section">
+                <h3>Adding Pictures from Files</h3>
+                <pre><code>using Aspose.Cells_FOSS;
+using System.IO;
+
+var workbook = new Workbook();
+var worksheet = workbook.Worksheets[0];
+
+// Add picture from file path
+byte[] imageData = File.ReadAllBytes("logo.png");
+int pictureIndex = worksheet.Pictures.Add(5, 5, 10, 10, imageData);
+
+// Add picture from file with different extension
+byte[] jpegData = File.ReadAllBytes("photo.jpg");
+int jpegIndex = worksheet.Pictures.Add(15, 5, 20, 15, jpegData);
+
+// Add picture from GIF
+byte[] gifData = File.ReadAllBytes("animation.gif");
+int gifIndex = worksheet.Pictures.Add(25, 5, 30, 15, gifData);</code></pre>
+            </div>
+
+            <div class="section">
+                <h3>Adding Pictures from Streams</h3>
+                <pre><code>using Aspose.Cells_FOSS;
+using System.IO;
+
+var workbook = new Workbook();
+var worksheet = workbook.Worksheets[0];
+
+// Add picture from stream
+using (var stream = File.OpenRead("image.png"))
+{
+    int streamIndex = worksheet.Pictures.Add(35, 5, 40, 15, stream);
+}
+
+// Add multiple pictures from same stream
+stream.Position = 0;
+for (int i = 0; i < 3; i++)
+{
+    byte[] data = new byte[1000]; // Read first 1KB
+    int bytesRead = stream.Read(data, 0, data.Length);
+    int pictureIndex = worksheet.Pictures.Add(45 + (i * 15), 5 + (i * 15), 45 + (i * 15), data);
+}
+
+Console.WriteLine($"Added {worksheet.Pictures.Count} pictures from stream");</code></pre>
+            </div>
+
+            <div class="section">
+                <h3>Adding Pictures from Byte Arrays</h3>
+                <pre><code>using Aspose.Cells_FOSS;
+
+var workbook = new Workbook();
+var worksheet = workbook.Worksheets[0];
+
+// Create a simple image byte array (100x100 red pixels)
+byte[] redImage = new byte[10000];
+for (int i = 0; i < redImage.Length; i++)
+{
+    redImage[i] = 255; // Red
+}
+
+// Add picture from byte array
+int pictureIndex = worksheet.Pictures.Add(10, 10, 25, 15, redImage);
+
+Console.WriteLine($"Added picture at index {pictureIndex}");</code></pre>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">Picture Properties</h2>
+                <p>The <strong>Picture</strong> class provides the following properties and methods:</p>
+                <ul>
+                    <li><strong>Name</strong> - Display name of the picture</li>
+                    <li><strong>ImageType</strong> - Detected image format (JPEG, PNG, GIF, BMP, Unknown)</li>
+                    <li><strong>UpperLeftRow</strong> - Zero-based row of upper-left anchor</li>
+                    <li><strong>UpperLeftColumn</strong> - Zero-based column of upper-left anchor</li>
+                    <li><strong>LowerRightRow</strong> - Zero-based row of lower-right anchor</li>
+                    <li><strong>LowerRightColumn</strong> - Zero-based column of lower-right anchor</li>
+                    <li><strong>Data</strong> - Raw image byte array</li>
+                    <li><strong>Size</strong> - Picture size (width and height in EMU)</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">PictureCollection</h2>
+                <p>The <strong>PictureCollection</strong> class manages all pictures in a worksheet:</p>
+                <ul>
+                    <li><strong>Count</strong> - Number of pictures</li>
+                    <li><strong>this[int]</strong> - Access picture by index</li>
+                    <li><strong>Add(byte[])</strong> - Add from byte array</li>
+                    <li><strong>Add(Stream)</strong> - Add from file stream</li>
+                    <li><strong>Add(string)</strong> - Add from file path</li>
+                    <li><strong>RemoveAt()</strong> - Remove picture at index</li>
+                    <li><strong>Parameters:</strong> position coordinates, image data, or file path</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">ImageType Enumeration</h2>
+                <p>Enumeration of supported image formats:</p>
+                <ul>
+                    <li><strong>Jpeg:</strong> JPEG image format</li>
+                    <li><strong>Png:</strong> PNG image format</li>
+                    <li><strong>Gif:</strong> GIF image format</li>
+                    <li><strong>Bmp:</strong> BMP image format</li>
+                    <li><strong>Unknown:</strong> Unrecognized image format</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">Important Notes</h2>
+                <ul>
+                    <li><strong>Automatic Format Detection:</strong> Image type is automatically detected from file extension or data magic bytes</li>
+                    <li><strong>Anchor Positioning:</strong> Pictures are positioned using anchor coordinates (upper-left and lower-right)</li>
+                    <li><strong>Stream Support:</strong> Can load from file path, stream, or byte array</li>
+                    <li><strong>Memory Management:</strong> Large images may require memory consideration</li>
+                </ul>
+            </div>
+
+        <div class="section">
+                <h2 class="section-title">Related Documentation</h2>
+                <ul>
+                    <li><a href="api-reference.html">Complete API Reference</a></li>
+                    <li><a href="shape.html">Shape Documentation</a></li>
+                    <li><a href="index.html">Back to Main Documentation</a></li>
+                    <li><a href="examples.html">More Examples</a></li>
+                </ul>
+            </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 40px; color: #666; font-size: 0.9em;">
+        <p>&copy; 2026 Aspose.Cells FOSS Project. All rights reserved.</p>
+    </div>
+</body>
+</html>

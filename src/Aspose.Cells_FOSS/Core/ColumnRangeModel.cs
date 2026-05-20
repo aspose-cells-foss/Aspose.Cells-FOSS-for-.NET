@@ -7,7 +7,7 @@ namespace Aspose.Cells_FOSS.Core
     /// <summary>
     /// Represents column range model.
     /// </summary>
-    public sealed class ColumnRangeModel
+    internal sealed class ColumnRangeModel
     {
         /// <summary>
         /// Gets or sets the min column index.
@@ -31,3 +31,4 @@ namespace Aspose.Cells_FOSS.Core
         public int? StyleIndex { get; set; }
     }
 }
+

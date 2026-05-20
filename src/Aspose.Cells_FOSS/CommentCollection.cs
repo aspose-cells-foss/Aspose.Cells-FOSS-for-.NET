@@ -7,6 +7,28 @@ namespace Aspose.Cells_FOSS
     /// <summary>
     /// Represents the collection of comments (legacy notes) on a worksheet.
     /// </summary>
+    /// <remarks>
+    /// Comments allow you to add text annotations to cells for documentation or collaboration.
+    /// Each comment is anchored to a specific cell and can be accessed by index or cell reference.
+    /// Comments support author information, visibility control, and custom box sizing.
+    /// Multiple comments can be added to the same worksheet, though each cell can only have one comment.
+    /// </remarks>
+    /// <example>
+    /// <code>
+    /// var workbook = new Workbook();
+    /// var worksheet = workbook.Worksheets[0];
+    ///
+    /// // Add comments to different cells
+    /// worksheet.Comments.Add("A1");
+    /// worksheet.Comments.Add("B1");
+    /// worksheet.Comments.Add("C1");
+    ///
+    /// // Configure the comments
+    /// worksheet.Comments["A1"].Author = "Reviewer 1";
+    /// worksheet.Comments["B1"].Author = "Reviewer 2";
+    /// worksheet.Comments["C1"].Author = "Reviewer 3";
+    /// </code>
+    /// </example>
     public sealed class CommentCollection
     {
         private readonly List<CommentModel> _models;

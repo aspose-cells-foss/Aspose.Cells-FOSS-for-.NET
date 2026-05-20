@@ -7,7 +7,7 @@ namespace Aspose.Cells_FOSS.Core
     /// <summary>
     /// Represents style value.
     /// </summary>
-    public sealed class StyleValue
+    internal sealed class StyleValue
     {
         /// <summary>
         /// Gets the default.
@@ -57,6 +57,10 @@ namespace Aspose.Cells_FOSS.Core
         /// </summary>
         /// <returns>The number format value number format { get; set; } = new.</returns>
         public NumberFormatValue NumberFormat { get; set; } = new NumberFormatValue();
+        /// <summary>
+        /// Gets or sets a value indicating whether quote prefix is enabled.
+        /// </summary>
+        public bool QuotePrefix { get; set; }
 
         /// <summary>
         /// Creates a copy of the current instance.
@@ -74,7 +78,9 @@ namespace Aspose.Cells_FOSS.Core
                 Alignment = Alignment.Clone(),
                 Protection = Protection.Clone(),
                 NumberFormat = NumberFormat.Clone(),
+                QuotePrefix = QuotePrefix,
             };
         }
     }
 }
+

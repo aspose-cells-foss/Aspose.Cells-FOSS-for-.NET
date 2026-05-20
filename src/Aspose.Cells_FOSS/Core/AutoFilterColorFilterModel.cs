@@ -7,7 +7,7 @@ namespace Aspose.Cells_FOSS.Core
     /// <summary>
     /// Represents auto filter color filter model.
     /// </summary>
-    public sealed class AutoFilterColorFilterModel
+    internal sealed class AutoFilterColorFilterModel
     {
         /// <summary>
         /// Gets or sets a value indicating whether enabled.
@@ -33,3 +33,4 @@ namespace Aspose.Cells_FOSS.Core
         }
     }
 }
+

@@ -7,7 +7,7 @@ namespace Aspose.Cells_FOSS.Core
     /// <summary>
     /// Represents core document properties model.
     /// </summary>
-    public sealed class CoreDocumentPropertiesModel
+    internal sealed class CoreDocumentPropertiesModel
     {
         /// <summary>
         /// Gets or sets the title.
@@ -93,3 +93,4 @@ namespace Aspose.Cells_FOSS.Core
         }
     }
 }
+
