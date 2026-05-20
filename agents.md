@@ -15,6 +15,7 @@ Before making changes, account for the current repository state:
 - there is no `tests/` directory in this checkout
 - `src/Aspose.Cells_FOSS/Aspose.Cells_FOSS.csproj` targets `netstandard2.0` and `net8.0`
 - the library is compiled with `LangVersion` set to `6`
+- release notes for this checkout include `RELEASE_NOTES_V26.5.0.md` (dated `2026-05-20`)
 
 Do not write instructions or code that depend on files that are not present unless the user explicitly asks you to add them.
 
@@ -42,6 +43,14 @@ All code changes should preserve the existing implementation constraints that ar
 - treat load diagnostics and recovery behavior as important public behavior
 - do not introduce a dependency on Microsoft Excel
 
+Current API alignment expectations for this checkout (V26.5.0):
+
+- preserve Aspose-compatible overloads and names that were added in this version
+- keep `FontUnderlineType`, `StyleFlag`, and selective style-application behavior intact
+- keep `CellValueType` and `CellArea` in their Aspose-aligned shapes
+- keep `Style.Font` and `Style.Borders` non-assignable at object level (`private set`)
+- treat release-noted behavior changes as public contract unless the user explicitly requests a change
+
 When editing existing files:
 
 - read the surrounding code first and follow the local style
@@ -58,7 +67,7 @@ For feature work or bug fixes:
 3. inspect any related sample projects under `samples/`
 4. implement the public behavior, load path, save path, and diagnostics together
 5. run the narrowest practical verification command for the touched project or sample
-6. update `README.md` or sample code if the user-facing workflow changed
+6. update `README.md`, `samples/README.md`, release notes, or sample code if user-facing behavior changed
 
 Because `tests/` is absent in this checkout, do not claim automated test coverage that you did not run. Prefer targeted `dotnet build` verification and clearly state what was and was not validated.
 
@@ -107,6 +116,7 @@ When updating docs:
 - avoid references to missing `Spec/` or `tests/` folders unless you explicitly call out that they are absent
 - keep build instructions executable from the repository root
 - prefer short, concrete examples over broad feature claims that cannot be verified locally
+- when behavior changes, keep `RELEASE_NOTES_V26.5.0.md` synchronized with affected API and compatibility notes
 
 ## Anti-Patterns
 
