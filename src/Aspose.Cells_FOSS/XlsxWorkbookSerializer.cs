@@ -144,7 +144,7 @@ namespace Aspose.Cells_FOSS
                     var chartFileOffset = chartFileOffsets[i];
                     var drawingNumber = drawingNumbers[i];
                     var commentFileNumber = commentFileNumbers[i];
-                    var hasDrawing = worksheet.Pictures.Count > 0 || worksheet.Shapes.Count > 0 || worksheet.Charts.Count > 0;
+                    var hasDrawing = worksheet.Pictures.Count > 0 || worksheet.Shapes.Count > 0 || worksheet.Charts.Count > 0 || worksheet.PreservedCharts.Count > 0;
                     var hasComments = worksheet.Comments.Count > 0;
                     var externalHyperlinkCount = CountExternalHyperlinks(worksheet);
 
@@ -163,7 +163,7 @@ namespace Aspose.Cells_FOSS
                             WritePictureMediaEntries(archive, worksheet, pictureFileOffset);
                         }
 
-                        if (worksheet.Pictures.Count > 0 || worksheet.ShapeImages.Count > 0 || worksheet.Charts.Count > 0)
+                        if (worksheet.Pictures.Count > 0 || worksheet.ShapeImages.Count > 0 || worksheet.Charts.Count > 0 || worksheet.PreservedCharts.Count > 0)
                         {
                             WriteXmlEntry(archive, "xl/drawings/_rels/drawing" + drawingNumber + ".xml.rels", BuildDrawingRelationshipsDocument(worksheet, pictureFileOffset, chartFileOffset));
                         }
@@ -172,6 +172,12 @@ namespace Aspose.Cells_FOSS
                         {
                             var globalChartNumber = chartFileOffset + k + 1;
                             WriteChartFiles(archive, worksheet.Charts[k], globalChartNumber, ref userShapesDrawingCounter);
+                        }
+
+                        for (var m = 0; m < worksheet.PreservedCharts.Count; m++)
+                        {
+                            var globalChartNumber = chartFileOffset + worksheet.Charts.Count + m + 1;
+                            WriteChartFiles(archive, worksheet.PreservedCharts[m], globalChartNumber, ref userShapesDrawingCounter);
                         }
                     }
 
@@ -268,7 +274,7 @@ namespace Aspose.Cells_FOSS
             for (var i = 0; i < model.Worksheets.Count; i++)
             {
                 offsets[i] = running;
-                running += model.Worksheets[i].Charts.Count;
+                running += model.Worksheets[i].Charts.Count + model.Worksheets[i].PreservedCharts.Count;
             }
 
             return offsets;
@@ -281,7 +287,7 @@ namespace Aspose.Cells_FOSS
             for (var i = 0; i < model.Worksheets.Count; i++)
             {
                 var ws = model.Worksheets[i];
-                if (ws.Pictures.Count > 0 || ws.Shapes.Count > 0 || ws.Charts.Count > 0)
+                if (ws.Pictures.Count > 0 || ws.Shapes.Count > 0 || ws.Charts.Count > 0 || ws.PreservedCharts.Count > 0)
                 {
                     drawingCounter++;
                     numbers[i] = drawingCounter;
@@ -335,7 +341,7 @@ namespace Aspose.Cells_FOSS
             for (var i = 0; i < model.Worksheets.Count; i++)
             {
                 var ws = model.Worksheets[i];
-                if (ws.Pictures.Count > 0 || ws.Shapes.Count > 0 || ws.Charts.Count > 0)
+                if (ws.Pictures.Count > 0 || ws.Shapes.Count > 0 || ws.Charts.Count > 0 || ws.PreservedCharts.Count > 0)
                 {
                     total++;
                 }
@@ -356,6 +362,37 @@ namespace Aspose.Cells_FOSS
                     var globalChartNumber = chartFileOffsets[i] + k + 1;
                     foreach (var companion in charts[k].CompanionFiles)
                     {
+                        if (string.Equals(companion.RelationshipType, ImageRelationshipType, StringComparison.OrdinalIgnoreCase))
+                        {
+                            continue;
+                        }
+
+                        string partName;
+                        if (companion.FileName.IndexOf('/') >= 0)
+                        {
+                            userShapesCounter++;
+                            partName = "/xl/drawings/drawing" + userShapesCounter.ToString(CultureInfo.InvariantCulture) + ".xml";
+                        }
+                        else
+                        {
+                            partName = "/" + ResolveCompanionPath(RenumberCompanionFileName(companion.FileName, globalChartNumber));
+                        }
+
+                        result.Add(partName);
+                    }
+                }
+
+                var preservedCharts = model.Worksheets[i].PreservedCharts;
+                for (var p = 0; p < preservedCharts.Count; p++)
+                {
+                    var globalChartNumber = chartFileOffsets[i] + charts.Count + p + 1;
+                    foreach (var companion in preservedCharts[p].CompanionFiles)
+                    {
+                        if (string.Equals(companion.RelationshipType, ImageRelationshipType, StringComparison.OrdinalIgnoreCase))
+                        {
+                            continue;
+                        }
+
                         string partName;
                         if (companion.FileName.IndexOf('/') >= 0)
                         {
@@ -385,6 +422,25 @@ namespace Aspose.Cells_FOSS
                 {
                     foreach (var companion in charts[k].CompanionFiles)
                     {
+                        if (string.Equals(companion.RelationshipType, ImageRelationshipType, StringComparison.OrdinalIgnoreCase))
+                        {
+                            continue;
+                        }
+
+                        result.Add(GetCompanionContentType(companion.RelationshipType));
+                    }
+                }
+
+                var preservedCharts = model.Worksheets[i].PreservedCharts;
+                for (var p = 0; p < preservedCharts.Count; p++)
+                {
+                    foreach (var companion in preservedCharts[p].CompanionFiles)
+                    {
+                        if (string.Equals(companion.RelationshipType, ImageRelationshipType, StringComparison.OrdinalIgnoreCase))
+                        {
+                            continue;
+                        }
+
                         result.Add(GetCompanionContentType(companion.RelationshipType));
                     }
                 }
@@ -407,6 +463,16 @@ namespace Aspose.Cells_FOSS
                         : "/xl/charts/chart" + globalChartNumber + ".xml";
                     result.Add(fileName);
                 }
+
+                var preservedCharts = model.Worksheets[i].PreservedCharts;
+                for (var p = 0; p < preservedCharts.Count; p++)
+                {
+                    var globalChartNumber = (chartFileOffsets[i] + charts.Count + p + 1).ToString(CultureInfo.InvariantCulture);
+                    var fileName = preservedCharts[p].IsChartEx
+                        ? "/xl/charts/chartEx" + globalChartNumber + ".xml"
+                        : "/xl/charts/chart" + globalChartNumber + ".xml";
+                    result.Add(fileName);
+                }
             }
 
             return result;
@@ -421,6 +487,12 @@ namespace Aspose.Cells_FOSS
                 for (var k = 0; k < charts.Count; k++)
                 {
                     result.Add(charts[k].IsChartEx ? ChartExContentType : ChartContentType);
+                }
+
+                var preservedCharts = model.Worksheets[i].PreservedCharts;
+                for (var p = 0; p < preservedCharts.Count; p++)
+                {
+                    result.Add(preservedCharts[p].IsChartEx ? ChartExContentType : ChartContentType);
                 }
             }
 
@@ -519,7 +591,13 @@ namespace Aspose.Cells_FOSS
                 string companionPath;
                 string relsTarget;
 
-                if (companion.FileName.IndexOf('/') >= 0)
+                if (string.Equals(companion.RelationshipType, ImageRelationshipType, StringComparison.OrdinalIgnoreCase))
+                {
+                    var imageFileName = BuildChartCompanionImageFileName(companion.FileName, globalChartNumber, companion.RelationshipId);
+                    companionPath = "xl/media/" + imageFileName;
+                    relsTarget = "../media/" + imageFileName;
+                }
+                else if (companion.FileName.IndexOf('/') >= 0)
                 {
                     // Cross-directory companion (e.g. chart user shapes): assign the next
                     // drawing number after all worksheet drawings to avoid collisions.
@@ -537,9 +615,18 @@ namespace Aspose.Cells_FOSS
 
                 var companionEntry = archive.CreateEntry(companionPath, CompressionLevel.Optimal);
                 using (var stream = companionEntry.Open())
-                using (var writer = new StreamWriter(stream, new UTF8Encoding(false)))
                 {
-                    writer.Write(companion.RawContent);
+                    if (companion.BinaryContent != null)
+                    {
+                        stream.Write(companion.BinaryContent, 0, companion.BinaryContent.Length);
+                    }
+                    else
+                    {
+                        using (var writer = new StreamWriter(stream, new UTF8Encoding(false)))
+                        {
+                            writer.Write(companion.RawContent);
+                        }
+                    }
                 }
 
                 companionRels.Add(new XElement(PackageRelationshipNs + "Relationship",
@@ -575,9 +662,95 @@ namespace Aspose.Cells_FOSS
                         result.Add(ext);
                     }
                 }
+
+                for (var c = 0; c < ws.Charts.Count; c++)
+                {
+                    CollectChartCompanionImageExtensions(ws.Charts[c], seen, result);
+                }
+
+                for (var c = 0; c < ws.PreservedCharts.Count; c++)
+                {
+                    CollectChartCompanionImageExtensions(ws.PreservedCharts[c], seen, result);
+                }
             }
 
             return result;
+        }
+
+        private static void CollectChartCompanionImageExtensions(ChartModel chart, HashSet<string> seen, List<string> result)
+        {
+            for (var i = 0; i < chart.CompanionFiles.Count; i++)
+            {
+                var companion = chart.CompanionFiles[i];
+                if (!string.Equals(companion.RelationshipType, ImageRelationshipType, StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+
+                var extension = GetCompanionFileExtension(companion.FileName);
+                if (!string.IsNullOrEmpty(extension) && seen.Add(extension))
+                {
+                    result.Add(extension);
+                }
+            }
+        }
+
+        private static string BuildChartCompanionImageFileName(string originalTarget, int globalChartNumber, string relationshipId)
+        {
+            var extension = GetCompanionFileExtension(originalTarget);
+            var baseName = "chart" + globalChartNumber.ToString(CultureInfo.InvariantCulture) + "-" + SanitizeRelationshipId(relationshipId);
+            if (string.IsNullOrEmpty(extension))
+            {
+                return baseName + ".bin";
+            }
+
+            return baseName + "." + extension;
+        }
+
+        private static string GetCompanionFileExtension(string target)
+        {
+            if (string.IsNullOrEmpty(target))
+            {
+                return string.Empty;
+            }
+
+            var fileName = Path.GetFileName(target.Replace('\\', '/'));
+            if (string.IsNullOrEmpty(fileName))
+            {
+                return string.Empty;
+            }
+
+            var extension = Path.GetExtension(fileName);
+            if (string.IsNullOrEmpty(extension))
+            {
+                return string.Empty;
+            }
+
+            return extension.TrimStart('.').ToLowerInvariant();
+        }
+
+        private static string SanitizeRelationshipId(string relationshipId)
+        {
+            if (string.IsNullOrEmpty(relationshipId))
+            {
+                return "companion";
+            }
+
+            var builder = new StringBuilder(relationshipId.Length);
+            for (var i = 0; i < relationshipId.Length; i++)
+            {
+                var ch = relationshipId[i];
+                if (char.IsLetterOrDigit(ch))
+                {
+                    builder.Append(ch);
+                }
+                else
+                {
+                    builder.Append('_');
+                }
+            }
+
+            return builder.ToString();
         }
 
         /// <summary>

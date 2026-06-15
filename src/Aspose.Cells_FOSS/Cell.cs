@@ -145,6 +145,8 @@ namespace Aspose.Cells_FOSS
                         return CellValueType.IsBool;
                     case CellValueKind.DateTime:
                         return CellValueType.IsDateTime;
+                    case CellValueKind.Error:
+                        return CellValueType.IsError;
                     case CellValueKind.Formula:
                         return CellValueType.IsUnknown;
                     default:

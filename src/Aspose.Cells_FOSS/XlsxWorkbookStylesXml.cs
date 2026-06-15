@@ -205,8 +205,9 @@ namespace Aspose.Cells_FOSS
             {
                 var fillValue = ReadFillValue(fill);
                 style.Pattern = fillValue.Pattern;
-                style.ForegroundColor = fillValue.ForegroundColor;
-                style.BackgroundColor = fillValue.BackgroundColor;
+                // Differential formats store the visible solid fill color in bgColor, reversed from regular cell fills.
+                style.ForegroundColor = fillValue.BackgroundColor;
+                style.BackgroundColor = fillValue.ForegroundColor;
             }
             var border = dxf.Element(MainNs + "border");
             if (border != null)
@@ -259,7 +260,21 @@ namespace Aspose.Cells_FOSS
                 Underline = ParseUnderlineType(font.Element(MainNs + "u")),
                 StrikeThrough = font.Element(MainNs + "strike") != null,
                 Color = ReadColorValue(font.Element(MainNs + "color")),
+                Family = ParseIntAttribute(font.Element(MainNs + "family")?.Attribute("val")),
+                Scheme = ParseFontSchemeType(font.Element(MainNs + "scheme")?.Attribute("val")),
             };
+        }
+        private static FontSchemeType ParseFontSchemeType(XAttribute schemeAttribute)
+        {
+            switch ((string)schemeAttribute)
+            {
+                case "major":
+                    return FontSchemeType.Major;
+                case "minor":
+                    return FontSchemeType.Minor;
+                default:
+                    return FontSchemeType.None;
+            }
         }
         private static FillValue ReadFillValue(XElement fill)
         {
@@ -366,11 +381,19 @@ namespace Aspose.Cells_FOSS
             {
                 element.Add(BuildUnderlineElement(font.Underline));
             }
+            if (font.Family.HasValue)
+            {
+                element.Add(new XElement(MainNs + "family", new XAttribute("val", font.Family.Value)));
+            }
             element.Add(new XElement(MainNs + "sz", new XAttribute("val", font.Size.ToString("0.####", CultureInfo.InvariantCulture))));
             var colorElement = BuildColorElement("color", font.Color);
             if (colorElement != null)
             {
                 element.Add(colorElement);
+            }
+            if (font.Scheme != FontSchemeType.None)
+            {
+                element.Add(new XElement(MainNs + "scheme", new XAttribute("val", font.Scheme == FontSchemeType.Major ? "major" : "minor")));
             }
             element.Add(new XElement(MainNs + "name", new XAttribute("val", font.Name)));
             return element;
@@ -523,11 +546,12 @@ namespace Aspose.Cells_FOSS
             }
             if (style.Pattern != FillPatternKind.None || !IsEmptyColor(style.ForegroundColor) || !IsEmptyColor(style.BackgroundColor))
             {
+                // Differential formats store the visible solid fill color in bgColor, reversed from regular cell fills.
                 element.Add(BuildFillElement(new FillValue
                 {
                     Pattern = style.Pattern,
-                    ForegroundColor = style.ForegroundColor,
-                    BackgroundColor = style.BackgroundColor,
+                    ForegroundColor = style.BackgroundColor,
+                    BackgroundColor = style.ForegroundColor,
                 }));
             }
             if (!BordersEqual(style.Borders, StyleValue.Default.Borders))

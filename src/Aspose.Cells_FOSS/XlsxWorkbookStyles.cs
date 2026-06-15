@@ -69,6 +69,8 @@ namespace Aspose.Cells_FOSS
 
             foreach (var worksheet in model.Worksheets)
             {
+                AddWorksheetMetadataStyles(worksheet, styleIndices, cellFormats, fonts, fontIds, fills, fillIds, borders, borderIds, customNumberFormatIds, customNumberFormats, ref nextCustomNumberFormatId);
+
                 var persistedEntries = CollectPersistedCellEntries(worksheet, model.DefaultStyle);
                 for (var index = 0; index < persistedEntries.Count; index++)
                 {
@@ -122,6 +124,73 @@ namespace Aspose.Cells_FOSS
 
             var hasStyles = styleIndices.Count > 1 || !StylesEqual(defaultStyle, StyleValue.Default) || differentialFormats.Count > 0;
             return new StylesheetSaveContext(BuildStylesheetDocument(fonts, fills, borders, normalCellFormat, cellFormats, customNumberFormats, differentialFormats), styleIndices, differentialStyleIndices, differentialFormats.Count, hasStyles);
+        }
+
+        private static void AddWorksheetMetadataStyles(
+            WorksheetModel worksheet,
+            IDictionary<string, int> styleIndices,
+            IList<CellFormatValue> cellFormats,
+            IList<FontValue> fonts,
+            IDictionary<string, int> fontIds,
+            IList<FillValue> fills,
+            IDictionary<string, int> fillIds,
+            IList<BordersValue> borders,
+            IDictionary<string, int> borderIds,
+            IDictionary<string, int> customNumberFormatIds,
+            IList<KeyValuePair<int, string>> customNumberFormats,
+            ref int nextCustomNumberFormatId)
+        {
+            foreach (var column in worksheet.Columns)
+            {
+                AddMetadataStyle(column.Style, styleIndices, cellFormats, fonts, fontIds, fills, fillIds, borders, borderIds, customNumberFormatIds, customNumberFormats, ref nextCustomNumberFormatId);
+            }
+
+            foreach (var row in worksheet.Rows.Values)
+            {
+                AddMetadataStyle(row.Style, styleIndices, cellFormats, fonts, fontIds, fills, fillIds, borders, borderIds, customNumberFormatIds, customNumberFormats, ref nextCustomNumberFormatId);
+            }
+        }
+
+        private static void AddMetadataStyle(
+            StyleValue style,
+            IDictionary<string, int> styleIndices,
+            IList<CellFormatValue> cellFormats,
+            IList<FontValue> fonts,
+            IDictionary<string, int> fontIds,
+            IList<FillValue> fills,
+            IDictionary<string, int> fillIds,
+            IList<BordersValue> borders,
+            IDictionary<string, int> borderIds,
+            IDictionary<string, int> customNumberFormatIds,
+            IList<KeyValuePair<int, string>> customNumberFormats,
+            ref int nextCustomNumberFormatId)
+        {
+            if (style == null)
+            {
+                return;
+            }
+
+            var styleKey = GetStyleKey(style);
+            if (styleIndices.ContainsKey(styleKey))
+            {
+                return;
+            }
+
+            var fontId = Intern(fontIds, fonts, style.Font, GetFontKey);
+            var fillId = Intern(fillIds, fills, ToFillValue(style), GetFillKey);
+            var borderId = Intern(borderIds, borders, style.Borders, GetBordersKey);
+            var numFmtId = ResolveNumberFormatId(style.NumberFormat, customNumberFormatIds, customNumberFormats, ref nextCustomNumberFormatId);
+
+            styleIndices[styleKey] = cellFormats.Count;
+            cellFormats.Add(new CellFormatValue
+            {
+                NumFmtId = numFmtId,
+                FontId = fontId,
+                FillId = fillId,
+                BorderId = borderId,
+                Alignment = style.Alignment.Clone(),
+                Protection = style.Protection.Clone(),
+            });
         }
 
         internal static StyleValue GetStyleForSerialization(CellRecord record)

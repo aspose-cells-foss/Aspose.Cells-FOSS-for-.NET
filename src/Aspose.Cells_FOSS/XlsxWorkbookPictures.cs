@@ -41,7 +41,7 @@ namespace Aspose.Cells_FOSS
             // Build a mapping from each picture's/shape-image's original rId to its new assigned rId
             // so that group shapes whose raw XML contains r:embed references stay correct.
             var imageCount = worksheet.Pictures.Count + worksheet.ShapeImages.Count;
-            var rIdMap = BuildImageRIdMap(worksheet.Pictures, worksheet.ShapeImages);
+            var rIdMap = BuildRelationshipIdMap(worksheet);
 
             for (var i = 0; i < worksheet.Pictures.Count; i++)
             {
@@ -69,14 +69,12 @@ namespace Aspose.Cells_FOSS
             return new XDocument(new XDeclaration("1.0", "utf-8", "yes"), root);
         }
 
-        private static System.Collections.Generic.Dictionary<string, string> BuildImageRIdMap(
-            System.Collections.Generic.IList<Core.PictureModel> pictures,
-            System.Collections.Generic.IList<Core.ShapeImageModel> shapeImages)
+        private static System.Collections.Generic.Dictionary<string, string> BuildRelationshipIdMap(WorksheetModel worksheet)
         {
             var map = new System.Collections.Generic.Dictionary<string, string>(StringComparer.Ordinal);
-            for (var i = 0; i < pictures.Count; i++)
+            for (var i = 0; i < worksheet.Pictures.Count; i++)
             {
-                var originalRId = pictures[i].OriginalRId;
+                var originalRId = worksheet.Pictures[i].OriginalRId;
                 if (!string.IsNullOrEmpty(originalRId))
                 {
                     var newRId = "rId" + (i + 1).ToString(CultureInfo.InvariantCulture);
@@ -86,12 +84,40 @@ namespace Aspose.Cells_FOSS
                     }
                 }
             }
-            for (var j = 0; j < shapeImages.Count; j++)
+            for (var j = 0; j < worksheet.ShapeImages.Count; j++)
             {
-                var originalRId = shapeImages[j].OriginalRId;
+                var originalRId = worksheet.ShapeImages[j].OriginalRId;
                 if (!string.IsNullOrEmpty(originalRId))
                 {
-                    var newRId = "rId" + (pictures.Count + j + 1).ToString(CultureInfo.InvariantCulture);
+                    var newRId = "rId" + (worksheet.Pictures.Count + j + 1).ToString(CultureInfo.InvariantCulture);
+                    if (originalRId != newRId)
+                    {
+                        map[originalRId] = newRId;
+                    }
+                }
+            }
+
+            var chartRelationshipIndex = worksheet.Pictures.Count + worksheet.ShapeImages.Count;
+            for (var k = 0; k < worksheet.Charts.Count; k++)
+            {
+                var originalRId = worksheet.Charts[k].OriginalRId;
+                if (!string.IsNullOrEmpty(originalRId))
+                {
+                    var newRId = "rId" + (chartRelationshipIndex + k + 1).ToString(CultureInfo.InvariantCulture);
+                    if (originalRId != newRId)
+                    {
+                        map[originalRId] = newRId;
+                    }
+                }
+            }
+
+            chartRelationshipIndex += worksheet.Charts.Count;
+            for (var m = 0; m < worksheet.PreservedCharts.Count; m++)
+            {
+                var originalRId = worksheet.PreservedCharts[m].OriginalRId;
+                if (!string.IsNullOrEmpty(originalRId))
+                {
+                    var newRId = "rId" + (chartRelationshipIndex + m + 1).ToString(CultureInfo.InvariantCulture);
                     if (originalRId != newRId)
                     {
                         map[originalRId] = newRId;
@@ -224,9 +250,19 @@ namespace Aspose.Cells_FOSS
                 return rawXml;
             }
 
+            var placeholderIndex = 0;
+            var placeholders = new System.Collections.Generic.List<System.Collections.Generic.KeyValuePair<string, string>>();
             foreach (var kvp in rIdMap)
             {
-                rawXml = rawXml.Replace("\"" + kvp.Key + "\"", "\"" + kvp.Value + "\"");
+                var placeholder = "__ACF_RID_PLACEHOLDER_" + placeholderIndex.ToString(CultureInfo.InvariantCulture) + "__";
+                rawXml = rawXml.Replace("\"" + kvp.Key + "\"", "\"" + placeholder + "\"");
+                placeholders.Add(new System.Collections.Generic.KeyValuePair<string, string>(placeholder, kvp.Value));
+                placeholderIndex++;
+            }
+
+            for (var i = 0; i < placeholders.Count; i++)
+            {
+                rawXml = rawXml.Replace("\"" + placeholders[i].Key + "\"", "\"" + placeholders[i].Value + "\"");
             }
 
             return rawXml;
@@ -364,6 +400,20 @@ namespace Aspose.Cells_FOSS
                     : "chart" + globalChartNumber.ToString(CultureInfo.InvariantCulture) + ".xml";
                 relationships.Add(new XElement(PackageRelationshipNs + "Relationship",
                     new XAttribute("Id", "rId" + (imageCount + k + 1).ToString(CultureInfo.InvariantCulture)),
+                    new XAttribute("Type", relType),
+                    new XAttribute("Target", "../charts/" + fileName)));
+            }
+
+            for (var m = 0; m < worksheet.PreservedCharts.Count; m++)
+            {
+                var chart = worksheet.PreservedCharts[m];
+                var globalChartNumber = chartFileOffset + worksheet.Charts.Count + m + 1;
+                var relType = chart.IsChartEx ? ChartExRelationshipType : ChartRelationshipType;
+                var fileName = chart.IsChartEx
+                    ? "chartEx" + globalChartNumber.ToString(CultureInfo.InvariantCulture) + ".xml"
+                    : "chart" + globalChartNumber.ToString(CultureInfo.InvariantCulture) + ".xml";
+                relationships.Add(new XElement(PackageRelationshipNs + "Relationship",
+                    new XAttribute("Id", "rId" + (imageCount + worksheet.Charts.Count + m + 1).ToString(CultureInfo.InvariantCulture)),
                     new XAttribute("Type", relType),
                     new XAttribute("Target", "../charts/" + fileName)));
             }

@@ -41,16 +41,24 @@ namespace Aspose.Cells_FOSS
             {
                 worksheetElement.Add(sheetViews);
             }
+
+            var sheetFormatPr = BuildSheetFormatPrElement(worksheet);
+            if (sheetFormatPr != null)
+            {
+                worksheetElement.Add(sheetFormatPr);
+            }
+
             var normalizedColumns = NormalizeColumnRanges(worksheet.Columns);
             if (normalizedColumns.Count > 0)
             {
-                worksheetElement.Add(new XElement(MainNs + "cols", BuildColumnElements(normalizedColumns)));
+                worksheetElement.Add(new XElement(MainNs + "cols", BuildColumnElements(normalizedColumns, stylesheet)));
             }
 
             var sheetData = new XElement(MainNs + "sheetData");
+            var persistedCellIndex = 0;
             foreach (var rowIndex in GetWorksheetRowIndexes(persistedCells, worksheet.Rows))
             {
-                var rowCells = GetRowCells(persistedCells, rowIndex);
+                var rowCells = GetRowCells(persistedCells, rowIndex, ref persistedCellIndex);
                 RowModel rowModel;
                 worksheet.Rows.TryGetValue(rowIndex, out rowModel);
                 if (rowCells.Count == 0 && !HasRowMetadata(rowModel))
@@ -183,27 +191,35 @@ namespace Aspose.Cells_FOSS
             return left.Key.ColumnIndex.CompareTo(right.Key.ColumnIndex);
         }
 
-        private static List<XElement> BuildColumnElements(IReadOnlyList<ColumnRangeModel> columns)
+        private static List<XElement> BuildColumnElements(IReadOnlyList<ColumnRangeModel> columns, StylesheetSaveContext stylesheet)
         {
             var columnElements = new List<XElement>(columns.Count);
             for (var index = 0; index < columns.Count; index++)
             {
-                columnElements.Add(BuildColumnElement(columns[index]));
+                columnElements.Add(BuildColumnElement(columns[index], stylesheet));
             }
 
             return columnElements;
         }
 
-        private static List<KeyValuePair<CellAddress, CellRecord>> GetRowCells(IReadOnlyList<KeyValuePair<CellAddress, CellRecord>> persistedCells, int rowIndex)
+        private static List<KeyValuePair<CellAddress, CellRecord>> GetRowCells(IReadOnlyList<KeyValuePair<CellAddress, CellRecord>> persistedCells, int rowIndex, ref int startIndex)
         {
             var rowCells = new List<KeyValuePair<CellAddress, CellRecord>>();
-            for (var index = 0; index < persistedCells.Count; index++)
+            while (startIndex < persistedCells.Count && persistedCells[startIndex].Key.RowIndex < rowIndex)
             {
-                var pair = persistedCells[index];
-                if (pair.Key.RowIndex == rowIndex)
+                startIndex++;
+            }
+
+            while (startIndex < persistedCells.Count)
+            {
+                var pair = persistedCells[startIndex];
+                if (pair.Key.RowIndex != rowIndex)
                 {
-                    rowCells.Add(pair);
+                    break;
                 }
+
+                rowCells.Add(pair);
+                startIndex++;
             }
 
             return rowCells;
@@ -269,7 +285,12 @@ namespace Aspose.Cells_FOSS
                 row.SetAttributeValue("hidden", 1);
             }
 
-            if (rowModel != null && rowModel.StyleIndex.HasValue && rowModel.StyleIndex.Value >= 0)
+            if (rowModel != null && rowModel.Style != null)
+            {
+                row.SetAttributeValue("s", stylesheet.GetStyleIndex(rowModel.Style));
+                row.SetAttributeValue("customFormat", 1);
+            }
+            else if (rowModel != null && rowModel.StyleIndex.HasValue && rowModel.StyleIndex.Value >= 0)
             {
                 row.SetAttributeValue("s", rowModel.StyleIndex.Value);
                 row.SetAttributeValue("customFormat", 1);
@@ -283,7 +304,38 @@ namespace Aspose.Cells_FOSS
             return row;
         }
 
-        internal static XElement BuildColumnElement(ColumnRangeModel column)
+        private static XElement BuildSheetFormatPrElement(WorksheetModel worksheet)
+        {
+            if (!worksheet.BaseColumnWidth.HasValue && !worksheet.DefaultColumnWidth.HasValue
+                && !worksheet.DefaultRowHeight.HasValue && !worksheet.CustomHeight.HasValue)
+            {
+                return null;
+            }
+
+            var element = new XElement(MainNs + "sheetFormatPr");
+            if (worksheet.BaseColumnWidth.HasValue)
+            {
+                element.SetAttributeValue("baseColWidth", worksheet.BaseColumnWidth.Value);
+            }
+
+            if (worksheet.DefaultColumnWidth.HasValue)
+            {
+                element.SetAttributeValue("defaultColWidth", worksheet.DefaultColumnWidth.Value.ToString("0.####", CultureInfo.InvariantCulture));
+            }
+
+            // defaultRowHeight is required by the OOXML schema whenever sheetFormatPr is present.
+            var defaultRowHeight = worksheet.DefaultRowHeight ?? 15d;
+            element.SetAttributeValue("defaultRowHeight", defaultRowHeight.ToString("0.####", CultureInfo.InvariantCulture));
+
+            if (worksheet.CustomHeight == true)
+            {
+                element.SetAttributeValue("customHeight", 1);
+            }
+
+            return element;
+        }
+
+        internal static XElement BuildColumnElement(ColumnRangeModel column, StylesheetSaveContext stylesheet)
         {
             var element = new XElement(MainNs + "col",
                 new XAttribute("min", column.MinColumnIndex + 1),
@@ -300,7 +352,11 @@ namespace Aspose.Cells_FOSS
                 element.SetAttributeValue("hidden", 1);
             }
 
-            if (column.StyleIndex.HasValue && column.StyleIndex.Value >= 0)
+            if (column.Style != null)
+            {
+                element.SetAttributeValue("style", stylesheet.GetStyleIndex(column.Style));
+            }
+            else if (column.StyleIndex.HasValue && column.StyleIndex.Value >= 0)
             {
                 element.SetAttributeValue("style", column.StyleIndex.Value);
             }
@@ -354,6 +410,7 @@ namespace Aspose.Cells_FOSS
                     Width = column.Width,
                     Hidden = column.Hidden,
                     StyleIndex = column.StyleIndex,
+                    Style = column.Style != null ? column.Style.Clone() : null,
                 });
             }
 

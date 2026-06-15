@@ -29,6 +29,10 @@ namespace Aspose.Cells_FOSS.Core
         /// Gets or sets the style index.
         /// </summary>
         public int? StyleIndex { get; set; }
+        /// <summary>
+        /// Gets or sets the resolved style value for the column metadata.
+        /// </summary>
+        public StyleValue Style { get; set; }
     }
 }
 
