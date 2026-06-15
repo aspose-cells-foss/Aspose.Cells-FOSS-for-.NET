@@ -69,6 +69,27 @@ namespace Aspose.Cells_FOSS
                 sheetView.SetAttributeValue("zoomScale", worksheet.View.ZoomScale);
             }
 
+            if (!string.IsNullOrWhiteSpace(worksheet.View.ViewType))
+            {
+                sheetView.SetAttributeValue("view", worksheet.View.ViewType);
+            }
+
+            if (!string.IsNullOrWhiteSpace(worksheet.View.TopLeftCell))
+            {
+                sheetView.SetAttributeValue("topLeftCell", worksheet.View.TopLeftCell);
+            }
+
+            if (worksheet.View.TabSelected)
+            {
+                sheetView.SetAttributeValue("tabSelected", 1);
+            }
+
+            var selection = BuildSelectionElement(worksheet.View);
+            if (selection != null)
+            {
+                sheetView.Add(selection);
+            }
+
             return new XElement(MainNs + "sheetViews", sheetView);
         }
 
@@ -105,7 +126,12 @@ namespace Aspose.Cells_FOSS
                 && view.ShowRowColumnHeaders
                 && view.ShowZeros
                 && !view.RightToLeft
-                && view.ZoomScale == 100;
+                && view.ZoomScale == 100
+                && string.IsNullOrWhiteSpace(view.ViewType)
+                && string.IsNullOrWhiteSpace(view.TopLeftCell)
+                && !view.TabSelected
+                && string.IsNullOrWhiteSpace(view.SelectionActiveCell)
+                && string.IsNullOrWhiteSpace(view.SelectionSqref);
         }
 
         private static void LoadTabColor(WorksheetModel worksheetModel, XElement sheetPropertiesElement, LoadDiagnostics diagnostics, LoadOptions options, string sheetName)
@@ -153,6 +179,11 @@ namespace Aspose.Cells_FOSS
             worksheetModel.View.ShowZeros = true;
             worksheetModel.View.RightToLeft = false;
             worksheetModel.View.ZoomScale = 100;
+            worksheetModel.View.ViewType = null;
+            worksheetModel.View.TopLeftCell = null;
+            worksheetModel.View.TabSelected = false;
+            worksheetModel.View.SelectionActiveCell = null;
+            worksheetModel.View.SelectionSqref = null;
             if (sheetViewElement == null)
             {
                 return;
@@ -163,6 +194,54 @@ namespace Aspose.Cells_FOSS
             worksheetModel.View.ShowZeros = ParseBooleanViewAttribute(sheetViewElement.Attribute("showZeros"), true, diagnostics, options, sheetName, "showZeros");
             worksheetModel.View.RightToLeft = ParseBooleanViewAttribute(sheetViewElement.Attribute("rightToLeft"), false, diagnostics, options, sheetName, "rightToLeft");
             worksheetModel.View.ZoomScale = ParseZoomScale(sheetViewElement.Attribute("zoomScale"), diagnostics, options, sheetName);
+            worksheetModel.View.ViewType = ReadOptionalTrimmedAttribute(sheetViewElement, "view");
+            worksheetModel.View.TopLeftCell = ReadOptionalTrimmedAttribute(sheetViewElement, "topLeftCell");
+            worksheetModel.View.TabSelected = ParseBooleanViewAttribute(sheetViewElement.Attribute("tabSelected"), false, diagnostics, options, sheetName, "tabSelected");
+            LoadPrimarySelection(worksheetModel.View, sheetViewElement);
+        }
+
+        private static XElement BuildSelectionElement(WorksheetViewModel view)
+        {
+            if (string.IsNullOrWhiteSpace(view.SelectionActiveCell) && string.IsNullOrWhiteSpace(view.SelectionSqref))
+            {
+                return null;
+            }
+
+            var selection = new XElement(MainNs + "selection");
+            if (!string.IsNullOrWhiteSpace(view.SelectionActiveCell))
+            {
+                selection.SetAttributeValue("activeCell", view.SelectionActiveCell);
+            }
+
+            if (!string.IsNullOrWhiteSpace(view.SelectionSqref))
+            {
+                selection.SetAttributeValue("sqref", view.SelectionSqref);
+            }
+
+            return selection;
+        }
+
+        private static void LoadPrimarySelection(WorksheetViewModel view, XElement sheetViewElement)
+        {
+            var selection = sheetViewElement.Element(MainNs + "selection");
+            if (selection == null)
+            {
+                return;
+            }
+
+            view.SelectionActiveCell = ReadOptionalTrimmedAttribute(selection, "activeCell");
+            view.SelectionSqref = ReadOptionalTrimmedAttribute(selection, "sqref");
+        }
+
+        private static string ReadOptionalTrimmedAttribute(XElement element, string attributeName)
+        {
+            var value = ((string)element.Attribute(attributeName) ?? string.Empty).Trim();
+            if (value.Length == 0)
+            {
+                return null;
+            }
+
+            return value;
         }
 
         private static bool ParseBooleanViewAttribute(XAttribute attribute, bool defaultValue, LoadDiagnostics diagnostics, LoadOptions options, string sheetName, string attributeName)

@@ -94,6 +94,33 @@ namespace Aspose.Cells_FOSS
         }
 
         /// <summary>
+        /// Determines whether the specified object is equal to the current font instance.
+        /// </summary>
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as Font);
+        }
+
+        /// <summary>
+        /// Serves as a hash function for a font object.
+        /// </summary>
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                var hash = 17;
+                hash = hash * 31 + (Name == null ? 0 : Name.GetHashCode());
+                hash = hash * 31 + Size.GetHashCode();
+                hash = hash * 31 + IsBold.GetHashCode();
+                hash = hash * 31 + IsItalic.GetHashCode();
+                hash = hash * 31 + Underline.GetHashCode();
+                hash = hash * 31 + IsStrikeout.GetHashCode();
+                hash = hash * 31 + Color.GetHashCode();
+                return hash;
+            }
+        }
+
+        /// <summary>
         /// Returns a string that represents the current font object.
         /// </summary>
         public override string ToString()

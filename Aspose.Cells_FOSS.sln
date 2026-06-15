@@ -6,7 +6,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{BE4E7227-7C2
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aspose.Cells_FOSS", "src\Aspose.Cells_FOSS\Aspose.Cells_FOSS.csproj", "{0789D9F6-0E65-4934-9E5A-354E3984DF2C}"
 EndProject
-
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{1B11C64E-9A39-464F-8ACE-7026698F836E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aspose.Cells_FOSS.Samples.Basic", "samples\Aspose.Cells_FOSS.Samples.Basic\Aspose.Cells_FOSS.Samples.Basic.csproj", "{1777FF64-7122-4AE3-A281-C9596822E012}"
@@ -24,6 +23,18 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aspose.Cells_FOSS.Samples.HyperlinksAndNames", "samples\Aspose.Cells_FOSS.Samples.HyperlinksAndNames\Aspose.Cells_FOSS.Samples.HyperlinksAndNames.csproj", "{723298C0-9528-4B5E-8A3E-8BAA4BE72F15}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aspose.Cells_FOSS.Samples.PageSetup", "samples\Aspose.Cells_FOSS.Samples.PageSetup\Aspose.Cells_FOSS.Samples.PageSetup.csproj", "{4D475612-B7A4-46C4-B4DB-CF39B4AF3C7C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aspose.Cells_FOSS.Samples.Charts", "samples\Aspose.Cells_FOSS.Samples.Charts\Aspose.Cells_FOSS.Samples.Charts.csproj", "{B4A5C253-0AF3-479D-A683-34F586B54FEC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aspose.Cells_FOSS.Samples.Comments", "samples\Aspose.Cells_FOSS.Samples.Comments\Aspose.Cells_FOSS.Samples.Comments.csproj", "{3FB84057-C9B0-4C53-A7E8-C73DF17613BB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aspose.Cells_FOSS.Samples.DocumentProperties", "samples\Aspose.Cells_FOSS.Samples.DocumentProperties\Aspose.Cells_FOSS.Samples.DocumentProperties.csproj", "{835C8411-9FA0-4777-979F-74AC8BCA9DCB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aspose.Cells_FOSS.Samples.ListObjects", "samples\Aspose.Cells_FOSS.Samples.ListObjects\Aspose.Cells_FOSS.Samples.ListObjects.csproj", "{3BD89033-8BA7-4B79-95D3-422FBDF95ECD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aspose.Cells_FOSS.Samples.Pictures", "samples\Aspose.Cells_FOSS.Samples.Pictures\Aspose.Cells_FOSS.Samples.Pictures.csproj", "{D0DD96BB-1CBD-4A4F-BA05-1F076EEC69DC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aspose.Cells_FOSS.Samples.Shapes", "samples\Aspose.Cells_FOSS.Samples.Shapes\Aspose.Cells_FOSS.Samples.Shapes.csproj", "{41033C8D-036F-4795-97D0-1F36B32C1EA2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -70,6 +81,30 @@ Global
 		{4D475612-B7A4-46C4-B4DB-CF39B4AF3C7C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4D475612-B7A4-46C4-B4DB-CF39B4AF3C7C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4D475612-B7A4-46C4-B4DB-CF39B4AF3C7C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B4A5C253-0AF3-479D-A683-34F586B54FEC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4A5C253-0AF3-479D-A683-34F586B54FEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4A5C253-0AF3-479D-A683-34F586B54FEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4A5C253-0AF3-479D-A683-34F586B54FEC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3FB84057-C9B0-4C53-A7E8-C73DF17613BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3FB84057-C9B0-4C53-A7E8-C73DF17613BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3FB84057-C9B0-4C53-A7E8-C73DF17613BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3FB84057-C9B0-4C53-A7E8-C73DF17613BB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{835C8411-9FA0-4777-979F-74AC8BCA9DCB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{835C8411-9FA0-4777-979F-74AC8BCA9DCB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{835C8411-9FA0-4777-979F-74AC8BCA9DCB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{835C8411-9FA0-4777-979F-74AC8BCA9DCB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3BD89033-8BA7-4B79-95D3-422FBDF95ECD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3BD89033-8BA7-4B79-95D3-422FBDF95ECD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3BD89033-8BA7-4B79-95D3-422FBDF95ECD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3BD89033-8BA7-4B79-95D3-422FBDF95ECD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0DD96BB-1CBD-4A4F-BA05-1F076EEC69DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0DD96BB-1CBD-4A4F-BA05-1F076EEC69DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0DD96BB-1CBD-4A4F-BA05-1F076EEC69DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0DD96BB-1CBD-4A4F-BA05-1F076EEC69DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{41033C8D-036F-4795-97D0-1F36B32C1EA2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{41033C8D-036F-4795-97D0-1F36B32C1EA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{41033C8D-036F-4795-97D0-1F36B32C1EA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{41033C8D-036F-4795-97D0-1F36B32C1EA2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{0789D9F6-0E65-4934-9E5A-354E3984DF2C} = {BE4E7227-7C2C-4AA5-ACDA-5F62AE7F1B58}
@@ -81,7 +116,11 @@ Global
 		{7C3BBF3C-FA68-4549-8DB7-B4280527A258} = {1B11C64E-9A39-464F-8ACE-7026698F836E}
 		{723298C0-9528-4B5E-8A3E-8BAA4BE72F15} = {1B11C64E-9A39-464F-8ACE-7026698F836E}
 		{4D475612-B7A4-46C4-B4DB-CF39B4AF3C7C} = {1B11C64E-9A39-464F-8ACE-7026698F836E}
+		{B4A5C253-0AF3-479D-A683-34F586B54FEC} = {1B11C64E-9A39-464F-8ACE-7026698F836E}
+		{3FB84057-C9B0-4C53-A7E8-C73DF17613BB} = {1B11C64E-9A39-464F-8ACE-7026698F836E}
+		{835C8411-9FA0-4777-979F-74AC8BCA9DCB} = {1B11C64E-9A39-464F-8ACE-7026698F836E}
+		{3BD89033-8BA7-4B79-95D3-422FBDF95ECD} = {1B11C64E-9A39-464F-8ACE-7026698F836E}
+		{D0DD96BB-1CBD-4A4F-BA05-1F076EEC69DC} = {1B11C64E-9A39-464F-8ACE-7026698F836E}
+		{41033C8D-036F-4795-97D0-1F36B32C1EA2} = {1B11C64E-9A39-464F-8ACE-7026698F836E}
 	EndGlobalSection
 EndGlobal
-
-

@@ -19,7 +19,11 @@ namespace Aspose.Cells_FOSS
             }
 
             var element = new XElement(MainNs + "sheetProtection");
-            element.SetAttributeValue("sheet", 1);
+            if (protection.IsProtected)
+            {
+                element.SetAttributeValue("sheet", 1);
+            }
+
             SetBoolAttributeWhenTrue(element, "objects", protection.Objects);
             SetBoolAttributeWhenTrue(element, "scenarios", protection.Scenarios);
             SetBoolAttributeWhenTrue(element, "formatCells", protection.FormatCells);
@@ -52,7 +56,7 @@ namespace Aspose.Cells_FOSS
                 return;
             }
 
-            worksheetModel.Protection.IsProtected = ParseProtectionBooleanAttribute(protectionElement.Attribute("sheet"), true, diagnostics, options, sheetName, "sheet");
+            worksheetModel.Protection.IsProtected = ParseProtectionBooleanAttribute(protectionElement.Attribute("sheet"), false, diagnostics, options, sheetName, "sheet");
             worksheetModel.Protection.Objects = ParseProtectionBooleanAttribute(protectionElement.Attribute("objects"), false, diagnostics, options, sheetName, "objects");
             worksheetModel.Protection.Scenarios = ParseProtectionBooleanAttribute(protectionElement.Attribute("scenarios"), false, diagnostics, options, sheetName, "scenarios");
             worksheetModel.Protection.FormatCells = ParseProtectionBooleanAttribute(protectionElement.Attribute("formatCells"), false, diagnostics, options, sheetName, "formatCells");

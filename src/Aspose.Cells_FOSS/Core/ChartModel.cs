@@ -75,6 +75,9 @@ namespace Aspose.Cells_FOSS.Core
 
         /// <summary>Gets or sets the raw XML content of the companion file.</summary>
         public string RawContent { get; set; }
+
+        /// <summary>Gets or sets the raw binary content of the companion file when the companion is not XML.</summary>
+        public byte[] BinaryContent { get; set; }
     }
 }
 

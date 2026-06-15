@@ -44,6 +44,7 @@ namespace Aspose.Cells_FOSS
             }
 
             LoadWorksheetViewSettings(worksheetModel, worksheetRoot, diagnostics, options, sheetName);
+            LoadSheetFormatPr(worksheetModel, worksheetRoot);
             LoadWorksheetProtection(worksheetModel, worksheetRoot, diagnostics, options, sheetName);
             LoadAutoFilter(worksheetModel, worksheetRoot, stylesheet, diagnostics, options, sheetName);
             LoadColumns(worksheetModel, worksheetRoot, stylesheet, diagnostics, options, sheetName);
@@ -144,6 +145,23 @@ namespace Aspose.Cells_FOSS
             return worksheetModel;
         }
 
+        private static void LoadSheetFormatPr(WorksheetModel worksheetModel, XElement worksheetRoot)
+        {
+            var sheetFormatPr = worksheetRoot.Element(MainNs + "sheetFormatPr");
+            if (sheetFormatPr == null)
+            {
+                return;
+            }
+
+            worksheetModel.BaseColumnWidth = ParseIntAttribute(sheetFormatPr.Attribute("baseColWidth"));
+            worksheetModel.DefaultColumnWidth = ParseDoubleAttribute(sheetFormatPr.Attribute("defaultColWidth"));
+            worksheetModel.DefaultRowHeight = ParseDoubleAttribute(sheetFormatPr.Attribute("defaultRowHeight"));
+            if (sheetFormatPr.Attribute("customHeight") != null)
+            {
+                worksheetModel.CustomHeight = ParseBoolAttribute(sheetFormatPr.Attribute("customHeight"));
+            }
+        }
+
         private static void LoadColumns(WorksheetModel worksheetModel, XElement worksheetRoot, StylesheetLoadContext stylesheet, LoadDiagnostics diagnostics, LoadOptions options, string sheetName)
         {
             var columns = new List<ColumnRangeModel>();
@@ -178,6 +196,7 @@ namespace Aspose.Cells_FOSS
                     Width = ParseDoubleAttribute(columnElement.Attribute("width")),
                     Hidden = ParseBoolAttribute(columnElement.Attribute("hidden")),
                     StyleIndex = styleIndex,
+                    Style = ResolveMetadataStyle(styleIndex, stylesheet),
                 });
             }
 
@@ -304,6 +323,7 @@ namespace Aspose.Cells_FOSS
                 Height = ParseDoubleAttribute(rowElement.Attribute("ht")),
                 Hidden = ParseBoolAttribute(rowElement.Attribute("hidden")),
                 StyleIndex = styleIndex,
+                Style = ResolveMetadataStyle(styleIndex, stylesheet),
             };
 
             if (rowModel.Height.HasValue && !ParseBoolAttribute(rowElement.Attribute("customHeight")))
@@ -418,6 +438,21 @@ namespace Aspose.Cells_FOSS
             }
 
             return true;
+        }
+
+        private static StyleValue ResolveMetadataStyle(int? styleIndex, StylesheetLoadContext stylesheet)
+        {
+            if (!styleIndex.HasValue)
+            {
+                return null;
+            }
+
+            if (styleIndex.Value < 0 || styleIndex.Value >= stylesheet.CellFormats.Count)
+            {
+                return null;
+            }
+
+            return stylesheet.CellFormats[styleIndex.Value].Clone();
         }
 
         private static void LoadMergeRegions(WorksheetModel worksheetModel, XElement worksheetRoot, LoadDiagnostics diagnostics, LoadOptions options, string sheetName)

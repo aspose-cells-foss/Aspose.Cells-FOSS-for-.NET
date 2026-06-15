@@ -20,6 +20,7 @@ namespace Aspose.Cells_FOSS
             worksheetModel.ShapeImages.Clear();
             worksheetModel.Shapes.Clear();
             worksheetModel.Charts.Clear();
+            worksheetModel.PreservedCharts.Clear();
 
             var drawingUri = FindDrawingUri(archive, worksheetUri);
             if (string.IsNullOrEmpty(drawingUri))
@@ -54,6 +55,7 @@ namespace Aspose.Cells_FOSS
             LoadOneCellAnchorShapes(worksheetModel, drawingRoot);
             LoadTwoCellAnchorCharts(worksheetModel, drawingRoot, chartTargets, archive, diagnostics, options, sheetName);
             LoadOneCellAnchorCharts(worksheetModel, drawingRoot, chartTargets, archive, diagnostics, options, sheetName);
+            LoadPreservedRawShapeCharts(worksheetModel, chartTargets, archive, diagnostics, options, sheetName);
         }
 
         private static void LoadTwoCellAnchorPictures(WorksheetModel worksheetModel, XElement drawingRoot, IReadOnlyDictionary<string, string> imageTargets, ZipArchive archive, LoadDiagnostics diagnostics, LoadOptions options, string sheetName)
@@ -878,6 +880,42 @@ namespace Aspose.Cells_FOSS
             }
         }
 
+        private static void LoadPreservedRawShapeCharts(WorksheetModel worksheetModel,
+            IReadOnlyDictionary<string, ChartTarget> chartTargets, ZipArchive archive,
+            LoadDiagnostics diagnostics, LoadOptions options, string sheetName)
+        {
+            var claimedRelationshipIds = new HashSet<string>(StringComparer.Ordinal);
+            for (var i = 0; i < worksheetModel.Charts.Count; i++)
+            {
+                var relationshipId = worksheetModel.Charts[i].OriginalRId;
+                if (!string.IsNullOrEmpty(relationshipId))
+                {
+                    claimedRelationshipIds.Add(relationshipId);
+                }
+            }
+
+            var unclaimedRelationshipIds = new List<string>();
+            foreach (var pair in chartTargets)
+            {
+                if (!claimedRelationshipIds.Contains(pair.Key))
+                {
+                    unclaimedRelationshipIds.Add(pair.Key);
+                }
+            }
+
+            unclaimedRelationshipIds.Sort(StringComparer.Ordinal);
+
+            for (var i = 0; i < unclaimedRelationshipIds.Count; i++)
+            {
+                var relationshipId = unclaimedRelationshipIds[i];
+                var model = LoadChartForRelationship(relationshipId, string.Empty, null, chartTargets, archive, diagnostics, options, sheetName);
+                if (model != null)
+                {
+                    worksheetModel.PreservedCharts.Add(model);
+                }
+            }
+        }
+
         private static bool IsChartGraphicFrame(XElement graphicFrame)
         {
             var graphicData = graphicFrame.Element(ANs + "graphic")?.Element(ANs + "graphicData");
@@ -909,60 +947,17 @@ namespace Aspose.Cells_FOSS
             IReadOnlyDictionary<string, ChartTarget> chartTargets, ZipArchive archive,
             LoadDiagnostics diagnostics, LoadOptions options, string sheetName)
         {
-            var graphicData = graphicFrame.Element(ANs + "graphic")?.Element(ANs + "graphicData");
-
-            // Standard chart: c:chart element; ChartEx: cx:chart element
-            var chartEl = graphicData?.Element(ChartNs + "chart")
-                       ?? graphicData?.Element(ChartExNs + "chart");
-            var rId = chartEl != null ? (string)chartEl.Attribute(RelationshipNs + "id") : null;
+            var rId = GetChartRelationshipId(graphicFrame);
             if (string.IsNullOrEmpty(rId))
             {
                 return null;
             }
 
-            ChartTarget chartTarget;
-            if (!chartTargets.TryGetValue(rId, out chartTarget))
+            var model = LoadChartForRelationship(rId, GetChartName(graphicFrame), rawContainerElement, chartTargets, archive, diagnostics, options, sheetName);
+            if (model == null)
             {
-                AddIssue(diagnostics, options, new LoadIssue("CHT-L001", DiagnosticSeverity.LossyRecoverable,
-                    "Chart relationship '" + rId + "' could not be resolved; chart was dropped.",
-                    repairApplied: true, dataLossRisk: true)
-                {
-                    SheetName = sheetName,
-                });
                 return null;
             }
-
-            var chartUri = chartTarget.Uri;
-            var isChartEx = chartTarget.IsChartEx;
-
-            var chartEntry = GetEntry(archive, chartUri);
-            if (chartEntry == null)
-            {
-                AddIssue(diagnostics, options, new LoadIssue("CHT-R001", DiagnosticSeverity.Recoverable,
-                    (isChartEx ? "ChartEx" : "Chart") + " part '" + chartUri + "' was not found; chart was skipped.",
-                    repairApplied: true)
-                {
-                    SheetName = sheetName,
-                });
-                return null;
-            }
-
-            string rawChartXml;
-            using (var stream = chartEntry.Open())
-            using (var reader = new StreamReader(stream, Encoding.UTF8))
-            {
-                rawChartXml = reader.ReadToEnd();
-            }
-
-            var model = new ChartModel
-            {
-                Name = GetChartName(graphicFrame),
-                RawChartXml = rawChartXml,
-                ChartType = DetectChartType(rawChartXml),
-                IsChartEx = isChartEx,
-                OriginalRId = rId,
-                RawGraphicFrameXml = rawContainerElement != null ? rawContainerElement.ToString() : null,
-            };
 
             if (toEl != null)
             {
@@ -992,6 +987,64 @@ namespace Aspose.Cells_FOSS
                 model.ExtentCx = cx;
                 model.ExtentCy = cy;
             }
+
+            return model;
+        }
+
+        private static string GetChartRelationshipId(XElement graphicFrame)
+        {
+            var graphicData = graphicFrame.Element(ANs + "graphic")?.Element(ANs + "graphicData");
+            var chartEl = graphicData?.Element(ChartNs + "chart")
+                       ?? graphicData?.Element(ChartExNs + "chart");
+            return chartEl != null ? (string)chartEl.Attribute(RelationshipNs + "id") : null;
+        }
+
+        private static ChartModel LoadChartForRelationship(string relationshipId, string chartName, XElement rawContainerElement,
+            IReadOnlyDictionary<string, ChartTarget> chartTargets, ZipArchive archive,
+            LoadDiagnostics diagnostics, LoadOptions options, string sheetName)
+        {
+            ChartTarget chartTarget;
+            if (!chartTargets.TryGetValue(relationshipId, out chartTarget))
+            {
+                AddIssue(diagnostics, options, new LoadIssue("CHT-L001", DiagnosticSeverity.LossyRecoverable,
+                    "Chart relationship '" + relationshipId + "' could not be resolved; chart was dropped.",
+                    repairApplied: true, dataLossRisk: true)
+                {
+                    SheetName = sheetName,
+                });
+                return null;
+            }
+
+            var chartUri = chartTarget.Uri;
+            var isChartEx = chartTarget.IsChartEx;
+            var chartEntry = GetEntry(archive, chartUri);
+            if (chartEntry == null)
+            {
+                AddIssue(diagnostics, options, new LoadIssue("CHT-R001", DiagnosticSeverity.Recoverable,
+                    (isChartEx ? "ChartEx" : "Chart") + " part '" + chartUri + "' was not found; chart was skipped.",
+                    repairApplied: true)
+                {
+                    SheetName = sheetName,
+                });
+                return null;
+            }
+
+            string rawChartXml;
+            using (var stream = chartEntry.Open())
+            using (var reader = new StreamReader(stream, Encoding.UTF8))
+            {
+                rawChartXml = reader.ReadToEnd();
+            }
+
+            var model = new ChartModel
+            {
+                Name = chartName,
+                RawChartXml = rawChartXml,
+                ChartType = DetectChartType(rawChartXml),
+                IsChartEx = isChartEx,
+                OriginalRId = relationshipId,
+                RawGraphicFrameXml = rawContainerElement != null ? rawContainerElement.ToString() : null,
+            };
 
             LoadChartCompanionFiles(model, chartUri, archive, diagnostics, options, sheetName);
             return model;
@@ -1112,11 +1165,44 @@ namespace Aspose.Cells_FOSS
                 }
                 else if (string.Equals(type, ImageRelationshipType, StringComparison.OrdinalIgnoreCase))
                 {
-                    AddIssue(diagnostics, options, new LoadIssue("CHT-R002", DiagnosticSeverity.Recoverable,
-                        "Chart '" + model.Name + "' contains an embedded image companion; this is not yet supported and the image was not loaded.",
-                        repairApplied: false)
+                    var imageUri = ResolvePartUri(chartUri, target);
+                    var imageEntry = GetEntry(archive, imageUri);
+                    if (imageEntry == null)
                     {
-                        SheetName = sheetName,
+                        AddIssue(diagnostics, options, new LoadIssue("CHT-R002", DiagnosticSeverity.Recoverable,
+                            "Chart '" + model.Name + "' references companion image '" + imageUri + "' but the image part was not found.",
+                            repairApplied: true)
+                        {
+                            SheetName = sheetName,
+                        });
+                        continue;
+                    }
+
+                    byte[] imageData;
+                    using (var stream = imageEntry.Open())
+                    using (var ms = new MemoryStream())
+                    {
+                        stream.CopyTo(ms);
+                        imageData = ms.ToArray();
+                    }
+
+                    if (imageData.Length == 0)
+                    {
+                        AddIssue(diagnostics, options, new LoadIssue("CHT-R003", DiagnosticSeverity.Recoverable,
+                            "Chart '" + model.Name + "' references companion image '" + imageUri + "' but the image part was empty.",
+                            repairApplied: true)
+                        {
+                            SheetName = sheetName,
+                        });
+                        continue;
+                    }
+
+                    model.CompanionFiles.Add(new ChartCompanionFile
+                    {
+                        RelationshipId = relId,
+                        RelationshipType = type,
+                        FileName = target,
+                        BinaryContent = imageData,
                     });
                 }
             }

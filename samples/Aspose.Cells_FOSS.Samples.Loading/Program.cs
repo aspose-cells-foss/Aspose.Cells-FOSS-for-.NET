@@ -15,7 +15,7 @@ namespace Aspose.Cells_FOSS.Samples.Loading
 
             try
             {
-                new Workbook("sample.xlsx", options);
+                new Workbook(@"..\..\..\sample.xlsx", options);
             }
             catch (WorkbookLoadException exception)
             {

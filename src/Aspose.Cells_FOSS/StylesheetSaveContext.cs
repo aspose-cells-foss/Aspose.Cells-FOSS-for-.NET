@@ -58,6 +58,22 @@ namespace Aspose.Cells_FOSS
         }
 
         /// <summary>
+        /// Gets the style index for a resolved metadata style.
+        /// </summary>
+        /// <param name="style">The style.</param>
+        /// <returns>The int.</returns>
+        public int GetStyleIndex(StyleValue style)
+        {
+            if (style == null)
+            {
+                return 0;
+            }
+
+            int index;
+            return _styleIndices.TryGetValue(XlsxWorkbookStyles.GetStyleKey(style), out index) ? index : 0;
+        }
+
+        /// <summary>
         /// Gets the differential style index.
         /// </summary>
         /// <param name="condition">The condition.</param>

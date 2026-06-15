@@ -32,6 +32,7 @@ namespace Aspose.Cells_FOSS.Core
             ShapeImages = new List<ShapeImageModel>();
             Shapes = new List<ShapeModel>();
             Charts = new List<ChartModel>();
+            PreservedCharts = new List<ChartModel>();
             Comments = new List<CommentModel>();
         }
 
@@ -104,6 +105,12 @@ namespace Aspose.Cells_FOSS.Core
         /// </summary>
         public List<ChartModel> Charts { get; }
         /// <summary>
+        /// Gets the list of chart parts referenced from preserved raw drawing XML such as group shapes.
+        /// These charts are written to drawing relationships and chart parts, but they do not produce
+        /// standalone top-level chart anchors because their anchors are already embedded in raw shape XML.
+        /// </summary>
+        internal List<ChartModel> PreservedCharts { get; }
+        /// <summary>
         /// Gets the list of comment models on this worksheet.
         /// </summary>
         public List<CommentModel> Comments { get; }
@@ -111,6 +118,21 @@ namespace Aspose.Cells_FOSS.Core
         /// Gets or sets the tab color.
         /// </summary>
         public ColorValue? TabColor { get; set; }
+        /// <summary>
+        /// Gets or sets the sheetFormatPr@baseColWidth value (default column width expressed as a count of characters of the normal style's font).
+        /// </summary>
+        public int? BaseColumnWidth { get; set; }
+        /// <summary>
+        /// Gets or sets the sheetFormatPr@defaultColWidth value (default column width measured as the number of characters of the maximum digit width of the normal style's font).
+        /// </summary>
+        public double? DefaultColumnWidth { get; set; }
+        /// <summary>
+        /// Gets or sets the sheetFormatPr@defaultRowHeight value, in points.
+        /// </summary>
+        public double? DefaultRowHeight { get; set; }
+        /// <summary>
+        /// Gets or sets the sheetFormatPr@customHeight value.
+        /// </summary>
+        public bool? CustomHeight { get; set; }
     }
 }
-

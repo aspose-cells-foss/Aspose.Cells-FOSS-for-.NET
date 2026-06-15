@@ -38,6 +38,14 @@ namespace Aspose.Cells_FOSS.Core
         /// Gets or sets the color.
         /// </summary>
         public ColorValue Color { get; set; }
+        /// <summary>
+        /// Gets or sets the OOXML font family value (the &lt;family val="..."/&gt; element).
+        /// </summary>
+        public int? Family { get; set; }
+        /// <summary>
+        /// Gets or sets the OOXML font scheme binding (the &lt;scheme val="..."/&gt; element).
+        /// </summary>
+        public FontSchemeType Scheme { get; set; }
 
         /// <summary>
         /// Creates a copy of the current instance.
@@ -54,6 +62,8 @@ namespace Aspose.Cells_FOSS.Core
                 Underline = Underline,
                 StrikeThrough = StrikeThrough,
                 Color = Color,
+                Family = Family,
+                Scheme = Scheme,
             };
         }
     }

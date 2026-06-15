@@ -141,7 +141,9 @@ namespace Aspose.Cells_FOSS
                 && left.Italic == right.Italic
                 && left.Underline == right.Underline
                 && left.StrikeThrough == right.StrikeThrough
-                && left.Color.Equals(right.Color);
+                && left.Color.Equals(right.Color)
+                && left.Family == right.Family
+                && left.Scheme == right.Scheme;
         }
 
         internal static bool BordersEqual(BordersValue left, BordersValue right)
