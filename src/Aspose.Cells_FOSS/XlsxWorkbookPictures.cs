@@ -37,6 +37,7 @@ namespace Aspose.Cells_FOSS
                 new XAttribute(XNamespace.Xmlns + "xdr", XdrNs),
                 new XAttribute(XNamespace.Xmlns + "a", ANs),
                 new XAttribute(XNamespace.Xmlns + "r", RelationshipNs));
+            var nextGeneratedObjectId = GetNextGeneratedObjectIdStart(worksheet);
 
             // Build a mapping from each picture's/shape-image's original rId to its new assigned rId
             // so that group shapes whose raw XML contains r:embed references stay correct.
@@ -47,14 +48,16 @@ namespace Aspose.Cells_FOSS
             {
                 var picture = worksheet.Pictures[i];
                 var rId = "rId" + (i + 1).ToString(CultureInfo.InvariantCulture);
-                var picId = i + 1;
+                var picId = nextGeneratedObjectId;
+                nextGeneratedObjectId++;
                 root.Add(BuildTwoCellAnchor(picture, rId, picId));
             }
 
             for (var j = 0; j < worksheet.Shapes.Count; j++)
             {
                 var shape = worksheet.Shapes[j];
-                var shapeId = worksheet.Pictures.Count + j + 1;
+                var shapeId = nextGeneratedObjectId;
+                nextGeneratedObjectId++;
                 root.Add(BuildShapeAnchor(shape, shapeId, rIdMap));
             }
 
@@ -62,11 +65,75 @@ namespace Aspose.Cells_FOSS
             {
                 var chart = worksheet.Charts[k];
                 var rId = "rId" + (imageCount + k + 1).ToString(CultureInfo.InvariantCulture);
-                var chartId = imageCount + worksheet.Shapes.Count + k + 1;
+                var chartId = nextGeneratedObjectId;
+                nextGeneratedObjectId++;
                 root.Add(BuildChartAnchor(chart, rId, chartId));
             }
 
             return new XDocument(new XDeclaration("1.0", "utf-8", "yes"), root);
+        }
+
+        private static int GetNextGeneratedObjectIdStart(WorksheetModel worksheet)
+        {
+            var maxExistingId = 0;
+            for (var index = 0; index < worksheet.Shapes.Count; index++)
+            {
+                UpdateMaxDrawingObjectId(worksheet.Shapes[index].RawElementXml, ref maxExistingId);
+            }
+
+            for (var index = 0; index < worksheet.Charts.Count; index++)
+            {
+                var chart = worksheet.Charts[index];
+                if (chart.IsChartEx)
+                {
+                    UpdateMaxDrawingObjectId(chart.RawGraphicFrameXml, ref maxExistingId);
+                }
+            }
+
+            for (var index = 0; index < worksheet.PreservedCharts.Count; index++)
+            {
+                UpdateMaxDrawingObjectId(worksheet.PreservedCharts[index].RawGraphicFrameXml, ref maxExistingId);
+            }
+
+            return maxExistingId + 1;
+        }
+
+        private static void UpdateMaxDrawingObjectId(string rawXml, ref int maxExistingId)
+        {
+            if (string.IsNullOrEmpty(rawXml))
+            {
+                return;
+            }
+
+            XElement root;
+            try
+            {
+                root = XElement.Parse(rawXml);
+            }
+            catch
+            {
+                return;
+            }
+
+            foreach (var cNvPr in root.Descendants(XdrNs + "cNvPr"))
+            {
+                var idAttribute = cNvPr.Attribute("id");
+                if (idAttribute == null)
+                {
+                    continue;
+                }
+
+                int parsedId;
+                if (!int.TryParse(idAttribute.Value, NumberStyles.Integer, CultureInfo.InvariantCulture, out parsedId))
+                {
+                    continue;
+                }
+
+                if (parsedId > maxExistingId)
+                {
+                    maxExistingId = parsedId;
+                }
+            }
         }
 
         private static System.Collections.Generic.Dictionary<string, string> BuildRelationshipIdMap(WorksheetModel worksheet)
@@ -118,6 +185,20 @@ namespace Aspose.Cells_FOSS
                 if (!string.IsNullOrEmpty(originalRId))
                 {
                     var newRId = "rId" + (chartRelationshipIndex + m + 1).ToString(CultureInfo.InvariantCulture);
+                    if (originalRId != newRId)
+                    {
+                        map[originalRId] = newRId;
+                    }
+                }
+            }
+
+            chartRelationshipIndex += worksheet.PreservedCharts.Count;
+            for (var n = 0; n < worksheet.PreservedDrawingRelationships.Count; n++)
+            {
+                var originalRId = worksheet.PreservedDrawingRelationships[n].OriginalRId;
+                if (!string.IsNullOrEmpty(originalRId))
+                {
+                    var newRId = "rId" + (chartRelationshipIndex + n + 1).ToString(CultureInfo.InvariantCulture);
                     if (originalRId != newRId)
                     {
                         map[originalRId] = newRId;
@@ -245,9 +326,15 @@ namespace Aspose.Cells_FOSS
 
         private static string ApplyRIdRemap(string rawXml, System.Collections.Generic.Dictionary<string, string> rIdMap)
         {
-            if (rIdMap == null || rIdMap.Count == 0 || string.IsNullOrEmpty(rawXml))
+            if (string.IsNullOrEmpty(rawXml))
             {
                 return rawXml;
+            }
+
+            var normalizedXml = NormalizePreservedDrawingMarkup(rawXml);
+            if (rIdMap == null || rIdMap.Count == 0)
+            {
+                return normalizedXml;
             }
 
             var placeholderIndex = 0;
@@ -255,17 +342,17 @@ namespace Aspose.Cells_FOSS
             foreach (var kvp in rIdMap)
             {
                 var placeholder = "__ACF_RID_PLACEHOLDER_" + placeholderIndex.ToString(CultureInfo.InvariantCulture) + "__";
-                rawXml = rawXml.Replace("\"" + kvp.Key + "\"", "\"" + placeholder + "\"");
+                normalizedXml = normalizedXml.Replace("\"" + kvp.Key + "\"", "\"" + placeholder + "\"");
                 placeholders.Add(new System.Collections.Generic.KeyValuePair<string, string>(placeholder, kvp.Value));
                 placeholderIndex++;
             }
 
             for (var i = 0; i < placeholders.Count; i++)
             {
-                rawXml = rawXml.Replace("\"" + placeholders[i].Key + "\"", "\"" + placeholders[i].Value + "\"");
+                normalizedXml = normalizedXml.Replace("\"" + placeholders[i].Key + "\"", "\"" + placeholders[i].Value + "\"");
             }
 
-            return rawXml;
+            return normalizedXml;
         }
 
         private static XElement BuildSpElement(ShapeModel shape, int shapeId)
@@ -418,6 +505,23 @@ namespace Aspose.Cells_FOSS
                     new XAttribute("Target", "../charts/" + fileName)));
             }
 
+            var preservedRelationshipIndex = imageCount + worksheet.Charts.Count + worksheet.PreservedCharts.Count;
+            for (var n = 0; n < worksheet.PreservedDrawingRelationships.Count; n++)
+            {
+                var relationship = worksheet.PreservedDrawingRelationships[n];
+                var relationshipElement = new XElement(PackageRelationshipNs + "Relationship",
+                    new XAttribute("Id", "rId" + (preservedRelationshipIndex + n + 1).ToString(CultureInfo.InvariantCulture)),
+                    new XAttribute("Type", relationship.RelationshipType),
+                    new XAttribute("Target", relationship.Target));
+
+                if (!string.IsNullOrEmpty(relationship.TargetMode))
+                {
+                    relationshipElement.Add(new XAttribute("TargetMode", relationship.TargetMode));
+                }
+
+                relationships.Add(relationshipElement);
+            }
+
             return new XDocument(new XDeclaration("1.0", "utf-8", "yes"), relationships);
         }
 
@@ -461,9 +565,11 @@ namespace Aspose.Cells_FOSS
             if (chart.IsChartEx && !string.IsNullOrEmpty(chart.RawGraphicFrameXml))
             {
                 // Substitute the new rId into the preserved raw element (mc:AlternateContent or graphicFrame)
-                var updatedXml = string.IsNullOrEmpty(chart.OriginalRId)
-                    ? chart.RawGraphicFrameXml
-                    : chart.RawGraphicFrameXml.Replace("\"" + chart.OriginalRId + "\"", "\"" + rId + "\"");
+                var updatedXml = NormalizePreservedDrawingMarkup(chart.RawGraphicFrameXml);
+                if (!string.IsNullOrEmpty(chart.OriginalRId))
+                {
+                    updatedXml = updatedXml.Replace("\"" + chart.OriginalRId + "\"", "\"" + rId + "\"");
+                }
                 try
                 {
                     anchor.Add(XElement.Parse(updatedXml));
@@ -514,6 +620,80 @@ namespace Aspose.Cells_FOSS
                         new XAttribute(RelationshipNs + "id", rId)))));
 
             return graphicFrame;
+        }
+
+        private static string NormalizePreservedDrawingMarkup(string rawXml)
+        {
+            XElement root;
+            try
+            {
+                root = XElement.Parse(rawXml);
+            }
+            catch
+            {
+                return rawXml;
+            }
+
+            NormalizeShapeTransformElements(root);
+            NormalizeCreationIdAttributes(root);
+            return root.ToString(System.Xml.Linq.SaveOptions.DisableFormatting);
+        }
+
+        private static void NormalizeShapeTransformElements(XElement root)
+        {
+            foreach (var spPr in root.Descendants(XdrNs + "spPr"))
+            {
+                var xdrTransform = spPr.Element(XdrNs + "xfrm");
+                if (xdrTransform == null)
+                {
+                    continue;
+                }
+
+                xdrTransform.Name = ANs + "xfrm";
+                NormalizeDescendantNamespaces(xdrTransform);
+            }
+        }
+
+        private static void NormalizeCreationIdAttributes(XElement root)
+        {
+            foreach (var element in root.Descendants())
+            {
+                if (!string.Equals(element.Name.LocalName, "creationId", StringComparison.Ordinal))
+                {
+                    continue;
+                }
+
+                var namespaceName = element.Name.NamespaceName;
+                if (!string.Equals(namespaceName, "http://schemas.microsoft.com/office/drawing/2014/main", StringComparison.Ordinal))
+                {
+                    continue;
+                }
+
+                var idAttribute = element.Attribute("id");
+                if (idAttribute == null || string.IsNullOrWhiteSpace(idAttribute.Value))
+                {
+                    continue;
+                }
+
+                Guid parsedGuid;
+                if (!Guid.TryParse(idAttribute.Value, out parsedGuid))
+                {
+                    continue;
+                }
+
+                idAttribute.Value = "{" + parsedGuid.ToString().ToUpperInvariant() + "}";
+            }
+        }
+
+        private static void NormalizeDescendantNamespaces(XElement root)
+        {
+            foreach (var element in root.DescendantsAndSelf())
+            {
+                if (element.Name.Namespace == XdrNs)
+                {
+                    element.Name = ANs + element.Name.LocalName;
+                }
+            }
         }
     }
 }

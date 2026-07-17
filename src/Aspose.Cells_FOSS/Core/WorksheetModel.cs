@@ -33,6 +33,7 @@ namespace Aspose.Cells_FOSS.Core
             Shapes = new List<ShapeModel>();
             Charts = new List<ChartModel>();
             PreservedCharts = new List<ChartModel>();
+            PreservedDrawingRelationships = new List<DrawingRelationshipModel>();
             Comments = new List<CommentModel>();
         }
 
@@ -110,6 +111,10 @@ namespace Aspose.Cells_FOSS.Core
         /// standalone top-level chart anchors because their anchors are already embedded in raw shape XML.
         /// </summary>
         internal List<ChartModel> PreservedCharts { get; }
+        /// <summary>
+        /// Gets the list of preserved drawing relationships referenced from raw shape XML.
+        /// </summary>
+        internal List<DrawingRelationshipModel> PreservedDrawingRelationships { get; }
         /// <summary>
         /// Gets the list of comment models on this worksheet.
         /// </summary>

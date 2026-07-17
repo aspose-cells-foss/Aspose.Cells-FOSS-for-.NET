@@ -577,7 +577,7 @@ namespace Aspose.Cells_FOSS
             using (var stream = chartEntry.Open())
             using (var writer = new StreamWriter(stream, new UTF8Encoding(false)))
             {
-                writer.Write(chart.RawChartXml);
+                writer.Write(NormalizeChartXmlForSave(chart.RawChartXml));
             }
 
             if (chart.CompanionFiles.Count == 0)
@@ -637,6 +637,148 @@ namespace Aspose.Cells_FOSS
 
             var relsPath = "xl/charts/_rels/" + chartFileName + ".rels";
             WriteXmlEntry(archive, relsPath, new XDocument(new XDeclaration("1.0", "utf-8", "yes"), companionRels));
+        }
+
+        private static string NormalizeChartXmlForSave(string rawChartXml)
+        {
+            if (string.IsNullOrEmpty(rawChartXml))
+            {
+                return rawChartXml;
+            }
+
+            XDocument document;
+            try
+            {
+                document = XDocument.Parse(rawChartXml, System.Xml.Linq.LoadOptions.PreserveWhitespace);
+            }
+            catch
+            {
+                return rawChartXml;
+            }
+
+            var changed = RemoveInvalidChartExtensionChildren(document.Root);
+            if (!changed)
+            {
+                return rawChartXml;
+            }
+
+            return document.Declaration != null
+                ? document.Declaration.ToString() + document.ToString(System.Xml.Linq.SaveOptions.DisableFormatting)
+                : document.ToString(System.Xml.Linq.SaveOptions.DisableFormatting);
+        }
+
+        private static bool RemoveInvalidChartExtensionChildren(XElement root)
+        {
+            if (root == null)
+            {
+                return false;
+            }
+
+            var changed = false;
+            var chart2012Namespace = (XNamespace)"http://schemas.microsoft.com/office/drawing/2012/chart";
+            var elements = new List<XElement>(root.Descendants());
+            for (var index = 0; index < elements.Count; index++)
+            {
+                var element = elements[index];
+                if (element.Name != chart2012Namespace + "showLeaderLines")
+                {
+                    continue;
+                }
+
+                element.Remove();
+                changed = true;
+            }
+
+            var chartNamespace = (XNamespace)"http://schemas.openxmlformats.org/drawingml/2006/chart";
+            var chartElement = root.Element(chartNamespace + "chart");
+            if (chartElement != null)
+            {
+                var showLabelsOverMax = chartElement.Element(chartNamespace + "showDLblsOverMax");
+                if (showLabelsOverMax != null)
+                {
+                    showLabelsOverMax.Remove();
+                    changed = true;
+                }
+
+                var chartLevelExtList = chartElement.Element(chartNamespace + "extLst");
+                if (chartLevelExtList != null)
+                {
+                    chartLevelExtList.Remove();
+                    changed = true;
+                }
+            }
+
+            var surfaceCharts = new List<XElement>(root.Descendants(chartNamespace + "surfaceChart"));
+            for (var index = 0; index < surfaceCharts.Count; index++)
+            {
+                var varyColors = surfaceCharts[index].Element(chartNamespace + "varyColors");
+                if (varyColors == null)
+                {
+                    continue;
+                }
+
+                varyColors.Remove();
+                changed = true;
+            }
+
+            var chartExNamespace = (XNamespace)"http://schemas.microsoft.com/office/drawing/2014/chartex";
+            var chartExSeries = new List<XElement>(root.Descendants(chartExNamespace + "series"));
+            for (var index = 0; index < chartExSeries.Count; index++)
+            {
+                var valueColors = chartExSeries[index].Element(chartExNamespace + "valueColors");
+                if (valueColors != null)
+                {
+                    valueColors.Remove();
+                    changed = true;
+                }
+
+                var valueColorPositions = chartExSeries[index].Element(chartExNamespace + "valueColorPositions");
+                if (valueColorPositions != null)
+                {
+                    valueColorPositions.Remove();
+                    changed = true;
+                }
+            }
+
+            var extElements = new List<XElement>();
+            foreach (var element in root.Descendants())
+            {
+                if (element.Name.LocalName == "ext")
+                {
+                    extElements.Add(element);
+                }
+            }
+            for (var index = 0; index < extElements.Count; index++)
+            {
+                if (extElements[index].HasElements)
+                {
+                    continue;
+                }
+
+                extElements[index].Remove();
+                changed = true;
+            }
+
+            var extListElements = new List<XElement>();
+            foreach (var element in root.Descendants())
+            {
+                if (element.Name.LocalName == "extLst")
+                {
+                    extListElements.Add(element);
+                }
+            }
+            for (var index = 0; index < extListElements.Count; index++)
+            {
+                if (extListElements[index].HasElements)
+                {
+                    continue;
+                }
+
+                extListElements[index].Remove();
+                changed = true;
+            }
+
+            return changed;
         }
 
         private static IReadOnlyList<string> CollectImageExtensions(WorkbookModel model)

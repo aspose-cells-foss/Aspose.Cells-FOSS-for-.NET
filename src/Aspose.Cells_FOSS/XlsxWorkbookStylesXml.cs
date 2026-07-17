@@ -381,21 +381,21 @@ namespace Aspose.Cells_FOSS
             {
                 element.Add(BuildUnderlineElement(font.Underline));
             }
-            if (font.Family.HasValue)
-            {
-                element.Add(new XElement(MainNs + "family", new XAttribute("val", font.Family.Value)));
-            }
             element.Add(new XElement(MainNs + "sz", new XAttribute("val", font.Size.ToString("0.####", CultureInfo.InvariantCulture))));
             var colorElement = BuildColorElement("color", font.Color);
             if (colorElement != null)
             {
                 element.Add(colorElement);
             }
+            element.Add(new XElement(MainNs + "name", new XAttribute("val", font.Name)));
+            if (font.Family.HasValue)
+            {
+                element.Add(new XElement(MainNs + "family", new XAttribute("val", font.Family.Value)));
+            }
             if (font.Scheme != FontSchemeType.None)
             {
                 element.Add(new XElement(MainNs + "scheme", new XAttribute("val", font.Scheme == FontSchemeType.Major ? "major" : "minor")));
             }
-            element.Add(new XElement(MainNs + "name", new XAttribute("val", font.Name)));
             return element;
         }
 

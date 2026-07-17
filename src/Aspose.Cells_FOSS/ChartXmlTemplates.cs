@@ -394,7 +394,6 @@ namespace Aspose.Cells_FOSS
                    "      <c:layout/>\r\n" +
                    "      <c:surfaceChart>" +
                    "<c:wireframe val=\"0\"/>" +
-                   "<c:varyColors val=\"0\"/>\r\n" +
                    SeriesWithVal(dataRange) +
                    "        <c:axId val=\"1\"/><c:axId val=\"2\"/><c:axId val=\"3\"/>" +
                    "</c:surfaceChart>\r\n" +

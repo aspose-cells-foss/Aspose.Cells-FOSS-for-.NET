@@ -21,6 +21,7 @@ namespace Aspose.Cells_FOSS
             worksheetModel.Shapes.Clear();
             worksheetModel.Charts.Clear();
             worksheetModel.PreservedCharts.Clear();
+            worksheetModel.PreservedDrawingRelationships.Clear();
 
             var drawingUri = FindDrawingUri(archive, worksheetUri);
             if (string.IsNullOrEmpty(drawingUri))
@@ -53,6 +54,7 @@ namespace Aspose.Cells_FOSS
             LoadShapeImages(worksheetModel, imageTargets, archive);
             LoadTwoCellAnchorShapes(worksheetModel, drawingRoot);
             LoadOneCellAnchorShapes(worksheetModel, drawingRoot);
+            LoadPreservedDrawingRelationships(worksheetModel, archive, drawingUri);
             LoadTwoCellAnchorCharts(worksheetModel, drawingRoot, chartTargets, archive, diagnostics, options, sheetName);
             LoadOneCellAnchorCharts(worksheetModel, drawingRoot, chartTargets, archive, diagnostics, options, sheetName);
             LoadPreservedRawShapeCharts(worksheetModel, chartTargets, archive, diagnostics, options, sheetName);
@@ -659,6 +661,109 @@ namespace Aspose.Cells_FOSS
         private static IReadOnlyDictionary<string, string> LoadDrawingImageTargets(ZipArchive archive, string drawingUri)
         {
             return LoadDrawingTargetsByType(archive, drawingUri, ImageRelationshipType);
+        }
+
+        private static void LoadPreservedDrawingRelationships(WorksheetModel worksheetModel, ZipArchive archive, string drawingUri)
+        {
+            worksheetModel.PreservedDrawingRelationships.Clear();
+
+            var referencedRelationshipIds = GetReferencedDrawingRelationshipIds(worksheetModel.Shapes);
+            if (referencedRelationshipIds.Count == 0)
+            {
+                return;
+            }
+
+            var relsUri = GetDrawingRelsUri(drawingUri);
+            var entry = GetEntry(archive, relsUri);
+            if (entry == null)
+            {
+                return;
+            }
+
+            var document = LoadDocument(entry);
+            foreach (var rel in document.Root != null ? document.Root.Elements(PackageRelationshipNs + "Relationship") : new XElement[0])
+            {
+                var id = (string)rel.Attribute("Id");
+                var type = (string)rel.Attribute("Type");
+                var target = (string)rel.Attribute("Target");
+                if (string.IsNullOrEmpty(id) || string.IsNullOrEmpty(type) || string.IsNullOrEmpty(target))
+                {
+                    continue;
+                }
+
+                if (!referencedRelationshipIds.Contains(id))
+                {
+                    continue;
+                }
+
+                if (string.Equals(type, ImageRelationshipType, StringComparison.OrdinalIgnoreCase) ||
+                    string.Equals(type, ChartRelationshipType, StringComparison.OrdinalIgnoreCase) ||
+                    string.Equals(type, ChartExRelationshipType, StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+
+                worksheetModel.PreservedDrawingRelationships.Add(new DrawingRelationshipModel
+                {
+                    OriginalRId = id,
+                    RelationshipType = type,
+                    Target = target,
+                    TargetMode = (string)rel.Attribute("TargetMode"),
+                });
+            }
+        }
+
+        private static HashSet<string> GetReferencedDrawingRelationshipIds(List<ShapeModel> shapes)
+        {
+            var referencedRelationshipIds = new HashSet<string>(StringComparer.Ordinal);
+            for (var index = 0; index < shapes.Count; index++)
+            {
+                CollectReferencedDrawingRelationshipIds(shapes[index].RawElementXml, referencedRelationshipIds);
+            }
+
+            return referencedRelationshipIds;
+        }
+
+        private static void CollectReferencedDrawingRelationshipIds(string rawXml, HashSet<string> referencedRelationshipIds)
+        {
+            if (string.IsNullOrEmpty(rawXml))
+            {
+                return;
+            }
+
+            XElement root;
+            try
+            {
+                root = XElement.Parse(rawXml);
+            }
+            catch
+            {
+                return;
+            }
+
+            foreach (var element in root.DescendantsAndSelf())
+            {
+                foreach (var attribute in element.Attributes())
+                {
+                    if (attribute.Name.Namespace != RelationshipNs)
+                    {
+                        continue;
+                    }
+
+                    var localName = attribute.Name.LocalName;
+                    if (!string.Equals(localName, "id", StringComparison.Ordinal) &&
+                        !string.Equals(localName, "embed", StringComparison.Ordinal) &&
+                        !string.Equals(localName, "link", StringComparison.Ordinal))
+                    {
+                        continue;
+                    }
+
+                    if (!string.IsNullOrEmpty(attribute.Value))
+                    {
+                        referencedRelationshipIds.Add(attribute.Value);
+                    }
+                }
+            }
         }
 
         private sealed class ChartTarget

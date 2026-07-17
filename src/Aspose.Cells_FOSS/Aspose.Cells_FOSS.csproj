@@ -9,7 +9,7 @@
     <ImplicitUsings>disable</ImplicitUsings>
 
     <PackageId>Aspose.Cells.FOSS</PackageId>
-    <Version>26.6.0.0</Version>
+    <Version>26.7.0.0</Version>
     <title>Aspose.Cells FOSS for .NET</title>
     <Authors>Aspose.Cells</Authors>
     <Company>Aspose</Company>
@@ -28,15 +28,23 @@
 
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageIcon>icon.png</PackageIcon>
 
    
     <Copyright>Copyright © 2026 Aspose</Copyright>
     <PackageReleaseNotes>
-https://github.com/aspose-cells-foss/Aspose.Cells-FOSS-for-.NET/releases/tag/V26.6.0
+https://github.com/aspose-cells-foss/Aspose.Cells-FOSS-for-.NET/releases/tag/V26.7.0
     </PackageReleaseNotes>
 
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);1591</NoWarn>
+
+    <!-- Symbols + Source Link: ship a .snupkg and make the build reproducible. -->
+    <DebugType>portable</DebugType>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
   </PropertyGroup>
 
   <ItemGroup>
@@ -44,13 +52,13 @@ https://github.com/aspose-cells-foss/Aspose.Cells-FOSS-for-.NET/releases/tag/V26
       <Pack>true</Pack>
       <PackagePath>\</PackagePath>
     </Content>
-    <Content Include="E:\Aspose.Cells_Foss - Github\License\LICENSE.txt">
+    <Content Include="..\..\License\LICENSE.txt">
       <Pack>true</Pack>
       <PackagePath>license\</PackagePath>
     </Content>
-    <Content Include="..\..\documentation\**\*">
+    <None Include="icon.png">
       <Pack>true</Pack>
-      <PackagePath>documentation\%(RecursiveDir)%(Filename)%(Extension)</PackagePath>
-    </Content>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 </Project>

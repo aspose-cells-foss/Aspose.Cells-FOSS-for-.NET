@@ -77,6 +77,43 @@ namespace Aspose.Cells_FOSS
             worksheetModel.Protection.HashValue = ReadOptionalAttribute(protectionElement, "hashValue");
             worksheetModel.Protection.SaltValue = ReadOptionalAttribute(protectionElement, "saltValue");
             worksheetModel.Protection.SpinCount = ReadOptionalAttribute(protectionElement, "spinCount");
+
+            if (!worksheetModel.Protection.IsProtected
+                && HasEffectiveProtectionState(worksheetModel.Protection))
+            {
+                worksheetModel.Protection.IsProtected = true;
+            }
+        }
+
+        private static bool HasEffectiveProtectionState(WorksheetProtectionModel protection)
+        {
+            if (protection.Objects
+                || protection.Scenarios
+                || protection.FormatCells
+                || protection.FormatColumns
+                || protection.FormatRows
+                || protection.InsertColumns
+                || protection.InsertRows
+                || protection.InsertHyperlinks
+                || protection.DeleteColumns
+                || protection.DeleteRows
+                || protection.Sort
+                || protection.AutoFilter
+                || protection.PivotTables)
+            {
+                return true;
+            }
+
+            if (!string.IsNullOrWhiteSpace(protection.PasswordHash)
+                || !string.IsNullOrWhiteSpace(protection.AlgorithmName)
+                || !string.IsNullOrWhiteSpace(protection.HashValue)
+                || !string.IsNullOrWhiteSpace(protection.SaltValue)
+                || !string.IsNullOrWhiteSpace(protection.SpinCount))
+            {
+                return true;
+            }
+
+            return false;
         }
 
         private static bool ParseProtectionBooleanAttribute(XAttribute attribute, bool defaultValue, LoadDiagnostics diagnostics, LoadOptions options, string sheetName, string attributeName)
