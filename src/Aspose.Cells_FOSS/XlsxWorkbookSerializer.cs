@@ -66,7 +66,18 @@ namespace Aspose.Cells_FOSS
                         var text = pair.Value.Value as string;
                         if (text != null)
                         {
-                            sharedStrings.Intern(text);
+                            if (pair.Value.RichTextRuns != null && pair.Value.RichTextRuns.Count > 0)
+                            {
+                                sharedStrings.Intern(new SharedStringEntry
+                                {
+                                    Text = text,
+                                    Runs = CloneRichTextRuns(pair.Value.RichTextRuns),
+                                });
+                            }
+                            else
+                            {
+                                sharedStrings.Intern(text);
+                            }
                         }
                     }
                 }
@@ -252,6 +263,17 @@ namespace Aspose.Cells_FOSS
             }
 
             return count;
+        }
+
+        private static List<RichTextRunValue> CloneRichTextRuns(IReadOnlyList<RichTextRunValue> runs)
+        {
+            var cloned = new List<RichTextRunValue>(runs.Count);
+            for (var index = 0; index < runs.Count; index++)
+            {
+                cloned.Add(runs[index].Clone());
+            }
+
+            return cloned;
         }
 
         private static int[] ComputePictureFileOffsets(WorkbookModel model)

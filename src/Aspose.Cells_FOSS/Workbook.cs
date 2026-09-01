@@ -206,7 +206,15 @@ namespace Aspose.Cells_FOSS
         /// </summary>
         public void Save(string fileName)
         {
-            Save(fileName, new SaveOptions());
+            if (fileName == null) throw new ArgumentNullException(nameof(fileName));
+
+            var options = new SaveOptions();
+            if (fileName.EndsWith(".pdf", StringComparison.OrdinalIgnoreCase))
+            {
+                options.SaveFormat = SaveFormat.Pdf;
+            }
+
+            Save(fileName, options);
         }
 
         /// <summary>
@@ -249,7 +257,15 @@ namespace Aspose.Cells_FOSS
 
             try
             {
-                XlsxWorkbookSerializer.Save(_model, stream, options);
+                if (options.SaveFormat == SaveFormat.Pdf)
+                {
+                    var pdfOptions = options as PdfSaveOptions ?? new PdfSaveOptions();
+                    Aspose.Cells_FOSS.Rendering.WorkbookPdfExporter.Export(_model, stream, pdfOptions);
+                }
+                else
+                {
+                    XlsxWorkbookSerializer.Save(_model, stream, options);
+                }
             }
             catch (CellsException)
             {
@@ -257,7 +273,7 @@ namespace Aspose.Cells_FOSS
             }
             catch (Exception exception)
             {
-                throw new WorkbookSaveException("Failed to save XLSX workbook.", exception);
+                throw new WorkbookSaveException("Failed to save workbook.", exception);
             }
         }
 

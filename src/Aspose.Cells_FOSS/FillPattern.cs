@@ -12,6 +12,7 @@ namespace Aspose.Cells_FOSS
         Solid,
         MediumGray,
         DarkGray,
+        LightGray,
         Gray125,
         Gray0625,
         DarkHorizontal,

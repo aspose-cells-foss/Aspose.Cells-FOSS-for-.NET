@@ -28,7 +28,7 @@ namespace Aspose.Cells_FOSS
             XDocument worksheetDocument,
             IReadOnlyDictionary<string, string> worksheetHyperlinkTargets,
             Aspose.Cells_FOSS.Core.DateSystem dateSystem,
-            IReadOnlyList<string> sharedStrings,
+            IReadOnlyList<SharedStringEntry> sharedStrings,
             StylesheetLoadContext stylesheet,
             LoadDiagnostics diagnostics,
             LoadOptions options,
@@ -322,6 +322,7 @@ namespace Aspose.Cells_FOSS
             {
                 Height = ParseDoubleAttribute(rowElement.Attribute("ht")),
                 Hidden = ParseBoolAttribute(rowElement.Attribute("hidden")),
+                CustomHeight = ParseBoolAttribute(rowElement.Attribute("customHeight")),
                 StyleIndex = styleIndex,
                 Style = ResolveMetadataStyle(styleIndex, stylesheet),
             };
@@ -345,7 +346,7 @@ namespace Aspose.Cells_FOSS
             XElement cellElement,
             int rowIndex,
             Aspose.Cells_FOSS.Core.DateSystem dateSystem,
-            IReadOnlyList<string> sharedStrings,
+            IReadOnlyList<SharedStringEntry> sharedStrings,
             StylesheetLoadContext stylesheet,
             LoadDiagnostics diagnostics,
             LoadOptions options,
@@ -428,12 +429,18 @@ namespace Aspose.Cells_FOSS
             var valueElement = cellElement.Element(MainNs + "v");
             object value;
             CellValueKind kind;
-            if (TryReadCellValue(cellElement, cellType, valueElement?.Value, isDateStyle, dateSystem, sharedStrings, diagnostics, options, sheetName, resolvedCellReference, out value, out kind))
+            List<RichTextRunValue> richTextRuns;
+            if (TryReadCellValue(cellElement, cellType, valueElement?.Value, isDateStyle, dateSystem, sharedStrings, diagnostics, options, sheetName, resolvedCellReference, out value, out kind, out richTextRuns))
             {
                 record.Value = value;
                 if (string.IsNullOrEmpty(record.Formula) || kind == CellValueKind.Error)
                 {
                     record.Kind = kind;
+                }
+
+                if (richTextRuns != null && richTextRuns.Count > 0)
+                {
+                    record.RichTextRuns = richTextRuns;
                 }
             }
 
@@ -534,20 +541,24 @@ namespace Aspose.Cells_FOSS
             string rawValue,
             bool isDateStyle,
             Aspose.Cells_FOSS.Core.DateSystem dateSystem,
-            IReadOnlyList<string> sharedStrings,
+            IReadOnlyList<SharedStringEntry> sharedStrings,
             LoadDiagnostics diagnostics,
             LoadOptions options,
             string sheetName,
             string cellReference,
             out object value,
-            out CellValueKind kind)
+            out CellValueKind kind,
+            out List<RichTextRunValue> richTextRuns)
         {
             value = null;
             kind = CellValueKind.Blank;
+            richTextRuns = null;
 
             if (cellType == "inlineStr")
             {
-                value = ReadInlineString(cellElement.Element(MainNs + "is"));
+                var inlineString = ReadSharedStringEntry(cellElement.Element(MainNs + "is"));
+                value = inlineString.Text;
+                richTextRuns = inlineString.Runs;
                 kind = CellValueKind.String;
                 return true;
             }
@@ -557,7 +568,8 @@ namespace Aspose.Cells_FOSS
                 int sharedStringIndex;
                 if (int.TryParse(rawValue, NumberStyles.Integer, CultureInfo.InvariantCulture, out sharedStringIndex) && sharedStringIndex >= 0 && sharedStringIndex < sharedStrings.Count)
                 {
-                    value = sharedStrings[sharedStringIndex];
+                    value = sharedStrings[sharedStringIndex].Text;
+                    richTextRuns = sharedStrings[sharedStringIndex].Runs;
                     kind = CellValueKind.String;
                     return true;
                 }

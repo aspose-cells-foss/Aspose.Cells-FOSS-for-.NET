@@ -1,0 +1,38 @@
+THIRD-PARTY SOFTWARE NOTICES AND INFORMATION
+============================================
+
+This product includes third-party software components. The copyright notices,
+license terms, and related attributions for those components are provided
+below.
+
+These notices are provided for informational and compliance purposes. Your use
+of each third-party component is subject to the applicable license terms of
+that component.
+
+
+1. SkiaSharp
+------------
+
+Component:
+SkiaSharp
+
+Version used by this project:
+2.88.8
+
+Project:
+https://github.com/mono/SkiaSharp
+
+Copyright:
+Copyright (c) 2015-2016 Xamarin, Inc.
+Copyright (c) 2017-2018 Microsoft Corporation.
+
+License:
+MIT License
+
+License file in this repository:
+License/SkiaSharp.LICENSE.txt
+
+Relevant usage in this project:
+SkiaSharp is used by the PDF rendering pipeline of Aspose.Cells_FOSS to produce
+PDF output.
+

@@ -58,6 +58,143 @@ namespace Aspose.Cells_FOSS
             LoadTwoCellAnchorCharts(worksheetModel, drawingRoot, chartTargets, archive, diagnostics, options, sheetName);
             LoadOneCellAnchorCharts(worksheetModel, drawingRoot, chartTargets, archive, diagnostics, options, sheetName);
             LoadPreservedRawShapeCharts(worksheetModel, chartTargets, archive, diagnostics, options, sheetName);
+            LoadSmartArt(worksheetModel, drawingRoot, archive, drawingUri);
+        }
+
+        // --- SmartArt loading ---
+
+        private const string DiagramGraphicDataUri = "http://schemas.openxmlformats.org/drawingml/2006/diagram";
+        private const string DiagramDrawingRelType = "http://schemas.microsoft.com/office/2007/relationships/diagramDrawing";
+        private static readonly XNamespace DspNs = "http://schemas.microsoft.com/office/drawing/2008/diagram";
+
+        private static void LoadSmartArt(WorksheetModel worksheetModel, XElement drawingRoot, ZipArchive archive, string drawingUri)
+        {
+            var drawingTargets = LoadDrawingTargetsByType(archive, drawingUri, DiagramDrawingRelType);
+            if (drawingTargets.Count == 0)
+            {
+                return;
+            }
+
+            var allRels = LoadAllDrawingRelTargets(archive, drawingUri);
+
+            foreach (var anchor in drawingRoot.Elements(XdrNs + "twoCellAnchor"))
+            {
+                var fromEl = anchor.Element(XdrNs + "from");
+                var toEl = anchor.Element(XdrNs + "to");
+                var gf = anchor.Element(XdrNs + "graphicFrame");
+                if (fromEl == null || toEl == null || gf == null || !IsDiagramGraphicFrame(gf))
+                {
+                    continue;
+                }
+
+                var drawingPartUri = ResolveSmartArtDrawingUri(gf, drawingTargets, allRels, archive);
+                if (string.IsNullOrEmpty(drawingPartUri))
+                {
+                    continue;
+                }
+
+                var entry = GetEntry(archive, drawingPartUri);
+                if (entry == null)
+                {
+                    continue;
+                }
+
+                string rawDrawingXml;
+                using (var stream = entry.Open())
+                using (var reader = new StreamReader(stream, Encoding.UTF8))
+                {
+                    rawDrawingXml = reader.ReadToEnd();
+                }
+
+                var model = new SmartArtModel
+                {
+                    Name = GetChartName(gf),
+                    RawDrawingXml = rawDrawingXml,
+                    UpperLeftColumn = ParseAnchorInt(fromEl.Element(XdrNs + "col")),
+                    UpperLeftColumnOffset = ParseAnchorLong(fromEl.Element(XdrNs + "colOff")),
+                    UpperLeftRow = ParseAnchorInt(fromEl.Element(XdrNs + "row")),
+                    UpperLeftRowOffset = ParseAnchorLong(fromEl.Element(XdrNs + "rowOff")),
+                    LowerRightColumn = ParseAnchorInt(toEl.Element(XdrNs + "col")),
+                    LowerRightColumnOffset = ParseAnchorLong(toEl.Element(XdrNs + "colOff")),
+                    LowerRightRow = ParseAnchorInt(toEl.Element(XdrNs + "row")),
+                    LowerRightRowOffset = ParseAnchorLong(toEl.Element(XdrNs + "rowOff")),
+                };
+                worksheetModel.SmartArts.Add(model);
+            }
+        }
+
+        private static bool IsDiagramGraphicFrame(XElement graphicFrame)
+        {
+            var graphicData = graphicFrame.Element(ANs + "graphic") != null
+                ? graphicFrame.Element(ANs + "graphic").Element(ANs + "graphicData")
+                : null;
+            return graphicData != null && string.Equals((string)graphicData.Attribute("uri"), DiagramGraphicDataUri, StringComparison.Ordinal);
+        }
+
+        private static string ResolveSmartArtDrawingUri(XElement graphicFrame, IReadOnlyDictionary<string, string> drawingTargets, IReadOnlyDictionary<string, string> allRels, ZipArchive archive)
+        {
+            // The diagram's data part carries a dsp:dataModelExt whose relId points to the drawing.
+            var graphicData = graphicFrame.Element(ANs + "graphic").Element(ANs + "graphicData");
+            string dmRelId = null;
+            foreach (var relIds in graphicData.Descendants())
+            {
+                if (relIds.Name.LocalName == "relIds")
+                {
+                    dmRelId = (string)relIds.Attribute(RelationshipNs + "dm");
+                    break;
+                }
+            }
+
+            string dataUri;
+            if (!string.IsNullOrEmpty(dmRelId) && allRels.TryGetValue(dmRelId, out dataUri))
+            {
+                var dataEntry = GetEntry(archive, dataUri);
+                if (dataEntry != null)
+                {
+                    var doc = LoadDocument(dataEntry);
+                    string drawingRelId = null;
+                    foreach (var ext in doc.Descendants(DspNs + "dataModelExt"))
+                    {
+                        drawingRelId = (string)ext.Attribute("relId");
+                        break;
+                    }
+
+                    string uri;
+                    if (!string.IsNullOrEmpty(drawingRelId) && drawingTargets.TryGetValue(drawingRelId, out uri))
+                    {
+                        return uri;
+                    }
+                }
+            }
+
+            // Fallback: single diagram drawing in this part.
+            foreach (var kv in drawingTargets)
+            {
+                return kv.Value;
+            }
+            return null;
+        }
+
+        private static IReadOnlyDictionary<string, string> LoadAllDrawingRelTargets(ZipArchive archive, string drawingUri)
+        {
+            var result = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            var entry = GetEntry(archive, GetDrawingRelsUri(drawingUri));
+            if (entry == null)
+            {
+                return result;
+            }
+
+            var document = LoadDocument(entry);
+            foreach (var rel in document.Root != null ? document.Root.Elements(PackageRelationshipNs + "Relationship") : new XElement[0])
+            {
+                var id = (string)rel.Attribute("Id");
+                var target = (string)rel.Attribute("Target");
+                if (!string.IsNullOrEmpty(id) && !string.IsNullOrEmpty(target))
+                {
+                    result[id] = ResolvePartUri(drawingUri, target);
+                }
+            }
+            return result;
         }
 
         private static void LoadTwoCellAnchorPictures(WorksheetModel worksheetModel, XElement drawingRoot, IReadOnlyDictionary<string, string> imageTargets, ZipArchive archive, LoadDiagnostics diagnostics, LoadOptions options, string sheetName)
@@ -259,6 +396,7 @@ namespace Aspose.Cells_FOSS
             var model = new ShapeModel
             {
                 Name = GetShapeName(sp),
+                DrawingObjectId = GetDrawingObjectId(sp),
                 UpperLeftColumn = ParseAnchorInt(fromEl.Element(XdrNs + "col")),
                 UpperLeftColumnOffset = ParseAnchorLong(fromEl.Element(XdrNs + "colOff")),
                 UpperLeftRow = ParseAnchorInt(fromEl.Element(XdrNs + "row")),
@@ -295,6 +433,7 @@ namespace Aspose.Cells_FOSS
             return new ShapeModel
             {
                 Name = GetShapeName(sp),
+                DrawingObjectId = GetDrawingObjectId(sp),
                 UpperLeftColumn = fromCol,
                 UpperLeftColumnOffset = ParseAnchorLong(fromEl.Element(XdrNs + "colOff")),
                 UpperLeftRow = fromRow,
@@ -315,6 +454,7 @@ namespace Aspose.Cells_FOSS
             var model = new ShapeModel
             {
                 Name = GetConnectorName(cxnSp),
+                DrawingObjectId = GetDrawingObjectId(cxnSp),
                 UpperLeftColumn = ParseAnchorInt(fromEl.Element(XdrNs + "col")),
                 UpperLeftColumnOffset = ParseAnchorLong(fromEl.Element(XdrNs + "colOff")),
                 UpperLeftRow = ParseAnchorInt(fromEl.Element(XdrNs + "row")),
@@ -326,6 +466,7 @@ namespace Aspose.Cells_FOSS
                 GeometryType = GetGeometryType(cxnSp),
                 RawElementXml = cxnSp.ToString(),
             };
+            LoadConnectorConnections(cxnSp, model);
             return model;
         }
 
@@ -345,9 +486,10 @@ namespace Aspose.Cells_FOSS
             var colSpan = cx > 0 ? (int)(cx / 609600L) + 1 : 1;
             var rowSpan = cy > 0 ? (int)(cy / 190500L) + 1 : 1;
 
-            return new ShapeModel
+            var model = new ShapeModel
             {
                 Name = GetConnectorName(cxnSp),
+                DrawingObjectId = GetDrawingObjectId(cxnSp),
                 UpperLeftColumn = fromCol,
                 UpperLeftColumnOffset = ParseAnchorLong(fromEl.Element(XdrNs + "colOff")),
                 UpperLeftRow = fromRow,
@@ -359,6 +501,8 @@ namespace Aspose.Cells_FOSS
                 GeometryType = GetGeometryType(cxnSp),
                 RawElementXml = cxnSp.ToString(),
             };
+            LoadConnectorConnections(cxnSp, model);
+            return model;
         }
 
         private static ShapeModel ParseGroupShape(XElement grpSp, XElement fromEl, XElement toEl)
@@ -366,6 +510,7 @@ namespace Aspose.Cells_FOSS
             return new ShapeModel
             {
                 Name = GetGroupShapeName(grpSp),
+                DrawingObjectId = GetDrawingObjectId(grpSp),
                 UpperLeftColumn = ParseAnchorInt(fromEl.Element(XdrNs + "col")),
                 UpperLeftColumnOffset = ParseAnchorLong(fromEl.Element(XdrNs + "colOff")),
                 UpperLeftRow = ParseAnchorInt(fromEl.Element(XdrNs + "row")),
@@ -397,6 +542,7 @@ namespace Aspose.Cells_FOSS
             return new ShapeModel
             {
                 Name = GetGroupShapeName(grpSp),
+                DrawingObjectId = GetDrawingObjectId(grpSp),
                 UpperLeftColumn = fromCol,
                 UpperLeftColumnOffset = ParseAnchorLong(fromEl.Element(XdrNs + "colOff")),
                 UpperLeftRow = fromRow,
@@ -407,6 +553,50 @@ namespace Aspose.Cells_FOSS
                 ExtentCy = cy,
                 RawElementXml = grpSp.ToString(),
             };
+        }
+
+        private static void LoadConnectorConnections(XElement cxnSp, ShapeModel model)
+        {
+            var nvCxnSpPr = cxnSp.Element(XdrNs + "nvCxnSpPr");
+            var cNvCxnSpPr = nvCxnSpPr != null ? nvCxnSpPr.Element(XdrNs + "cNvCxnSpPr") : null;
+            if (cNvCxnSpPr == null)
+            {
+                return;
+            }
+
+            LoadConnectorConnection(cNvCxnSpPr.Element(ANs + "stCxn"), true, model);
+            LoadConnectorConnection(cNvCxnSpPr.Element(ANs + "endCxn"), false, model);
+        }
+
+        private static void LoadConnectorConnection(XElement connection, bool isStart, ShapeModel model)
+        {
+            if (connection == null)
+            {
+                return;
+            }
+
+            int shapeId;
+            if (!int.TryParse((string)connection.Attribute("id"), NumberStyles.Integer, CultureInfo.InvariantCulture, out shapeId))
+            {
+                shapeId = -1;
+            }
+
+            int site;
+            if (!int.TryParse((string)connection.Attribute("idx"), NumberStyles.Integer, CultureInfo.InvariantCulture, out site))
+            {
+                site = -1;
+            }
+
+            if (isStart)
+            {
+                model.StartConnectionShapeId = shapeId;
+                model.StartConnectionSite = site;
+            }
+            else
+            {
+                model.EndConnectionShapeId = shapeId;
+                model.EndConnectionSite = site;
+            }
         }
 
         private static string GetGroupShapeName(XElement grpSp)
@@ -443,6 +633,47 @@ namespace Aspose.Cells_FOSS
 
             var cNvPr = nvSpPr.Element(XdrNs + "cNvPr");
             return (string)cNvPr?.Attribute("name") ?? string.Empty;
+        }
+
+        private static int GetDrawingObjectId(XElement shapeElement)
+        {
+            var cNvPr = GetNonVisualDrawingProperties(shapeElement);
+            int id;
+            if (cNvPr != null
+                && int.TryParse((string)cNvPr.Attribute("id"), NumberStyles.Integer, CultureInfo.InvariantCulture, out id))
+            {
+                return id;
+            }
+
+            return -1;
+        }
+
+        private static XElement GetNonVisualDrawingProperties(XElement shapeElement)
+        {
+            if (shapeElement == null)
+            {
+                return null;
+            }
+
+            var nvSpPr = shapeElement.Element(XdrNs + "nvSpPr");
+            if (nvSpPr != null)
+            {
+                return nvSpPr.Element(XdrNs + "cNvPr");
+            }
+
+            var nvCxnSpPr = shapeElement.Element(XdrNs + "nvCxnSpPr");
+            if (nvCxnSpPr != null)
+            {
+                return nvCxnSpPr.Element(XdrNs + "cNvPr");
+            }
+
+            var nvGrpSpPr = shapeElement.Element(XdrNs + "nvGrpSpPr");
+            if (nvGrpSpPr != null)
+            {
+                return nvGrpSpPr.Element(XdrNs + "cNvPr");
+            }
+
+            return null;
         }
 
         private static string GetGeometryType(XElement sp)

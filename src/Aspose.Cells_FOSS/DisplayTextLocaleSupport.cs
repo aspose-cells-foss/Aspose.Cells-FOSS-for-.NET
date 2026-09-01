@@ -8,6 +8,42 @@ namespace Aspose.Cells_FOSS
 {
     internal static class DisplayTextLocaleSupport
     {
+        internal static bool ContainsLocaleDirective(string section)
+        {
+            if (string.IsNullOrEmpty(section))
+            {
+                return false;
+            }
+
+            var inQuote = false;
+            for (var index = 0; index < section.Length; index++)
+            {
+                var character = section[index];
+                if (character == '"')
+                {
+                    inQuote = !inQuote;
+                    continue;
+                }
+
+                if (!inQuote && character == '[')
+                {
+                    var endIndex = section.IndexOf(']', index + 1);
+                    if (endIndex > index)
+                    {
+                        var token = section.Substring(index + 1, endIndex - index - 1);
+                        if (!string.IsNullOrWhiteSpace(token) && token[0] == '$')
+                        {
+                            return true;
+                        }
+
+                        index = endIndex;
+                    }
+                }
+            }
+
+            return false;
+        }
+
         internal static string ApplyLocaleDirectives(string section, CultureInfo fallbackCulture, out CultureInfo sectionCulture)
         {
             sectionCulture = fallbackCulture;

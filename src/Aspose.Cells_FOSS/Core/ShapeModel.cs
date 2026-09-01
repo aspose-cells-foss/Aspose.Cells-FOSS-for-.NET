@@ -13,12 +13,22 @@ namespace Aspose.Cells_FOSS.Core
         {
             Name = string.Empty;
             GeometryType = "rect";
+            DrawingObjectId = -1;
+            StartConnectionShapeId = -1;
+            StartConnectionSite = -1;
+            EndConnectionShapeId = -1;
+            EndConnectionSite = -1;
         }
 
         /// <summary>
         /// Gets or sets the display name shown in Excel's name box.
         /// </summary>
         public string Name { get; set; }
+
+        /// <summary>
+        /// Gets or sets the drawing object id from xdr:cNvPr/@id. A negative value means absent.
+        /// </summary>
+        public int DrawingObjectId { get; set; }
 
         /// <summary>
         /// Gets or sets the zero-based row index of the upper-left anchor cell.
@@ -84,6 +94,26 @@ namespace Aspose.Cells_FOSS.Core
         /// Gets or sets the preserved outer XML of the &lt;xdr:txBody&gt; element, or null if absent.
         /// </summary>
         public string RawTxBodyXml { get; set; }
+
+        /// <summary>
+        /// Gets or sets the source shape id referenced by a:stCxn. A negative value means absent.
+        /// </summary>
+        public int StartConnectionShapeId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the source connection-site index referenced by a:stCxn. A negative value means absent.
+        /// </summary>
+        public int StartConnectionSite { get; set; }
+
+        /// <summary>
+        /// Gets or sets the target shape id referenced by a:endCxn. A negative value means absent.
+        /// </summary>
+        public int EndConnectionShapeId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the target connection-site index referenced by a:endCxn. A negative value means absent.
+        /// </summary>
+        public int EndConnectionSite { get; set; }
 
         /// <summary>
         /// Gets or sets the preserved outer XML of the shape element (e.g. &lt;xdr:cxnSp&gt;) for

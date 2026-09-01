@@ -26,6 +26,10 @@ namespace Aspose.Cells_FOSS.Core
         /// </summary>
         public StyleValue Style { get; set; } = StyleValue.Default;
         /// <summary>
+        /// Gets or sets the rich-text runs for string content.
+        /// </summary>
+        public List<RichTextRunValue> RichTextRuns { get; set; }
+        /// <summary>
         /// Gets or sets a value indicating whether explicitly stored.
         /// </summary>
         public bool IsExplicitlyStored { get; set; }

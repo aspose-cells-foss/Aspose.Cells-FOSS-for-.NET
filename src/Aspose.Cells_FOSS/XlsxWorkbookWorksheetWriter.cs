@@ -527,12 +527,23 @@ namespace Aspose.Cells_FOSS
                 else if (options.UseSharedStrings)
                 {
                     cell.SetAttributeValue("t", "s");
-                    cell.Add(new XElement(MainNs + "v", sharedStrings.Intern(text).ToString(CultureInfo.InvariantCulture)));
+                    if (record.RichTextRuns != null && record.RichTextRuns.Count > 0)
+                    {
+                        cell.Add(new XElement(MainNs + "v", sharedStrings.Intern(new SharedStringEntry
+                        {
+                            Text = text,
+                            Runs = CloneRichTextRuns(record.RichTextRuns),
+                        }).ToString(CultureInfo.InvariantCulture)));
+                    }
+                    else
+                    {
+                        cell.Add(new XElement(MainNs + "v", sharedStrings.Intern(text).ToString(CultureInfo.InvariantCulture)));
+                    }
                 }
                 else
                 {
                     cell.SetAttributeValue("t", "inlineStr");
-                    cell.Add(new XElement(MainNs + "is", CreateTextElement(text)));
+                    cell.Add(CreateInlineStringElement(text, record.RichTextRuns));
                 }
             }
             else if (record.Value is bool)
@@ -600,6 +611,22 @@ namespace Aspose.Cells_FOSS
             }
 
             return cell;
+        }
+
+        private static List<RichTextRunValue> CloneRichTextRuns(IReadOnlyList<RichTextRunValue> runs)
+        {
+            if (runs == null || runs.Count == 0)
+            {
+                return null;
+            }
+
+            var cloned = new List<RichTextRunValue>(runs.Count);
+            for (var index = 0; index < runs.Count; index++)
+            {
+                cloned.Add(runs[index].Clone());
+            }
+
+            return cloned;
         }
     }
 }

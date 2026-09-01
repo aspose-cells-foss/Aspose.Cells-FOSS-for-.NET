@@ -11,6 +11,36 @@
       }
     },
     {
+      "type": "Conceptual",
+      "source_relative_path": "QUICKSTART.md",
+      "output": {
+        ".html": {
+          "relative_path": "QUICKSTART.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "README.md",
+      "output": {
+        ".html": {
+          "relative_path": "README.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "USER_GUIDE.md",
+      "output": {
+        ".html": {
+          "relative_path": "USER_GUIDE.html"
+        }
+      },
+      "version": ""
+    },
+    {
       "type": "ManagedReference",
       "source_relative_path": "api/Aspose.Cells_FOSS.AutoFilter.yml",
       "output": {

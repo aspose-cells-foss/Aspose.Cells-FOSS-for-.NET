@@ -92,7 +92,7 @@ namespace Aspose.Cells_FOSS
             return string.Empty;
         }
 
-        internal static IReadOnlyList<string> LoadSharedStrings(ZipArchive archive, IReadOnlyDictionary<string, string> workbookRelationships, LoadOptions options, LoadDiagnostics diagnostics)
+        internal static IReadOnlyList<SharedStringEntry> LoadSharedStrings(ZipArchive archive, IReadOnlyDictionary<string, string> workbookRelationships, LoadOptions options, LoadDiagnostics diagnostics)
         {
             var sharedStringsUri = FindRelationshipTarget(workbookRelationships, "/xl/sharedStrings.xml");
             if (string.IsNullOrEmpty(sharedStringsUri))
@@ -115,14 +115,14 @@ namespace Aspose.Cells_FOSS
             var entry = GetEntry(archive, sharedStringsUri);
             if (entry == null)
             {
-                return new string[0];
+                return new SharedStringEntry[0];
             }
 
             var document = LoadDocument(entry);
-            var items = new List<string>();
+            var items = new List<SharedStringEntry>();
             foreach (var item in document.Root != null ? document.Root.Elements(XlsxWorkbookSerializerCommon.MainNs + "si") : new XElement[0])
             {
-                items.Add(ReadInlineString(item));
+                items.Add(ReadSharedStringEntry(item));
             }
 
             return items;
@@ -243,6 +243,182 @@ namespace Aspose.Cells_FOSS
             }
 
             return textNodes.Count > 0 ? string.Concat(textNodes) : inlineStringElement.Value;
+        }
+
+        internal static SharedStringEntry ReadSharedStringEntry(XElement inlineStringElement)
+        {
+            var entry = new SharedStringEntry();
+            if (inlineStringElement == null)
+            {
+                entry.Text = string.Empty;
+                return entry;
+            }
+
+            var runs = ReadRichTextRuns(inlineStringElement);
+            entry.Text = ReadInlineString(inlineStringElement);
+            if (runs.Count > 0)
+            {
+                entry.Runs = runs;
+            }
+
+            return entry;
+        }
+
+        internal static List<RichTextRunValue> ReadRichTextRuns(XElement inlineStringElement)
+        {
+            var runs = new List<RichTextRunValue>();
+            if (inlineStringElement == null)
+            {
+                return runs;
+            }
+
+            var currentIndex = 0;
+            foreach (var runElement in inlineStringElement.Elements(XlsxWorkbookSerializerCommon.MainNs + "r"))
+            {
+                var text = ReadInlineString(runElement);
+                if (string.IsNullOrEmpty(text))
+                {
+                    continue;
+                }
+
+                runs.Add(new RichTextRunValue
+                {
+                    StartIndex = currentIndex,
+                    Length = text.Length,
+                    Font = ReadRichTextFontValue(runElement.Element(XlsxWorkbookSerializerCommon.MainNs + "rPr")),
+                });
+                currentIndex += text.Length;
+            }
+
+            return runs;
+        }
+
+        internal static FontValue ReadRichTextFontValue(XElement runProperties)
+        {
+            if (runProperties == null)
+            {
+                return new FontValue();
+            }
+
+            return new FontValue
+            {
+                Name = (string)runProperties.Element(XlsxWorkbookSerializerCommon.MainNs + "rFont")?.Attribute("val") ?? "Calibri",
+                Size = ParseDoubleAttribute(runProperties.Element(XlsxWorkbookSerializerCommon.MainNs + "sz")?.Attribute("val")) ?? 11d,
+                Bold = runProperties.Element(XlsxWorkbookSerializerCommon.MainNs + "b") != null,
+                Italic = runProperties.Element(XlsxWorkbookSerializerCommon.MainNs + "i") != null,
+                Underline = ParseRichTextUnderlineType(runProperties.Element(XlsxWorkbookSerializerCommon.MainNs + "u")),
+                StrikeThrough = runProperties.Element(XlsxWorkbookSerializerCommon.MainNs + "strike") != null,
+                Color = ReadRichTextColorValue(runProperties.Element(XlsxWorkbookSerializerCommon.MainNs + "color")),
+                Family = ParseIntAttribute(runProperties.Element(XlsxWorkbookSerializerCommon.MainNs + "family")?.Attribute("val")),
+                Scheme = ParseRichTextFontScheme(runProperties.Element(XlsxWorkbookSerializerCommon.MainNs + "scheme")?.Attribute("val")),
+            };
+        }
+
+        private static FontUnderlineType ParseRichTextUnderlineType(XElement underlineElement)
+        {
+            if (underlineElement == null)
+            {
+                return FontUnderlineType.None;
+            }
+
+            var value = (string)underlineElement.Attribute("val");
+            if (string.IsNullOrEmpty(value))
+            {
+                return FontUnderlineType.Single;
+            }
+
+            switch (value)
+            {
+                case "double":
+                    return FontUnderlineType.Double;
+                case "singleAccounting":
+                    return FontUnderlineType.Accounting;
+                case "doubleAccounting":
+                    return FontUnderlineType.DoubleAccounting;
+                default:
+                    return FontUnderlineType.Single;
+            }
+        }
+
+        private static FontSchemeType ParseRichTextFontScheme(XAttribute schemeAttribute)
+        {
+            switch ((string)schemeAttribute)
+            {
+                case "major":
+                    return FontSchemeType.Major;
+                case "minor":
+                    return FontSchemeType.Minor;
+                default:
+                    return FontSchemeType.None;
+            }
+        }
+
+        private static ColorValue ReadRichTextColorValue(XElement colorElement)
+        {
+            if (colorElement == null)
+            {
+                return default(ColorValue);
+            }
+
+            var themeAttribute = (string)colorElement.Attribute("theme");
+            if (!string.IsNullOrEmpty(themeAttribute))
+            {
+                int themeIndex;
+                if (int.TryParse(themeAttribute, NumberStyles.Integer, CultureInfo.InvariantCulture, out themeIndex))
+                {
+                    double tintValue;
+                    double? tint = null;
+                    var tintAttribute = (string)colorElement.Attribute("tint");
+                    if (!string.IsNullOrEmpty(tintAttribute)
+                        && double.TryParse(tintAttribute, NumberStyles.Float, CultureInfo.InvariantCulture, out tintValue))
+                    {
+                        tint = tintValue;
+                    }
+
+                    return new ColorValue(themeIndex, tint);
+                }
+            }
+
+            var indexedAttribute = (string)colorElement.Attribute("indexed");
+            if (!string.IsNullOrEmpty(indexedAttribute))
+            {
+                int indexedValue;
+                if (int.TryParse(indexedAttribute, NumberStyles.Integer, CultureInfo.InvariantCulture, out indexedValue))
+                {
+                    return new ColorValue(indexedValue);
+                }
+            }
+
+            var rgb = (string)colorElement.Attribute("rgb");
+            if (string.IsNullOrWhiteSpace(rgb))
+            {
+                return default(ColorValue);
+            }
+
+            var rgbValue = rgb.Trim().ToUpperInvariant();
+            if (rgbValue.Length == 6)
+            {
+                rgbValue = "FF" + rgbValue;
+            }
+
+            if (rgbValue.Length != 8)
+            {
+                return default(ColorValue);
+            }
+
+            byte a;
+            byte r;
+            byte g;
+            byte b;
+            if (!byte.TryParse(rgbValue.Substring(0, 2), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out a)
+                || !byte.TryParse(rgbValue.Substring(2, 2), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out r)
+                || !byte.TryParse(rgbValue.Substring(4, 2), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out g)
+                || !byte.TryParse(rgbValue.Substring(6, 2), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out b))
+            {
+                return default(ColorValue);
+            }
+
+            return new ColorValue(a, r, g, b);
         }
 
         internal static bool TryParseNumber(string rawValue, out object numberValue)

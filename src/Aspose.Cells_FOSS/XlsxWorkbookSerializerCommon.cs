@@ -376,15 +376,174 @@ namespace Aspose.Cells_FOSS
         internal static XDocument BuildSharedStrings(SharedStringRepository sharedStrings)
         {
             var root = new XElement(MainNs + "sst",
-                new XAttribute("count", sharedStrings.Values.Count),
-                new XAttribute("uniqueCount", sharedStrings.Values.Count));
+                new XAttribute("count", sharedStrings.Entries.Count),
+                new XAttribute("uniqueCount", sharedStrings.Entries.Count));
 
-            foreach (var value in sharedStrings.Values)
+            for (var index = 0; index < sharedStrings.Entries.Count; index++)
             {
-                root.Add(new XElement(MainNs + "si", CreateTextElement(value)));
+                root.Add(CreateSharedStringItemElement(sharedStrings.Entries[index]));
             }
 
             return new XDocument(new XDeclaration("1.0", "utf-8", "yes"), root);
+        }
+
+        internal static XElement CreateSharedStringItemElement(SharedStringEntry entry)
+        {
+            var safeEntry = entry == null ? new SharedStringEntry() : entry;
+            if (safeEntry.Runs == null || safeEntry.Runs.Count == 0)
+            {
+                return new XElement(MainNs + "si", CreateTextElement(safeEntry.Text ?? string.Empty));
+            }
+
+            var item = new XElement(MainNs + "si");
+            var text = safeEntry.Text ?? string.Empty;
+            for (var index = 0; index < safeEntry.Runs.Count; index++)
+            {
+                var run = safeEntry.Runs[index];
+                item.Add(CreateRichTextRunElement(text, run));
+            }
+
+            return item;
+        }
+
+        internal static XElement CreateInlineStringElement(string text, IReadOnlyList<RichTextRunValue> runs)
+        {
+            if (runs == null || runs.Count == 0)
+            {
+                return new XElement(MainNs + "is", CreateTextElement(text ?? string.Empty));
+            }
+
+            var inlineString = new XElement(MainNs + "is");
+            var safeText = text ?? string.Empty;
+            for (var index = 0; index < runs.Count; index++)
+            {
+                inlineString.Add(CreateRichTextRunElement(safeText, runs[index]));
+            }
+
+            return inlineString;
+        }
+
+        private static XElement CreateRichTextRunElement(string text, RichTextRunValue run)
+        {
+            var runElement = new XElement(MainNs + "r");
+            runElement.Add(BuildRichTextRunProperties(run == null ? null : run.Font));
+
+            var safeText = text ?? string.Empty;
+            var startIndex = run == null ? 0 : run.StartIndex;
+            var length = run == null ? 0 : run.Length;
+            if (startIndex < 0)
+            {
+                startIndex = 0;
+            }
+
+            if (length < 0)
+            {
+                length = 0;
+            }
+
+            if (startIndex > safeText.Length)
+            {
+                startIndex = safeText.Length;
+            }
+
+            if (startIndex + length > safeText.Length)
+            {
+                length = safeText.Length - startIndex;
+            }
+
+            runElement.Add(CreateTextElement(safeText.Substring(startIndex, length)));
+            return runElement;
+        }
+
+        private static XElement BuildRichTextRunProperties(FontValue font)
+        {
+            var safeFont = font ?? new FontValue();
+            var properties = new XElement(MainNs + "rPr");
+            if (safeFont.Bold)
+            {
+                properties.Add(new XElement(MainNs + "b"));
+            }
+
+            if (safeFont.Italic)
+            {
+                properties.Add(new XElement(MainNs + "i"));
+            }
+
+            if (safeFont.StrikeThrough)
+            {
+                properties.Add(new XElement(MainNs + "strike"));
+            }
+
+            if (safeFont.Underline != FontUnderlineType.None)
+            {
+                properties.Add(BuildRichTextUnderlineElement(safeFont.Underline));
+            }
+
+            properties.Add(new XElement(MainNs + "sz", new XAttribute("val", safeFont.Size.ToString("0.####", CultureInfo.InvariantCulture))));
+            var colorElement = BuildRichTextColorElement(safeFont.Color);
+            if (colorElement != null)
+            {
+                properties.Add(colorElement);
+            }
+
+            properties.Add(new XElement(MainNs + "rFont", new XAttribute("val", safeFont.Name ?? "Calibri")));
+            if (safeFont.Family.HasValue)
+            {
+                properties.Add(new XElement(MainNs + "family", new XAttribute("val", safeFont.Family.Value)));
+            }
+
+            if (safeFont.Scheme != FontSchemeType.None)
+            {
+                properties.Add(new XElement(MainNs + "scheme", new XAttribute("val", safeFont.Scheme == FontSchemeType.Major ? "major" : "minor")));
+            }
+
+            return properties;
+        }
+
+        private static XElement BuildRichTextUnderlineElement(FontUnderlineType underlineType)
+        {
+            switch (underlineType)
+            {
+                case FontUnderlineType.Double:
+                    return new XElement(MainNs + "u", new XAttribute("val", "double"));
+                case FontUnderlineType.Accounting:
+                    return new XElement(MainNs + "u", new XAttribute("val", "singleAccounting"));
+                case FontUnderlineType.DoubleAccounting:
+                    return new XElement(MainNs + "u", new XAttribute("val", "doubleAccounting"));
+                default:
+                    return new XElement(MainNs + "u");
+            }
+        }
+
+        private static XElement BuildRichTextColorElement(ColorValue color)
+        {
+            if (color.ThemeIndex.HasValue)
+            {
+                var element = new XElement(MainNs + "color", new XAttribute("theme", color.ThemeIndex.Value.ToString(CultureInfo.InvariantCulture)));
+                if (color.Tint.HasValue)
+                {
+                    element.SetAttributeValue("tint", color.Tint.Value.ToString("R", CultureInfo.InvariantCulture));
+                }
+
+                return element;
+            }
+
+            if (color.Indexed.HasValue)
+            {
+                return new XElement(MainNs + "color", new XAttribute("indexed", color.Indexed.Value.ToString(CultureInfo.InvariantCulture)));
+            }
+
+            if (color.A == 0 && color.R == 0 && color.G == 0 && color.B == 0)
+            {
+                return null;
+            }
+
+            return new XElement(MainNs + "color",
+                new XAttribute("rgb",
+                    color.A.ToString("X2", CultureInfo.InvariantCulture)
+                    + color.R.ToString("X2", CultureInfo.InvariantCulture)
+                    + color.G.ToString("X2", CultureInfo.InvariantCulture)
+                    + color.B.ToString("X2", CultureInfo.InvariantCulture)));
         }
 
         internal static XElement CreateTextElement(string value)

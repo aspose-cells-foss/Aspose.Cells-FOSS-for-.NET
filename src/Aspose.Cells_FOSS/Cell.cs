@@ -156,6 +156,85 @@ namespace Aspose.Cells_FOSS
         }
 
         /// <summary>
+        /// Returns a rich-text character range within the cell text.
+        /// </summary>
+        public FontSetting Characters(int startIndex, int length)
+        {
+            if (startIndex < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(startIndex));
+            }
+
+            if (length < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(length));
+            }
+
+            var text = GetCurrentTextValue();
+            if (startIndex + length > text.Length)
+            {
+                throw new ArgumentOutOfRangeException(nameof(length));
+            }
+
+            return CreateFontSetting(startIndex, length);
+        }
+
+        /// <summary>
+        /// Returns all rich-text character ranges in the cell text.
+        /// </summary>
+        public FontSetting[] GetCharacters()
+        {
+            var record = TryGetRecord();
+            if (record == null || record.RichTextRuns == null || record.RichTextRuns.Count == 0)
+            {
+                return new FontSetting[0];
+            }
+
+            var result = new FontSetting[record.RichTextRuns.Count];
+            for (var index = 0; index < record.RichTextRuns.Count; index++)
+            {
+                result[index] = FontSetting.FromCore(record.RichTextRuns[index]);
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Indicates whether the cell string contains rich-text formatting runs.
+        /// </summary>
+        public bool IsRichText()
+        {
+            var record = TryGetRecord();
+            return record != null && record.RichTextRuns != null && record.RichTextRuns.Count > 0;
+        }
+
+        /// <summary>
+        /// Sets rich-text formatting runs for the current cell text.
+        /// </summary>
+        public void SetCharacters(FontSetting[] characters)
+        {
+            if (characters == null)
+            {
+                throw new ArgumentNullException(nameof(characters));
+            }
+
+            var text = GetCurrentTextValue();
+            var record = GetOrCreateRecord();
+            if (characters.Length == 0)
+            {
+                record.RichTextRuns = null;
+                return;
+            }
+
+            var normalized = NormalizeFontSettings(characters, text.Length);
+            record.RichTextRuns = new List<RichTextRunValue>(normalized.Count);
+            for (var index = 0; index < normalized.Count; index++)
+            {
+                record.RichTextRuns.Add(normalized[index].ToCore());
+            }
+        }
+
+        /// <summary>
         /// Sets the cell value to a string.
         /// </summary>
         public void PutValue(string value)
@@ -591,6 +670,7 @@ namespace Aspose.Cells_FOSS
             record.Value = null;
             record.Formula = null;
             record.Kind = CellValueKind.Blank;
+            record.RichTextRuns = null;
         }
 
         private CellRecord TryGetRecord()
@@ -624,6 +704,109 @@ namespace Aspose.Cells_FOSS
             record.Value = value;
             record.Kind = kind;
             record.Formula = null;
+            record.RichTextRuns = null;
+        }
+
+        private string GetCurrentTextValue()
+        {
+            var record = TryGetRecord();
+            if (record == null || record.Value == null)
+            {
+                return string.Empty;
+            }
+
+            var text = record.Value as string;
+            if (text == null)
+            {
+                throw new CellsException("Rich text can only be applied to string cells.");
+            }
+
+            return text;
+        }
+
+        private FontSetting CreateFontSetting(int startIndex, int length)
+        {
+            var setting = new FontSetting(startIndex, length);
+            var record = TryGetRecord();
+            var run = FindRichTextRun(record, startIndex, length);
+            if (run != null)
+            {
+                return FontSetting.FromCore(run);
+            }
+
+            var style = record == null || record.Style == null ? _worksheet.Workbook.Model.DefaultStyle : record.Style;
+            setting.Font.Name = style.Font.Name;
+            setting.Font.Size = style.Font.Size;
+            setting.Font.IsBold = style.Font.Bold;
+            setting.Font.IsItalic = style.Font.Italic;
+            setting.Font.Underline = style.Font.Underline;
+            setting.Font.IsStrikeout = style.Font.StrikeThrough;
+            setting.Font.Color = Color.FromCore(style.Font.Color);
+            return setting;
+        }
+
+        private static RichTextRunValue FindRichTextRun(CellRecord record, int startIndex, int length)
+        {
+            if (record == null || record.RichTextRuns == null)
+            {
+                return null;
+            }
+
+            for (var index = 0; index < record.RichTextRuns.Count; index++)
+            {
+                var run = record.RichTextRuns[index];
+                if (run.StartIndex == startIndex && run.Length == length)
+                {
+                    return run;
+                }
+            }
+
+            return null;
+        }
+
+        private static List<FontSetting> NormalizeFontSettings(FontSetting[] characters, int textLength)
+        {
+            var normalized = new List<FontSetting>(characters.Length);
+            for (var index = 0; index < characters.Length; index++)
+            {
+                var setting = characters[index];
+                if (setting == null)
+                {
+                    throw new ArgumentNullException(nameof(characters));
+                }
+
+                if (setting.StartIndex < 0 || setting.Length < 0 || setting.StartIndex + setting.Length > textLength)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(characters));
+                }
+
+                normalized.Add(setting.Clone());
+            }
+
+            normalized.Sort(delegate(FontSetting left, FontSetting right)
+            {
+                var startComparison = left.StartIndex.CompareTo(right.StartIndex);
+                if (startComparison != 0)
+                {
+                    return startComparison;
+                }
+
+                return left.Length.CompareTo(right.Length);
+            });
+
+            var previousEnd = -1;
+            for (var index = 0; index < normalized.Count; index++)
+            {
+                var setting = normalized[index];
+                if (index > 0 && setting.StartIndex < previousEnd)
+                {
+                    throw new CellsException("Rich text runs must not overlap.");
+                }
+
+                previousEnd = setting.StartIndex + setting.Length;
+            }
+
+            return normalized;
         }
 
         private static string NormalizeFormula(string value)

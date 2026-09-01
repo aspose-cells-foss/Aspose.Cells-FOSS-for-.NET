@@ -31,6 +31,7 @@ namespace Aspose.Cells_FOSS.Core
             Pictures = new List<PictureModel>();
             ShapeImages = new List<ShapeImageModel>();
             Shapes = new List<ShapeModel>();
+            SmartArts = new List<SmartArtModel>();
             Charts = new List<ChartModel>();
             PreservedCharts = new List<ChartModel>();
             PreservedDrawingRelationships = new List<DrawingRelationshipModel>();
@@ -101,6 +102,9 @@ namespace Aspose.Cells_FOSS.Core
         /// Gets the list of shape models on this worksheet.
         /// </summary>
         public List<ShapeModel> Shapes { get; }
+
+        /// <summary>Gets the SmartArt diagrams anchored to this worksheet.</summary>
+        public List<SmartArtModel> SmartArts { get; }
         /// <summary>
         /// Gets the list of chart models on this worksheet.
         /// </summary>

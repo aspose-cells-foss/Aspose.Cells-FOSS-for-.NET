@@ -296,6 +296,9 @@ namespace Aspose.Cells_FOSS
                 case "darkgray":
                     pattern = FillPatternKind.DarkGray;
                     break;
+                case "lightgray":
+                    pattern = FillPatternKind.LightGray;
+                    break;
                 case "gray125":
                     pattern = FillPatternKind.Gray125;
                     break;
@@ -456,6 +459,9 @@ namespace Aspose.Cells_FOSS
                     break;
                 case FillPatternKind.DarkGray:
                     patternFill.SetAttributeValue("patternType", "darkGray");
+                    break;
+                case FillPatternKind.LightGray:
+                    patternFill.SetAttributeValue("patternType", "lightGray");
                     break;
                 case FillPatternKind.Gray125:
                     patternFill.SetAttributeValue("patternType", "gray125");

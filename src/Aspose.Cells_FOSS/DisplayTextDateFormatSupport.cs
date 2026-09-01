@@ -266,6 +266,44 @@ namespace Aspose.Cells_FOSS
             return false;
         }
 
+        internal static bool ContainsTextualMonthToken(string formatCode)
+        {
+            var inQuote = false;
+            for (var index = 0; index < formatCode.Length; index++)
+            {
+                var character = formatCode[index];
+                if (character == '"')
+                {
+                    inQuote = !inQuote;
+                    continue;
+                }
+
+                if (inQuote)
+                {
+                    continue;
+                }
+
+                if (character == '\\' || character == '_' || character == '*')
+                {
+                    index++;
+                    continue;
+                }
+
+                if (character == 'm' || character == 'M')
+                {
+                    var count = CountRepeated(formatCode, index, character);
+                    if (!IsMinuteContext(formatCode, index, count) && count >= 3)
+                    {
+                        return true;
+                    }
+
+                    index += count - 1;
+                }
+            }
+
+            return false;
+        }
+
         internal static string FormatElapsedTimeValue(TimeSpan time, string formatCode, CultureInfo culture)
         {
             var builder = new StringBuilder(formatCode.Length + 8);

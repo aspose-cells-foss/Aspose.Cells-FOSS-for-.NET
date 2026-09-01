@@ -10,7 +10,7 @@ namespace Aspose.Cells_FOSS.Core
     internal sealed class SharedStringRepository
     {
         private readonly Dictionary<string, int> _indices = new Dictionary<string, int>(StringComparer.Ordinal);
-        private readonly List<string> _values = new List<string>();
+        private readonly List<SharedStringEntry> _entries = new List<SharedStringEntry>();
 
         /// <summary>
         /// Gets the values.
@@ -19,7 +19,24 @@ namespace Aspose.Cells_FOSS.Core
         {
             get
             {
-                return _values;
+                var values = new List<string>(_entries.Count);
+                for (var index = 0; index < _entries.Count; index++)
+                {
+                    values.Add(_entries[index].Text ?? string.Empty);
+                }
+
+                return values;
+            }
+        }
+
+        /// <summary>
+        /// Gets the logical shared-string entries.
+        /// </summary>
+        public IReadOnlyList<SharedStringEntry> Entries
+        {
+            get
+            {
+                return _entries;
             }
         }
 
@@ -29,7 +46,7 @@ namespace Aspose.Cells_FOSS.Core
         public void Clear()
         {
             _indices.Clear();
-            _values.Clear();
+            _entries.Clear();
         }
 
         /// <summary>
@@ -40,13 +57,28 @@ namespace Aspose.Cells_FOSS.Core
         /// <returns><see langword="true"/> if the operation succeeds; otherwise, <see langword="false"/>.</returns>
         public bool TryGetValue(int index, out string value)
         {
-            if (index >= 0 && index < _values.Count)
+            if (index >= 0 && index < _entries.Count)
             {
-                value = _values[index];
+                value = _entries[index].Text ?? string.Empty;
                 return true;
             }
 
             value = string.Empty;
+            return false;
+        }
+
+        /// <summary>
+        /// Attempts to get a full shared-string entry.
+        /// </summary>
+        public bool TryGetEntry(int index, out SharedStringEntry entry)
+        {
+            if (index >= 0 && index < _entries.Count)
+            {
+                entry = _entries[index].Clone();
+                return true;
+            }
+
+            entry = null;
             return false;
         }
 
@@ -57,12 +89,81 @@ namespace Aspose.Cells_FOSS.Core
         /// <returns>The int.</returns>
         public int Intern(string value)
         {
+            return Intern(new SharedStringEntry
+            {
+                Text = value ?? string.Empty,
+            });
+        }
+
+        /// <summary>
+        /// Interns a rich-text-capable shared-string entry.
+        /// </summary>
+        public int Intern(SharedStringEntry entry)
+        {
+            var safeEntry = entry == null ? new SharedStringEntry() : entry.Clone();
+            safeEntry.Text = safeEntry.Text ?? string.Empty;
+
+            var key = BuildKey(safeEntry);
             int index;
-            if (_indices.TryGetValue(value, out index)) return index;
-            index = _values.Count;
-            _values.Add(value);
-            _indices[value] = index;
+            if (_indices.TryGetValue(key, out index))
+            {
+                return index;
+            }
+
+            index = _entries.Count;
+            _entries.Add(safeEntry);
+            _indices[key] = index;
             return index;
+        }
+
+        private static string BuildKey(SharedStringEntry entry)
+        {
+            var runs = entry.Runs;
+            if (runs == null || runs.Count == 0)
+            {
+                return "T|" + (entry.Text ?? string.Empty);
+            }
+
+            var builder = new System.Text.StringBuilder();
+            builder.Append("R|");
+            builder.Append(entry.Text ?? string.Empty);
+            for (var index = 0; index < runs.Count; index++)
+            {
+                var run = runs[index];
+                builder.Append('|');
+                builder.Append(run.StartIndex);
+                builder.Append(':');
+                builder.Append(run.Length);
+                builder.Append(':');
+                builder.Append(run.Font.Name ?? string.Empty);
+                builder.Append(':');
+                builder.Append(run.Font.Size.ToString("0.####", System.Globalization.CultureInfo.InvariantCulture));
+                builder.Append(':');
+                builder.Append(run.Font.Bold ? '1' : '0');
+                builder.Append(':');
+                builder.Append(run.Font.Italic ? '1' : '0');
+                builder.Append(':');
+                builder.Append((int)run.Font.Underline);
+                builder.Append(':');
+                builder.Append(run.Font.StrikeThrough ? '1' : '0');
+                builder.Append(':');
+                builder.Append(run.Font.Color.A.ToString("X2", System.Globalization.CultureInfo.InvariantCulture));
+                builder.Append(run.Font.Color.R.ToString("X2", System.Globalization.CultureInfo.InvariantCulture));
+                builder.Append(run.Font.Color.G.ToString("X2", System.Globalization.CultureInfo.InvariantCulture));
+                builder.Append(run.Font.Color.B.ToString("X2", System.Globalization.CultureInfo.InvariantCulture));
+                builder.Append(':');
+                builder.Append(run.Font.Color.ThemeIndex.HasValue ? run.Font.Color.ThemeIndex.Value.ToString(System.Globalization.CultureInfo.InvariantCulture) : string.Empty);
+                builder.Append(':');
+                builder.Append(run.Font.Color.Tint.HasValue ? run.Font.Color.Tint.Value.ToString("R", System.Globalization.CultureInfo.InvariantCulture) : string.Empty);
+                builder.Append(':');
+                builder.Append(run.Font.Color.Indexed.HasValue ? run.Font.Color.Indexed.Value.ToString(System.Globalization.CultureInfo.InvariantCulture) : string.Empty);
+                builder.Append(':');
+                builder.Append(run.Font.Family.HasValue ? run.Font.Family.Value.ToString(System.Globalization.CultureInfo.InvariantCulture) : string.Empty);
+                builder.Append(':');
+                builder.Append((int)run.Font.Scheme);
+            }
+
+            return builder.ToString();
         }
     }
 }

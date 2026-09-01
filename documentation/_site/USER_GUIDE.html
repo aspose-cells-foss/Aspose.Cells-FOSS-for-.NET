@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+
+  <head>
+    <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+      <title>Aspose.Cells FOSS - Public API Documentation Generation | Aspose.Cells FOSS for .NET API Documentation </title>
+      <meta name="viewport" content="width=device-width">
+      <meta name="title" content="Aspose.Cells FOSS - Public API Documentation Generation | Aspose.Cells FOSS for .NET API Documentation ">
+    
+    
+      <link rel="shortcut icon" href="https://www.aspose.cloud/templates/aspose/App_Themes/V3/images/favicon.ico">
+      <link rel="stylesheet" href="styles/docfx.vendor.min.css">
+      <link rel="stylesheet" href="styles/docfx.css">
+      <link rel="stylesheet" href="styles/main.css">
+      <meta property="docfx:navrel" content="toc.html">
+      <meta property="docfx:tocrel" content="toc.html">
+    
+    <meta property="docfx:rel" content="">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+
+              <a class="navbar-brand" href="index.html">
+                <img id="logo" class="svg" src="https://www.aspose.cloud/templates/aspose/App_Themes/V3/images/total/header/aspose_logo-for-total.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+
+        <div id="search-results">
+          <div class="search-list">Search Results for <span></span></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination" data-first=First data-prev=Previous data-next=Next data-last=Last></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        <div class="article row grid">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="asposecells-foss---public-api-documentation-generation">Aspose.Cells FOSS - Public API Documentation Generation</h1>
+
+<h2 id="overview">Overview</h2>
+<p>A complete documentation generation system has been implemented for Aspose.Cells FOSS for .NET. The system automatically generates professional HTML and CHM documentation from XML comments in the source code.</p>
+<h2 id="quick-start">Quick Start</h2>
+<h3 id="1-generate-documentation-windows---recommended">1. Generate Documentation (Windows - Recommended)</h3>
+<pre><code class="lang-batch">cd documentation
+BuildDocumentation.bat
+</code></pre>
+<h3 id="2-generate-documentation-cross-platform">2. Generate Documentation (Cross-platform)</h3>
+<pre><code class="lang-bash">cd documentation
+dotnet run -- --metadata
+</code></pre>
+<h3 id="3-view-documentation">3. View Documentation</h3>
+<pre><code class="lang-bash">cd documentation
+dotnet run -- --serve
+</code></pre>
+<p>Then open http://localhost:8080</p>
+<h3 id="4-generate-chm-file-windows-only">4. Generate CHM File (Windows only)</h3>
+<pre><code class="lang-powershell">cd documentation
+.\GenerateChm.ps1
+</code></pre>
+<h2 id="what-you-get">What You Get</h2>
+<ul>
+<li>✅ <strong>HTML Documentation</strong> - Professional API reference with navigation</li>
+<li>✅ <strong>CHM Help File</strong> - Standalone Windows help file with search</li>
+<li>✅ <strong>API Reference</strong> - Complete documentation for all public APIs</li>
+<li>✅ <strong>Code Examples</strong> - Integrated examples from source code</li>
+<li>✅ <strong>Search Functionality</strong> - Full-text search in both formats</li>
+</ul>
+<h2 id="requirements">Requirements</h2>
+<h3 id="required">Required</h3>
+<ul>
+<li>.NET SDK 8.0 or later</li>
+<li>DocFX (automatically restored via NuGet)</li>
+</ul>
+<h3 id="optional-for-chm-generation">Optional (for CHM generation)</h3>
+<ul>
+<li>HTML Help Workshop
+<ul>
+<li>Download from: <a href="https://www.microsoft.com/en-us/download/details.aspx?id=21138">https://www.microsoft.com/en-us/download/details.aspx?id=21138</a></li>
+</ul>
+</li>
+</ul>
+<h2 id="documentation-structure">Documentation Structure</h2>
+<pre><code>documentation/
+├── Aspose.Cells_FOSS.Documentation.csproj  # Project file
+├── Program.cs                               # Documentation generator
+├── DocumentationValidator.cs               # Setup validator
+├── docfx.json                               # DocFX configuration
+├── toc.yml                                  # Table of contents
+├── index.md                                 # Main landing page
+├── README.md                                # Full documentation
+├── QUICKSTART.md                            # Quick start guide
+├── SETUP.md                                 # Setup status
+├── IMPLEMENTATION.md                        # Implementation details
+├── BuildDocumentation.bat                   # Windows build script
+├── GenerateChm.ps1                          # CHM generation script
+└── _site/                                   # Generated output (gitignored)
+    ├── index.html                           # Main HTML page
+    ├── api/                                 # API reference
+    └── chm/                                 # CHM files
+</code></pre>
+<h2 id="how-it-works">How It Works</h2>
+<h3 id="the-process">The Process</h3>
+<ol>
+<li><strong>Build Main Project</strong> - Generates XML documentation files</li>
+<li><strong>Run DocFX Metadata</strong> - Extracts API information from XML</li>
+<li><strong>Run DocFX Build</strong> - Generates HTML documentation</li>
+<li><strong>Generate CHM (optional)</strong> - Compiles CHM help file</li>
+</ol>
+<h3 id="input-sources">Input Sources</h3>
+<ul>
+<li>XML documentation comments in C# source code</li>
+<li>DocFX configuration files</li>
+<li>Markdown documentation files</li>
+</ul>
+<h3 id="output-formats">Output Formats</h3>
+<ul>
+<li>HTML documentation (cross-platform)</li>
+<li>CHM help file (Windows only)</li>
+</ul>
+<h2 id="customization">Customization</h2>
+<h3 id="modify-main-page">Modify Main Page</h3>
+<p>Edit <code>documentation/index.md</code> to change the landing page content.</p>
+<h3 id="change-navigation">Change Navigation</h3>
+<p>Edit <code>documentation/toc.yml</code> to modify the table of contents structure.</p>
+<h3 id="enhance-api-documentation">Enhance API Documentation</h3>
+<p>Add XML comments to source code:</p>
+<pre><code class="lang-csharp">/// &lt;summary&gt;
+/// Gets or sets the cell value.
+/// &lt;/summary&gt;
+/// &lt;example&gt;
+/// &lt;code&gt;
+/// cell.PutValue(&quot;Hello&quot;);
+/// &lt;/code&gt;
+/// &lt;/example&gt;
+public object Value { get; set; }
+</code></pre>
+<h3 id="configure-docfx">Configure DocFX</h3>
+<p>Edit <code>documentation/docfx.json</code> to change:</p>
+<ul>
+<li>Output destinations</li>
+<li>Global metadata</li>
+<li>Build options</li>
+<li>XRef settings</li>
+</ul>
+<h2 id="integration">Integration</h2>
+<h3 id="cicd-pipeline">CI/CD Pipeline</h3>
+<pre><code class="lang-yaml"># Example for GitHub Actions
+- name: Generate Documentation
+  run: |
+    cd documentation
+    dotnet run -- --metadata
+
+- name: Deploy Documentation
+  uses: peaceiris/actions-gh-pages@v3
+  with:
+    github_token: ${{ secrets.GITHUB_TOKEN }}
+    publish_dir: ./documentation/_site
+</code></pre>
+<h3 id="pre-commit-hook">Pre-commit Hook</h3>
+<pre><code class="lang-bash">#!/bin/bash
+# Generate documentation on commit
+cd documentation
+dotnet run -- --metadata
+</code></pre>
+<h2 id="validation">Validation</h2>
+<h3 id="check-setup">Check Setup</h3>
+<pre><code class="lang-bash">cd documentation
+dotnet run -- validate
+</code></pre>
+<h3 id="verify-generated-files">Verify Generated Files</h3>
+<p>Check <code>documentation/_site/</code> for generated HTML files.</p>
+<h2 id="troubleshooting">Troubleshooting</h2>
+<h3 id="common-issues">Common Issues</h3>
+<p><strong>Build fails with &quot;XML documentation not found&quot;</strong></p>
+<ul>
+<li>Ensure main project is built: <code>dotnet build src/Aspose.Cells_FOSS/Aspose.Cells_FOSS.csproj</code></li>
+<li>Check <code>GenerateDocumentationFile</code> property in <code>.csproj</code> file</li>
+</ul>
+<p><strong>DocFX not found</strong></p>
+<ul>
+<li>Install globally: <code>dotnet tool install -g docfx</code></li>
+<li>Or restore NuGet packages: <code>dotnet restore</code></li>
+</ul>
+<p><strong>CHM generation fails</strong></p>
+<ul>
+<li>Install HTML Help Workshop</li>
+<li>Verify <code>hhc.exe</code> is in expected location</li>
+<li>Check HTML files are generated before CHM compilation</li>
+</ul>
+<p><strong>Missing API documentation</strong></p>
+<ul>
+<li>Add XML comments to public APIs</li>
+<li>Rebuild main project</li>
+<li>Regenerate documentation</li>
+</ul>
+<h2 id="performance">Performance</h2>
+<ul>
+<li><strong>Build Time</strong>: ~2-5 minutes for full documentation</li>
+<li><strong>HTML Size</strong>: ~10-50 MB depending on API surface</li>
+<li><strong>CHM Size</strong>: ~5-20 MB compressed</li>
+<li><strong>Incremental Builds</strong>: Supported by DocFX</li>
+</ul>
+<h2 id="maintenance">Maintenance</h2>
+<h3 id="regular-tasks">Regular Tasks</h3>
+<ul>
+<li>Update DocFX version in <code>.csproj</code></li>
+<li>Review and improve XML comments</li>
+<li>Update documentation examples</li>
+<li>Check generated documentation quality</li>
+</ul>
+<h3 id="version-updates">Version Updates</h3>
+<ol>
+<li>Update DocFX package version</li>
+<li>Test documentation generation</li>
+<li>Verify output quality</li>
+<li>Update scripts if needed</li>
+</ol>
+<h2 id="support">Support</h2>
+<h3 id="documentation">Documentation</h3>
+<ul>
+<li>See <code>README.md</code> for detailed information</li>
+<li>See <code>QUICKSTART.md</code> for quick start</li>
+<li>See <code>IMPLEMENTATION.md</code> for technical details</li>
+</ul>
+<h3 id="external-resources">External Resources</h3>
+<ul>
+<li><a href="https://dotnet.github.io/docfx/">DocFX Documentation</a></li>
+<li><a href="https://docs.microsoft.com/en-us/previous-versions/windows/desktop/htmlhelp/html-help-overview">HTML Help Workshop</a></li>
+<li><a href="https://github.com/aspose-cells/Aspose.Cells_FOSS">Aspose.Cells FOSS</a></li>
+</ul>
+<h2 id="summary">Summary</h2>
+<p>The documentation generation system provides:</p>
+<p>✅ <strong>Automated</strong> - No manual documentation maintenance
+✅ <strong>Professional</strong> - High-quality output with navigation
+✅ <strong>Flexible</strong> - Multiple output formats and customization options
+✅ <strong>Cross-platform</strong> - HTML generation works on all platforms
+✅ <strong>Searchable</strong> - Full-text search in CHM format
+✅ <strong>Integrated</strong> - Seamlessly integrated with build process</p>
+<h2 id="next-steps">Next Steps</h2>
+<ol>
+<li><strong>Generate Documentation</strong> - Run the build script</li>
+<li><strong>Review Output</strong> - Check generated HTML files</li>
+<li><strong>Customize</strong> - Modify content as needed</li>
+<li><strong>Integrate</strong> - Add to CI/CD pipeline</li>
+<li><strong>Maintain</strong> - Keep XML comments updated</li>
+</ol>
+<hr>
+<p><strong>Status</strong>: ✅ Ready to Use
+<strong>Version</strong>: 1.0
+<strong>Date</strong>: 2026-05-13</p>
+
+</article>
+          </div>
+
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In this article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+      Aspose.Cells FOSS for .NET - API Documentation
+      
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script type="text/javascript" src="styles/docfx.vendor.min.js"></script>
+    <script type="text/javascript" src="styles/docfx.js"></script>
+    <script type="text/javascript" src="styles/main.js"></script>
+  </body>
+</html>

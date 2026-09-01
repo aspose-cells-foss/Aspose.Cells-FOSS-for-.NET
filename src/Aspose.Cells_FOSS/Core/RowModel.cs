@@ -14,6 +14,11 @@ namespace Aspose.Cells_FOSS.Core
         /// </summary>
         public double? Height { get; set; }
         /// <summary>
+        /// Gets or sets a value indicating whether the row@customHeight flag is set. When false, Excel
+        /// treats the stored height as a cached auto-fit value and re-derives it on render.
+        /// </summary>
+        public bool CustomHeight { get; set; }
+        /// <summary>
         /// Gets or sets a value indicating whether hidden.
         /// </summary>
         public bool Hidden { get; set; }

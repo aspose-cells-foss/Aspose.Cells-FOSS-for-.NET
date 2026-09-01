@@ -16,7 +16,7 @@ namespace Aspose.Cells_FOSS
     /// });
     /// </code>
     /// </example>
-    public sealed class SaveOptions
+    public class SaveOptions
     {
         /// <summary>
         /// Gets or sets the output file format.

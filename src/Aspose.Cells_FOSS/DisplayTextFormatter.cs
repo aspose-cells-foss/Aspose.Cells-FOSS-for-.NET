@@ -142,7 +142,7 @@ namespace Aspose.Cells_FOSS
             var formatCode = NumberFormat.ResolveFormatCode(style.NumberFormat.Number, style.NumberFormat.Custom);
             if (string.IsNullOrWhiteSpace(formatCode) || string.Equals(formatCode, "General", StringComparison.Ordinal))
             {
-                return FormatStringValue(value);
+                return FormatGeneralNumericValue(value);
             }
 
             // Numeric formats can split positive, negative, zero, and text behavior into
@@ -210,8 +210,62 @@ namespace Aspose.Cells_FOSS
             return FormatStringValue(value);
         }
 
+        /// <summary>
+        /// Formats a value under the General number format. Floating-point values are rounded to 15
+        /// significant digits (Excel's General-format precision), which collapses binary artifacts
+        /// such as 1499.9899999999998 back to 1499.99. Integers and other kinds keep the stable raw
+        /// representation used by <see cref="FormatStringValue"/>.
+        /// </summary>
+        private static string FormatGeneralNumericValue(object value)
+        {
+            if (value is double)
+            {
+                return FormatGeneralDouble((double)value);
+            }
+
+            if (value is float)
+            {
+                return FormatGeneralDouble((float)value);
+            }
+
+            if (value is decimal)
+            {
+                // Numeric cached values with a decimal point are loaded as decimal (exact), but
+                // Excel's General format is IEEE-754/15-significant-digit based; round accordingly.
+                return FormatGeneralDouble((double)(decimal)value);
+            }
+
+            return FormatStringValue(value);
+        }
+
+        private static string FormatGeneralDouble(double number)
+        {
+            if (double.IsNaN(number) || double.IsInfinity(number))
+            {
+                return FormatStringValue(number);
+            }
+
+            return number.ToString("G15", CultureInfo.InvariantCulture);
+        }
+
         private static string FormatDateTimeValue(DateTime value, StyleValue style, CultureInfo workbookCulture)
         {
+            // Excel renders the locale-dependent built-in date/time formats (14 = short date,
+            // 22 = general date-time) with the viewer's regional settings, not the literal ECMA pattern
+            // ("mm-dd-yy"). When a concrete culture is supplied (e.g. the renderer's machine culture),
+            // honour its short date/time patterns so the output matches Excel; the invariant default
+            // keeps the deterministic ECMA literal for API callers.
+            if (string.IsNullOrEmpty(style.NumberFormat.Custom)
+                && (style.NumberFormat.Number == 14 || style.NumberFormat.Number == 22)
+                && workbookCulture != null
+                && !CultureInfo.InvariantCulture.Equals(workbookCulture))
+            {
+                var pattern = style.NumberFormat.Number == 22
+                    ? workbookCulture.DateTimeFormat.ShortDatePattern + " " + workbookCulture.DateTimeFormat.ShortTimePattern
+                    : workbookCulture.DateTimeFormat.ShortDatePattern;
+                return value.ToString(pattern, workbookCulture);
+            }
+
             var formatCode = NumberFormat.ResolveFormatCode(style.NumberFormat.Number, style.NumberFormat.Custom);
             if (string.IsNullOrWhiteSpace(formatCode) || string.Equals(formatCode, "General", StringComparison.Ordinal))
             {
@@ -239,6 +293,14 @@ namespace Aspose.Cells_FOSS
             if (string.IsNullOrWhiteSpace(sectionFormat))
             {
                 return FormatRawDateTimeValue(value);
+            }
+
+            if (DisplayTextDateFormatSupport.ContainsTextualMonthToken(sectionFormat)
+                && !DisplayTextLocaleSupport.ContainsLocaleDirective(section.Raw)
+                && workbookCulture != null
+                && CultureInfo.CurrentCulture.Equals(workbookCulture))
+            {
+                sectionCulture = CultureInfo.InvariantCulture;
             }
 
             try
