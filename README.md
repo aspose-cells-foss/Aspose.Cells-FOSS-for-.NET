@@ -4,11 +4,7 @@
 
 [![Aspose.Cells FOSS for .NET](https://products.aspose.org/media/cells/net/banner-readme.png)](https://products.aspose.org/cells/net/)
 
-<<<<<<< HEAD
 Aspose.Cells FOSS for .NET is a free, open-source, MIT-licensed .NET library for creating, loading, editing, and saving Excel `.xlsx` workbooks, with no dependency on Microsoft Excel or any other native Office library. It exposes an Aspose.Cells-compatible API surface built around `Workbook`, `Worksheet`, `Cells`, and `Cell`. The library is pure managed code, multi-targeting `netstandard2.0` and `net8.0`, so the same package runs on Windows, Linux, and macOS, including containerized and serverless environments.
-=======
-Aspose.Cells FOSS for .NET is a free, open-source, MIT-licensed .NET library for creating, loading, editing, and saving Excel `.xlsx` workbooks, with no dependency on Microsoft Excel or any other native Office library. It exposes an Aspose.Cells-compatible API surface built around `Workbook`, `Worksheet`, `Cells`, and `Cell` — the objects a spreadsheet developer already expects. The library is pure managed code, multi-targeting `netstandard2.0` and `net8.0`, so the same package runs unmodified on Windows, Linux, and macOS, including containerized and serverless environments such as Azure Functions and AWS Lambda.
->>>>>>> 6ee32c08a6090a778fab03e66afac731859f93a9
 
 ## Navigation
 
@@ -30,10 +26,7 @@ flowchart TD
   subgraph StartingPoints["Starting Points"]
     direction LR
     i1["An existing XLSX workbook"]
-<<<<<<< HEAD
     i2["A new workbook created in code"]
-=======
->>>>>>> 6ee32c08a6090a778fab03e66afac731859f93a9
   end
   PRODUCT["Aspose.Cells FOSS for .NET"]
   subgraph Capabilities["Core Capabilities"]
@@ -46,52 +39,31 @@ flowchart TD
     end
     subgraph capr[" "]
       direction TB
-<<<<<<< HEAD
       c4["Validation, conditional formatting, filters, and names"]
       c5["Tables, pictures, shapes, charts, and comments"]
       c6["Save to XLSX or export to PDF"]
-=======
-      c4["Data validation, conditional formatting, and auto-filters"]
-      c5["Hyperlinks, named ranges, and protection"]
-      c6["Tables, pictures, shapes, charts, and comments"]
->>>>>>> 6ee32c08a6090a778fab03e66afac731859f93a9
     end
   end
   subgraph Outputs["Outputs"]
     direction TB
     o1["XLSX workbooks"]
-<<<<<<< HEAD
     o2["PDF documents"]
-=======
->>>>>>> 6ee32c08a6090a778fab03e66afac731859f93a9
   end
   StartingPoints --> PRODUCT --> Capabilities --> Outputs
 ```
 
 ## Key Capabilities
 
-<<<<<<< HEAD
 - Create a new workbook or load an existing `.xlsx` file with `Workbook()` / `Workbook(fileName)` / `Workbook(stream)`, then save to `.xlsx` or `.pdf` through `Save(...)`; navigate sheets through `Workbook.Worksheets`.
-- Recover from malformed input instead of failing outright: `LoadOptions.TryRepairPackage` / `TryRepairXml` / `StrictMode` control repair behavior, and `LoadDiagnostics` reports repair and data-loss-risk diagnostics through `HasRepairs` / `HasDataLossRisk`, plus warning callbacks delivered through `IWarningCallback`.
+- Recover from malformed input instead of failing outright: `LoadOptions.TryRepairPackage`, `TryRepairXml`, and `StrictMode` control repair behavior, and `LoadDiagnostics` reports repair and data-loss-risk diagnostics through `HasRepairs` and `HasDataLossRisk`, plus warning callbacks delivered through `IWarningCallback`.
 - Configure worksheet-level display and print settings including zoom, gridlines, right-to-left layout, visibility, and page layout through `Worksheet.PageSetup`, plus workbook and document metadata via `WorkbookProperties` and `CoreDocumentProperties`.
 - Read and write cell values of multiple types (`string`, `int`, `bool`, `decimal`, `DateTime`) with `Cell.PutValue(value)`, and read them back with `Cell.StringValue` / `Cell.Value`; store formulas as strings via `Cell.Formula`.
-- Apply fonts, fills, borders, alignment, and number formats through `Cell.GetStyle()` / `SetStyle()` and the `Style` / `Font` / `Borders` / `FillPattern` types, with `StyleFlag` controlling which formatting properties a style application touches.
+- Apply fonts, fills, borders, alignment, and number formats through `Cell.GetStyle()` / `SetStyle()` and the `Style`, `Font`, `Borders`, and `FillPattern` types, with `StyleFlag` controlling which formatting properties a style application touches.
 - Add whole-number, decimal, list, and date validation rules with `ValidationCollection.Add()`, `ValidationType`, and `OperatorType`; highlight data with conditional formatting via `Worksheet.ConditionalFormattings`; filter columns with `AutoFilter` / `FilterColumn`.
 - Add hyperlinks through `HyperlinkCollection.Add()`; create workbook-level and sheet-scoped defined names with `DefinedNameCollection.Add()`; protect workbook structure with `WorkbookProtection` or individual sheets with `Worksheet.Protect()`.
 - Build structured Excel tables through `Worksheet.ListObjects`, including built-in table styles (`TableStyleType`) and totals-row aggregation (`TotalsCalculation`); anchor pictures (`PictureCollection`) and drawing shapes (`ShapeCollection`, `AutoShapeType`) to a worksheet.
 - Create and configure charts through `ChartCollection.Add()` and `Chart` / `ChartType`; attach legacy cell comments with `CommentCollection.Add()`.
 - Export worksheets to PDF with `SaveFormat.Pdf` or `PdfSaveOptions`, with worksheet page geometry driven by `Worksheet.PageSetup`.
-=======
-- Create a new workbook or load an existing `.xlsx` file with `Workbook()` / `Workbook(fileName)` / `Workbook(stream)`, and save it with `Save(fileName)`; navigate sheets through `Workbook.Worksheets`.
-- Recover from malformed input instead of failing outright: `LoadOptions.TryRepairPackage`/`TryRepairXml`/`StrictMode` control the repair behavior, and `LoadDiagnostics` reports repair and data-loss-risk diagnostics through `HasRepairs`/`HasDataLossRisk`, plus warning callbacks delivered through an `IWarningCallback`.
-- Configure worksheet-level display and print settings — zoom, gridlines, right-to-left (RTL) layout, visibility, and page/print layout through `Worksheet.PageSetup` — plus workbook and document metadata via `WorkbookProperties` and `CoreDocumentProperties`.
-- Read and write cell values of multiple types (`string`, `int`, `bool`, `decimal`, `DateTime`) with `Cell.PutValue(value)`, and read them back with `Cell.StringValue`/`Cell.Value`; store formulas as strings via `Cell.Formula` — evaluated by the application that opens the file, not computed by the library itself.
-- Apply fonts, fills, borders, and alignment through `Cell.GetStyle()`/`SetStyle()` and the `Style`/`Font`/`Borders`/`FillPattern` types, with `StyleFlag` controlling which formatting properties a given style application actually touches; assign custom per-cell number formats.
-- Add whole-number, decimal, list, and date validation rules with `ValidationCollection.Add()`, `ValidationType`, and `OperatorType`; highlight data with conditional formatting — `FormatConditionType.CellValue`, `Expression`, `ColorScale`, `DataBar`, `IconSet` — via `Worksheet.ConditionalFormattings`; filter columns with `AutoFilter`/`FilterColumn`.
-- Add hyperlinks — external URLs, internal cell references, and mailto links — through `HyperlinkCollection.Add()`; create global and sheet-scoped defined names with `DefinedNameCollection.Add()`; lock a workbook's structure with `WorkbookProtection` or an individual sheet with `Worksheet.Protect()`.
-- Build structured Excel tables through `Worksheet.ListObjects` (`ListObjectCollection.Add()`, `ListObject`/`ListColumn`), including built-in table styles (`TableStyleType`) and totals-row aggregation (`TotalsCalculation`); anchor pictures (`PictureCollection`) and drawing shapes (`ShapeCollection`, `AutoShapeType`) to a worksheet.
-- Create and configure charts through `ChartCollection.Add()` and `Chart`/`ChartType`; attach legacy cell comments with `CommentCollection.Add()`.
->>>>>>> 6ee32c08a6090a778fab03e66afac731859f93a9
 
 ## Installation
 
@@ -100,17 +72,10 @@ dotnet add package Aspose.Cells.FOSS
 ```
 
 ```xml
-<<<<<<< HEAD
 <PackageReference Include="Aspose.Cells.FOSS" Version="26.9.0.0" />
 ```
 
 The library multi-targets `netstandard2.0` and `net8.0`. Because it targets `netstandard2.0`, it can also be consumed by other compatible runtimes, including .NET Framework 4.6.1 and later. The public namespace is `Aspose.Cells_FOSS` (with an underscore), which is distinct from the NuGet package id `Aspose.Cells.FOSS` (with dots).
-=======
-<PackageReference Include="Aspose.Cells.FOSS" Version="26.7.0.0" />
-```
-
-The library multi-targets `netstandard2.0` and `net8.0`. Because it targets `netstandard2.0`, it can also be consumed by any compatible runtime, including .NET Framework 4.6.1 and later alongside modern .NET — the same package works unmodified on Windows, Linux, and macOS with no native dependencies. The public namespace is `Aspose.Cells_FOSS` (with an underscore) — distinct from the NuGet package id `Aspose.Cells.FOSS` (with dots).
->>>>>>> 6ee32c08a6090a778fab03e66afac731859f93a9
 
 ## Quick Start
 
@@ -166,7 +131,6 @@ workbook.Worksheets[0].Cells["A1"].PutValue("Updated");
 workbook.Save("updated.xlsx");
 ```
 
-<<<<<<< HEAD
 Export a worksheet to PDF:
 
 ```csharp
@@ -188,12 +152,6 @@ workbook.Save("report.pdf", new PdfSaveOptions
 
 More runnable snippets adapted from the sample projects under [`samples/`](samples/README.md) are collected below.
 
-=======
-## Additional Examples
-
-More real, runnable snippets — adapted from the sample projects under [`samples/`](samples/README.md) — are collected below.
-
->>>>>>> 6ee32c08a6090a778fab03e66afac731859f93a9
 ### Build a Table With Totals
 
 ```csharp
@@ -293,15 +251,11 @@ for (var month = 1; month <= 12; month++)
 
 var chartIndex = sheet.Charts.Add(ChartType.Column, "Charts!$B$1:$B$13", 0, 4, 18, 8);
 var chart = sheet.Charts[chartIndex];
-<<<<<<< HEAD
 chart.Name = "Revenue";
-=======
->>>>>>> 6ee32c08a6090a778fab03e66afac731859f93a9
 
 workbook.Save("charts-sample.xlsx");
 ```
 
-<<<<<<< HEAD
 ### Convert XLSX to PDF
 
 ```csharp
@@ -313,17 +267,11 @@ workbook.Save("output.pdf", new PdfSaveOptions
 });
 ```
 
-=======
->>>>>>> 6ee32c08a6090a778fab03e66afac731859f93a9
 </details>
 
 ## API Reference
 
-<<<<<<< HEAD
-The public API is exposed under the `Aspose.Cells_FOSS` namespace, with `Workbook` as the root object and `Worksheet` / `Cells` / `Cell` as the types most developers interact with day to day. The table below summarizes the supported public surface present in this checkout.
-=======
-The public API is exposed under the `Aspose.Cells_FOSS` namespace, with `Workbook` as the root object and `Worksheet`/`Cells`/`Cell` as the objects developers interact with day to day. The library ships 96 public types, summarized in the module-grouped table below.
->>>>>>> 6ee32c08a6090a778fab03e66afac731859f93a9
+The public API is exposed under the `Aspose.Cells_FOSS` namespace, with `Workbook` as the root object and `Worksheet`, `Cells`, and `Cell` as the types most developers interact with day to day. The table below summarizes the supported public surface present in this checkout.
 
 <details>
 <summary>View the Supported Public API Surface</summary>
@@ -378,10 +326,7 @@ The public API is exposed under the `Aspose.Cells_FOSS` namespace, with `Workboo
 | `LoadOptions` | Specifies how a workbook should be loaded. |
 | `NumberFormat` | Provides number format operations. |
 | `PageSetup` | Represents worksheet print and page-layout settings. |
-<<<<<<< HEAD
 | `PdfSaveOptions` | Specifies options controlling XLSX-to-PDF export. |
-=======
->>>>>>> 6ee32c08a6090a778fab03e66afac731859f93a9
 | `Picture` | Represents a picture (image) anchored to a worksheet. |
 | `PictureCollection` | Represents collection of pictures anchored to a worksheet. |
 | `Row` | Represents row. |
@@ -403,11 +348,7 @@ The public API is exposed under the `Aspose.Cells_FOSS` namespace, with `Workboo
 | `WorkbookSaveException` | Represents an error that occurs during workbook save. |
 | `WorkbookSettings` | Represents workbook-level settings that affect date handling and display formatting. |
 | `WorkbookView` | Represents workbook view. |
-<<<<<<< HEAD
 | `Worksheet` | Encapsulates a single worksheet and its supported features. |
-=======
-| `Worksheet` | Encapsulates a single worksheet and its supported v0.1 worksheet features. |
->>>>>>> 6ee32c08a6090a778fab03e66afac731859f93a9
 | `WorksheetCollection` | Encapsulates the workbook's worksheets and active-sheet state. |
 | `WorksheetProtection` | Represents worksheet protection. |
 
@@ -468,11 +409,7 @@ The public API is exposed under the `Aspose.Cells_FOSS` namespace, with `Workboo
 - `LoadOptions` / `LoadDiagnostics`
   - Properties: `StrictMode: bool`, `TryRepairPackage: bool`, `TryRepairXml: bool`, `WarningCallback: IWarningCallback`, `Issues: IReadOnlyList<LoadIssue>`, `HasRepairs: bool`, `HasDataLossRisk: bool`
 
-<<<<<<< HEAD
 ### Cells, Values, Styling, and Save Options
-=======
-### Cells, Values, and Styling
->>>>>>> 6ee32c08a6090a778fab03e66afac731859f93a9
 
 - `Cell`
   - `PutValue(value)`, `PutValue(value, isConverted)`, `PutValue(value, isConverted, setStyle)`, `GetStyle()`, `GetStyle(checkBorders)`, `SetStyle(style)`, `SetStyle(style, explicitFlag)`, `SetStyle(style, flag)`
@@ -483,11 +420,8 @@ The public API is exposed under the `Aspose.Cells_FOSS` namespace, with `Workboo
 - `Style`
   - `Copy(source)`, `Equals(obj)`, `GetHashCode()`
   - Properties: `Font: Font`, `Borders: Borders`, `Pattern: FillPattern`, `ForegroundColor: Color`, `BackgroundColor: Color`, `NumberFormat: string`, `HorizontalAlignment: HorizontalAlignmentType`, `VerticalAlignment: VerticalAlignmentType`, `WrapText: bool`, `IsLocked: bool`, `IsHidden: bool`
-<<<<<<< HEAD
 - `SaveOptions` / `PdfSaveOptions`
   - Properties: `SaveFormat: SaveFormat`, `OnePagePerSheet: bool`, `AllColumnsInOnePagePerSheet: bool`, `DefaultFont: string`
-=======
->>>>>>> 6ee32c08a6090a778fab03e66afac731859f93a9
 
 ### Validation, Conditional Formatting, and Tables
 
@@ -526,37 +460,23 @@ The public API is exposed under the `Aspose.Cells_FOSS` namespace, with `Workboo
 
 ### Exceptions
 
-<<<<<<< HEAD
 - `CellsException` - base type for the library's exceptions
 - `WorkbookLoadException` / `WorkbookSaveException` - raised for a failed load or save
 - `InvalidFileFormatException` - the input is not a recognized XLSX package
-=======
-- `CellsException` — base type for the library's exceptions
-- `WorkbookLoadException` / `WorkbookSaveException` — raised for a failed load or save
-- `InvalidFileFormatException` — the input is not a recognized XLSX package
->>>>>>> 6ee32c08a6090a778fab03e66afac731859f93a9
 - `StyleException` / `FormulaException` / `UnsupportedFeatureException`
 
 </details>
 
 ## Documentation & Resources
 
-<<<<<<< HEAD
 - **[Getting started guide](https://docs.aspose.org/cells/net/)** - installation, walkthroughs, and feature guides.
 - **[How-to guides & FAQ](https://kb.aspose.org/cells/net/)** - task-focused answers for common spreadsheet questions.
 - **[Full API reference](https://reference.aspose.org/cells/net/)** - the complete browsable reference for all public types.
 - **[Contributor guide](agents.md)** - repository layout, build commands, verification notes, and conventions for this checkout.
-=======
-- **[Getting started guide](https://docs.aspose.org/cells/net/)** — installation, walkthroughs, and feature guides for this library.
-- **[How-to guides & FAQ](https://kb.aspose.org/cells/net/)** — task-focused answers for common spreadsheet questions.
-- **[Full API reference](https://reference.aspose.org/cells/net/)** — the complete, browsable reference for all public types (the [API reference](#api-reference) section above covers the essentials).
-- **[Contributor guide](agents.md)** — repository layout, build/verification commands, and conventions for agents and contributors working in this checkout.
->>>>>>> 6ee32c08a6090a778fab03e66afac731859f93a9
 - Found a bug or have a feature request? [Open an issue](https://github.com/aspose-cells-foss/Aspose.Cells-FOSS-for-.NET/issues) on GitHub.
 
 ## Scope and Limitations
 
-<<<<<<< HEAD
 - **Load format scope.** Load support is limited to XLSX (`LoadFormat.Auto` and `LoadFormat.Xlsx`). Legacy XLS, ODS, CSV, and other spreadsheet formats are not loaded.
 - **Save format scope.** Save support currently covers XLSX and PDF (`SaveFormat.Xlsx` and `SaveFormat.Pdf`).
 - **No formula calculation engine.** `Cell.Formula` stores the formula as a string; the library does not parse, evaluate, or recalculate formulas.
@@ -576,36 +496,11 @@ dotnet build src\Aspose.Cells_FOSS\Aspose.Cells_FOSS.csproj -c Debug
 ```
 
 Run a sample from the repository root, for example:
-=======
-- **Single format.** Only XLSX is supported for both load and save (`LoadFormat` and `SaveFormat` each expose just one real format); legacy XLS (binary), ODS, CSV, and other spreadsheet formats are not read or written.
-- **No formula calculation engine.** `Cell.Formula` stores the formula as a string verbatim; the library does not parse, evaluate, or recalculate it — results come from whatever the application that opens the file computes.
-- **No rendering, conversion, or printing.** There is no PDF/image/HTML export and no print execution — output is always an XLSX workbook; `PageSetup`'s print-layout properties (page breaks via `AddHorizontalPageBreak`/`AddVerticalPageBreak`, orientation, paper size) configure how a real spreadsheet application would print the file, but the library itself never rasterizes a page.
-- **No macros or VBA.** The public API has no VBA-project or macro-related types, so a macro-enabled workbook round-trips only its non-macro content.
-- **No pivot tables.** Structured tables (`ListObject`) and charts (`Chart`) are supported; pivot tables are not part of the public API surface.
-- Charts are created and embedded as real chart objects (`Chart`/`ChartCollection`) with series data and anchoring, but the library does not rasterize a chart to an image — that rendering happens in whatever application opens the workbook.
-
-For workflows that need broader spreadsheet functionality — additional formats (XLS, ODS, CSV), a formula calculation engine, pivot tables, and rendering to PDF or images — see [Aspose.Cells for .NET — Enterprise Edition](https://products.aspose.com/cells/net/), the commercial product this FOSS edition's core is derived from.
-
-## Development and Testing
-
-This checkout has no dedicated test project (`tests/` is absent) — the `samples/` console projects are the verification surface; run the relevant one after touching a related area of the library.
-
-Clone the repository and build the library from the repository root:
-
-```bash
-git clone https://github.com/aspose-cells-foss/Aspose.Cells-FOSS-for-.NET.git
-cd Aspose.Cells-FOSS-for-.NET
-dotnet build src\Aspose.Cells_FOSS\Aspose.Cells_FOSS.csproj -c Debug
-```
-
-Run any sample from the repository root, for example:
->>>>>>> 6ee32c08a6090a778fab03e66afac731859f93a9
 
 ```bash
 dotnet run --project samples\Aspose.Cells_FOSS.Samples.Basic\Aspose.Cells_FOSS.Samples.Basic.csproj
 ```
 
-<<<<<<< HEAD
 PDF export sample:
 
 ```bash
@@ -616,12 +511,6 @@ dotnet run --project samples\Aspose.Cells_FOSS.Samples.PdfConversion\Aspose.Cell
 <summary>View All Sample Projects</summary>
 
 The [`samples/`](samples/README.md) directory contains runnable console projects for:
-=======
-<details>
-<summary>View All Sample Projects</summary>
-
-The [`samples/`](samples/README.md) directory has one runnable console project per feature area:
->>>>>>> 6ee32c08a6090a778fab03e66afac731859f93a9
 
 - `Aspose.Cells_FOSS.Samples.Basic`
 - `Aspose.Cells_FOSS.Samples.Loading`
