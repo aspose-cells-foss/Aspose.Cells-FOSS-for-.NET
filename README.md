@@ -11,6 +11,7 @@ Aspose.Cells FOSS for .NET is a free, open-source, MIT-licensed .NET library for
 - [At a Glance](#at-a-glance)
 - [Key Capabilities](#key-capabilities)
 - [Installation](#installation)
+- [Dependencies](#dependencies)
 - [Quick Start](#quick-start)
 - [Additional Examples](#additional-examples)
 - [API Reference](#api-reference)
@@ -26,7 +27,6 @@ flowchart TD
   subgraph StartingPoints["Starting Points"]
     direction LR
     i1["An existing XLSX workbook"]
-    i2["A new workbook created in code"]
   end
   PRODUCT["Aspose.Cells FOSS for .NET"]
   subgraph Capabilities["Core Capabilities"]
@@ -76,6 +76,23 @@ dotnet add package Aspose.Cells.FOSS
 ```
 
 The library multi-targets `netstandard2.0` and `net8.0`. Because it targets `netstandard2.0`, it can also be consumed by other compatible runtimes, including .NET Framework 4.6.1 and later. The public namespace is `Aspose.Cells_FOSS` (with an underscore), which is distinct from the NuGet package id `Aspose.Cells.FOSS` (with dots).
+
+## Dependencies
+
+### Required Package Dependencies
+
+- `SkiaSharp` (2.88.8) — powers the XLSX-to-PDF renderer (`SKDocument.CreatePdf`). It is
+  referenced by `src/Aspose.Cells_FOSS/Aspose.Cells_FOSS.csproj` and is carried as a dependency of
+  the published `Aspose.Cells.FOSS` package; its license notice ships in
+  [`License/SkiaSharp.LICENSE.txt`](License/SkiaSharp.LICENSE.txt).
+
+### Native and System Requirements
+
+- PDF export calls the native `libSkiaSharp` library through SkiaSharp. SkiaSharp 2.88.8 brings it in
+  on Windows and macOS; on Linux, add `SkiaSharp.NativeAssets.Linux` (or
+  `SkiaSharp.NativeAssets.Linux.NoDependencies`) to your application. Creating, loading, and saving
+  `.xlsx` files does not use it.
+- Targets `netstandard2.0` and `net8.0` (see [Installation](#installation)).
 
 ## Quick Start
 
@@ -251,7 +268,6 @@ for (var month = 1; month <= 12; month++)
 
 var chartIndex = sheet.Charts.Add(ChartType.Column, "Charts!$B$1:$B$13", 0, 4, 18, 8);
 var chart = sheet.Charts[chartIndex];
-chart.Name = "Revenue";
 
 workbook.Save("charts-sample.xlsx");
 ```
@@ -326,7 +342,6 @@ The public API is exposed under the `Aspose.Cells_FOSS` namespace, with `Workboo
 | `LoadOptions` | Specifies how a workbook should be loaded. |
 | `NumberFormat` | Provides number format operations. |
 | `PageSetup` | Represents worksheet print and page-layout settings. |
-| `PdfSaveOptions` | Specifies options controlling XLSX-to-PDF export. |
 | `Picture` | Represents a picture (image) anchored to a worksheet. |
 | `PictureCollection` | Represents collection of pictures anchored to a worksheet. |
 | `Row` | Represents row. |
