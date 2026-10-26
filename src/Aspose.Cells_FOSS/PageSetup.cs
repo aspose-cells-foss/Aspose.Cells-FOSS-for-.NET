@@ -116,6 +116,7 @@ namespace Aspose.Cells_FOSS
                 }
 
                 _model.Scale = value;
+                if (value.HasValue) _model.FitToPage = false;
             }
         }
 
@@ -136,6 +137,7 @@ namespace Aspose.Cells_FOSS
                 }
 
                 _model.FitToWidth = value;
+                if (value.HasValue) _model.FitToPage = true;
             }
         }
 
@@ -156,6 +158,7 @@ namespace Aspose.Cells_FOSS
                 }
 
                 _model.FitToHeight = value;
+                if (value.HasValue) _model.FitToPage = true;
             }
         }
 

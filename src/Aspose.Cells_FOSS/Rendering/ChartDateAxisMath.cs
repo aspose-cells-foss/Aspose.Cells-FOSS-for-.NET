@@ -187,6 +187,26 @@ namespace Aspose.Cells_FOSS.Rendering
             return plot.Left + (float)t * plot.Width;
         }
 
+        public static float DateCategoryX(double serial, double minDate, double maxDate, SKRect plot,
+            ParsedChart chart, DateSystem dateSystem)
+        {
+            if (LineChartAutomaticLayout.Applies(chart)
+                && string.Equals(chart.CategoryBaseTimeUnit, "months", StringComparison.Ordinal))
+            {
+                // A monthly date axis has equal-width months, including February.
+                return DateCategoryX(MonthCoordinate(serial, dateSystem), MonthCoordinate(minDate, dateSystem),
+                    MonthCoordinate(maxDate, dateSystem), plot);
+            }
+            return DateCategoryX(serial, minDate, maxDate, plot);
+        }
+
+        private static double MonthCoordinate(double serial, DateSystem dateSystem)
+        {
+            var date = DateSerialConverter.FromSerial(serial, dateSystem);
+            return date.Year * 12d + date.Month - 1d
+                + (date.Day - 1d + date.TimeOfDay.TotalDays) / DateTime.DaysInMonth(date.Year, date.Month);
+        }
+
         public static double NormalizePointSerial(ParsedChart chart, double serial, DateSystem dateSystem)
         {
             if (chart == null || !chart.HasDateCategoryAxis)
@@ -208,7 +228,8 @@ namespace Aspose.Cells_FOSS.Rendering
 
             var visibleCategoryCount = CountVisibleCategoryValues(chart);
             var monthCount = GetInclusiveMonthCount(minDate, maxDate, dateSystem);
-            if (visibleCategoryCount > 0 && monthCount <= visibleCategoryCount + 2)
+            if (visibleCategoryCount > 0 && (monthCount <= visibleCategoryCount + 2
+                || LineChartAutomaticLayout.Applies(chart) || chart.IsLine3D))
             {
                 return StartOfMonth(serial, dateSystem);
             }

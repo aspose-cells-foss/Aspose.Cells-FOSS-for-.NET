@@ -46,6 +46,15 @@ namespace Aspose.Cells_FOSS.Rendering
         /// <summary>Approximate line height in points (Excel adds ~20% leading over the em size).</summary>
         public float LineHeightPt { get { return _sizePt * 1.2f; } }
 
+        public float WrappedLineHeightPt
+        {
+            get
+            {
+                var metrics = FontFor(_primary).Metrics;
+                return Math.Max(LineHeightPt, -metrics.Ascent + metrics.Descent + metrics.Leading + 1f);
+            }
+        }
+
         /// <summary>
         /// Glyph height (ascent + descent, no leading) in points, matching the vertical extent the
         /// renderer draws. Used to size a row to rotated text.
@@ -169,10 +178,59 @@ namespace Aspose.Cells_FOSS.Rendering
         }
 
         /// <summary>
+        /// Measures advances as the Type3 PDF writer does: one glyph at a time at 1000pt.
+        /// This avoids UI-size hinting changing the placement of worksheet text.
+        /// </summary>
+        public List<GlyphRun> SplitPdfRuns(string text)
+        {
+            var runs = SplitRuns(text);
+            for (var i = 0; i < runs.Count; i++)
+            {
+                using (var font = new SKFont(runs[i].Typeface, 1000f))
+                {
+                    font.Subpixel = true;
+                    using (var paint = new SKPaint(font))
+                    {
+                        var width = 0f;
+                        var index = 0;
+                        while (index < runs[i].Text.Length)
+                        {
+                            int codepoint;
+                            var count = ReadCodepoint(runs[i].Text, index, out codepoint);
+                            width += paint.MeasureText(runs[i].Text.Substring(index, count));
+                            index += count;
+                        }
+
+                        runs[i].WidthPt = width * _sizePt / 1000f;
+                    }
+                }
+            }
+
+            return runs;
+        }
+
+        public float MeasurePdfText(string text)
+        {
+            var runs = SplitPdfRuns(text);
+            var width = 0f;
+            for (var i = 0; i < runs.Count; i++)
+            {
+                width += runs[i].WidthPt;
+            }
+
+            return width;
+        }
+
+        /// <summary>
         /// Greedy line breaker: wraps on whitespace where possible, hard-breaking any single token
         /// that is wider than <paramref name="maxWidthPt"/>. Explicit newlines are always honored.
         /// </summary>
         public List<string> WrapLines(string text, float maxWidthPt)
+        {
+            return WrapLines(text, maxWidthPt, false);
+        }
+
+        public List<string> WrapLines(string text, float maxWidthPt, bool pdfMetrics)
         {
             var lines = new List<string>();
             if (string.IsNullOrEmpty(text))
@@ -184,13 +242,18 @@ namespace Aspose.Cells_FOSS.Rendering
             var paragraphs = text.Replace("\r\n", "\n").Replace('\r', '\n').Split('\n');
             for (var p = 0; p < paragraphs.Length; p++)
             {
-                WrapParagraph(paragraphs[p], maxWidthPt, lines);
+                WrapParagraph(paragraphs[p], maxWidthPt, lines, pdfMetrics);
             }
 
             return lines;
         }
 
-        private void WrapParagraph(string paragraph, float maxWidthPt, List<string> lines)
+        private float MeasureForWrap(string text, bool pdfMetrics)
+        {
+            return pdfMetrics ? MeasurePdfText(text) : Measure(text);
+        }
+
+        private void WrapParagraph(string paragraph, float maxWidthPt, List<string> lines, bool pdfMetrics)
         {
             if (maxWidthPt <= 0f || paragraph.Length == 0)
             {
@@ -204,7 +267,7 @@ namespace Aspose.Cells_FOSS.Rendering
             {
                 var token = tokens[t];
                 var candidate = current.Length == 0 ? token : current.ToString() + token;
-                if (Measure(candidate) <= maxWidthPt || current.Length == 0 && Measure(token) <= maxWidthPt)
+                if (MeasureForWrap(candidate.TrimEnd(), pdfMetrics) <= maxWidthPt)
                 {
                     current.Append(token);
                     continue;
@@ -217,9 +280,9 @@ namespace Aspose.Cells_FOSS.Rendering
                 }
 
                 // Token alone still overflows: hard-break it character by character.
-                if (Measure(token) > maxWidthPt)
+                if (MeasureForWrap(token.TrimEnd(), pdfMetrics) > maxWidthPt)
                 {
-                    HardBreak(token, maxWidthPt, lines, current);
+                    HardBreak(token, maxWidthPt, lines, current, pdfMetrics);
                 }
                 else
                 {
@@ -230,12 +293,19 @@ namespace Aspose.Cells_FOSS.Rendering
             lines.Add(current.ToString().TrimEnd());
         }
 
-        private void HardBreak(string token, float maxWidthPt, List<string> lines, System.Text.StringBuilder current)
+        private void HardBreak(string token, float maxWidthPt, List<string> lines, System.Text.StringBuilder current, bool pdfMetrics)
         {
             foreach (var ch in token)
             {
                 var candidate = current.ToString() + ch;
-                if (current.Length > 0 && Measure(candidate) > maxWidthPt)
+                // A trailing word separator does not occupy a line of its own. Keep it
+                // with this fragment until the next token is fitted or the line is flushed.
+                if (char.IsWhiteSpace(ch))
+                {
+                    current.Append(ch);
+                    continue;
+                }
+                if (current.Length > 0 && MeasureForWrap(candidate, pdfMetrics) > maxWidthPt)
                 {
                     lines.Add(current.ToString());
                     current.Length = 0;

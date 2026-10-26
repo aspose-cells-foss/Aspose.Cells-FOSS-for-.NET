@@ -302,6 +302,16 @@ namespace Aspose.Cells_FOSS
             var context = new StylesheetLoadContext();
             context.CellFormats.Clear();
             context.DifferentialFormats.AddRange(ReadDifferentialStyleValues(root));
+            var tableStyles = root.Element(MainNs + "tableStyles");
+            context.RawTableStylesXml = tableStyles != null ? tableStyles.ToString(System.Xml.Linq.SaveOptions.DisableFormatting) : null;
+            var differentialFormats = root.Element(MainNs + "dxfs");
+            if (differentialFormats != null)
+            {
+                foreach (var differentialFormat in differentialFormats.Elements(MainNs + "dxf"))
+                {
+                    context.RawDifferentialFormatsXml.Add(differentialFormat.ToString(System.Xml.Linq.SaveOptions.DisableFormatting));
+                }
+            }
 
             var cellXfsContainer = root.Element(MainNs + "cellXfs");
             var cellXfs = cellXfsContainer != null ? new List<XElement>(cellXfsContainer.Elements(MainNs + "xf")) : new List<XElement>();

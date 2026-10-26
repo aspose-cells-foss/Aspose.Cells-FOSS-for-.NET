@@ -9,6 +9,12 @@ namespace Aspose.Cells_FOSS.Rendering
     {
         public static void DrawText(SKCanvas canvas, string text, float x, float baseline, SKFont font, SKColor color)
         {
+            DrawText(canvas, text, x, baseline, font, color, SKPaintStyle.Fill, 0f);
+        }
+
+        public static void DrawText(SKCanvas canvas, string text, float x, float baseline, SKFont font,
+            SKColor color, SKPaintStyle style, float strokeWidth)
+        {
             if (canvas == null || font == null || string.IsNullOrEmpty(text))
             {
                 return;
@@ -17,7 +23,9 @@ namespace Aspose.Cells_FOSS.Rendering
             using (var paint = new SKPaint(font))
             {
                 paint.Color = color;
-                paint.Style = SKPaintStyle.Fill;
+                paint.Style = style;
+                paint.StrokeWidth = strokeWidth;
+                paint.StrokeJoin = SKStrokeJoin.Round;
                 paint.IsAntialias = true;
 
                 using (var path = paint.GetTextPath(text, x, baseline))

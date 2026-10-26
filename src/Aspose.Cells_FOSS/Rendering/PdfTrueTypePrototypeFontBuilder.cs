@@ -172,70 +172,15 @@ namespace Aspose.Cells_FOSS.Rendering
 
         private static byte[] Compress(byte[] raw)
         {
-            var zlibStreamType = System.Type.GetType("System.IO.Compression.ZLibStream, System.IO.Compression", false);
-            if (zlibStreamType != null)
-            {
-                var constructor = zlibStreamType.GetConstructor(new[] { typeof(Stream), typeof(CompressionLevel), typeof(bool) });
-                if (constructor != null)
-                {
-                    using (var output = new MemoryStream())
-                    {
-                        System.IDisposable stream = null;
-                        try
-                        {
-                            stream = (System.IDisposable)constructor.Invoke(new object[] { output, CompressionLevel.Optimal, true });
-                            ((Stream)stream).Write(raw, 0, raw.Length);
-                        }
-                        finally
-                        {
-                            if (stream != null)
-                            {
-                                stream.Dispose();
-                            }
-                        }
-
-                        return output.ToArray();
-                    }
-                }
-            }
-
             using (var output = new MemoryStream())
             {
-                output.WriteByte(0x78);
-                output.WriteByte(0xDA);
-                using (var deflated = new MemoryStream())
+                using (var zip = new ZLibStream(output, CompressionLevel.Optimal, true))
                 {
-                    using (var zip = new DeflateStream(deflated, CompressionLevel.Optimal, true))
-                    {
-                        zip.Write(raw, 0, raw.Length);
-                    }
-
-                    var body = deflated.ToArray();
-                    output.Write(body, 0, body.Length);
+                    zip.Write(raw, 0, raw.Length);
                 }
 
-                var adler = Adler32(raw);
-                output.WriteByte((byte)((adler >> 24) & 0xFF));
-                output.WriteByte((byte)((adler >> 16) & 0xFF));
-                output.WriteByte((byte)((adler >> 8) & 0xFF));
-                output.WriteByte((byte)(adler & 0xFF));
                 return output.ToArray();
             }
-        }
-
-        private static uint Adler32(byte[] data)
-        {
-            const uint mod = 65521;
-            uint a = 1;
-            uint b = 0;
-
-            for (var i = 0; i < data.Length; i++)
-            {
-                a = (a + data[i]) % mod;
-                b = (b + a) % mod;
-            }
-
-            return (b << 16) | a;
         }
 
         private static string Format(float value)

@@ -52,6 +52,12 @@ namespace Aspose.Cells_FOSS
         /// </summary>
         public string DefaultFont { get; set; }
 
+        /// <summary>
+        /// Gets or sets the date used to evaluate relative-date conditional formatting rules
+        /// during PDF export. When null, the local date at export time is used.
+        /// </summary>
+        public DateTime? ConditionalFormattingEvaluationDate { get; set; }
+
         internal bool UseType3TextOptimization { get; set; }
         internal bool UseTrueTypeSubsetPrototype { get; set; }
     }

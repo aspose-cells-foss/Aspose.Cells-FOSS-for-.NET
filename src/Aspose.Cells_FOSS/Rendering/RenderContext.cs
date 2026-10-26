@@ -34,6 +34,7 @@ namespace Aspose.Cells_FOSS.Rendering
             Culture = displayCulture != null && !CultureInfo.InvariantCulture.Equals(displayCulture)
                 ? displayCulture
                 : CultureInfo.CurrentCulture;
+            ConditionalFormattingEvaluationDate = DateTime.Today;
             var normalFont = workbook != null && workbook.DefaultStyle != null ? workbook.DefaultStyle.Font : null;
             MaxDigitWidthPixels = Fonts.MeasureMaxDigitWidth(normalFont);
             FontDerivedRowHeightPt = Fonts.MeasureDefaultRowHeightPt(normalFont);
@@ -45,6 +46,7 @@ namespace Aspose.Cells_FOSS.Rendering
         public ChartPdfImageCache Charts { get; private set; }
         public RenderColor Colors { get; private set; }
         public CultureInfo Culture { get; private set; }
+        public DateTime ConditionalFormattingEvaluationDate { get; set; }
         public double MaxDigitWidthPixels { get; private set; }
         public double FontDerivedRowHeightPt { get; private set; }
         public PdfTextDocumentSession PdfTextSession { get; set; }

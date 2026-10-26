@@ -24,11 +24,19 @@ namespace Aspose.Cells_FOSS.Rendering
 
         public void RecordChartRun(PageLayout page, SKRect clipRect, string text, SKTypeface typeface, SKColor color, float fontSizePt, float xPt, float baselinePt)
         {
+            RecordChartRun(page, clipRect, text, typeface, color, fontSizePt, xPt, baselinePt, false);
+        }
+
+        public void RecordChartRun(PageLayout page, SKRect clipRect, string text, SKTypeface typeface, SKColor color,
+            float fontSizePt, float xPt, float baselinePt, bool invisible)
+        {
             if (page == null || typeface == null || string.IsNullOrEmpty(text))
             {
                 return;
             }
 
+            clipRect = PageContentClip.Intersect(page, clipRect, true);
+            if (clipRect.IsEmpty) return;
             var scale = (float)page.ScaleFactor;
             var x = (float)page.ContentOriginXPt + scale * xPt;
             var baselineTop = (float)page.ContentOriginYPt + scale * baselinePt;
@@ -47,6 +55,7 @@ namespace Aspose.Cells_FOSS.Rendering
                 UsePositiveYFontMatrix = true,
                 UseTopDownCoordinates = true,
                 Color = color,
+                Invisible = invisible,
                 FontSizePt = scale * fontSizePt,
                 XPt = x,
                 BaselineYPt = baselineTop,
@@ -66,6 +75,8 @@ namespace Aspose.Cells_FOSS.Rendering
                 return;
             }
 
+            clipRect = PageContentClip.Intersect(page, clipRect, true);
+            if (clipRect.IsEmpty) return;
             var scale = (float)page.ScaleFactor;
             var originX = (float)page.ContentOriginXPt + scale * originXPt;
             var originY = (float)page.ContentOriginYPt + scale * originYPt;
@@ -104,6 +115,8 @@ namespace Aspose.Cells_FOSS.Rendering
                 return;
             }
 
+            clipRect = PageContentClip.Intersect(page, clipRect, false);
+            if (clipRect.IsEmpty) return;
             var scale = (float)page.ScaleFactor;
             var x = (float)page.ContentOriginXPt + scale * xPt;
             var pageHeight = (float)page.PageHeightPt;

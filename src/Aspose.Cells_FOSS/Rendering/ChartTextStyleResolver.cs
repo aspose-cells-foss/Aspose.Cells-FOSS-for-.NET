@@ -11,7 +11,7 @@ namespace Aspose.Cells_FOSS.Rendering
         private static readonly XNamespace A = "http://schemas.openxmlformats.org/drawingml/2006/main";
         private static readonly XNamespace R = "http://schemas.openxmlformats.org/officeDocument/2006/relationships";
 
-        public static bool TryResolveFont(XElement defaultRunProperties, out FontValue font)
+        public static bool TryResolveFont(XElement defaultRunProperties, string majorFontName, string minorFontName, out FontValue font)
         {
             font = null;
             if (defaultRunProperties == null)
@@ -44,7 +44,7 @@ namespace Aspose.Cells_FOSS.Rendering
             }
 
             string typeface;
-            if (TryResolveTypeface(defaultRunProperties, out typeface))
+            if (TryResolveTypeface(defaultRunProperties, majorFontName, minorFontName, out typeface))
             {
                 resolved.Name = typeface;
                 found = true;
@@ -118,6 +118,24 @@ namespace Aspose.Cells_FOSS.Rendering
             }
 
             return TryResolveRepresentativeImageColor(companion.BinaryContent, out color);
+        }
+
+        public static bool TryResolveTextOutlineColor(XElement runProperties, RenderColor colors, out SKColor color)
+        {
+            color = SKColors.Transparent;
+            var line = runProperties != null ? runProperties.Element(A + "ln") : null;
+            if (line == null)
+            {
+                return false;
+            }
+
+            if (TryResolveGradientTextColor(line.Element(A + "gradFill"), colors, out color))
+            {
+                return true;
+            }
+
+            var solidFill = line.Element(A + "solidFill");
+            return ChartXmlParser.TryDrawingColor(ChartXmlParser.FillChild(solidFill), colors, out color);
         }
 
         private static bool TryResolveGradientTextColor(XElement gradientFill, RenderColor colors, out SKColor color)
@@ -317,34 +335,44 @@ namespace Aspose.Cells_FOSS.Rendering
             return true;
         }
 
-        private static bool TryResolveTypeface(XElement defaultRunProperties, out string typeface)
+        private static bool TryResolveTypeface(XElement defaultRunProperties, string majorFontName, string minorFontName, out string typeface)
         {
             typeface = null;
             var latin = defaultRunProperties.Element(A + "latin");
-            typeface = ResolveTypefaceAttr(latin);
+            typeface = ResolveTypefaceAttr(latin, majorFontName, minorFontName);
             if (!string.IsNullOrEmpty(typeface))
             {
                 return true;
             }
 
             var eastAsian = defaultRunProperties.Element(A + "ea");
-            typeface = ResolveTypefaceAttr(eastAsian);
+            typeface = ResolveTypefaceAttr(eastAsian, majorFontName, minorFontName);
             if (!string.IsNullOrEmpty(typeface))
             {
                 return true;
             }
 
             var complexScript = defaultRunProperties.Element(A + "cs");
-            typeface = ResolveTypefaceAttr(complexScript);
+            typeface = ResolveTypefaceAttr(complexScript, majorFontName, minorFontName);
             return !string.IsNullOrEmpty(typeface);
         }
 
-        private static string ResolveTypefaceAttr(XElement element)
+        private static string ResolveTypefaceAttr(XElement element, string majorFontName, string minorFontName)
         {
             var typeface = AttrOf(element, "typeface");
             if (string.IsNullOrEmpty(typeface))
             {
                 return null;
+            }
+
+            if (typeface.StartsWith("+mn-", StringComparison.Ordinal))
+            {
+                return minorFontName;
+            }
+
+            if (typeface.StartsWith("+mj-", StringComparison.Ordinal))
+            {
+                return majorFontName;
             }
 
             if (typeface[0] == '+')

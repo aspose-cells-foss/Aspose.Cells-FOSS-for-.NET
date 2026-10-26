@@ -101,7 +101,7 @@ namespace Aspose.Cells_FOSS
 
         private static XElement BuildPageSetupPropertiesElement(PageSetupModel pageSetup)
         {
-            if (!pageSetup.FitToWidth.HasValue && !pageSetup.FitToHeight.HasValue)
+            if (!pageSetup.FitToPage)
             {
                 return null;
             }

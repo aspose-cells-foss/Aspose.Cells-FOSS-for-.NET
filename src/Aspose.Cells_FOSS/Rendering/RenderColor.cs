@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Xml.Linq;
 using Aspose.Cells_FOSS.Core;
 using SkiaSharp;
@@ -32,12 +33,20 @@ namespace Aspose.Cells_FOSS.Rendering
 
         // Classic 56-entry indexed color palette (indices 8..63). Indices 0..7 mirror 8..15.
         private static readonly SKColor[] IndexedPalette = BuildIndexedPalette();
+        private static readonly double[] DefaultThemeLineWidthsPt = { 0.75d, 0.5d, 1d, 1.5d };
 
         private readonly SKColor[] _scheme;
+        private readonly double[] _themeLineWidthsPt;
+        private readonly List<XElement> _themeEffects = new List<XElement>();
+        public string MajorFontName { get; private set; }
+        public string MinorFontName { get; private set; }
 
-        private RenderColor(SKColor[] scheme)
+        private RenderColor(SKColor[] scheme, double[] themeLineWidthsPt, string majorFontName, string minorFontName)
         {
             _scheme = scheme;
+            _themeLineWidthsPt = themeLineWidthsPt;
+            MajorFontName = majorFontName;
+            MinorFontName = minorFontName;
         }
 
         /// <summary>
@@ -46,8 +55,58 @@ namespace Aspose.Cells_FOSS.Rendering
         /// </summary>
         public static RenderColor FromWorkbook(WorkbookModel model)
         {
-            var scheme = ParseThemeScheme(model != null ? model.RawThemeXml : null);
-            return new RenderColor(scheme ?? DefaultScheme);
+            var themeXml = model != null ? model.RawThemeXml : null;
+            var scheme = ParseThemeScheme(themeXml);
+            var lineWidths = ParseThemeLineWidths(themeXml);
+            var result = new RenderColor(scheme ?? DefaultScheme, lineWidths ?? DefaultThemeLineWidthsPt,
+                ParseThemeFontName(themeXml, true) ?? "Calibri Light",
+                ParseThemeFontName(themeXml, false) ?? "Calibri");
+            if (!string.IsNullOrEmpty(themeXml))
+            {
+                try
+                {
+                    XNamespace a = "http://schemas.openxmlformats.org/drawingml/2006/main";
+                    var doc = XDocument.Parse(themeXml);
+                    var styles = doc.Descendants(a + "effectStyleLst").FirstOrDefaultSafe();
+                    if (styles != null)
+                        foreach (var style in styles.Elements(a + "effectStyle")) result._themeEffects.Add(style.Element(a + "effectLst"));
+                }
+                catch (System.Xml.XmlException) { }
+            }
+            return result;
+        }
+
+        public XElement ResolveThemeEffects(int index)
+        {
+            return index > 0 && index <= _themeEffects.Count ? _themeEffects[index - 1] : null;
+        }
+
+        private static string ParseThemeFontName(string rawThemeXml, bool major)
+        {
+            if (string.IsNullOrWhiteSpace(rawThemeXml))
+            {
+                return null;
+            }
+
+            try
+            {
+                XNamespace a = "http://schemas.openxmlformats.org/drawingml/2006/main";
+                var doc = XDocument.Parse(rawThemeXml);
+                var fontScheme = doc.Descendants(a + "fontScheme").FirstOrDefaultSafe();
+                var fontGroup = fontScheme != null ? fontScheme.Element(a + (major ? "majorFont" : "minorFont")) : null;
+                var latin = fontGroup != null ? fontGroup.Element(a + "latin") : null;
+                var name = latin != null ? (string)latin.Attribute("typeface") : null;
+                return string.IsNullOrWhiteSpace(name) ? null : name;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        public double ResolveThemeLineWidth(int index, double fallback)
+        {
+            return index >= 0 && index < _themeLineWidthsPt.Length ? _themeLineWidthsPt[index] : fallback;
         }
 
         /// <summary>
@@ -105,19 +164,88 @@ namespace Aspose.Cells_FOSS.Rendering
         /// <summary>Applies a DrawingML luminance modulation/offset (lumMod/lumOff) to a color.</summary>
         public static SKColor ApplyLuma(SKColor color, double lumMod, double lumOff)
         {
-            return new SKColor(
-                LumaChannel(color.Red, lumMod, lumOff),
-                LumaChannel(color.Green, lumMod, lumOff),
-                LumaChannel(color.Blue, lumMod, lumOff),
-                color.Alpha);
+            double hue;
+            double saturation;
+            double luminance;
+            ToHsl(color, out hue, out saturation, out luminance);
+            luminance = ClampUnit(luminance * lumMod + lumOff);
+            return FromHsl(hue, saturation, luminance, color.Alpha);
         }
 
-        private static byte LumaChannel(byte channel, double lumMod, double lumOff)
+        private static void ToHsl(SKColor color, out double hue, out double saturation, out double luminance)
         {
-            var value = channel * lumMod + 255d * lumOff;
-            if (value < 0d) value = 0d;
-            if (value > 255d) value = 255d;
-            return (byte)Math.Round(value);
+            var red = color.Red / 255d;
+            var green = color.Green / 255d;
+            var blue = color.Blue / 255d;
+            var maximum = Math.Max(red, Math.Max(green, blue));
+            var minimum = Math.Min(red, Math.Min(green, blue));
+            luminance = (maximum + minimum) * 0.5d;
+            if (Math.Abs(maximum - minimum) < 0.0000001d)
+            {
+                hue = 0d;
+                saturation = 0d;
+                return;
+            }
+
+            var delta = maximum - minimum;
+            saturation = luminance > 0.5d
+                ? delta / (2d - maximum - minimum)
+                : delta / (maximum + minimum);
+            if (Math.Abs(maximum - red) < 0.0000001d)
+            {
+                hue = (green - blue) / delta + (green < blue ? 6d : 0d);
+            }
+            else if (Math.Abs(maximum - green) < 0.0000001d)
+            {
+                hue = (blue - red) / delta + 2d;
+            }
+            else
+            {
+                hue = (red - green) / delta + 4d;
+            }
+
+            hue /= 6d;
+        }
+
+        private static SKColor FromHsl(double hue, double saturation, double luminance, byte alpha)
+        {
+            if (saturation <= 0d)
+            {
+                var gray = ToColorByte(luminance);
+                return new SKColor(gray, gray, gray, alpha);
+            }
+
+            var q = luminance < 0.5d
+                ? luminance * (1d + saturation)
+                : luminance + saturation - luminance * saturation;
+            var p = 2d * luminance - q;
+            return new SKColor(
+                ToColorByte(HueToRgb(p, q, hue + 1d / 3d)),
+                ToColorByte(HueToRgb(p, q, hue)),
+                ToColorByte(HueToRgb(p, q, hue - 1d / 3d)),
+                alpha);
+        }
+
+        private static double HueToRgb(double p, double q, double hue)
+        {
+            if (hue < 0d) hue += 1d;
+            if (hue > 1d) hue -= 1d;
+            if (hue < 1d / 6d) return p + (q - p) * 6d * hue;
+            if (hue < 0.5d) return q;
+            if (hue < 2d / 3d) return p + (q - p) * (2d / 3d - hue) * 6d;
+            return p;
+        }
+
+        private static double ClampUnit(double value)
+        {
+            if (value < 0d) return 0d;
+            if (value > 1d) return 1d;
+            return value;
+        }
+
+        private static byte ToColorByte(double value)
+        {
+            return (byte)Math.Round(ClampUnit(value) * 255d);
         }
 
         private SKColor ResolveTheme(int themeIndex)
@@ -187,6 +315,42 @@ namespace Aspose.Cells_FOSS.Rendering
             if (value < 0d) value = 0d;
             if (value > 255d) value = 255d;
             return (byte)Math.Round(value);
+        }
+
+        private static double[] ParseThemeLineWidths(string rawThemeXml)
+        {
+            if (string.IsNullOrWhiteSpace(rawThemeXml))
+            {
+                return null;
+            }
+
+            try
+            {
+                XNamespace a = "http://schemas.openxmlformats.org/drawingml/2006/main";
+                var doc = XDocument.Parse(rawThemeXml);
+                var lineStyles = doc.Descendants(a + "lnStyleLst").FirstOrDefaultSafe();
+                if (lineStyles == null)
+                {
+                    return null;
+                }
+
+                var widths = new List<double>();
+                widths.Add(DefaultThemeLineWidthsPt[0]);
+                foreach (var line in lineStyles.Elements(a + "ln"))
+                {
+                    double emu;
+                    var fallback = widths.Count < DefaultThemeLineWidthsPt.Length
+                        ? DefaultThemeLineWidthsPt[widths.Count] : 0.75d;
+                    widths.Add(double.TryParse((string)line.Attribute("w"), NumberStyles.Float,
+                        CultureInfo.InvariantCulture, out emu) && emu > 0d ? emu / 12700d : fallback);
+                }
+
+                return widths.Count > 1 ? widths.ToArray() : null;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         private static SKColor[] ParseThemeScheme(string rawThemeXml)

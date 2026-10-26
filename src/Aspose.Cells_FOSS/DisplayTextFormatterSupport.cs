@@ -45,7 +45,8 @@ namespace Aspose.Cells_FOSS
 
             if (numericSectionCount == 1)
             {
-                useAbsoluteValue = ShouldUseAbsoluteValue(sections[0].Raw, numericValue);
+                // A lone section formats the signed value itself.
+                useAbsoluteValue = false;
                 return sections[0];
             }
 
@@ -53,7 +54,9 @@ namespace Aspose.Cells_FOSS
             {
                 if (numericValue < 0)
                 {
-                    useAbsoluteValue = ShouldUseAbsoluteValue(sections[1].Raw, numericValue);
+                    // A dedicated negative section receives the magnitude. Its own
+                    // literals (minus sign, parentheses, currency) supply the sign.
+                    useAbsoluteValue = true;
                     return sections[1];
                 }
 
@@ -69,7 +72,7 @@ namespace Aspose.Cells_FOSS
 
             if (numericValue < 0)
             {
-                useAbsoluteValue = ShouldUseAbsoluteValue(sections[1].Raw, numericValue);
+                useAbsoluteValue = true;
                 return sections[1];
             }
 
@@ -332,7 +335,7 @@ namespace Aspose.Cells_FOSS
                 builder.Append(character);
             }
 
-            return builder.ToString().Trim();
+            return builder.ToString();
         }
 
         internal static string StripDirectiveBrackets(string section, bool preserveElapsedTokens)

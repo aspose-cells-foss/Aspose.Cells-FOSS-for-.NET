@@ -16,22 +16,43 @@ namespace Aspose.Cells_FOSS.Rendering
         Area,
         Radar,
         Pie,
+        Scatter,
     }
 
     internal sealed class ChartSeries
     {
         public string Name = string.Empty;
         public SKColor Color = SKColors.Gray;
+        public Dictionary<int, SKColor> PointColors = new Dictionary<int, SKColor>();
         public SKColor LineColor = SKColors.Gray;
         public double LineWidthPt = 2.25d;
         public bool HasVisibleLine = true;
+        public bool HasBarBorder;
+        public bool SmoothLine;
         public List<double?> Values = new List<double?>();
+        public List<double?> XValues = new List<double?>();
+        public List<double?> BubbleSizes = new List<double?>();
+        public bool Bubble3D;
         public bool MarkerVisible;
         public string MarkerSymbol = "none";
         public int MarkerSize = 5;
         public SKColor MarkerFillColor = SKColors.Gray;
         public SKColor MarkerStrokeColor = SKColors.Gray;
         public double MarkerStrokeWidthPt = 0.75d;
+        public string PatternPreset;
+        public SKColor PatternForegroundColor = SKColors.Transparent;
+        public SKColor PatternBackgroundColor = SKColors.Transparent;
+        public bool ShowValueDataLabels;
+        public string DataLabelPosition;
+        public double? DataLabelSizePt;
+        public string ValueFormatCode;
+        public SKColor DataLabelColor = new SKColor(0x40, 0x40, 0x40);
+        public bool HasErrorBars;
+        public string ErrorBarType;
+        public string ErrorValueType;
+        public bool ErrorBarsHaveEndCaps = true;
+        public SKColor ErrorBarColor = new SKColor(0x59, 0x59, 0x59);
+        public double ErrorBarWidthPt = 0.75d;
     }
 
     /// <summary>
@@ -42,20 +63,53 @@ namespace Aspose.Cells_FOSS.Rendering
     {
         public ChartKind Kind = ChartKind.Unsupported;
         public CultureInfo Culture;
+        public double? TextSizePt;
         public string Title;                 // null = no title band
         public FontValue TitleFont = new FontValue { Name = "Calibri", Size = 14d, Bold = true };
         public SKColor TitleColor = new SKColor(0x59, 0x59, 0x59);
+        public SKColor? TitleTextOutlineColor;
+        public bool TitleAllCaps;
         public bool HasTitleBorder;
         public SKColor TitleBorderColor = SKColors.Transparent;
         public double TitleBorderWidthPt = 0.75d;
         public SKColor AxisLabelColor = new SKColor(0x59, 0x59, 0x59);
+        public SKColor? AxisTextOutlineColor;
         public SKColor LegendTextColor = new SKColor(0x59, 0x59, 0x59);
+        public SKColor? LegendTextOutlineColor;
         public SKColor SeriesAxisLabelColor = new SKColor(0x59, 0x59, 0x59);
+        public string CategoryAxisTitle;
+        public string ValueAxisTitle;
         public bool HasChartAreaFill;
         public SKColor ChartAreaFillColor = SKColors.White;
+        public string ChartAreaPatternPreset;
+        public SKColor ChartAreaPatternForegroundColor = SKColors.Transparent;
+        public SKColor ChartAreaPatternBackgroundColor = SKColors.White;
+        public bool HasChartAreaBorder;
+        public SKColor ChartAreaBorderColor = new SKColor(0xD9, 0xD9, 0xD9);
+        public double ChartAreaBorderWidthPt = 1d;
+        public bool HasChartAreaGlow;
+        public SKColor ChartAreaGlowColor;
+        public double ChartAreaGlowRadiusPt;
+        public double ChartAreaSoftEdgeRadiusPt;
+        public bool HasChartAreaGradient;
+        public List<SKColor> ChartAreaGradientColors = new List<SKColor>();
+        public List<float> ChartAreaGradientPositions = new List<float>();
+        public double ChartAreaGradientAngleDeg;
         public string LegendPosition;        // "b","t","l","r","tr", or null
+        public bool HasManualLegend;
+        public double LegendX;
+        public double LegendY;
+        public double LegendW;
+        public double LegendH;
         public bool HasValueGridlines;
+        public SKColor ValueGridlineColor = new SKColor(0xD9, 0xD9, 0xD9);
+        public double ValueGridlineWidthPt = 1d;
         public bool HasMinorValueGridlines;
+        public bool HasValueAxisLine;
+        public bool ValueAxisOnRight;
+        public SKColor ValueAxisLineColor = new SKColor(0x59, 0x59, 0x59);
+        public double ValueAxisLineWidthPt = 0.75d;
+        public string ValueAxisMajorTickMark;
         public string ValueFormatCode;
         public bool CrossBetween = true;  // category points sit at band centers (Excel default)
         public bool IsStacked;
@@ -64,6 +118,18 @@ namespace Aspose.Cells_FOSS.Rendering
         public double? AxisMax;
         public double? MajorUnit;
         public double? MinorUnit;
+        public double? ScatterXMin;
+        public double? ScatterXMax;
+        public double? ScatterXMajorUnit;
+        public string ScatterXFormatCode;
+        public bool ScatterVaryColors;
+        public bool IsBubble;
+        public double BubbleScalePercent = 100d;
+        public bool ShowNegativeBubbles;
+        public bool ScatterValueAxisDeleted;
+        public bool ScatterCategoryAxisDeleted;
+        public bool ScatterTitleOverlay;
+        public bool RoundedCorners;
         public SKColor MinorValueGridlineColor = new SKColor(0xEDEDED);
         public double MinorValueGridlineWidthPt = 1d;
         public bool HasCategoryGridlines;
@@ -72,10 +138,23 @@ namespace Aspose.Cells_FOSS.Rendering
         public bool HasPlotAreaBorder;
         public SKColor PlotAreaBorderColor = SKColors.Transparent;
         public double PlotAreaBorderWidthPt = 1d;
+        public bool HasDataTable;
+        public bool DataTableShowHorizontalBorders;
+        public bool DataTableShowVerticalBorders;
+        public bool DataTableShowOutline;
+        public bool DataTableShowKeys;
+        public SKColor DataTableLineColor = new SKColor(0xD9, 0xD9, 0xD9);
+        public double DataTableLineWidthPt = 0.75d;
+        public SKColor DataTableTextColor = new SKColor(0x59, 0x59, 0x59);
         public List<ChartSeries> Series = new List<ChartSeries>();
         public List<string> Categories = new List<string>();
         public List<double?> CategoryValues = new List<double?>();
         public List<SKColor> PiePointColors = new List<SKColor>();
+        public List<SKColor> PiePointLineColors = new List<SKColor>();
+        public List<double> PiePointLineWidthsPt = new List<double>();
+        public bool IsDoughnut;
+        public double DoughnutHoleSizePercent = 50d;
+        public double DoughnutFirstSliceAngleDeg;
         public bool IsOfPie;
         public string OfPieType;
         public string OfPieSplitType;
@@ -89,15 +168,38 @@ namespace Aspose.Cells_FOSS.Rendering
         public string CategoryFormatCode;
         public string CategoryBaseTimeUnit;
         public double CategoryAxisTextRotationDeg;
+        public string CategoryAxisMajorTickMark;
+        public bool HasCategoryAxisLine = true;
+        public SKColor CategoryAxisLineColor = new SKColor(0xD9, 0xD9, 0xD9);
+        public double CategoryAxisLineWidthPt = 1d;
+        public bool CategoryAxisAutomaticTextRotation;
         public bool CategoryAxisMinMax = true;
         public string RadarStyle = "standard";
         public double GapWidthPercent = 150d;
         public double OverlapPercent;
+        public string BarShape = "box";
         public bool IsLine3D;
-        public double RotationXDeg;
-        public double RotationYDeg;
-        public double PerspectiveDeg;
+        public bool IsArea3D;
+        public bool IsBar3D;
+        public bool IsPie3D;
+        public double ValueDisplayUnitDivisor = 1d;
+        public string ValueDisplayUnitLabel;
+        public bool HasManualValueDisplayUnitLabel;
+        public double ValueDisplayUnitLabelX;
+        public double ValueDisplayUnitLabelY;
+        public double RotationXDeg = 15d;
+        public double RotationYDeg = 20d;
+        public double PerspectiveDeg = 30d;
+        public double DepthPercent = 100d;
+        public double GapDepthPercent = 150d;
+        public bool RightAngleAxes = true;
         public bool HasVisibleSeriesAxis;
+        public byte[] SideWallImageData;
+        public byte[] BackWallImageData;
+
+        public bool HasManualTitle;
+        public double TitleX;
+        public double TitleY;
 
         // Manual inner-plot layout as fractions of the chart area (Excel c:manualLayout), if present.
         public bool HasManualPlot;
@@ -135,33 +237,84 @@ namespace Aspose.Cells_FOSS.Rendering
             }
 
             var result = new ParsedChart { Kind = kind };
+            result.IsBubble = typeEl.Name == C + "bubbleChart";
+            if (result.IsBubble)
+            {
+                double bubbleScale;
+                if (TryDouble(AttrOf(typeEl.Element(C + "bubbleScale"), "val"), out bubbleScale)
+                    && bubbleScale > 0d)
+                {
+                    result.BubbleScalePercent = bubbleScale;
+                }
+                result.ShowNegativeBubbles = string.Equals(
+                    AttrOf(typeEl.Element(C + "showNegBubbles"), "val"), "1", StringComparison.Ordinal);
+            }
+            result.RoundedCorners = string.Equals(AttrOf(doc.Root.Element(C + "roundedCorners"), "val"), "1", StringComparison.Ordinal);
+            if (kind == ChartKind.Scatter)
+            {
+                result.ScatterVaryColors = string.Equals(AttrOf(typeEl.Element(C + "varyColors"), "val"), "1", StringComparison.Ordinal);
+            }
+            var scatterStyle = AttrOf(typeEl.Element(C + "scatterStyle"), "val");
+            var smoothScatterStyle = string.Equals(scatterStyle, "smooth", StringComparison.Ordinal)
+                || string.Equals(scatterStyle, "smoothMarker", StringComparison.Ordinal);
             result.Culture = ResolveChartCulture(doc.Root, culture);
+            ChartExplicitFormatting.ApplyTextDefaults(doc.Root, colors, result);
             result.Title = ParseTitle(chart, colors, result, chartModel, workbook);
             ParseChartAreaStyle(doc.Root, colors, result);
             ParseLegend(chart, colors, result, chartModel);
             ParseManualPlot(plotArea, result);
-            ParseThreeDimensionalSettings(chart, typeEl, result);
+            ParseThreeDimensionalSettings(chart, typeEl, result, chartModel);
+            ParseDoughnutSettings(typeEl, result);
             ParseOfPieSettings(typeEl, colors, result);
             ParseGrouping(typeEl, result);
             ParseRadarSettings(typeEl, result);
             ParseBarSeriesLayout(typeEl, result);
-            ParseValueAxis(plotArea, colors, result, chartModel);
-            ParseCategoryAxis(plotArea, colors, result, chartModel);
+            ParseValueAxis(plotArea, colors, result, chartModel, workbook);
+            ParseCategoryAxis(plotArea, colors, result, chartModel, workbook);
             ParseSeriesAxis(plotArea, colors, result, chartModel);
             ParsePlotAreaStyle(plotArea, colors, result);
+            ParseDataTable(plotArea, colors, result, chartModel);
+            ChartLegacyGridStyle.Apply(doc.Root, plotArea, chartModel, result);
 
+            var chartDataLabels = typeEl.Element(C + "dLbls");
             var seriesIndex = 0;
             foreach (var ser in typeEl.Elements(C + "ser"))
             {
+                var seriesDataLabels = ser.Element(C + "dLbls") ?? chartDataLabels;
+                var valueHolder = ser.Element(C + "val") ?? ser.Element(C + "yVal");
                 var series = new ChartSeries
                 {
                     Name = ParseSeriesName(ser.Element(C + "tx"), workbook),
                     Color = ParseSeriesColor(ser, colors, seriesIndex),
                     LineWidthPt = ParseLineWidthPt(ser),
-                    Values = ParseNumericData(ser.Element(C + "val"), workbook, dateSystem),
+                    SmoothLine = kind == ChartKind.Scatter && (ser.Element(C + "smooth") == null
+                        ? smoothScatterStyle
+                        : string.Equals(AttrOf(ser.Element(C + "smooth"), "val"), "1", StringComparison.Ordinal)),
+                    Values = ParseNumericData(valueHolder, workbook, dateSystem),
+                    XValues = ParseNumericData(ser.Element(C + "xVal"), workbook, dateSystem),
+                    BubbleSizes = ParseNumericData(ser.Element(C + "bubbleSize"), workbook, dateSystem),
+                    Bubble3D = string.Equals(AttrOf(ser.Element(C + "bubble3D"), "val"),
+                        "1", StringComparison.Ordinal),
+                    ShowValueDataLabels = string.Equals(
+                        AttrOf(seriesDataLabels != null ? seriesDataLabels.Element(C + "showVal") : null, "val"),
+                        "1",
+                        StringComparison.Ordinal),
+                    DataLabelPosition = AttrOf(seriesDataLabels != null ? seriesDataLabels.Element(C + "dLblPos") : null, "val"),
+                    ValueFormatCode = TextOf(FirstDescendant(valueHolder, C + "formatCode")),
                 };
+                ChartExplicitFormatting.ApplySeries(ser, typeEl, colors, series, seriesIndex);
                 ParseSeriesLineStyle(ser, colors, series);
+                if ((kind == ChartKind.Column || kind == ChartKind.Bar) && !result.IsBar3D)
+                    ChartBarBorder.Apply(ser, series);
+                ParseSeriesPatternFill(ser, colors, series);
                 ParseMarker(ser, colors, series);
+                ParseErrorBars(ser, colors, series);
+                SKColor dataLabelColor;
+                if (TryResolveTextColor(seriesDataLabels != null ? seriesDataLabels.Element(C + "txPr") : null,
+                    colors, chartModel, out dataLabelColor))
+                {
+                    series.DataLabelColor = dataLabelColor;
+                }
                 ApplyRadarSeriesDefaults(result, series);
                 result.Series.Add(series);
                 seriesIndex++;
@@ -174,6 +327,7 @@ namespace Aspose.Cells_FOSS.Rendering
             {
                 result.Categories = ParseCategories(firstSer.Element(C + "cat"), workbook, dateSystem, result.Culture);
                 result.CategoryValues = ParseCategoryValues(firstSer.Element(C + "cat"), workbook, dateSystem);
+                PieChartPointMetadata.Apply(firstSer, colors, result);
                 result.PiePointColors = ParsePiePointColors(firstSer, colors, result.Categories.Count);
                 if (string.IsNullOrEmpty(result.ValueFormatCode))
                 {
@@ -184,6 +338,74 @@ namespace Aspose.Cells_FOSS.Rendering
             return result;
         }
 
+        private static void ParseDataTable(XElement plotArea, RenderColor colors, ParsedChart result, ChartModel chartModel)
+        {
+            var dataTable = plotArea != null ? plotArea.Element(C + "dTable") : null;
+            if (dataTable == null || result == null)
+            {
+                return;
+            }
+
+            result.HasDataTable = true;
+            result.DataTableShowHorizontalBorders = IsEnabled(dataTable.Element(C + "showHorzBorder"));
+            result.DataTableShowVerticalBorders = IsEnabled(dataTable.Element(C + "showVertBorder"));
+            result.DataTableShowOutline = IsEnabled(dataTable.Element(C + "showOutline"));
+            result.DataTableShowKeys = IsEnabled(dataTable.Element(C + "showKeys"));
+
+            var line = dataTable.Element(C + "spPr") != null
+                ? dataTable.Element(C + "spPr").Element(A + "ln")
+                : null;
+            bool hasVisibleLine;
+            SKColor lineColor;
+            double lineWidth;
+            ParseLineStyle(line, colors, out hasVisibleLine, out lineColor, out lineWidth);
+            if (hasVisibleLine)
+            {
+                result.DataTableLineColor = lineColor;
+                result.DataTableLineWidthPt = lineWidth;
+            }
+
+            SKColor textColor;
+            if (TryResolveTextColor(dataTable.Element(C + "txPr"), colors, chartModel, out textColor))
+            {
+                result.DataTableTextColor = textColor;
+            }
+        }
+
+        private static void ParseErrorBars(XElement seriesElement, RenderColor colors, ChartSeries series)
+        {
+            var errorBars = seriesElement != null ? seriesElement.Element(C + "errBars") : null;
+            if (errorBars == null || series == null)
+            {
+                return;
+            }
+
+            series.HasErrorBars = true;
+            series.ErrorBarType = AttrOf(errorBars.Element(C + "errBarType"), "val");
+            series.ErrorValueType = AttrOf(errorBars.Element(C + "errValType"), "val");
+            series.ErrorBarsHaveEndCaps = !string.Equals(
+                AttrOf(errorBars.Element(C + "noEndCap"), "val"), "1", StringComparison.Ordinal);
+
+            var line = errorBars.Element(C + "spPr") != null
+                ? errorBars.Element(C + "spPr").Element(A + "ln")
+                : null;
+            bool hasVisibleLine;
+            SKColor lineColor;
+            double lineWidth;
+            ParseLineStyle(line, colors, out hasVisibleLine, out lineColor, out lineWidth);
+            if (hasVisibleLine)
+            {
+                series.ErrorBarColor = lineColor;
+                series.ErrorBarWidthPt = lineWidth;
+            }
+        }
+
+        private static bool IsEnabled(XElement element)
+        {
+            return element != null
+                && !string.Equals(AttrOf(element, "val"), "0", StringComparison.Ordinal);
+        }
+
         private static void ApplyFallbackTitle(ParsedChart chart)
         {
             if (chart == null)
@@ -191,7 +413,8 @@ namespace Aspose.Cells_FOSS.Rendering
                 return;
             }
 
-            if (chart.Kind == ChartKind.Pie
+            if ((chart.Kind == ChartKind.Pie && !chart.IsDoughnut
+                    || chart.Kind == ChartKind.Scatter && chart.Series != null && chart.Series.Count == 1)
                 && chart.Series != null
                 && chart.Series.Count > 0
                 && (string.IsNullOrEmpty(chart.Title) || string.Equals(chart.Title, "Chart Title", StringComparison.Ordinal)))
@@ -222,6 +445,12 @@ namespace Aspose.Cells_FOSS.Rendering
         {
             var line = plotArea.Element(C + "lineChart");
             if (line != null) { kind = ChartKind.Line; return line; }
+
+            var scatter = plotArea.Element(C + "scatterChart");
+            if (scatter != null) { kind = ChartKind.Scatter; return scatter; }
+
+            var bubble = plotArea.Element(C + "bubbleChart");
+            if (bubble != null) { kind = ChartKind.Scatter; return bubble; }
 
             var line3d = plotArea.Element(C + "line3DChart");
             if (line3d != null) { kind = ChartKind.Line; return line3d; }
@@ -257,11 +486,33 @@ namespace Aspose.Cells_FOSS.Rendering
             var pie3d = plotArea.Element(C + "pie3DChart");
             if (pie3d != null) { kind = ChartKind.Pie; return pie3d; }
 
+            var doughnut = plotArea.Element(C + "doughnutChart");
+            if (doughnut != null) { kind = ChartKind.Pie; return doughnut; }
+
             var ofPie = plotArea.Element(C + "ofPieChart");
             if (ofPie != null) { kind = ChartKind.Pie; return ofPie; }
 
             kind = ChartKind.Unsupported;
             return null;
+        }
+
+        private static void ParseDoughnutSettings(XElement typeEl, ParsedChart result)
+        {
+            if (typeEl == null || typeEl.Name != C + "doughnutChart")
+            {
+                return;
+            }
+
+            result.IsDoughnut = true;
+            double value;
+            if (TryDouble(AttrOf(typeEl.Element(C + "holeSize"), "val"), out value))
+            {
+                result.DoughnutHoleSizePercent = Math.Max(10d, Math.Min(90d, value));
+            }
+            if (TryDouble(AttrOf(typeEl.Element(C + "firstSliceAng"), "val"), out value))
+            {
+                result.DoughnutFirstSliceAngleDeg = value;
+            }
         }
 
         private static string ParseTitle(XElement chart, RenderColor colors, ParsedChart result, ChartModel chartModel, WorkbookModel workbook)
@@ -277,6 +528,9 @@ namespace Aspose.Cells_FOSS.Rendering
                 return null;
             }
 
+            ParseManualTitleLayout(titleEl, result);
+            result.ScatterTitleOverlay = result.Kind == ChartKind.Scatter
+                && string.Equals(AttrOf(titleEl.Element(C + "overlay"), "val"), "1", StringComparison.Ordinal);
             ParseTitleStyle(titleEl, colors, result, chartModel);
             var text = ParseTitleText(titleEl, workbook);
             if (!string.IsNullOrEmpty(text))
@@ -285,6 +539,27 @@ namespace Aspose.Cells_FOSS.Rendering
             }
 
             return "Chart Title";
+        }
+
+        private static void ParseManualTitleLayout(XElement titleEl, ParsedChart result)
+        {
+            var manual = titleEl.Element(C + "layout") != null
+                ? titleEl.Element(C + "layout").Element(C + "manualLayout")
+                : null;
+            if (manual == null)
+            {
+                return;
+            }
+
+            double x;
+            double y;
+            if (TryDouble(AttrOf(manual.Element(C + "x"), "val"), out x)
+                && TryDouble(AttrOf(manual.Element(C + "y"), "val"), out y))
+            {
+                result.HasManualTitle = true;
+                result.TitleX = x;
+                result.TitleY = y;
+            }
         }
 
         private static void ParseTitleStyle(XElement titleEl, RenderColor colors, ParsedChart result, ChartModel chartModel)
@@ -296,14 +571,23 @@ namespace Aspose.Cells_FOSS.Rendering
 
             var titleTextProperties = ResolveTextProperties(titleEl);
 
+            var defaultRunProperties = titleTextProperties != null
+                ? FirstDescendant(titleTextProperties, A + "defRPr")
+                : null;
+            result.TitleAllCaps = string.Equals(AttrOf(defaultRunProperties, "cap"), "all", StringComparison.Ordinal);
+
             SKColor titleColor;
             if (TryResolveTextColor(titleTextProperties, colors, chartModel, out titleColor))
             {
                 result.TitleColor = titleColor;
             }
+            if (TryResolveTextOutlineColor(titleTextProperties, colors, out titleColor))
+            {
+                result.TitleTextOutlineColor = titleColor;
+            }
 
             FontValue titleFont;
-            if (TryResolveTextFont(titleTextProperties, out titleFont))
+            if (TryResolveTextFont(titleTextProperties, colors, out titleFont))
             {
                 result.TitleFont = titleFont;
             }
@@ -323,11 +607,33 @@ namespace Aspose.Cells_FOSS.Rendering
             if (legend != null)
             {
                 result.LegendPosition = AttrOf(legend.Element(C + "legendPos"), "val") ?? "r";
+                var layout = legend.Element(C + "layout");
+                var manual = layout != null ? layout.Element(C + "manualLayout") : null;
+                double x;
+                double y;
+                double w;
+                double h;
+                if (manual != null
+                    && TryDouble(AttrOf(manual.Element(C + "x"), "val"), out x)
+                    && TryDouble(AttrOf(manual.Element(C + "y"), "val"), out y)
+                    && TryDouble(AttrOf(manual.Element(C + "w"), "val"), out w)
+                    && TryDouble(AttrOf(manual.Element(C + "h"), "val"), out h))
+                {
+                    result.HasManualLegend = true;
+                    result.LegendX = x;
+                    result.LegendY = y;
+                    result.LegendW = w;
+                    result.LegendH = h;
+                }
 
                 SKColor legendTextColor;
                 if (TryResolveTextColor(legend.Element(C + "txPr"), colors, chartModel, out legendTextColor))
                 {
                     result.LegendTextColor = legendTextColor;
+                }
+                if (TryResolveTextOutlineColor(legend.Element(C + "txPr"), colors, out legendTextColor))
+                {
+                    result.LegendTextOutlineColor = legendTextColor;
                 }
             }
         }
@@ -375,6 +681,12 @@ namespace Aspose.Cells_FOSS.Rendering
                 }
 
                 result.OverlapPercent = overlap;
+            }
+
+            var shape = AttrOf(typeEl.Element(C + "shape"), "val");
+            if (!string.IsNullOrEmpty(shape))
+            {
+                result.BarShape = shape;
             }
         }
 
@@ -448,19 +760,28 @@ namespace Aspose.Cells_FOSS.Rendering
             }
         }
 
-        private static void ParseThreeDimensionalSettings(XElement chart, XElement typeEl, ParsedChart result)
+        private static void ParseThreeDimensionalSettings(XElement chart, XElement typeEl, ParsedChart result, ChartModel chartModel)
         {
             if (chart == null || typeEl == null || result == null)
             {
                 return;
             }
 
-            if (typeEl.Name != C + "line3DChart")
+            var isLine3D = typeEl.Name == C + "line3DChart";
+            var isArea3D = typeEl.Name == C + "area3DChart";
+            var isBar3D = typeEl.Name == C + "bar3DChart";
+            var isPie3D = typeEl.Name == C + "pie3DChart";
+            if (!isLine3D && !isArea3D && !isBar3D && !isPie3D)
             {
                 return;
             }
 
-            result.IsLine3D = true;
+            result.IsLine3D = isLine3D;
+            result.IsArea3D = isArea3D;
+            result.IsBar3D = isBar3D;
+            result.IsPie3D = isPie3D;
+            result.SideWallImageData = ResolveWallImageData(chart.Element(C + "sideWall"), chartModel);
+            result.BackWallImageData = ResolveWallImageData(chart.Element(C + "backWall"), chartModel);
             var view3D = chart.Element(C + "view3D");
             double value;
             if (TryDouble(AttrOf(view3D != null ? view3D.Element(C + "rotX") : null, "val"), out value))
@@ -477,6 +798,55 @@ namespace Aspose.Cells_FOSS.Rendering
             {
                 result.PerspectiveDeg = value;
             }
+
+            if (TryDouble(AttrOf(view3D != null ? view3D.Element(C + "depthPercent") : null, "val"), out value) && value > 0d)
+            {
+                result.DepthPercent = value;
+            }
+
+            var rightAngleAxes = AttrOf(view3D != null ? view3D.Element(C + "rAngAx") : null, "val");
+            if (!string.IsNullOrEmpty(rightAngleAxes))
+            {
+                result.RightAngleAxes = !string.Equals(rightAngleAxes, "0", StringComparison.Ordinal)
+                    && !string.Equals(rightAngleAxes, "false", StringComparison.OrdinalIgnoreCase);
+            }
+
+            if (TryDouble(AttrOf(typeEl.Element(C + "gapDepth"), "val"), out value) && value >= 0d)
+            {
+                result.GapDepthPercent = value;
+            }
+        }
+
+        private static byte[] ResolveWallImageData(XElement wall, ChartModel chartModel)
+        {
+            if (wall == null || chartModel == null)
+            {
+                return null;
+            }
+
+            var shapeProperties = wall.Element(C + "spPr");
+            var blipFill = shapeProperties != null ? shapeProperties.Element(A + "blipFill") : null;
+            var blip = blipFill != null ? blipFill.Element(A + "blip") : null;
+            var relationshipId = blip != null
+                ? (string)blip.Attribute(XName.Get("embed", "http://schemas.openxmlformats.org/officeDocument/2006/relationships"))
+                : null;
+            if (string.IsNullOrEmpty(relationshipId) || blipFill.Element(A + "tile") == null)
+            {
+                return null;
+            }
+
+            for (var i = 0; i < chartModel.CompanionFiles.Count; i++)
+            {
+                var companion = chartModel.CompanionFiles[i];
+                if (string.Equals(companion.RelationshipId, relationshipId, StringComparison.Ordinal)
+                    && companion.BinaryContent != null
+                    && companion.BinaryContent.Length > 0)
+                {
+                    return companion.BinaryContent;
+                }
+            }
+
+            return null;
         }
 
         private static void ParseManualPlot(XElement plotArea, ParsedChart result)
@@ -500,9 +870,11 @@ namespace Aspose.Cells_FOSS.Rendering
             }
         }
 
-        private static void ParseValueAxis(XElement plotArea, RenderColor colors, ParsedChart result, ChartModel chartModel)
+        private static void ParseValueAxis(XElement plotArea, RenderColor colors, ParsedChart result, ChartModel chartModel, WorkbookModel workbook)
         {
-            var valAx = FirstElement(plotArea, C + "valAx");
+            var valAx = result.Kind == ChartKind.Scatter
+                ? FindValueAxisAt(plotArea, "l", "r")
+                : FirstElement(plotArea, C + "valAx");
             if (valAx == null)
             {
                 return;
@@ -510,10 +882,45 @@ namespace Aspose.Cells_FOSS.Rendering
 
             result.HasValueGridlines = valAx.Element(C + "majorGridlines") != null;
             result.HasMinorValueGridlines = valAx.Element(C + "minorGridlines") != null;
+            result.ValueAxisMajorTickMark = AttrOf(valAx.Element(C + "majorTickMark"), "val");
+            result.ValueAxisOnRight = string.Equals(AttrOf(valAx.Element(C + "axPos"), "val"), "r", StringComparison.Ordinal);
             result.ValueFormatCode = AttrOf(valAx.Element(C + "numFmt"), "formatCode");
+            result.ValueAxisTitle = ParseAxisTitle(valAx, workbook);
+            result.ScatterValueAxisDeleted = result.Kind == ChartKind.Scatter
+                && string.Equals(AttrOf(valAx.Element(C + "delete"), "val"), "1", StringComparison.Ordinal);
+            var displayUnits = valAx.Element(C + "dispUnits");
+            var displayUnit = AttrOf(displayUnits != null
+                ? displayUnits.Element(C + "builtInUnit")
+                : null, "val");
+            if (string.Equals(displayUnit, "hundreds", StringComparison.Ordinal))
+            {
+                result.ValueDisplayUnitDivisor = 100d;
+                result.ValueDisplayUnitLabel = "Hundreds";
+            }
+            var displayUnitLabel = displayUnits != null ? displayUnits.Element(C + "dispUnitsLbl") : null;
+            var displayUnitLayout = displayUnitLabel != null ? displayUnitLabel.Element(C + "layout") : null;
+            var displayUnitManual = displayUnitLayout != null ? displayUnitLayout.Element(C + "manualLayout") : null;
+            double displayUnitX;
+            double displayUnitY;
+            if (displayUnitManual != null
+                && TryDouble(AttrOf(displayUnitManual.Element(C + "x"), "val"), out displayUnitX)
+                && TryDouble(AttrOf(displayUnitManual.Element(C + "y"), "val"), out displayUnitY))
+            {
+                result.HasManualValueDisplayUnitLabel = true;
+                result.ValueDisplayUnitLabelX = displayUnitX;
+                result.ValueDisplayUnitLabelY = displayUnitY;
+            }
             result.CrossBetween = !string.Equals(AttrOf(valAx.Element(C + "crossBetween"), "val"), "midCat", StringComparison.Ordinal);
 
-            ParseValueGridlineStyle(valAx.Element(C + "minorGridlines"), colors, result);
+            var shapeProperties = valAx.Element(C + "spPr");
+            var axisLine = shapeProperties != null ? shapeProperties.Element(A + "ln") : null;
+            ParseLineStyle(axisLine, colors, out result.HasValueAxisLine, out result.ValueAxisLineColor, out result.ValueAxisLineWidthPt);
+            if (axisLine != null && axisLine.Attribute("w") == null)
+            {
+                result.ValueAxisLineWidthPt = 0.75d;
+            }
+            ParseValueGridlineStyle(valAx.Element(C + "majorGridlines"), colors, result, false);
+            ParseValueGridlineStyle(valAx.Element(C + "minorGridlines"), colors, result, true);
             var scaling = valAx.Element(C + "scaling");
             double v;
             if (scaling != null)
@@ -529,13 +936,20 @@ namespace Aspose.Cells_FOSS.Rendering
             {
                 result.AxisLabelColor = axisLabelColor;
             }
+            if (TryResolveTextOutlineColor(valAx.Element(C + "txPr"), colors, out axisLabelColor))
+            {
+                result.AxisTextOutlineColor = axisLabelColor;
+            }
         }
 
-        private static void ParseCategoryAxis(XElement plotArea, RenderColor colors, ParsedChart result, ChartModel chartModel)
+        private static void ParseCategoryAxis(XElement plotArea, RenderColor colors, ParsedChart result, ChartModel chartModel, WorkbookModel workbook)
         {
             var dateAxis = FirstElement(plotArea, C + "dateAx");
             var categoryAxis = FirstElement(plotArea, C + "catAx");
-            var axisElement = dateAxis ?? categoryAxis;
+            var scatterAxis = result.Kind == ChartKind.Scatter
+                ? FindValueAxisAt(plotArea, "b", "t")
+                : null;
+            var axisElement = dateAxis ?? categoryAxis ?? scatterAxis;
             if (axisElement == null)
             {
                 return;
@@ -543,7 +957,30 @@ namespace Aspose.Cells_FOSS.Rendering
 
             result.HasDateCategoryAxis = dateAxis != null;
             result.CategoryFormatCode = AttrOf(axisElement.Element(C + "numFmt"), "formatCode");
+            if (scatterAxis != null)
+            {
+                result.ScatterXFormatCode = result.CategoryFormatCode;
+                var scatterScaling = scatterAxis.Element(C + "scaling");
+                double scatterValue;
+                if (scatterScaling != null)
+                {
+                    if (TryDouble(AttrOf(scatterScaling.Element(C + "min"), "val"), out scatterValue)) result.ScatterXMin = scatterValue;
+                    if (TryDouble(AttrOf(scatterScaling.Element(C + "max"), "val"), out scatterValue)) result.ScatterXMax = scatterValue;
+                }
+                if (TryDouble(AttrOf(scatterAxis.Element(C + "majorUnit"), "val"), out scatterValue)) result.ScatterXMajorUnit = scatterValue;
+            }
+            result.CategoryAxisTitle = ParseAxisTitle(axisElement, workbook);
+            result.ScatterCategoryAxisDeleted = result.Kind == ChartKind.Scatter
+                && string.Equals(AttrOf(axisElement.Element(C + "delete"), "val"), "1", StringComparison.Ordinal);
             result.CategoryBaseTimeUnit = AttrOf(axisElement.Element(C + "baseTimeUnit"), "val");
+            result.CategoryAxisMajorTickMark = AttrOf(axisElement.Element(C + "majorTickMark"), "val");
+            var axisShape = axisElement.Element(C + "spPr");
+            var axisLine = axisShape != null ? axisShape.Element(A + "ln") : null;
+            if (axisLine != null)
+            {
+                ParseLineStyle(axisLine, colors, out result.HasCategoryAxisLine,
+                    out result.CategoryAxisLineColor, out result.CategoryAxisLineWidthPt);
+            }
             var scaling = axisElement.Element(C + "scaling");
             result.CategoryAxisMinMax = !string.Equals(AttrOf(scaling != null ? scaling.Element(C + "orientation") : null, "val"), "maxMin", StringComparison.Ordinal);
             ParseGridlineStyle(axisElement.Element(C + "majorGridlines"), colors, result);
@@ -552,7 +989,9 @@ namespace Aspose.Cells_FOSS.Rendering
             double rotation;
             if (TryDouble(AttrOf(bodyPr, "rot"), out rotation))
             {
-                result.CategoryAxisTextRotationDeg = rotation / 1000000d;
+                // Excel's automatic orientation marker is not a literal -1000 degree angle.
+                result.CategoryAxisAutomaticTextRotation = rotation == -60000000d;
+                result.CategoryAxisTextRotationDeg = Math.Max(-90d, Math.Min(90d, rotation / 60000d));
             }
 
             SKColor axisLabelColor;
@@ -560,6 +999,30 @@ namespace Aspose.Cells_FOSS.Rendering
             {
                 result.AxisLabelColor = axisLabelColor;
             }
+            if (TryResolveTextOutlineColor(axisElement.Element(C + "txPr"), colors, out axisLabelColor))
+            {
+                result.AxisTextOutlineColor = axisLabelColor;
+            }
+        }
+
+        private static XElement FindValueAxisAt(XElement plotArea, string firstPosition, string secondPosition)
+        {
+            if (plotArea == null)
+            {
+                return null;
+            }
+
+            foreach (var axis in plotArea.Elements(C + "valAx"))
+            {
+                var position = AttrOf(axis.Element(C + "axPos"), "val");
+                if (string.Equals(position, firstPosition, StringComparison.Ordinal)
+                    || string.Equals(position, secondPosition, StringComparison.Ordinal))
+                {
+                    return axis;
+                }
+            }
+
+            return null;
         }
 
         private static void ParsePlotAreaStyle(XElement plotArea, RenderColor colors, ParsedChart result)
@@ -572,6 +1035,10 @@ namespace Aspose.Cells_FOSS.Rendering
             var shapeProperties = plotArea.Element(C + "spPr");
             var line = shapeProperties != null ? shapeProperties.Element(A + "ln") : null;
             ParseLineStyle(line, colors, out result.HasPlotAreaBorder, out result.PlotAreaBorderColor, out result.PlotAreaBorderWidthPt);
+            if (result.Kind == ChartKind.Scatter && line != null && AttrOf(line, "w") == null)
+            {
+                result.PlotAreaBorderWidthPt = 0.75d;
+            }
         }
 
         private static void ParseChartAreaStyle(XElement chartSpace, RenderColor colors, ParsedChart result)
@@ -582,6 +1049,85 @@ namespace Aspose.Cells_FOSS.Rendering
             }
 
             var shapeProperties = chartSpace.Element(C + "spPr");
+            var borderLine = shapeProperties != null ? shapeProperties.Element(A + "ln") : null;
+            ParseLineStyle(borderLine, colors, out result.HasChartAreaBorder,
+                out result.ChartAreaBorderColor, out result.ChartAreaBorderWidthPt);
+            var patternFill = shapeProperties != null ? shapeProperties.Element(A + "pattFill") : null;
+            if (patternFill != null)
+            {
+                result.ChartAreaPatternPreset = AttrOf(patternFill, "prst");
+                SKColor patternColor;
+                if (TryDrawingColor(FillChild(patternFill.Element(A + "fgClr")), colors, out patternColor))
+                {
+                    result.ChartAreaPatternForegroundColor = patternColor;
+                }
+                if (TryDrawingColor(FillChild(patternFill.Element(A + "bgClr")), colors, out patternColor))
+                {
+                    result.ChartAreaPatternBackgroundColor = patternColor;
+                }
+            }
+
+            var effectList = shapeProperties != null ? shapeProperties.Element(A + "effectLst") : null;
+            var glow = effectList != null ? effectList.Element(A + "glow") : null;
+            double glowRadius;
+            SKColor glowColor;
+            if (TryDouble(AttrOf(glow, "rad"), out glowRadius)
+                && glowRadius > 0d
+                && TryDrawingColor(FillChild(glow), colors, out glowColor))
+            {
+                result.HasChartAreaGlow = true;
+                result.ChartAreaGlowRadiusPt = glowRadius / 12700d;
+                result.ChartAreaGlowColor = glowColor;
+            }
+            var softEdge = effectList != null ? effectList.Element(A + "softEdge") : null;
+            double softEdgeRadius;
+            if (TryDouble(AttrOf(softEdge, "rad"), out softEdgeRadius) && softEdgeRadius > 0d)
+            {
+                result.ChartAreaSoftEdgeRadiusPt = softEdgeRadius / 12700d;
+            }
+            var gradientFill = shapeProperties != null ? shapeProperties.Element(A + "gradFill") : null;
+            if (gradientFill != null)
+            {
+                var stops = gradientFill.Element(A + "gsLst");
+                var parsedStops = new List<Tuple<float, SKColor>>();
+                if (stops != null)
+                {
+                    foreach (var stop in stops.Elements(A + "gs"))
+                    {
+                        double position;
+                        SKColor stopColor;
+                        if (TryDouble(AttrOf(stop, "pos"), out position)
+                            && TryDrawingColor(FillChild(stop), colors, out stopColor))
+                        {
+                            parsedStops.Add(Tuple.Create((float)(position / 100000d), stopColor));
+                        }
+                    }
+                }
+
+                parsedStops.Sort(delegate(Tuple<float, SKColor> left, Tuple<float, SKColor> right)
+                {
+                    return left.Item1.CompareTo(right.Item1);
+                });
+                for (var i = 0; i < parsedStops.Count; i++)
+                {
+                    result.ChartAreaGradientPositions.Add(parsedStops[i].Item1);
+                    result.ChartAreaGradientColors.Add(parsedStops[i].Item2);
+                }
+
+                double angle;
+                var linear = gradientFill.Element(A + "lin");
+                if (TryDouble(AttrOf(linear, "ang"), out angle))
+                {
+                    result.ChartAreaGradientAngleDeg = angle / 60000d;
+                }
+
+                result.HasChartAreaGradient = result.ChartAreaGradientColors.Count >= 2;
+                if (result.HasChartAreaGradient)
+                {
+                    return;
+                }
+            }
+
             var solidFill = shapeProperties != null ? shapeProperties.Element(A + "solidFill") : null;
             var fill = FillChild(solidFill);
             if (fill == null)
@@ -633,7 +1179,7 @@ namespace Aspose.Cells_FOSS.Rendering
             }
         }
 
-        private static void ParseValueGridlineStyle(XElement gridlines, RenderColor colors, ParsedChart result)
+        private static void ParseValueGridlineStyle(XElement gridlines, RenderColor colors, ParsedChart result, bool minor)
         {
             if (gridlines == null || result == null)
             {
@@ -645,15 +1191,27 @@ namespace Aspose.Cells_FOSS.Rendering
             double widthPt;
             bool hasVisibleLine;
             ParseLineStyle(line, colors, out hasVisibleLine, out color, out widthPt);
-            result.HasMinorValueGridlines = hasVisibleLine || line == null;
-            if (hasVisibleLine)
+            if (minor)
             {
-                result.MinorValueGridlineColor = color;
-                result.MinorValueGridlineWidthPt = widthPt;
+                result.HasMinorValueGridlines = hasVisibleLine || line == null;
+                if (hasVisibleLine)
+                {
+                    result.MinorValueGridlineColor = color;
+                    result.MinorValueGridlineWidthPt = widthPt;
+                }
+            }
+            else
+            {
+                result.HasValueGridlines = hasVisibleLine || line == null;
+                if (hasVisibleLine)
+                {
+                    result.ValueGridlineColor = color;
+                    result.ValueGridlineWidthPt = widthPt;
+                }
             }
         }
 
-        private static void ParseLineStyle(XElement line, RenderColor colors, out bool hasVisibleLine, out SKColor color, out double widthPt)
+        internal static void ParseLineStyle(XElement line, RenderColor colors, out bool hasVisibleLine, out SKColor color, out double widthPt)
         {
             hasVisibleLine = false;
             color = new SKColor(0xD9, 0xD9, 0xD9);
@@ -787,6 +1345,31 @@ namespace Aspose.Cells_FOSS.Rendering
             return DefaultSeriesColor(colors, index);
         }
 
+        private static void ParseSeriesPatternFill(XElement ser, RenderColor colors, ChartSeries series)
+        {
+            var shapeProperties = ser != null ? ser.Element(C + "spPr") : null;
+            var patternFill = shapeProperties != null ? shapeProperties.Element(A + "pattFill") : null;
+            if (patternFill == null || series == null)
+            {
+                return;
+            }
+
+            series.PatternPreset = AttrOf(patternFill, "prst");
+            SKColor parsedColor;
+            var foreground = FillChild(patternFill.Element(A + "fgClr"));
+            if (TryDrawingColor(foreground, colors, out parsedColor))
+            {
+                series.PatternForegroundColor = parsedColor;
+                series.Color = parsedColor;
+            }
+
+            var background = FillChild(patternFill.Element(A + "bgClr"));
+            if (TryDrawingColor(background, colors, out parsedColor))
+            {
+                series.PatternBackgroundColor = parsedColor;
+            }
+        }
+
         internal static XElement FillChild(XElement solidFill)
         {
             if (solidFill == null) return null;
@@ -840,6 +1423,12 @@ namespace Aspose.Cells_FOSS.Rendering
         private static bool TryResolveTextColor(XElement textProperties, RenderColor colors, ChartModel chartModel, out SKColor color)
         {
             color = SKColors.Transparent;
+            var runProperties = FirstDescendant(textProperties, A + "rPr");
+            if (ChartTextStyleResolver.TryResolveTextColor(runProperties, colors, chartModel, out color))
+            {
+                return true;
+            }
+
             var defaultRunProperties = ResolveDefaultRunProperties(textProperties);
             if (defaultRunProperties == null)
             {
@@ -856,7 +1445,20 @@ namespace Aspose.Cells_FOSS.Rendering
             return ChartTextStyleResolver.TryResolveTextColor(endParagraphRunProperties, colors, chartModel, out color);
         }
 
-        private static bool TryResolveTextFont(XElement textProperties, out FontValue font)
+        private static bool TryResolveTextOutlineColor(XElement textProperties, RenderColor colors, out SKColor color)
+        {
+            color = SKColors.Transparent;
+            var runProperties = FirstDescendant(textProperties, A + "rPr");
+            if (ChartTextStyleResolver.TryResolveTextOutlineColor(runProperties, colors, out color))
+            {
+                return true;
+            }
+
+            var defaultRunProperties = ResolveDefaultRunProperties(textProperties);
+            return ChartTextStyleResolver.TryResolveTextOutlineColor(defaultRunProperties, colors, out color);
+        }
+
+        private static bool TryResolveTextFont(XElement textProperties, RenderColor colors, out FontValue font)
         {
             font = null;
             var defaultRunProperties = ResolveDefaultRunProperties(textProperties);
@@ -865,7 +1467,8 @@ namespace Aspose.Cells_FOSS.Rendering
                 return false;
             }
 
-            return ChartTextStyleResolver.TryResolveFont(defaultRunProperties, out font);
+            return ChartTextStyleResolver.TryResolveFont(defaultRunProperties,
+                colors.MajorFontName, colors.MinorFontName, out font);
         }
 
         private static XElement ResolveTextProperties(XElement owner)
@@ -875,19 +1478,13 @@ namespace Aspose.Cells_FOSS.Rendering
                 return null;
             }
 
-            var textProperties = owner.Element(C + "txPr");
-            if (textProperties != null)
-            {
-                return textProperties;
-            }
-
             var richText = owner.Element(C + "tx");
             if (richText != null)
             {
                 richText = richText.Element(C + "rich");
             }
 
-            return richText;
+            return richText ?? owner.Element(C + "txPr");
         }
 
         private static XElement ResolveDefaultRunProperties(XElement textProperties)
@@ -1156,8 +1753,13 @@ namespace Aspose.Cells_FOSS.Rendering
             }
         }
 
-        private static bool IsDateFormat(string code)
+        internal static bool IsDateFormat(string code)
         {
+            if (string.IsNullOrEmpty(code))
+            {
+                return false;
+            }
+
             // Ignore color/condition blocks like [Red] (whose letters would otherwise look like date
             // tokens), backslash escapes, and quoted literals before checking for real date tokens.
             var cleaned = System.Text.RegularExpressions.Regex.Replace(code, @"\[[^\]]*\]", string.Empty);
@@ -1201,6 +1803,18 @@ namespace Aspose.Cells_FOSS.Rendering
             }
 
             return ConcatText(titleEl);
+        }
+
+        private static string ParseAxisTitle(XElement axisElement, WorkbookModel workbook)
+        {
+            var title = axisElement != null ? axisElement.Element(C + "title") : null;
+            if (title == null)
+            {
+                return null;
+            }
+
+            var text = ParseTitleText(title, workbook);
+            return !string.IsNullOrEmpty(text) ? text.Trim() : "Axis Title";
         }
 
         private static string ParseSeriesName(XElement textSource, WorkbookModel workbook)

@@ -78,6 +78,10 @@ namespace Aspose.Cells_FOSS.Core
         /// Gets or sets a value indicating whether show border.
         /// </summary>
         public bool ShowBorder { get; set; }
+        internal bool DataBarGradient { get; set; } = true;
+        internal double DataBarMinLength { get; set; } = 0.10d;
+        internal double DataBarMaxLength { get; set; } = 0.90d;
+        internal bool DataBarAutoMinimum { get; set; }
         /// <summary>
         /// Gets or sets the direction.
         /// </summary>

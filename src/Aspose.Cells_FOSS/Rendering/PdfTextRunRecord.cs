@@ -10,6 +10,7 @@ namespace Aspose.Cells_FOSS.Rendering
         public bool UsePositiveYFontMatrix;
         public bool UseTopDownCoordinates;
         public SKColor Color;
+        public bool Invisible;
         public float FontSizePt;
         public float XPt;
         public float BaselineYPt;

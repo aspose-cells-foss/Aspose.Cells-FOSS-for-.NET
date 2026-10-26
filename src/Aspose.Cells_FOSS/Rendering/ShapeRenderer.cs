@@ -61,9 +61,8 @@ namespace Aspose.Cells_FOSS.Rendering
                 || geometry.StartsWith("curvedConnector", StringComparison.Ordinal);
         }
 
-        // "med" arrowhead sizing: ~3x the line width in both length and total width. Excel clamps
-        // the scaling width to a minimum so arrowheads stay visible on thin lines (a 0.75pt line
-        // still gets a ~7pt head), so scale by max(lineWidth, MinArrowScale).
+        // Preserve the existing non-triangle arrow scale. Medium triangle heads use six
+        // line widths in length and total width, with a one-point minimum scaling width.
         private const float MinArrowScalePt = 1.1f;
 
         private void DrawConnector(SKCanvas canvas, PageLayout page, SKRect rect, ParsedShape shape, ShapeModel shapeModel, IList<ShapeModel> shapes)
@@ -80,11 +79,10 @@ namespace Aspose.Cells_FOSS.Rendering
             }
 
             var width = (float)Math.Max(0.5d, shape.LineWidthPt);
-            var points = TryBuildConnectedPolyline(page, shapeModel, shapes, shape);
-            if (points == null)
-            {
-                points = BuildConnectorPolyline(rect, shape);
-            }
+            var initialStart = TransformNormalizedPoint(rect, shape, 0f, 0f);
+            var initialEnd = TransformNormalizedPoint(rect, shape, 1f, 1f);
+            ResolveConnectorEndpoints(page, shapeModel, shapes, ref initialStart, ref initialEnd);
+            var points = ShapePolylineGeometry.Build(initialStart, initialEnd, shape);
 
             if (points == null || points.Length < 2)
             {
@@ -102,6 +100,8 @@ namespace Aspose.Cells_FOSS.Rendering
             }
 
             var arrowScale = Math.Max(width, MinArrowScalePt);
+
+            ShapeReflectionRenderer.Draw(canvas, points, shape);
 
             // A filled arrowhead (triangle/stealth/diamond) hides the line end, so stop the line at
             // its base with a flat cap; an open "arrow" (V) sits on top of the line, so the line runs
@@ -135,44 +135,6 @@ namespace Aspose.Cells_FOSS.Rendering
             DrawArrowhead(canvas, shape.TailEnd, end, tailDirection.X, tailDirection.Y, width, shape.LineColor);
         }
 
-        private SKPoint[] TryBuildConnectedPolyline(PageLayout page, ShapeModel shapeModel, IList<ShapeModel> shapes, ParsedShape shape)
-        {
-            if (page == null || shapeModel == null || shapes == null)
-            {
-                return null;
-            }
-
-            var startShape = FindShapeByDrawingObjectId(shapes, shapeModel.StartConnectionShapeId);
-            var endShape = FindShapeByDrawingObjectId(shapes, shapeModel.EndConnectionShapeId);
-            if (startShape == null || endShape == null)
-            {
-                return null;
-            }
-
-            var start = ConnectionPoint(page, startShape, shapeModel.StartConnectionSite);
-            var end = ConnectionPoint(page, endShape, shapeModel.EndConnectionSite);
-            if (shape.Geometry.StartsWith("bentConnector", StringComparison.Ordinal))
-            {
-                return new[]
-                {
-                    start,
-                    new SKPoint(start.X, end.Y),
-                    end,
-                };
-            }
-
-            if (shape.Geometry.StartsWith("straightConnector", StringComparison.Ordinal) || shape.Geometry == "line")
-            {
-                return new[]
-                {
-                    start,
-                    end,
-                };
-            }
-
-            return null;
-        }
-
         private void DrawCurvedConnector(SKCanvas canvas, PageLayout page, SKRect rect, ParsedShape shape, ShapeModel shapeModel, IList<ShapeModel> shapes)
         {
             var width = (float)Math.Max(0.5d, shape.LineWidthPt);
@@ -182,12 +144,9 @@ namespace Aspose.Cells_FOSS.Rendering
             var end = TransformNormalizedPoint(rect, shape, 1f, 1f);
             ResolveConnectorEndpoints(page, shapeModel, shapes, ref start, ref end);
 
-            var control1 = new SKPoint(
-                start.X + (end.X - start.X) * 0.28f,
-                start.Y - rect.Height * 0.12f);
-            var control2 = new SKPoint(
-                end.X - (end.X - start.X) * 0.18f,
-                end.Y + rect.Height * 0.36f);
+            var curve = ShapeCurveGeometry.Build(start, end, shape);
+            var control1 = curve[1];
+            var control2 = curve[curve.Length - 2];
 
             var endDirection = SegmentDirection(control2, end);
             var headDirection = SegmentDirection(control1, start);
@@ -212,7 +171,11 @@ namespace Aspose.Cells_FOSS.Rendering
             using (var paint = new SKPaint { Style = SKPaintStyle.Stroke, Color = shape.LineColor, StrokeWidth = width, IsAntialias = true, StrokeCap = SKStrokeCap.Butt, StrokeJoin = SKStrokeJoin.Round })
             {
                 path.MoveTo(visibleStart);
-                path.CubicTo(control1, control2, visibleEnd);
+                curve[curve.Length - 1] = visibleEnd;
+                for (var i = 1; i < curve.Length; i += 3)
+                {
+                    path.CubicTo(curve[i], curve[i + 1], curve[i + 2]);
+                }
                 canvas.DrawPath(path, paint);
             }
 
@@ -262,13 +225,12 @@ namespace Aspose.Cells_FOSS.Rendering
         private static SKPoint ConnectionPoint(PageLayout page, ShapeModel shape, int site)
         {
             var rect = ShapeRect(page, shape);
-            if (site == 2
-                && !string.IsNullOrEmpty(shape.RawElementXml)
-                && shape.RawElementXml.IndexOf("wordArtVertRtl", StringComparison.Ordinal) >= 0)
+            if (shape.GeometryType == "snip1Rect" || shape.GeometryType == "snip2SameRect")
             {
-                return new SKPoint(rect.Left, rect.MidY);
+                // These presets enumerate right, bottom, left, top, unlike rect.
+                var sites = new[] { 3, 2, 1, 0 };
+                if (site >= 0 && site < sites.Length) site = sites[site];
             }
-
             if (site == 0)
             {
                 return new SKPoint(rect.MidX, rect.Top);
@@ -333,7 +295,7 @@ namespace Aspose.Cells_FOSS.Rendering
 
             var px = -dirY;
             var py = dirX;
-            var arrowScale = Math.Max(lineWidth, MinArrowScalePt);
+            var arrowScale = type == "triangle" ? Math.Max(lineWidth, 1f) : Math.Max(lineWidth, MinArrowScalePt);
             var arrowLen = arrowScale * ArrowLengthMultiplier(type);
             var halfW = arrowScale * ArrowHalfWidthMultiplier(type);
             var baseX = tip.X - dirX * arrowLen;
@@ -365,7 +327,7 @@ namespace Aspose.Cells_FOSS.Rendering
         {
             if (type == "triangle")
             {
-                return 0.17f;
+                return 6f;
             }
 
             if (type == "stealth")
@@ -380,7 +342,7 @@ namespace Aspose.Cells_FOSS.Rendering
         {
             if (type == "triangle")
             {
-                return 0.92f;
+                return 3f;
             }
 
             if (type == "stealth")
@@ -407,12 +369,13 @@ namespace Aspose.Cells_FOSS.Rendering
         {
             using (var path = BuildGeometry(shape, rect))
             {
-                if (shape.HasFill)
+                if (shape.HasFill && !ShapePresetDetails.DrawFill(canvas, rect, shape))
                 {
                     using (var fill = new SKPaint { Style = SKPaintStyle.Fill, Color = shape.FillColor, IsAntialias = true })
                     {
                         canvas.DrawPath(path, fill);
                     }
+                    ShapePatternRenderer.Draw(canvas, rect, path, shape);
                 }
 
                 if (shape.HasLine)
@@ -424,11 +387,24 @@ namespace Aspose.Cells_FOSS.Rendering
                 }
             }
 
+            ShapePresetDetails.DrawLines(canvas, rect, shape);
             DrawText(canvas, page, rect, shape);
         }
 
-        private static SKPath BuildGeometry(ParsedShape shape, SKRect r)
+        private SKPath BuildGeometry(ParsedShape shape, SKRect r)
         {
+            var special = ShapeSpecialGeometry.Build(shape, r);
+            if (special != null)
+            {
+                return special;
+            }
+            if (shape.CustomGeometry != null)
+            {
+                _context.Workbook.Diagnostics.Add(new DiagnosticEntry { Code = "PDF_CUSTOM_GEOMETRY_UNSUPPORTED",
+                    Message = "Custom shape path contains unsupported or invalid coordinates or commands; rendered as a rectangle.",
+                    DataLossRisk = true });
+            }
+
             var geometry = shape.Geometry;
             var path = new SKPath();
             float l = r.Left, t = r.Top, right = r.Right, b = r.Bottom, w = r.Width, h = r.Height;
@@ -534,7 +510,7 @@ namespace Aspose.Cells_FOSS.Rendering
 
         private static void BlockArrowRight(SKPath path, SKRect r)
         {
-            float headW = r.Width * 0.10f, shaftH = r.Height * 0.58f, headInset = r.Height * 0.16f;
+            float headW = Math.Min(r.Width, r.Height) * 0.5f, shaftH = r.Height * 0.5f, headInset = 0f;
             float sy0 = r.MidY - shaftH / 2f, sy1 = r.MidY + shaftH / 2f, hx = r.Right - headW;
             path.MoveTo(r.Left, sy0);
             path.LineTo(hx, sy0); path.LineTo(hx, r.Top + headInset); path.LineTo(r.Right, r.MidY);
@@ -607,9 +583,15 @@ namespace Aspose.Cells_FOSS.Rendering
                 else if (shape.TextVAnchor == "b") baseline = rect.Bottom - (float)shape.TextInsetTopPt - metrics.Descent;
                 else baseline = rect.MidY - (metrics.Ascent + metrics.Descent) / 2f;
 
-                if (IsVerticalText(shape))
+                if (ShapeVerticalTextRenderer.IsVerticalText(shape))
                 {
-                    DrawVerticalText(canvas, rect, shape, fontContext, paint);
+                    ShapeVerticalTextRenderer.Draw(canvas, rect, shape, fontContext, paint);
+                    return;
+                }
+
+                if (shape.TextWrap && fontContext.Measure(shape.Text) > rect.Width - (float)shape.TextInsetLeftPt * 2f)
+                {
+                    ShapeWrappedTextRenderer.Draw(canvas, rect, shape, fontContext, paint);
                     return;
                 }
 
@@ -638,67 +620,6 @@ namespace Aspose.Cells_FOSS.Rendering
             return false;
         }
 
-        private static SKPoint[] BuildConnectorPolyline(SKRect rect, ParsedShape shape)
-        {
-            SKPoint[] points;
-            if (shape.Geometry.StartsWith("bentConnector", StringComparison.Ordinal))
-            {
-                if (Math.Abs(shape.RotationDeg - 270d) <= 0.01d && shape.FlipH && !shape.FlipV)
-                {
-                    points = new[]
-                    {
-                        new SKPoint(rect.Left, rect.Top),
-                        new SKPoint(rect.Left, rect.Bottom),
-                        new SKPoint(rect.Right, rect.Bottom),
-                    };
-                    return points;
-                }
-
-                points = new[]
-                {
-                    new SKPoint(rect.Left, rect.MidY),
-                    new SKPoint(rect.Right, rect.MidY),
-                    new SKPoint(rect.Right, rect.Bottom),
-                };
-            }
-            else if (shape.Geometry.StartsWith("curvedConnector", StringComparison.Ordinal))
-            {
-                points = new[]
-                {
-                    new SKPoint(rect.Left, rect.MidY),
-                    new SKPoint(rect.Left + rect.Width * 0.35f, rect.MidY),
-                    new SKPoint(rect.Left + rect.Width * 0.75f, rect.Bottom),
-                    new SKPoint(rect.Right, rect.Bottom),
-                };
-            }
-            else
-            {
-                points = new[]
-                {
-                    new SKPoint(rect.Left, rect.Top),
-                    new SKPoint(rect.Right, rect.Bottom),
-                };
-            }
-
-            return TransformConnectorPoints(points, rect, shape);
-        }
-
-        private static SKPoint[] TransformConnectorPoints(SKPoint[] points, SKRect rect, ParsedShape shape)
-        {
-            var result = new SKPoint[points.Length];
-            for (var i = 0; i < points.Length; i++)
-            {
-                var point = points[i];
-                result[i] = TransformNormalizedPoint(
-                    rect,
-                    shape,
-                    (point.X - rect.Left) / rect.Width,
-                    (point.Y - rect.Top) / rect.Height);
-            }
-
-            return result;
-        }
-
         private static SKPoint TransformNormalizedPoint(SKRect rect, ParsedShape shape, float x, float y)
         {
             if (shape.FlipH)
@@ -724,7 +645,7 @@ namespace Aspose.Cells_FOSS.Rendering
                 return new SKPoint(x, y);
             }
 
-            var radians = -rotationDeg * Math.PI / 180d;
+            var radians = rotationDeg * Math.PI / 180d;
             var dx = x - 0.5d;
             var dy = y - 0.5d;
             var rotatedX = dx * Math.Cos(radians) - dy * Math.Sin(radians);
@@ -779,74 +700,5 @@ namespace Aspose.Cells_FOSS.Rendering
             return new SKPoint(dx / length, dy / length);
         }
 
-        private static bool IsVerticalText(ParsedShape shape)
-        {
-            if (shape == null || string.IsNullOrEmpty(shape.TextVerticalType))
-            {
-                return false;
-            }
-
-            return shape.TextVerticalType == "vert"
-                || shape.TextVerticalType == "vert270"
-                || shape.TextVerticalType == "wordArtVert"
-                || shape.TextVerticalType == "wordArtVertRtl";
-        }
-
-        private void DrawVerticalText(SKCanvas canvas, SKRect rect, ParsedShape shape, CellFontContext fontContext, SKPaint paint)
-        {
-            if (shape.TextVerticalType == "wordArtVert" || shape.TextVerticalType == "wordArtVertRtl")
-            {
-                DrawWordArtVerticalText(canvas, rect, shape, fontContext, paint);
-                return;
-            }
-
-            var clockwise = shape.TextVerticalType == "vert270" || shape.TextVerticalType == "wordArtVertRtl";
-            canvas.Save();
-            canvas.Translate(rect.MidX, rect.MidY);
-            canvas.RotateDegrees(clockwise ? 90f : -90f);
-
-            var metrics = paint.FontMetrics;
-            var width = fontContext.Measure(shape.Text);
-            var drawX = -width / 2f;
-            var baseline = -(metrics.Ascent + metrics.Descent) / 2f;
-            using (var fontObject = new SKFont(paint.Typeface, paint.TextSize))
-            {
-                fontObject.Subpixel = true;
-                PdfTextPathRenderer.DrawText(canvas, shape.Text, drawX, baseline, fontObject, paint.Color);
-            }
-
-            canvas.Restore();
-        }
-
-        private void DrawWordArtVerticalText(SKCanvas canvas, SKRect rect, ParsedShape shape, CellFontContext fontContext, SKPaint paint)
-        {
-            if (string.IsNullOrEmpty(shape.Text))
-            {
-                return;
-            }
-
-            var metrics = paint.FontMetrics;
-            var centerX = rect.MidX;
-            var charAdvance = Math.Max((float)shape.TextSizePt, metrics.Descent - metrics.Ascent);
-            var totalHeight = charAdvance * shape.Text.Length;
-            var currentY = rect.MidY - totalHeight * 0.5f;
-
-            canvas.Save();
-            canvas.ClipRect(rect);
-            using (var fontObject = new SKFont(paint.Typeface, paint.TextSize))
-            {
-                fontObject.Subpixel = true;
-                for (var i = 0; i < shape.Text.Length; i++)
-                {
-                    var ch = shape.Text[i].ToString();
-                    var width = fontContext.Measure(ch);
-                    var drawX = centerX - width * 0.5f;
-                    var baseline = currentY - metrics.Ascent;
-                    PdfTextPathRenderer.DrawText(canvas, ch, drawX, baseline, fontObject, paint.Color);
-                    currentY += charAdvance;
-                }
-            }
-            canvas.Restore();
-        }
     }
 }

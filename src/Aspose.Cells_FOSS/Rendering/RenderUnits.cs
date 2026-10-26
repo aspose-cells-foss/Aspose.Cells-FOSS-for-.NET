@@ -68,31 +68,4 @@ namespace Aspose.Cells_FOSS.Rendering
         }
     }
 
-    /// <summary>
-    /// Maps an OOXML paper-size code to physical dimensions in points (portrait orientation).
-    /// </summary>
-    internal static class PaperSizes
-    {
-        public static void GetDimensionsPoints(int paperSizeCode, out double widthPt, out double heightPt)
-        {
-            // Dimensions are in inches, converted to points. When the workbook does not specify a
-            // paper size (code 0), Excel falls back to the machine/regional default; we default to
-            // A4 to match the common non-US default and the reference exports we validate against.
-            double widthIn, heightIn;
-            switch (paperSizeCode)
-            {
-                case 1:  widthIn = 8.5;  heightIn = 11.0;  break; // Letter
-                case 3:  widthIn = 11.0; heightIn = 17.0;  break; // Tabloid
-                case 5:  widthIn = 8.5;  heightIn = 14.0;  break; // Legal
-                case 8:  widthIn = 11.69; heightIn = 16.54; break; // A3
-                case 9:  widthIn = 8.27; heightIn = 11.69; break; // A4
-                case 11: widthIn = 5.83; heightIn = 8.27;  break; // A5
-                case 13: widthIn = 7.17; heightIn = 10.12; break; // B5 (JIS)
-                default: widthIn = 8.27; heightIn = 11.69; break; // A4 fallback (unspecified)
-            }
-
-            widthPt = RenderUnits.InchesToPoints(widthIn);
-            heightPt = RenderUnits.InchesToPoints(heightIn);
-        }
-    }
 }

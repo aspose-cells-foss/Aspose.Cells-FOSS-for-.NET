@@ -18,9 +18,13 @@ namespace Aspose.Cells_FOSS.Rendering
         public bool FlipV;
         public double RotationDeg;
         public double[] Adjusts;   // preset geometry adjust values, as fractions (0..1)
+        public XElement CustomGeometry;
 
         public bool HasFill;
         public SKColor FillColor = SKColors.White;
+        public string FillPattern;
+        public SKColor PatternForeground;
+        public XElement Reflection;
 
         public bool HasLine = true;
         public SKColor LineColor = SKColors.Black;
@@ -36,6 +40,7 @@ namespace Aspose.Cells_FOSS.Rendering
         public string TextVAnchor = "ctr";  // t / ctr / b
         public string TextHAlign = "ctr";   // l / ctr / r
         public string TextVerticalType = "horz";
+        public bool TextWrap;
         public double TextInsetTopPt;
         public double TextInsetLeftPt;
     }
@@ -55,9 +60,6 @@ namespace Aspose.Cells_FOSS.Rendering
         private static readonly XNamespace Xdr = "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing";
         private static readonly XNamespace Dsp = "http://schemas.microsoft.com/office/drawing/2008/diagram";
         private static readonly XNamespace A = "http://schemas.openxmlformats.org/drawingml/2006/main";
-
-        // Office theme fmtScheme line widths by lnRef index (EMU): idx 1/2/3.
-        private static readonly double[] ThemeLineWidthPt = { 0.75d, 0.75d, 2.0d, 3.0d };
 
         public static ParsedShape Parse(string rawXml, string geometryFallback, RenderColor colors)
         {
@@ -154,10 +156,19 @@ namespace Aspose.Cells_FOSS.Rendering
             var prst = prstGeom != null ? AttrOf(prstGeom, "prst") : null;
             shape.Geometry = !string.IsNullOrEmpty(prst) ? prst : (geometryFallback ?? "rect");
             ParseAdjusts(prstGeom, shape);
+            shape.CustomGeometry = spPr != null ? spPr.Element(A + "custGeom") : null;
 
             ParseFill(spPr, style, colors, shape);
             ParseLine(spPr, style, colors, shape);
             ParseText(txBody, style, colors, shape);
+            var effects = spPr != null ? spPr.Element(A + "effectLst") : null;
+            if (effects == null && style != null && colors != null)
+            {
+                int effectIndex;
+                if (int.TryParse(AttrOf(style.Element(A + "effectRef"), "idx"), out effectIndex))
+                    effects = colors.ResolveThemeEffects(effectIndex);
+            }
+            shape.Reflection = effects != null ? effects.Element(A + "reflection") : null;
             return shape;
         }
 
@@ -200,6 +211,15 @@ namespace Aspose.Cells_FOSS.Rendering
 
                 var solid = spPr.Element(A + "solidFill");
                 SKColor c;
+                var pattern = spPr.Element(A + "pattFill");
+                if (pattern != null && AttrOf(pattern, "prst") == "pct5")
+                {
+                    shape.HasFill = true;
+                    shape.FillPattern = "pct5";
+                    shape.FillColor = TryColor(FillChild(pattern.Element(A + "bgClr")), colors, out c) ? c : SKColors.White;
+                    shape.PatternForeground = TryColor(FillChild(pattern.Element(A + "fgClr")), colors, out c) ? c : SKColors.Black;
+                    return;
+                }
                 if (solid != null && TryColor(FillChild(solid), colors, out c))
                 {
                     shape.HasFill = true;
@@ -241,9 +261,8 @@ namespace Aspose.Cells_FOSS.Rendering
             {
                 var lnRefIdx = style != null && style.Element(A + "lnRef") != null ? AttrOf(style.Element(A + "lnRef"), "idx") : null;
                 int idx;
-                shape.LineWidthPt = int.TryParse(lnRefIdx, out idx) && idx >= 0 && idx < ThemeLineWidthPt.Length
-                    ? ThemeLineWidthPt[idx]
-                    : 0.75d;
+                shape.LineWidthPt = int.TryParse(lnRefIdx, out idx) && colors != null
+                    ? colors.ResolveThemeLineWidth(idx, 0.75d) : 0.75d;
             }
 
             // Color: explicit ln solidFill wins, then the style's lnRef.
@@ -296,14 +315,18 @@ namespace Aspose.Cells_FOSS.Rendering
                 if (!string.IsNullOrEmpty(anchor)) shape.TextVAnchor = anchor;
                 var verticalType = AttrOf(bodyPr, "vert");
                 if (!string.IsNullOrEmpty(verticalType)) shape.TextVerticalType = verticalType;
+                shape.TextWrap = string.Equals(AttrOf(bodyPr, "wrap"), "square", StringComparison.Ordinal);
                 double ins;
                 if (double.TryParse(AttrOf(bodyPr, "tIns"), NumberStyles.Float, CultureInfo.InvariantCulture, out ins)) shape.TextInsetTopPt = ins / 12700d;
+                else shape.TextInsetTopPt = 3.6d;
                 if (double.TryParse(AttrOf(bodyPr, "lIns"), NumberStyles.Float, CultureInfo.InvariantCulture, out ins)) shape.TextInsetLeftPt = ins / 12700d;
+                else shape.TextInsetLeftPt = 7.2d;
             }
 
             var pPr = txBody.Descendants(A + "pPr").FirstOrDefaultSafe();
             var algn = pPr != null ? AttrOf(pPr, "algn") : null;
             if (!string.IsNullOrEmpty(algn)) shape.TextHAlign = algn;
+            else shape.TextHAlign = "l";
 
             // Pick up size/bold/color from the first run properties available.
             var rPr = txBody.Descendants(A + "rPr").FirstOrDefaultSafe() ?? txBody.Descendants(A + "endParaRPr").FirstOrDefaultSafe();
@@ -315,6 +338,20 @@ namespace Aspose.Cells_FOSS.Rendering
                     shape.TextSizePt = sz / 100d;
                 }
                 shape.TextBold = string.Equals(AttrOf(rPr, "b"), "1", StringComparison.Ordinal);
+                if (shape.TextBold)
+                {
+                    foreach (var laterRun in txBody.Descendants(A + "r"))
+                    {
+                        var laterText = laterRun.Element(A + "t");
+                        var laterProperties = laterRun.Element(A + "rPr");
+                        if (laterText != null && laterText.Value.Length > shape.Text.Length / 2
+                            && laterProperties != null && !string.Equals(AttrOf(laterProperties, "b"), "1", StringComparison.Ordinal))
+                        {
+                            shape.TextBold = false;
+                            break;
+                        }
+                    }
+                }
                 SKColor c;
                 var solid = rPr.Element(A + "solidFill");
                 if (solid != null && TryColor(FillChild(solid), colors, out c))
@@ -409,15 +446,23 @@ namespace Aspose.Cells_FOSS.Rendering
                     color.Alpha);
             }
 
+            int alpha;
+            if (int.TryParse(AttrOf(colorEl.Element(A + "alpha"), "val"), NumberStyles.Integer, CultureInfo.InvariantCulture, out alpha))
+            {
+                color = color.WithAlpha((byte)Math.Round(Math.Max(0, Math.Min(100000, alpha)) * 255d / 100000d));
+            }
+
             return color;
         }
 
         private static byte ScaleByte(byte value, double factor)
         {
-            var scaled = value * factor;
-            if (scaled < 0d) scaled = 0d;
-            if (scaled > 255d) scaled = 255d;
-            return (byte)Math.Round(scaled);
+            // DrawingML shade operates on linear light, not encoded sRGB bytes.
+            var channel = value / 255d;
+            var linear = channel <= 0.04045d ? channel / 12.92d : Math.Pow((channel + 0.055d) / 1.055d, 2.4d);
+            linear = Math.Max(0d, Math.Min(1d, linear * factor));
+            var encoded = linear <= 0.0031308d ? linear * 12.92d : 1.055d * Math.Pow(linear, 1d / 2.4d) - 0.055d;
+            return (byte)Math.Round(encoded * 255d);
         }
 
         private static byte TintByte(byte value, double amount)

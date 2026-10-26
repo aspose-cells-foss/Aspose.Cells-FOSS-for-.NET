@@ -57,6 +57,9 @@ namespace Aspose.Cells_FOSS
                     {
                         continue;
                     }
+
+                    XlsxDataBarExtensionReader.Apply(worksheetRoot, ruleElement,
+                        formatting.Conditions[formatting.Conditions.Count - 1]);
                 }
 
                 if (formatting.Conditions.Count == 0)

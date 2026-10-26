@@ -40,7 +40,13 @@ namespace Aspose.Cells_FOSS.Rendering
                 slotWidth = availableWidth / (visibleTickCount - 1);
             }
 
-            if (monthCount > visibleCategoryCount + 2 || slotWidth < 52f)
+            if (LineChartAutomaticLayout.Applies(chart))
+            {
+                // Choose orientation from available tick spacing, not a literal angle
+                // obtained by clamping Excel's automatic-orientation marker.
+                result.RotationDeg = slotWidth >= 52f ? 0f : slotWidth >= 18f ? -45f : -90f;
+            }
+            else if (monthCount > visibleCategoryCount + 2 || slotWidth < 52f)
             {
                 result.RotationDeg = (float)chart.CategoryAxisTextRotationDeg;
             }

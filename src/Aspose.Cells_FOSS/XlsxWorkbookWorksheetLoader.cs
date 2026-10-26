@@ -49,6 +49,7 @@ namespace Aspose.Cells_FOSS
             LoadAutoFilter(worksheetModel, worksheetRoot, stylesheet, diagnostics, options, sheetName);
             LoadColumns(worksheetModel, worksheetRoot, stylesheet, diagnostics, options, sheetName);
             LoadWorksheetPageSetup(worksheetModel, worksheetRoot, diagnostics, options, sheetName);
+            XlsxWorkbookPrinterSettings.Load(worksheetModel.PageSetup, worksheetRoot, archive, worksheetUri, diagnostics, options, sheetName);
             LoadHyperlinks(worksheetModel, worksheetRoot, worksheetHyperlinkTargets, diagnostics, options, sheetName);
             LoadConditionalFormattings(worksheetModel, worksheetRoot, stylesheet, diagnostics, options, sheetName);
             LoadValidations(worksheetModel, worksheetRoot, diagnostics, options, sheetName);

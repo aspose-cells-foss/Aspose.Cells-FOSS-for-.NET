@@ -23,10 +23,10 @@ namespace Aspose.Cells_FOSS.Rendering
         /// </summary>
         private static readonly Dictionary<string, double> ExcelDigitWidthPxAt11 = new Dictionary<string, double>(StringComparer.OrdinalIgnoreCase)
         {
-            { "SimSun", 7.75d },
-            { "宋体", 7.75d },   // 宋体
-            { "NSimSun", 7.75d },
-            { "新宋体", 7.75d }, // 新宋体
+            { "SimSun", 7.34d },
+            { "宋体", 7.34d },
+            { "NSimSun", 7.34d },
+            { "新宋体", 7.34d },
         };
 
         /// <summary>
@@ -43,6 +43,10 @@ namespace Aspose.Cells_FOSS.Rendering
         {
             var name = font != null && !string.IsNullOrEmpty(font.Name) ? font.Name : "Calibri";
             var weight = (font != null && font.Bold) ? SKFontStyleWeight.Bold : SKFontStyleWeight.Normal;
+            if (font != null && !font.Bold && name.EndsWith(" Light", StringComparison.OrdinalIgnoreCase))
+            {
+                weight = SKFontStyleWeight.Light;
+            }
             var slant = (font != null && font.Italic) ? SKFontStyleSlant.Italic : SKFontStyleSlant.Upright;
             var key = name + "|" + (int)weight + "|" + (int)slant;
 
@@ -54,6 +58,14 @@ namespace Aspose.Cells_FOSS.Rendering
 
             var typeface = SKTypeface.FromFamilyName(name, weight, SKFontStyleWidth.Normal, slant)
                 ?? SKTypeface.Default;
+            if (name.StartsWith("Aptos", StringComparison.OrdinalIgnoreCase)
+                && !string.Equals(typeface.FamilyName, name, StringComparison.OrdinalIgnoreCase))
+            {
+                var substitute = name.EndsWith("Display", StringComparison.OrdinalIgnoreCase)
+                    ? "Calibri Light" : "Calibri";
+                typeface = SKTypeface.FromFamilyName(substitute, weight, SKFontStyleWidth.Normal, slant)
+                    ?? typeface;
+            }
             _cache[key] = typeface;
             return typeface;
         }
@@ -158,6 +170,13 @@ namespace Aspose.Cells_FOSS.Rendering
                     {
                         // Calibri 11 default fallback.
                         return 7.5d;
+                    }
+
+                    // Tahoma's print advance is fractional (8pt: 5.8229px). Snapping it to
+                    // 6px expands every column and moves drawing anchors progressively right.
+                    if (string.Equals(typeface.FamilyName, "Tahoma", StringComparison.OrdinalIgnoreCase))
+                    {
+                        return width;
                     }
 
                     // Excel's effective digit metric sits on a half-pixel grid at or just above the

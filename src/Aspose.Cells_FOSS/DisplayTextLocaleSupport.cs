@@ -72,6 +72,14 @@ namespace Aspose.Cells_FOSS
                         {
                             builder.Append(replacement);
                             sectionCulture = resolvedCulture;
+                            if (string.Equals(token, "$-F800", StringComparison.OrdinalIgnoreCase)
+                                || string.Equals(token, "$-F400", StringComparison.OrdinalIgnoreCase))
+                            {
+                                // Excel's system long-date/time directives replace the
+                                // stored fallback pattern rather than prefixing it.
+                                return builder.ToString();
+                            }
+
                             index = endIndex;
                             continue;
                         }
@@ -94,7 +102,13 @@ namespace Aspose.Cells_FOSS
             }
 
             var dashIndex = token.LastIndexOf('-');
-            if (dashIndex <= 0 || dashIndex >= token.Length - 1)
+            if (dashIndex < 0)
+            {
+                replacement = QuoteLiteral(token.Substring(1));
+                return true;
+            }
+
+            if (dashIndex == 0 || dashIndex >= token.Length - 1)
             {
                 return false;
             }
@@ -105,14 +119,18 @@ namespace Aspose.Cells_FOSS
 
             if (string.Equals(localeCode, "F800", StringComparison.OrdinalIgnoreCase))
             {
-                replacement = fallbackCulture.DateTimeFormat.LongDatePattern;
+                replacement = fallbackCulture.Name.StartsWith("zh", StringComparison.OrdinalIgnoreCase)
+                    ? "yyyy\"年\"m\"月\"d\"日\""
+                    : fallbackCulture.DateTimeFormat.LongDatePattern;
                 resolvedCulture = fallbackCulture;
                 return true;
             }
 
             if (string.Equals(localeCode, "F400", StringComparison.OrdinalIgnoreCase))
             {
-                replacement = fallbackCulture.DateTimeFormat.LongTimePattern;
+                replacement = fallbackCulture.Name.StartsWith("zh", StringComparison.OrdinalIgnoreCase)
+                    ? "H:mm:ss"
+                    : fallbackCulture.DateTimeFormat.LongTimePattern;
                 resolvedCulture = fallbackCulture;
                 return true;
             }

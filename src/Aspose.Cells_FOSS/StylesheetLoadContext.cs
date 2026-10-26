@@ -25,6 +25,8 @@ namespace Aspose.Cells_FOSS
         /// Gets the loaded differential styles (dxf records).
         /// </summary>
         public List<StyleValue> DifferentialFormats { get; } = new List<StyleValue>();
+        public string RawTableStylesXml { get; set; }
+        public List<string> RawDifferentialFormatsXml { get; } = new List<string>();
         /// <summary>
         /// Gets style indexes that should be interpreted as date/time styles.
         /// </summary>

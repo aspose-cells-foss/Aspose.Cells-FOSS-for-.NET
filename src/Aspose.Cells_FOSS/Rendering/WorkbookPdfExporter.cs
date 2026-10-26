@@ -20,6 +20,12 @@ namespace Aspose.Cells_FOSS.Rendering
 
             using (var context = new RenderContext(workbook, options.DefaultFont))
             {
+                if (options.ConditionalFormattingEvaluationDate.HasValue)
+                {
+                    context.ConditionalFormattingEvaluationDate =
+                        options.ConditionalFormattingEvaluationDate.Value.Date;
+                }
+
                 if (options.UseType3TextOptimization)
                 {
                     context.PdfTextSession = new PdfTextDocumentSession();

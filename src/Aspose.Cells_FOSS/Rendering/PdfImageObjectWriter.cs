@@ -85,14 +85,30 @@ namespace Aspose.Cells_FOSS.Rendering
             for (var sheetIndex = 0; sheetIndex < workbook.Worksheets.Count; sheetIndex++)
             {
                 var sheet = workbook.Worksheets[sheetIndex];
-                if (sheet == null || sheet.Pictures == null)
+                if (sheet == null)
                 {
                     continue;
                 }
 
-                for (var pictureIndex = 0; pictureIndex < sheet.Pictures.Count; pictureIndex++)
+                for (var pictureIndex = 0; sheet.Pictures != null && pictureIndex < sheet.Pictures.Count; pictureIndex++)
                 {
                     var picture = sheet.Pictures[pictureIndex];
+                    if (!ShouldPreserveLosslessly(picture))
+                    {
+                        continue;
+                    }
+
+                    var replacement = BuildReplacement(picture);
+                    if (replacement != null)
+                    {
+                        replacements.Add(replacement);
+                    }
+                }
+
+                for (var imageIndex = 0; sheet.ShapeImages != null && imageIndex < sheet.ShapeImages.Count; imageIndex++)
+                {
+                    var image = sheet.ShapeImages[imageIndex];
+                    var picture = new PictureModel { ImageData = image.ImageData, ImageExtension = image.Extension };
                     if (!ShouldPreserveLosslessly(picture))
                     {
                         continue;

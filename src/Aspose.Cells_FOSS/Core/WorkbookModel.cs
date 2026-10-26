@@ -76,6 +76,15 @@ namespace Aspose.Cells_FOSS.Core
         /// </summary>
         internal string RawThemeXml { get; set; }
 
+        /// <summary>Custom table style definitions retained for PDF rendering.</summary>
+        internal string RawTableStylesXml { get; set; }
+
+        /// <summary>Differential formats referenced by custom table style elements.</summary>
+        internal List<StyleValue> TableDifferentialStyles { get; } = new List<StyleValue>();
+
+        /// <summary>Raw differential-format nodes retain which properties were explicitly set.</summary>
+        internal List<string> RawTableDifferentialStylesXml { get; } = new List<string>();
+
         /// <summary>
         /// Gets the list of external link parts, preserved verbatim on round-trip.
         /// Order matches the order of externalReference elements in workbook.xml.

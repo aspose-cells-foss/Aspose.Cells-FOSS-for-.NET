@@ -951,6 +951,9 @@ namespace Aspose.Cells_FOSS
                     var workbookModel = new WorkbookModel();
                     workbookModel.Worksheets.Clear();
                     workbookModel.DefaultStyle = stylesheet.DefaultCellStyle.Clone();
+                    workbookModel.RawTableStylesXml = stylesheet.RawTableStylesXml;
+                    workbookModel.TableDifferentialStyles.AddRange(stylesheet.DifferentialFormats);
+                    workbookModel.RawTableDifferentialStylesXml.AddRange(stylesheet.RawDifferentialFormatsXml);
 
                     var workbookRoot = workbookDocument.Root;
                     if (workbookRoot == null)

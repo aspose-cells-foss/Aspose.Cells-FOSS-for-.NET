@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Collections.Generic;
+using System.Globalization;
 using Aspose.Cells_FOSS;
 
 namespace Aspose.Cells_FOSS.Samples.PdfConversion
@@ -10,7 +11,30 @@ namespace Aspose.Cells_FOSS.Samples.PdfConversion
         private static void Main(string[] args)
         {
             var repositoryRoot = ResolveRepositoryRoot();
-            var inputPaths = ResolveInputPaths(repositoryRoot, args);
+            DateTime? evaluationDate = null;
+            var printOverrides = new PrintOverrides();
+            var inputArguments = new List<string>();
+            for (var index = 0; index < args.Length; index++)
+            {
+                if (printOverrides.Read(args, ref index)) continue;
+                if (args[index] == "--conditional-date")
+                {
+                    DateTime parsedDate;
+                    if (index + 1 >= args.Length || !DateTime.TryParseExact(args[index + 1],
+                        "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out parsedDate))
+                    {
+                        throw new ArgumentException("--conditional-date requires a yyyy-MM-dd date.");
+                    }
+
+                    evaluationDate = parsedDate;
+                    index++;
+                    continue;
+                }
+
+                inputArguments.Add(args[index]);
+            }
+
+            var inputPaths = ResolveInputPaths(repositoryRoot, inputArguments.ToArray());
 
             for (var index = 0; index < inputPaths.Count; index++)
             {
@@ -18,7 +42,11 @@ namespace Aspose.Cells_FOSS.Samples.PdfConversion
                 var outputPath = Path.ChangeExtension(inputPath, ".pdf");
 
                 var workbook = new Workbook(inputPath);
-                workbook.Save(outputPath, new PdfSaveOptions());
+                printOverrides.Apply(workbook);
+                workbook.Save(outputPath, new PdfSaveOptions
+                {
+                    ConditionalFormattingEvaluationDate = evaluationDate,
+                });
 
                 Console.WriteLine("Input: " + inputPath);
                 Console.WriteLine("Output: " + outputPath);

@@ -2,6 +2,7 @@ using System.IO;
 using System.Collections.Generic;
 using System;
 using System.Globalization;
+using System.Text;
 using Aspose.Cells_FOSS.Core;
 
 namespace Aspose.Cells_FOSS
@@ -76,6 +77,11 @@ namespace Aspose.Cells_FOSS
 
         internal static string FormatDisplayValue(object value, StyleValue style, CultureInfo workbookCulture)
         {
+            return FormatDisplayValue(value, style, workbookCulture, DateSystem.Windows1900);
+        }
+
+        internal static string FormatDisplayValue(object value, StyleValue style, CultureInfo workbookCulture, DateSystem dateSystem)
+        {
             if (value == null)
             {
                 return string.Empty;
@@ -93,7 +99,7 @@ namespace Aspose.Cells_FOSS
 
             if (value is DateTime)
             {
-                return FormatDateTimeValue((DateTime)value, style, workbookCulture);
+                return FormatDateTimeValue((DateTime)value, style, workbookCulture, dateSystem);
             }
 
             if (DisplayTextFormatterSupport.IsNumericValue(value))
@@ -171,6 +177,13 @@ namespace Aspose.Cells_FOSS
 
             CultureInfo sectionCulture;
             var localizedSection = DisplayTextLocaleSupport.ApplyLocaleDirectives(selectedSection.Raw, workbookCulture, out sectionCulture);
+            if (selectedSection.Raw.IndexOf("-401]", StringComparison.OrdinalIgnoreCase) >= 0
+                && sectionCulture.NumberFormat.NumberDecimalSeparator != ".")
+            {
+                sectionCulture = (CultureInfo)sectionCulture.Clone();
+                sectionCulture.NumberFormat.NumberDecimalSeparator = ".";
+            }
+
             var sanitizedSection = DisplayTextFormatterSupport.SanitizeNumericSection(localizedSection);
             if (string.IsNullOrWhiteSpace(sanitizedSection))
             {
@@ -248,7 +261,7 @@ namespace Aspose.Cells_FOSS
             return number.ToString("G15", CultureInfo.InvariantCulture);
         }
 
-        private static string FormatDateTimeValue(DateTime value, StyleValue style, CultureInfo workbookCulture)
+        private static string FormatDateTimeValue(DateTime value, StyleValue style, CultureInfo workbookCulture, DateSystem dateSystem)
         {
             // Excel renders the locale-dependent built-in date/time formats (14 = short date,
             // 22 = general date-time) with the viewer's regional settings, not the literal ECMA pattern
@@ -287,7 +300,8 @@ namespace Aspose.Cells_FOSS
             // Elapsed-time formats are duration-style output, not calendar rendering.
             if (DisplayTextDateFormatSupport.ContainsElapsedTimeToken(sectionFormat))
             {
-                return DisplayTextDateFormatSupport.FormatElapsedTimeValue(value.TimeOfDay, sectionFormat, sectionCulture);
+                var serial = DateSerialConverter.ToSerial(value, dateSystem);
+                return DisplayTextDateFormatSupport.FormatElapsedTimeValue(TimeSpan.FromDays(serial), sectionFormat, sectionCulture);
             }
 
             if (string.IsNullOrWhiteSpace(sectionFormat))
@@ -305,7 +319,13 @@ namespace Aspose.Cells_FOSS
 
             try
             {
-                return DisplayTextDateFormatSupport.FormatDateTimeValue(value, sectionFormat, sectionCulture);
+                var result = DisplayTextDateFormatSupport.FormatDateTimeValue(value, sectionFormat, sectionCulture);
+                if (section.Raw.IndexOf("[DBNum1]", StringComparison.OrdinalIgnoreCase) >= 0)
+                {
+                    return FormatDbNumOne(result);
+                }
+
+                return result;
             }
             catch (FormatException)
             {
@@ -323,6 +343,64 @@ namespace Aspose.Cells_FOSS
             return value.ToString("M/d/yyyy H:mm", CultureInfo.InvariantCulture);
         }
 
+        private static string FormatDbNumOne(string text)
+        {
+            const string digits = "零一二三四五六七八九";
+            var builder = new StringBuilder(text.Length);
+            for (var index = 0; index < text.Length; index++)
+            {
+                if (text[index] < '0' || text[index] > '9')
+                {
+                    builder.Append(text[index]);
+                    continue;
+                }
+
+                var end = index + 1;
+                while (end < text.Length && text[end] >= '0' && text[end] <= '9')
+                {
+                    end++;
+                }
+
+                if (end < text.Length && text[end] == '年')
+                {
+                    for (var digitIndex = index; digitIndex < end; digitIndex++)
+                    {
+                        builder.Append(digits[text[digitIndex] - '0']);
+                    }
+                }
+                else
+                {
+                    int number;
+                    if (int.TryParse(text.Substring(index, end - index), NumberStyles.None,
+                        CultureInfo.InvariantCulture, out number) && number < 100)
+                    {
+                        if (number >= 10)
+                        {
+                            if (number >= 20)
+                            {
+                                builder.Append(digits[number / 10]);
+                            }
+
+                            builder.Append('十');
+                        }
+
+                        if (number % 10 != 0 || number == 0)
+                        {
+                            builder.Append(digits[number % 10]);
+                        }
+                    }
+                    else
+                    {
+                        builder.Append(text, index, end - index);
+                    }
+                }
+
+                index = end - 1;
+            }
+
+            return builder.ToString();
+        }
+
         private static bool TryFormatFraction(double numericValue, string section, bool useAbsoluteValue, out string result)
         {
             result = string.Empty;
@@ -336,6 +414,39 @@ namespace Aspose.Cells_FOSS
             if (slashIndex <= 0)
             {
                 return false;
+            }
+
+            var fixedEnd = slashIndex + 1;
+            while (fixedEnd < sanitizedSection.Length && char.IsDigit(sanitizedSection[fixedEnd]))
+            {
+                fixedEnd++;
+            }
+
+            if (fixedEnd > slashIndex + 1)
+            {
+                int fixedDenominator;
+                if (!int.TryParse(sanitizedSection.Substring(slashIndex + 1, fixedEnd - slashIndex - 1),
+                    NumberStyles.None, CultureInfo.InvariantCulture, out fixedDenominator)
+                    || fixedDenominator <= 0)
+                {
+                    return false;
+                }
+
+                var absolute = Math.Abs(numericValue);
+                var whole = (long)Math.Floor(absolute);
+                var numerator = (int)Math.Round((absolute - whole) * fixedDenominator, MidpointRounding.AwayFromZero);
+                if (numerator >= fixedDenominator)
+                {
+                    whole++;
+                    numerator = 0;
+                }
+
+                var sign = numericValue < 0 && !useAbsoluteValue ? "-" : string.Empty;
+                result = numerator == 0
+                    ? sign + whole.ToString(CultureInfo.InvariantCulture)
+                    : sign + (whole == 0 ? string.Empty : whole.ToString(CultureInfo.InvariantCulture) + " ")
+                        + numerator.ToString(CultureInfo.InvariantCulture) + "/" + fixedDenominator.ToString(CultureInfo.InvariantCulture);
+                return true;
             }
 
             var denominatorDigits = 0;

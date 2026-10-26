@@ -36,6 +36,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aspose.Cells_FOSS.Samples.P
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aspose.Cells_FOSS.Samples.Shapes", "samples\Aspose.Cells_FOSS.Samples.Shapes\Aspose.Cells_FOSS.Samples.Shapes.csproj", "{41033C8D-036F-4795-97D0-1F36B32C1EA2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aspose.Cells_FOSS.Samples.PdfConversion", "samples\Aspose.Cells_FOSS.Samples.PdfConversion\Aspose.Cells_FOSS.Samples.PdfConversion.csproj", "{CB51DF23-F8AF-46D2-97EB-05FCCAF186AA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -105,6 +107,10 @@ Global
 		{41033C8D-036F-4795-97D0-1F36B32C1EA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{41033C8D-036F-4795-97D0-1F36B32C1EA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{41033C8D-036F-4795-97D0-1F36B32C1EA2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CB51DF23-F8AF-46D2-97EB-05FCCAF186AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CB51DF23-F8AF-46D2-97EB-05FCCAF186AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CB51DF23-F8AF-46D2-97EB-05FCCAF186AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CB51DF23-F8AF-46D2-97EB-05FCCAF186AA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{0789D9F6-0E65-4934-9E5A-354E3984DF2C} = {BE4E7227-7C2C-4AA5-ACDA-5F62AE7F1B58}
@@ -122,5 +128,6 @@ Global
 		{3BD89033-8BA7-4B79-95D3-422FBDF95ECD} = {1B11C64E-9A39-464F-8ACE-7026698F836E}
 		{D0DD96BB-1CBD-4A4F-BA05-1F076EEC69DC} = {1B11C64E-9A39-464F-8ACE-7026698F836E}
 		{41033C8D-036F-4795-97D0-1F36B32C1EA2} = {1B11C64E-9A39-464F-8ACE-7026698F836E}
+		{CB51DF23-F8AF-46D2-97EB-05FCCAF186AA} = {1B11C64E-9A39-464F-8ACE-7026698F836E}
 	EndGlobalSection
 EndGlobal

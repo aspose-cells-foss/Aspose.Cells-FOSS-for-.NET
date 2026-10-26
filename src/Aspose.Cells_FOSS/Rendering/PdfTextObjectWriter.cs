@@ -202,6 +202,10 @@ namespace Aspose.Cells_FOSS.Rendering
             }
 
             builder.Append("BT\n");
+            if (firstRun.Invisible)
+            {
+                builder.Append("3 Tr\n");
+            }
             builder.Append(ColorCommand(firstRun));
             builder.Append('\n');
 
@@ -309,6 +313,11 @@ namespace Aspose.Cells_FOSS.Rendering
             }
 
             if (left.UseTopDownCoordinates != right.UseTopDownCoordinates)
+            {
+                return false;
+            }
+
+            if (left.Invisible != right.Invisible)
             {
                 return false;
             }

@@ -302,6 +302,11 @@ namespace Aspose.Cells_FOSS
                 _model.DefinedNames.Clear();
                 _model.DefinedNames.AddRange(loadedModel.DefinedNames);
                 _model.RawThemeXml = loadedModel.RawThemeXml;
+                _model.RawTableStylesXml = loadedModel.RawTableStylesXml;
+                _model.TableDifferentialStyles.Clear();
+                _model.TableDifferentialStyles.AddRange(loadedModel.TableDifferentialStyles);
+                _model.RawTableDifferentialStylesXml.Clear();
+                _model.RawTableDifferentialStylesXml.AddRange(loadedModel.RawTableDifferentialStylesXml);
                 _model.ExternalLinks.Clear();
                 _model.ExternalLinks.AddRange(loadedModel.ExternalLinks);
             }

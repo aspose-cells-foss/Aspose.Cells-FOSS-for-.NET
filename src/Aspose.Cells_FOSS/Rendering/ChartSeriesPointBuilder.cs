@@ -37,7 +37,7 @@ namespace Aspose.Cells_FOSS.Rendering
                 var serial = ChartDateAxisMath.NormalizePointSerial(chart, chart.CategoryValues[i].Value, dateSystem);
                 serials.Add(serial);
                 points.Add(new SKPoint(
-                    ChartDateAxisMath.DateCategoryX(serial, plotMinDate, plotMaxDate, plot),
+                    ChartDateAxisMath.DateCategoryX(serial, plotMinDate, plotMaxDate, plot, chart, dateSystem),
                     ValueToY(values[i].Value, min, max, plot)));
             }
 

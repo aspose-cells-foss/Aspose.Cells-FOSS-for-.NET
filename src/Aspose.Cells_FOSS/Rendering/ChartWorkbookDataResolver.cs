@@ -162,7 +162,8 @@ namespace Aspose.Cells_FOSS.Rendering
             var culture = workbook != null && workbook.Settings != null
                 ? workbook.Settings.DisplayCulture
                 : CultureInfo.InvariantCulture;
-            return DisplayTextFormatter.FormatDisplayValue(record.Value, style, culture);
+            return DisplayTextFormatter.FormatDisplayValue(record.Value, style, culture,
+                workbook.Settings.DateSystem);
         }
 
         private static bool TryParseSingleRangeReference(WorkbookModel workbook, string formula, out WorksheetModel sheet, out int firstRow, out int firstColumn, out int lastRow, out int lastColumn)

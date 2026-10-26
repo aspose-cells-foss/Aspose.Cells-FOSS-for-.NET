@@ -595,6 +595,9 @@ namespace Aspose.Cells_FOSS
 
             var normalized = builder.ToString();
             return normalized.IndexOf("yy", StringComparison.Ordinal) >= 0
+                || normalized.IndexOf("aaa", StringComparison.Ordinal) >= 0
+                || (normalized.IndexOf('m') >= 0 && formatCode.IndexOf('月') >= 0)
+                || (normalized.IndexOf('d') >= 0 && formatCode.IndexOf('日') >= 0)
                 || normalized.IndexOf("yyyy", StringComparison.Ordinal) >= 0
                 || normalized.IndexOf("dd", StringComparison.Ordinal) >= 0
                 || normalized.IndexOf("ddd", StringComparison.Ordinal) >= 0

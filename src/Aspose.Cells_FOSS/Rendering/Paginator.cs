@@ -12,6 +12,22 @@ namespace Aspose.Cells_FOSS.Rendering
     {
         public static List<PageLayout> Paginate(SheetLayout layout, int sheetIndex, PdfSaveOptions options)
         {
+            var areas = PrintAreaRanges.Read(layout.Sheet.PageSetup.PrintArea);
+            if (areas.Count == 0)
+            {
+                areas.Add(new MergeRegion(layout.FirstRow, layout.FirstColumn,
+                    layout.LastRow - layout.FirstRow + 1, layout.LastColumn - layout.FirstColumn + 1));
+            }
+            var pages = new List<PageLayout>();
+            foreach (var area in areas)
+            {
+                pages.AddRange(PaginateArea(layout, sheetIndex, options, area));
+            }
+            return pages;
+        }
+
+        private static List<PageLayout> PaginateArea(SheetLayout layout, int sheetIndex, PdfSaveOptions options, MergeRegion area)
+        {
             var pages = new List<PageLayout>();
             if (layout.IsEmpty)
             {
@@ -40,36 +56,64 @@ namespace Aspose.Cells_FOSS.Rendering
             var usableWidthPt = Math.Max(1d, pageWidthPt - leftPt - rightPt);
             var usableHeightPt = Math.Max(1d, pageHeightPt - topPt - bottomPt);
 
-            var totalWidthPt = layout.ColumnStartPt[layout.LastColumn + 1] - layout.ColumnStartPt[layout.FirstColumn];
-            var totalHeightPt = layout.RowStartPt[layout.LastRow + 1] - layout.RowStartPt[layout.FirstRow];
+            var firstRow = area.FirstRow;
+            var firstColumn = area.FirstColumn;
+            var lastRow = firstRow + area.TotalRows - 1;
+            var lastColumn = firstColumn + area.TotalColumns - 1;
+            var totalWidthPt = layout.ColumnStartPt[lastColumn + 1] - layout.ColumnStartPt[firstColumn];
+            var totalHeightPt = layout.RowStartPt[lastRow + 1] - layout.RowStartPt[firstRow];
 
             var forceOnePageWide = options.OnePagePerSheet || options.AllColumnsInOnePagePerSheet;
             var forceOnePageTall = options.OnePagePerSheet;
 
             var scale = ResolveScale(setup, options, totalWidthPt, totalHeightPt, usableWidthPt, usableHeightPt);
 
+            // Excel's ChartEx region-map print layout uses a slightly reduced worksheet zoom and
+            // reserves a larger top band than the pageMargins element alone describes. Apply this
+            // to the whole sheet so cells, charts, and shapes keep their shared anchor coordinates.
+            if (ChartExRegionMapPrintLayout.Applies(layout.Sheet) && !setup.Scale.HasValue
+                && !setup.FitToWidth.HasValue && !setup.FitToHeight.HasValue
+                && !options.OnePagePerSheet && !options.AllColumnsInOnePagePerSheet)
+            {
+                scale = ChartExRegionMapPrintLayout.Scale;
+                leftPt += ChartExRegionMapPrintLayout.LeftInsetPt;
+                topPt = ChartExRegionMapPrintLayout.TopOrigin(pageHeightPt, topPt);
+                usableWidthPt += ChartExRegionMapPrintLayout.HorizontalBreakAllowancePt;
+                usableHeightPt = Math.Max(1d, pageHeightPt - topPt - bottomPt);
+            }
+
             var colBreaks = forceOnePageWide
-                ? SingleSpan(layout.FirstColumn, layout.LastColumn)
+                ? SingleSpan(firstColumn, lastColumn)
                 : SplitAxis(
-                    layout.FirstColumn,
-                    layout.LastColumn,
+                    firstColumn,
+                    lastColumn,
                     usableWidthPt / scale,
-                    delegate(int index) { return layout.ColumnWidthPt[index]; },
+                    // Excel places column breaks on its whole-pixel worksheet grid. Keep the
+                    // fractional vector geometry for drawing, but not for deciding a new page.
+                    delegate(int index) { return Math.Floor(layout.ColumnWidthPt[index] / RenderUnits.PixelsToPoints) * RenderUnits.PixelsToPoints; },
                     setup.VerticalPageBreaks);
 
+            if (ChartExRegionMapPrintLayout.Applies(layout.Sheet) && !forceOnePageWide)
+            {
+                KeepRegionMapChartsTogether(layout, colBreaks);
+            }
+
             var rowBreaks = forceOnePageTall
-                ? SingleSpan(layout.FirstRow, layout.LastRow)
+                ? SingleSpan(firstRow, lastRow)
                 : SplitAxis(
-                    layout.FirstRow,
-                    layout.LastRow,
+                    firstRow,
+                    lastRow,
                     usableHeightPt / scale,
                     delegate(int index) { return layout.RowHeightPt[index]; },
                     setup.HorizontalPageBreaks);
 
-            foreach (var rowSpan in rowBreaks)
+            var pageCount = rowBreaks.Count * colBreaks.Count;
+            for (var pageIndex = 0; pageIndex < pageCount; pageIndex++)
             {
-                foreach (var colSpan in colBreaks)
-                {
+                    var rowIndex = setup.PageOrderOverThenDown ? pageIndex / colBreaks.Count : pageIndex % rowBreaks.Count;
+                    var colIndex = setup.PageOrderOverThenDown ? pageIndex % colBreaks.Count : pageIndex / rowBreaks.Count;
+                    var rowSpan = rowBreaks[rowIndex];
+                    var colSpan = colBreaks[colIndex];
                     var page = new PageLayout();
                     page.SheetIndex = sheetIndex;
                     page.Sheet = layout;
@@ -83,7 +127,6 @@ namespace Aspose.Cells_FOSS.Rendering
                     page.ContentOriginXPt = leftPt;
                     page.ContentOriginYPt = topPt;
                     pages.Add(page);
-                }
             }
 
             return pages;
@@ -105,20 +148,20 @@ namespace Aspose.Cells_FOSS.Rendering
                 return Math.Min(1d, w);
             }
 
-            var fitWidth = setup.FitToWidth.HasValue && setup.FitToWidth.Value > 0;
-            var fitHeight = setup.FitToHeight.HasValue && setup.FitToHeight.Value > 0;
+            var fitWidth = setup.FitToPage && (!setup.FitToWidth.HasValue || setup.FitToWidth.Value > 0);
+            var fitHeight = setup.FitToPage && (!setup.FitToHeight.HasValue || setup.FitToHeight.Value > 0);
 
             if (fitWidth || fitHeight)
             {
                 var scale = double.MaxValue;
                 if (fitWidth && totalWidthPt > 0d)
                 {
-                    scale = Math.Min(scale, setup.FitToWidth.Value * usableWidthPt / totalWidthPt);
+                    scale = Math.Min(scale, (setup.FitToWidth ?? 1) * usableWidthPt / totalWidthPt);
                 }
 
                 if (fitHeight && totalHeightPt > 0d)
                 {
-                    scale = Math.Min(scale, setup.FitToHeight.Value * usableHeightPt / totalHeightPt);
+                    scale = Math.Min(scale, (setup.FitToHeight ?? 1) * usableHeightPt / totalHeightPt);
                 }
 
                 if (scale == double.MaxValue)
@@ -141,6 +184,34 @@ namespace Aspose.Cells_FOSS.Rendering
         private static List<Span> SingleSpan(int first, int last)
         {
             return new List<Span> { new Span(first, last) };
+        }
+
+        private static void KeepRegionMapChartsTogether(SheetLayout layout, List<Span> spans)
+        {
+            for (var spanIndex = 0; spanIndex + 1 < spans.Count; spanIndex++)
+            {
+                var current = spans[spanIndex];
+                var next = spans[spanIndex + 1];
+                if (next.Start != current.End + 1 || next.Start >= next.End)
+                {
+                    continue;
+                }
+
+                foreach (var chart in layout.Sheet.Charts)
+                {
+                    if (chart != null && chart.IsChartEx
+                        && chart.UpperLeftColumn >= current.Start
+                        && chart.UpperLeftColumn <= current.End
+                        && chart.LowerRightColumn == next.Start)
+                    {
+                        current.End++;
+                        next.Start++;
+                        spans[spanIndex] = current;
+                        spans[spanIndex + 1] = next;
+                        break;
+                    }
+                }
+            }
         }
 
         private delegate double SizeAccessor(int index);

@@ -17,11 +17,15 @@ namespace Aspose.Cells_FOSS.Rendering
         {
             public double Fraction;   // 0..1 of the cell width
             public SKColor Color;
+            public bool ShowBorder;
+            public bool Gradient;
         }
 
         internal struct Icon
         {
             public SKColor Color;
+            public SKColor BorderColor;
+            public bool HasBorder;
             public float AngleDeg;    // arrow direction; 90 = up, -90 = down, 0 = right
             public bool IsArrow;      // false => draw a filled circle (fallback for non-arrow sets)
         }
@@ -32,17 +36,24 @@ namespace Aspose.Cells_FOSS.Rendering
             public SKColor Fill;
             public bool HasFontColor;
             public SKColor FontColor;
+            public bool HasFontBold;
+            public bool HasFontItalic;
+            public bool HasFontUnderline;
+            public FontUnderlineType FontUnderline;
             public DataBar? Bar;
             public Icon? IconGlyph;
             public bool SuppressText;   // icon-set rule with showValue="0": draw the icon only
         }
 
-        private const double DataBarMinFraction = 0.12;
-        private const double DataBarMaxFraction = 0.90;
-
         private static readonly SKColor ArrowGreen = new SKColor(0x63, 0xA5, 0x37);
         private static readonly SKColor ArrowAmber = new SKColor(0xE8, 0xA8, 0x38);
         private static readonly SKColor ArrowRed = new SKColor(0xDC, 0x3A, 0x2E);
+        private static readonly SKColor TrafficRed = new SKColor(214, 85, 50);
+        private static readonly SKColor TrafficYellow = new SKColor(234, 194, 130);
+        private static readonly SKColor TrafficGreen = new SKColor(104, 164, 144);
+        private static readonly SKColor TrafficRedBorder = new SKColor(161, 63, 36);
+        private static readonly SKColor TrafficYellowBorder = new SKColor(167, 132, 51);
+        private static readonly SKColor TrafficGreenBorder = new SKColor(58, 116, 97);
 
         private readonly Dictionary<long, CellEffect> _effects = new Dictionary<long, CellEffect>();
 
@@ -101,11 +112,14 @@ namespace Aspose.Cells_FOSS.Rendering
                 case FormatConditionType.IconSet:
                     ApplyIconSet(sheet, condition, area);
                     return;
+                case FormatConditionType.Expression:
+                    ApplyExpression(sheet, context, condition, area);
+                    return;
             }
 
             // Differential-format (dxf) rules: apply the fill/font only where the rule matches. A rule
             // with no dxf still "matches" but paints nothing (Excel behaviour for this file).
-            var matcher = BuildMatcher(sheet, condition, area);
+            var matcher = BuildMatcher(sheet, context, condition, area);
             if (matcher == null)
             {
                 return;
@@ -123,6 +137,27 @@ namespace Aspose.Cells_FOSS.Rendering
                     }
 
                     ApplyDifferentialStyle(context, EffectFor(r, c), condition);
+                }
+            }
+        }
+
+        private void ApplyExpression(WorksheetModel sheet, RenderContext context,
+            FormatConditionModel condition, CellArea area)
+        {
+            var matcher = ConditionalFormatExpressionMatcher.TryCreate(sheet, area, condition.Formula1);
+            if (matcher == null)
+            {
+                return;
+            }
+
+            for (var row = area.StartRow; row <= area.EndRow; row++)
+            {
+                for (var column = area.StartColumn; column <= area.EndColumn; column++)
+                {
+                    if (matcher.Matches(row, column))
+                    {
+                        ApplyDifferentialStyle(context, EffectFor(row, column), condition);
+                    }
                 }
             }
         }
@@ -150,13 +185,30 @@ namespace Aspose.Cells_FOSS.Rendering
                 effect.HasFontColor = true;
                 effect.FontColor = context.Colors.Resolve(style.Font.Color, SKColors.Black);
             }
+
+            if (style.Font != null && style.Font.Bold)
+            {
+                effect.HasFontBold = true;
+            }
+
+            if (style.Font != null && style.Font.Italic)
+            {
+                effect.HasFontItalic = true;
+            }
+
+            if (style.Font != null && style.Font.Underline != FontUnderlineType.None)
+            {
+                effect.HasFontUnderline = true;
+                effect.FontUnderline = style.Font.Underline;
+            }
         }
 
         // --- Differential-format rule matchers -----------------------------------------------------
 
         private delegate bool CellMatcher(CellRecord record);
 
-        private static CellMatcher BuildMatcher(WorksheetModel sheet, FormatConditionModel condition, CellArea area)
+        private static CellMatcher BuildMatcher(WorksheetModel sheet, RenderContext context,
+            FormatConditionModel condition, CellArea area)
         {
             switch (condition.Type)
             {
@@ -181,7 +233,7 @@ namespace Aspose.Cells_FOSS.Rendering
                     return record => TextOf(record).EndsWith(suffix, StringComparison.OrdinalIgnoreCase);
                 }
                 case FormatConditionType.TimePeriod:
-                    return BuildTimePeriodMatcher(condition.TimePeriod);
+                    return BuildTimePeriodMatcher(condition.TimePeriod, context);
                 case FormatConditionType.CellValue:
                     return BuildCellValueMatcher(condition);
                 case FormatConditionType.DuplicateValues:
@@ -194,7 +246,7 @@ namespace Aspose.Cells_FOSS.Rendering
                 case FormatConditionType.BelowAverage:
                     return BuildAverageMatcher(sheet, area, condition);
                 default:
-                    // Expression and any unmodelled type: no evaluator, so no effect.
+                    // Unmodelled rule types have no evaluator.
                     return null;
             }
         }
@@ -228,9 +280,10 @@ namespace Aspose.Cells_FOSS.Rendering
             };
         }
 
-        private static CellMatcher BuildTimePeriodMatcher(string period)
+        private static CellMatcher BuildTimePeriodMatcher(string period, RenderContext context)
         {
-            var today = DateTime.Today;
+            var today = context.ConditionalFormattingEvaluationDate.Date;
+            var dateSystem = context.Workbook.Settings.DateSystem;
             return record =>
             {
                 double serial;
@@ -239,7 +292,7 @@ namespace Aspose.Cells_FOSS.Rendering
                     return false;
                 }
 
-                var date = SerialToDate(serial);
+                var date = SerialToDate(serial, dateSystem);
                 if (!date.HasValue)
                 {
                     return false;
@@ -411,6 +464,10 @@ namespace Aspose.Cells_FOSS.Rendering
             values.Sort();
             var min = values[0];
             var max = values[values.Count - 1];
+            if (condition.DataBarAutoMinimum && min >= 0d)
+            {
+                min = 0d;
+            }
             var color = ToSk(context, condition.BarColor, new SKColor(0x63, 0x8E, 0xC6));
 
             for (var r = area.StartRow; r <= area.EndRow; r++)
@@ -425,11 +482,11 @@ namespace Aspose.Cells_FOSS.Rendering
                         continue;
                     }
 
-                    // Excel's automatic data bar does not map the smallest value to a zero-length bar
-                    // nor the largest to the full cell: the range compresses to roughly [12%, 90%].
-                    var display = DataBarMinFraction + (DataBarMaxFraction - DataBarMinFraction) * Fraction(x, min, max);
+                    var display = condition.DataBarMinLength
+                        + (condition.DataBarMaxLength - condition.DataBarMinLength) * Fraction(x, min, max);
                     var effect = EffectFor(r, c);
-                    effect.Bar = new DataBar { Fraction = display, Color = color };
+                    effect.Bar = new DataBar { Fraction = display, Color = color,
+                        ShowBorder = condition.ShowBorder, Gradient = condition.DataBarGradient };
                 }
             }
         }
@@ -459,11 +516,16 @@ namespace Aspose.Cells_FOSS.Rendering
                         continue;
                     }
 
-                    // Default (percent) thresholds: equal splits, so bucket = floor(percent / step).
+                    // OOXML's default percent thresholds are integer values (0, 33, 66 for three icons).
                     var percent = Fraction(x, min, max) * 100.0;
-                    var bucket = (int)(percent / (100.0 / iconCount));
-                    if (bucket >= iconCount) bucket = iconCount - 1;
-                    if (bucket < 0) bucket = 0;
+                    var bucket = 0;
+                    for (var index = 1; index < iconCount; index++)
+                    {
+                        if (percent >= (100 * index) / iconCount)
+                        {
+                            bucket = index;
+                        }
+                    }
 
                     var lookup = condition.ReverseIcons ? iconCount - 1 - bucket : bucket;
                     var effect = EffectFor(r, c);
@@ -480,6 +542,7 @@ namespace Aspose.Cells_FOSS.Rendering
         {
             var type = (iconSetType ?? string.Empty).ToLowerInvariant();
             var isArrow = type.Contains("arrow");
+            var isTrafficLight = type.Contains("trafficlight");
 
             // Colour ramp low->high: red, amber, green (amber fills the middle buckets).
             SKColor color;
@@ -487,9 +550,30 @@ namespace Aspose.Cells_FOSS.Rendering
             else if (index == count - 1) color = ArrowGreen;
             else color = ArrowAmber;
 
+            var borderColor = SKColors.Transparent;
+            if (isTrafficLight)
+            {
+                if (index == 0)
+                {
+                    color = TrafficRed;
+                    borderColor = TrafficRedBorder;
+                }
+                else if (index == count - 1)
+                {
+                    color = TrafficGreen;
+                    borderColor = TrafficGreenBorder;
+                }
+                else
+                {
+                    color = TrafficYellow;
+                    borderColor = TrafficYellowBorder;
+                }
+            }
+
             // Arrow direction sweeps from down (lowest) to up (highest) across the buckets.
             var angle = count <= 1 ? 0f : -90f + 180f * index / (count - 1);
-            return new Icon { Color = color, AngleDeg = angle, IsArrow = isArrow };
+            return new Icon { Color = color, BorderColor = borderColor,
+                HasBorder = isTrafficLight, AngleDeg = angle, IsArrow = isArrow };
         }
 
         // --- Value / numeric helpers ---------------------------------------------------------------
@@ -562,7 +646,7 @@ namespace Aspose.Cells_FOSS.Rendering
             return Convert.ToString(record.Value, System.Globalization.CultureInfo.InvariantCulture) ?? string.Empty;
         }
 
-        private static bool TryNumber(CellRecord record, out double value)
+        internal static bool TryNumber(CellRecord record, out double value)
         {
             value = 0;
             if (record == null || record.Value == null)
@@ -597,13 +681,17 @@ namespace Aspose.Cells_FOSS.Rendering
             return double.TryParse(text, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out value);
         }
 
-        private static DateTime? SerialToDate(double serial)
+        private static DateTime? SerialToDate(double serial, DateSystem dateSystem)
         {
             try
             {
-                return DateTime.FromOADate(serial);
+                return DateSerialConverter.FromSerial(serial, dateSystem);
             }
-            catch (ArgumentException)
+            catch (ArgumentOutOfRangeException)
+            {
+                return null;
+            }
+            catch (OverflowException)
             {
                 return null;
             }
@@ -653,9 +741,9 @@ namespace Aspose.Cells_FOSS.Rendering
         private static SKColor Lerp(SKColor a, SKColor b, double t)
         {
             return new SKColor(
-                (byte)Math.Round(a.Red + (b.Red - a.Red) * t),
-                (byte)Math.Round(a.Green + (b.Green - a.Green) * t),
-                (byte)Math.Round(a.Blue + (b.Blue - a.Blue) * t));
+                (byte)(a.Red + (int)((b.Red - a.Red) * t)),
+                (byte)(a.Green + (int)((b.Green - a.Green) * t)),
+                (byte)(a.Blue + (int)((b.Blue - a.Blue) * t)));
         }
 
         private static int IconCount(string iconSetType)

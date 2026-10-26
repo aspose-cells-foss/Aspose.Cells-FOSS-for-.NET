@@ -205,6 +205,13 @@ namespace Aspose.Cells_FOSS
             {
                 var fillValue = ReadFillValue(fill);
                 style.Pattern = fillValue.Pattern;
+                var patternFill = fill.Element(MainNs + "patternFill");
+                if (style.Pattern == FillPatternKind.None && patternFill != null
+                    && patternFill.Attribute("patternType") == null
+                    && patternFill.Element(MainNs + "bgColor") != null)
+                {
+                    style.Pattern = FillPatternKind.Solid;
+                }
                 // Differential formats store the visible solid fill color in bgColor, reversed from regular cell fills.
                 style.ForegroundColor = fillValue.BackgroundColor;
                 style.BackgroundColor = fillValue.ForegroundColor;
@@ -256,7 +263,8 @@ namespace Aspose.Cells_FOSS
                 Name = (string)font.Element(MainNs + "name")?.Attribute("val") ?? "Calibri",
                 Size = ParseDoubleAttribute(font.Element(MainNs + "sz")?.Attribute("val")) ?? 11d,
                 Bold = font.Element(MainNs + "b") != null,
-                Italic = font.Element(MainNs + "i") != null,
+                Italic = font.Element(MainNs + "i") != null
+                    && ParseOptionalBoolAttribute(font.Element(MainNs + "i").Attribute("val")) != false,
                 Underline = ParseUnderlineType(font.Element(MainNs + "u")),
                 StrikeThrough = font.Element(MainNs + "strike") != null,
                 Color = ReadColorValue(font.Element(MainNs + "color")),
@@ -574,7 +582,7 @@ namespace Aspose.Cells_FOSS
                 }
                 element.Add(numFmtElement);
             }
-            var alignmentElement = BuildAlignmentElement(style.Alignment);
+            var alignmentElement = XlsxStyleAlignmentWriter.Build(style.Alignment);
             if (alignmentElement != null)
             {
                 element.Add(alignmentElement);
@@ -613,7 +621,7 @@ namespace Aspose.Cells_FOSS
             {
                 element.SetAttributeValue("applyBorder", 1);
             }
-            var alignmentElement = BuildAlignmentElement(cellFormat.Alignment);
+            var alignmentElement = XlsxStyleAlignmentWriter.Build(cellFormat.Alignment);
             if (alignmentElement != null)
             {
                 element.SetAttributeValue("applyAlignment", 1);
@@ -746,55 +754,6 @@ namespace Aspose.Cells_FOSS
                 element.Add(colorElement);
             }
             return element;
-        }
-    
-        private static XElement BuildAlignmentElement(AlignmentValue alignment)
-        {
-            var element = new XElement(MainNs + "alignment");
-            var hasValue = false;
-            var horizontal = GetHorizontalAlignmentName(alignment.Horizontal);
-            if (!string.IsNullOrEmpty(horizontal))
-            {
-                element.SetAttributeValue("horizontal", horizontal);
-                hasValue = true;
-            }
-            var vertical = GetVerticalAlignmentName(alignment.Vertical);
-            if (!string.IsNullOrEmpty(vertical))
-            {
-                element.SetAttributeValue("vertical", vertical);
-                hasValue = true;
-            }
-            if (alignment.WrapText)
-            {
-                element.SetAttributeValue("wrapText", 1);
-                hasValue = true;
-            }
-            if (alignment.IndentLevel > 0)
-            {
-                element.SetAttributeValue("indent", alignment.IndentLevel);
-                hasValue = true;
-            }
-            if (alignment.TextRotation != 0)
-            {
-                element.SetAttributeValue("textRotation", alignment.TextRotation);
-                hasValue = true;
-            }
-            if (alignment.ShrinkToFit)
-            {
-                element.SetAttributeValue("shrinkToFit", 1);
-                hasValue = true;
-            }
-            if (alignment.ReadingOrder != 0)
-            {
-                element.SetAttributeValue("readingOrder", alignment.ReadingOrder);
-                hasValue = true;
-            }
-            if (alignment.RelativeIndent != 0)
-            {
-                element.SetAttributeValue("relativeIndent", alignment.RelativeIndent);
-                hasValue = true;
-            }
-            return hasValue ? element : null;
         }
     
         private static XElement BuildProtectionElement(ProtectionValue protection)

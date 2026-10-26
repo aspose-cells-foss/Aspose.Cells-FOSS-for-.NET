@@ -120,6 +120,12 @@ namespace Aspose.Cells_FOSS.Rendering
                 if (smartArt.LowerRightColumn > maxCol) maxCol = smartArt.LowerRightColumn;
             }
 
+            foreach (var area in PrintAreaRanges.Read(sheet.PageSetup.PrintArea))
+            {
+                maxRow = Math.Max(maxRow, area.FirstRow + area.TotalRows - 1);
+                maxCol = Math.Max(maxCol, area.FirstColumn + area.TotalColumns - 1);
+            }
+
             if (maxRow < 0 || maxCol < 0)
             {
                 // Nothing to render: keep an empty range anchored at A1.
@@ -190,6 +196,17 @@ namespace Aspose.Cells_FOSS.Rendering
             var defaultPt = sheet.DefaultColumnWidth.HasValue && sheet.DefaultColumnWidth.Value > 0
                 ? RenderUnits.ColumnWidthCharsToPoints(sheet.DefaultColumnWidth.Value, context.MaxDigitWidthPixels)
                 : RenderUnits.DefaultColumnWidthCharsToPoints(DefaultColumnWidthChars, context.MaxDigitWidthPixels);
+            var normalFont = context.Workbook != null && context.Workbook.DefaultStyle != null
+                ? context.Workbook.DefaultStyle.Font : null;
+            if (!sheet.DefaultColumnWidth.HasValue && normalFont != null
+                && (string.Equals(normalFont.Name, "SimSun", StringComparison.OrdinalIgnoreCase)
+                    || string.Equals(normalFont.Name, "\u5b8b\u4f53", StringComparison.Ordinal)))
+            {
+                // Excel retains a 66-pixel implicit column width when the normal style uses SimSun.
+                // Applying SimSun's wider glyph advance to the unstored 8.43-character fallback
+                // makes drawing anchors drift farther right with each intervening column.
+                defaultPt = RenderUnits.PixelsToPointsValue(66d);
+            }
 
             for (var c = 0; c < count; c++)
             {
@@ -227,15 +244,12 @@ namespace Aspose.Cells_FOSS.Rendering
             var count = LastRow + 1;
             RowHeightPt = new double[count];
             RowHidden = new bool[count];
+            var mapPrintLayout = ChartExRegionMapPrintLayout.Applies(sheet);
             var rowHeightScale = ResolveStoredRowHeightScale(context, sheet);
 
-            // Excel only treats the stored defaultRowHeight as authoritative when customHeight is
-            // set; otherwise it re-derives the row height from the workbook's default font (a stored
-            // value can be stale after the default font changed). Match that so CJK-font sheets get
-            // the correct, shorter rows instead of a leftover Latin-font height.
             var customHeightSet = sheet.CustomHeight.HasValue && sheet.CustomHeight.Value;
             double defaultHeight;
-            if (customHeightSet && sheet.DefaultRowHeight.HasValue && sheet.DefaultRowHeight.Value > 0)
+            if ((customHeightSet || mapPrintLayout) && sheet.DefaultRowHeight.HasValue && sheet.DefaultRowHeight.Value > 0)
             {
                 defaultHeight = sheet.DefaultRowHeight.Value;
             }
@@ -262,24 +276,13 @@ namespace Aspose.Cells_FOSS.Rendering
                     continue;
                 }
 
-                if (hasRow && rowModel.Height.HasValue && rowModel.Height.Value > 0 && rowModel.CustomHeight)
+                if (hasRow && rowModel.Height.HasValue && rowModel.Height.Value > 0
+                    && (rowModel.CustomHeight || mapPrintLayout || RowUsesCachedAutoHeight(sheet, r)))
                 {
-                    // A true customHeight row is user-authored and stays authoritative.
-                    RowHeightPt[r] = rowModel.Height.Value;
-                }
-                else if (hasRow && rowModel.Height.HasValue && rowModel.Height.Value > 0 && RowUsesCachedAutoHeight(sheet, r))
-                {
-                    // Wrap/rotation rows often persist Excel's latest auto-fit result only in the
-                    // row height cache. Reuse that cached value for rotated text instead of
-                    // re-fitting with our simpler text model, which can otherwise greatly
-                    // overestimate vertical text.
                     RowHeightPt[r] = rowModel.Height.Value;
                 }
                 else
                 {
-                    // A stored height without customHeight is only Excel's cached auto-fit result.
-                    // Re-fit from the actual row content so stale heights shrink back to the same
-                    // size Excel uses during PDF export.
                     var fittedHeight = Math.Max(defaultHeight, AutoRowHeight(context, sheet, r));
                     if (hasRow && rowModel.Height.HasValue && rowModel.Height.Value > 0)
                     {
@@ -291,12 +294,7 @@ namespace Aspose.Cells_FOSS.Rendering
             }
         }
 
-        /// <summary>
-        /// Some workbooks keep a stale defaultRowHeight after the default font changed. Excel's PDF
-        /// export visually scales explicit row heights by the ratio between the current font-derived
-        /// default row height and that stale stored height; apply the same normalization so custom
-        /// rows stay visually consistent with the active font.
-        /// </summary>
+        /// <summary>Returns the scale for cached row heights after a default-font change.</summary>
         private static double ResolveStoredRowHeightScale(RenderContext context, WorksheetModel sheet)
         {
             if (sheet == null || !sheet.DefaultRowHeight.HasValue || sheet.DefaultRowHeight.Value <= 0d)
@@ -323,12 +321,10 @@ namespace Aspose.Cells_FOSS.Rendering
             return scale;
         }
 
-        /// <summary>
-        /// True when a non-custom-height row contains rotated text and Excel's stored row height
-        /// acts as the latest cached auto-fit result worth preserving.
-        /// </summary>
+        /// <summary>Preserves cached heights for rotated text and empty drawing spacer rows.</summary>
         private bool RowUsesCachedAutoHeight(WorksheetModel sheet, int row)
         {
+            var hasContent = false;
             for (var col = 0; col <= LastColumn; col++)
             {
                 if (ColumnHidden[col])
@@ -348,18 +344,21 @@ namespace Aspose.Cells_FOSS.Rendering
                 }
 
                 var style = record.Style ?? StyleValue.Default;
+                if (record.Value != null && !string.Equals(record.Value as string, string.Empty, StringComparison.Ordinal))
+                {
+                    hasContent = true;
+                }
                 if (style.Alignment.TextRotation > 0)
                 {
                     return true;
                 }
             }
 
-            return false;
+            // Empty rows have no text to re-measure. Their stored height still positions drawings.
+            return !hasContent;
         }
 
-        /// <summary>
-        /// Computes the height a row needs to fit wrap-text cells whose height is not fixed.
-        /// </summary>
+        /// <summary>Computes the auto-fit height for a row whose height is not fixed.</summary>
         private double AutoRowHeight(RenderContext context, WorksheetModel sheet, int row)
         {
             double needed = 0d;
@@ -380,13 +379,13 @@ namespace Aspose.Cells_FOSS.Rendering
                 var style = record.Style ?? StyleValue.Default;
                 var rotation = style.Alignment.TextRotation;
                 var isRotated = rotation > 0;
-                // Skip cells that are merged across rows; their height is governed by the merge.
                 if (IsMergeCovered(row, col) || SpansMultipleRows(row, col))
                 {
                     continue;
                 }
 
-                var text = DisplayTextFormatter.FormatDisplayValue(record.Value, style, context.Culture);
+                var text = DisplayTextFormatter.FormatDisplayValue(record.Value, style, context.Culture,
+                    context.Workbook.Settings.DateSystem);
                 if (string.IsNullOrEmpty(text))
                 {
                     continue;
@@ -396,8 +395,6 @@ namespace Aspose.Cells_FOSS.Rendering
 
                 if (isRotated)
                 {
-                    // Excel fits the row tightly to the rotated text's bounding box (no cell padding),
-                    // so the angled text can graze the top/bottom borders as it does in Excel.
                     var rotatedHeight = RotatedTextHeightPt(font, text, rotation);
                     if (rotatedHeight > needed)
                     {
@@ -416,21 +413,38 @@ namespace Aspose.Cells_FOSS.Rendering
                         continue;
                     }
 
-                    var lines = font.WrapLines(text, (float)availableWidth);
+                    var lines = font.WrapLines(text, (float)availableWidth, true);
                     lineCount = Math.Max(1, lines.Count);
                 }
 
                 if (!style.Alignment.WrapText && style.Alignment.Horizontal == HorizontalAlignment.Distributed)
                 {
-                    // Excel's distributed horizontal alignment keeps single-line text visually on
-                    // one baseline but auto-fits the row to about two default line boxes.
-                    lineCount = Math.Max(lineCount, 2);
+                    var width = DistributedTextLine.UnwrappedWidth(font,
+                        (float)(MergedWidthPt(row, col) - 2d * HorizontalPaddingPt), style.Alignment);
+                    lineCount = Math.Max(1, font.WrapLines(text, width, true).Count);
+                }
+
+                var normalFont = context.Workbook != null && context.Workbook.DefaultStyle != null
+                    ? context.Workbook.DefaultStyle.Font
+                    : null;
+                if (!style.Alignment.WrapText && style.Alignment.Horizontal != HorizontalAlignment.Distributed
+                    && normalFont != null && style.Font != null
+                    && string.Equals(style.Font.Name, normalFont.Name, StringComparison.OrdinalIgnoreCase)
+                    && style.Font.Size <= normalFont.Size)
+                {
+                    continue;
                 }
 
                 var verticalPadding = style.Alignment.WrapText
                     ? 2d * VerticalPaddingPt
                     : 2d * AutoFitSingleLineVerticalPaddingPt;
-                var blockHeight = lineCount * font.LineHeightPt + verticalPadding;
+                var lineHeight = style.Alignment.WrapText ? font.WrappedLineHeightPt : font.LineHeightPt;
+                if (!style.Alignment.WrapText && style.Alignment.Horizontal == HorizontalAlignment.Distributed)
+                {
+                    lineHeight = font.WrappedLineHeightPt;
+                    verticalPadding = 0d;
+                }
+                var blockHeight = lineCount * lineHeight + verticalPadding;
                 if (blockHeight > needed)
                 {
                     needed = blockHeight;
@@ -440,11 +454,7 @@ namespace Aspose.Cells_FOSS.Rendering
             return needed;
         }
 
-        /// <summary>
-        /// Height (excluding padding) that a single line of rotated cell text occupies. Angled text
-        /// (1-180) contributes the height of its rotated bounding box; vertically-stacked text (255)
-        /// contributes one line per character.
-        /// </summary>
+        /// <summary>Returns the unpadded height of rotated or vertically stacked text.</summary>
         private static double RotatedTextHeightPt(CellFontContext font, string text, int rotation)
         {
             var flat = text.Replace("\r", string.Empty).Replace("\n", string.Empty);
@@ -456,8 +466,6 @@ namespace Aspose.Cells_FOSS.Rendering
             var ccwDeg = rotation <= 90 ? rotation : rotation - 90;
             var rad = ccwDeg * Math.PI / 180d;
 
-            // Size the row to the rotated text's tight ink box (what Excel fits to), not the font's
-            // nominal line box, so a row of rotated text is not left several points too tall.
             float inkWidth, inkHeight;
             font.MeasureInkBounds(flat, out inkWidth, out inkHeight);
             return inkWidth * Math.Abs(Math.Sin(rad)) + inkHeight * Math.Abs(Math.Cos(rad));

@@ -116,7 +116,7 @@ namespace Aspose.Cells_FOSS
 
         internal static XElement BuildSheetProperties(PageSetupModel pageSetup)
         {
-            if (!pageSetup.FitToWidth.HasValue && !pageSetup.FitToHeight.HasValue)
+            if (!pageSetup.FitToPage)
             {
                 return null;
             }
@@ -183,12 +183,17 @@ namespace Aspose.Cells_FOSS
                 && !pageSetup.FirstPageNumber.HasValue
                 && !pageSetup.Scale.HasValue
                 && !pageSetup.FitToWidth.HasValue
-                && !pageSetup.FitToHeight.HasValue)
+                && !pageSetup.FitToHeight.HasValue
+                && !pageSetup.PageOrderOverThenDown)
             {
                 return null;
             }
 
             var element = new XElement(MainNs + "pageSetup");
+            if (pageSetup.PageOrderOverThenDown)
+            {
+                element.SetAttributeValue("pageOrder", "overThenDown");
+            }
             if (pageSetup.PaperSize > 0)
             {
                 element.SetAttributeValue("paperSize", pageSetup.PaperSize);
@@ -297,6 +302,8 @@ namespace Aspose.Cells_FOSS
         internal static void LoadWorksheetPageSetup(WorksheetModel worksheetModel, XElement worksheetRoot, LoadDiagnostics diagnostics, LoadOptions options, string sheetName)
         {
             var pageSetup = worksheetModel.PageSetup;
+            var setupProperties = worksheetRoot.Element(MainNs + "sheetPr")?.Element(MainNs + "pageSetUpPr");
+            pageSetup.FitToPage = ParseBoolAttribute(setupProperties?.Attribute("fitToPage"));
             LoadPageMargins(pageSetup, worksheetRoot.Element(MainNs + "pageMargins"), diagnostics, options, sheetName);
             LoadPageSetupCore(pageSetup, worksheetRoot.Element(MainNs + "pageSetup"), diagnostics, options, sheetName);
             LoadPrintOptions(pageSetup, worksheetRoot.Element(MainNs + "printOptions"));
@@ -333,6 +340,7 @@ namespace Aspose.Cells_FOSS
             pageSetup.FitToWidth = ParseNonNegativeIntAttribute(pageSetupElement.Attribute("fitToWidth"), diagnostics, options, sheetName, "fitToWidth");
             pageSetup.FitToHeight = ParseNonNegativeIntAttribute(pageSetupElement.Attribute("fitToHeight"), diagnostics, options, sheetName, "fitToHeight");
             pageSetup.Orientation = ParseOrientation((string)pageSetupElement.Attribute("orientation"), diagnostics, options, sheetName);
+            pageSetup.PageOrderOverThenDown = string.Equals((string)pageSetupElement.Attribute("pageOrder"), "overThenDown", StringComparison.Ordinal);
         }
 
         private static void LoadPrintOptions(PageSetupModel pageSetup, XElement printOptionsElement)
@@ -508,7 +516,7 @@ namespace Aspose.Cells_FOSS
             return string.Join(",", segments);
         }
 
-        private static string NormalizeLoadedPrintArea(string value)
+        internal static string NormalizeLoadedPrintArea(string value)
         {
             var segments = new List<string>();
             foreach (var segment in SplitReferenceList(value))

@@ -75,7 +75,8 @@ namespace Aspose.Cells_FOSS
                 // Display formatting is style-aware while StringValue stays a stable raw
                 // representation of the logical cell payload.
                 var style = record == null ? _worksheet.Workbook.Model.DefaultStyle : record.Style;
-                return DisplayTextFormatter.FormatDisplayValue(record?.Value, style, _worksheet.Workbook.Model.Settings.DisplayCulture);
+                return DisplayTextFormatter.FormatDisplayValue(record?.Value, style,
+                    _worksheet.Workbook.Model.Settings.DisplayCulture, _worksheet.Workbook.Model.Settings.DateSystem);
             }
         }
 

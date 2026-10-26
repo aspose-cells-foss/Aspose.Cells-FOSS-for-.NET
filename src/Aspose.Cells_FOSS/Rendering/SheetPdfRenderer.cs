@@ -16,6 +16,7 @@ namespace Aspose.Cells_FOSS.Rendering
 
         private readonly RenderContext _context;
         private readonly Dictionary<ChartModel, ParsedChart> _chartCache = new Dictionary<ChartModel, ParsedChart>();
+        private readonly Dictionary<ChartModel, MapChartData> _mapChartCache = new Dictionary<ChartModel, MapChartData>();
         private readonly Dictionary<ShapeModel, ParsedShape> _shapeCache = new Dictionary<ShapeModel, ParsedShape>();
         private readonly Dictionary<SmartArtModel, List<SmartArtShape>> _smartArtCache = new Dictionary<SmartArtModel, List<SmartArtShape>>();
         private readonly Dictionary<WorksheetModel, ConditionalFormatEvaluator> _cfCache = new Dictionary<WorksheetModel, ConditionalFormatEvaluator>();
@@ -26,7 +27,7 @@ namespace Aspose.Cells_FOSS.Rendering
         {
             _context = context;
             _richTextRenderer = new RichTextCellRenderer(context);
-            _tableStyleResolver = new TableStyleResolver();
+            _tableStyleResolver = new TableStyleResolver(context.Workbook);
         }
 
         public void RenderPage(SKCanvas canvas, PageLayout page)
@@ -39,9 +40,7 @@ namespace Aspose.Cells_FOSS.Rendering
 
             // Clip to the printable region (in content coordinates) so scaled content never bleeds
             // into the page margins.
-            var contentWidth = (float)(layout.ColumnStartPt[page.EndColumn + 1] - layout.ColumnStartPt[page.StartColumn]);
-            var contentHeight = (float)(layout.RowStartPt[page.EndRow + 1] - layout.RowStartPt[page.StartRow]);
-            var contentClip = new SKRect(0f, 0f, contentWidth, contentHeight);
+            var contentClip = PageContentClip.Resolve(page, false);
 
             // Cell grid: clip tightly to the content span.
             canvas.Save();
@@ -73,12 +72,7 @@ namespace Aspose.Cells_FOSS.Rendering
             // pictures or arrowheads, especially on the sheet's outer right edge. Keep the clip tight
             // at internal page breaks, but allow a larger outer-edge overflow so those labels are not
             // truncated to just their first few characters.
-            const float overflow = 72f;
-            var objectClip = new SKRect(
-                0f,
-                0f,
-                contentWidth + (page.EndColumn >= layout.LastColumn ? overflow : 0f),
-                contentHeight + (page.EndRow >= layout.LastRow ? overflow : 0f));
+            var objectClip = PageContentClip.Resolve(page, true);
 
             canvas.Save();
             canvas.ClipRect(objectClip);
@@ -140,9 +134,11 @@ namespace Aspose.Cells_FOSS.Rendering
                         ConditionalFormatEvaluator.CellEffect effect;
                         if (cf.TryGet(row, col, out effect) && effect.HasFill)
                         {
-                            var rect = CellRect(page, row, col);
                             DrawRotatedNeighborUnderlay(canvas, page, row, col, style);
-                            DrawSolidCellFill(canvas, rect, style.Alignment, effect.Fill);
+                            if (FillShearFactor(style.Alignment) != 0f)
+                            {
+                                DrawSolidCellFill(canvas, CellRect(page, row, col), style.Alignment, effect.Fill);
+                            }
                         }
                         else if (style != null && style.Pattern != FillPatternKind.None)
                         {
@@ -153,13 +149,14 @@ namespace Aspose.Cells_FOSS.Rendering
                 }
             }
 
+            ConditionalFillRunRenderer.Draw(canvas, page, cf, _tableStyleResolver);
             DrawConditionalDataBars(canvas, page, cf);
         }
 
         /// <summary>
         /// Draws conditional-formatting data bars over the cell fills and behind the cell text. Each bar
-        /// grows from the cell's left edge with a gradient toward a lighter tint, as Excel renders the
-        /// default gradient data bar.
+        /// grows from the cell's left edge and uses either the default gradient or a solid fill,
+        /// according to the loaded rule.
         /// </summary>
         private void DrawConditionalDataBars(SKCanvas canvas, PageLayout page, ConditionalFormatEvaluator cf)
         {
@@ -181,8 +178,8 @@ namespace Aspose.Cells_FOSS.Rendering
 
                     var bar = effect.Bar.Value;
                     var rect = CellRect(page, row, col);
-                    var inset = 1.5f;
-                    var maxWidth = rect.Width - 2f * inset;
+                    var inset = 1.9f;
+                    var maxWidth = rect.Width - 3f;
                     var width = (float)(maxWidth * bar.Fraction);
                     if (width <= 0.5f)
                     {
@@ -191,20 +188,25 @@ namespace Aspose.Cells_FOSS.Rendering
 
                     var barRect = new SKRect(rect.Left + inset, rect.Top + inset, rect.Left + inset + width, rect.Bottom - inset);
                     var lighter = new SKColor(
-                        (byte)(bar.Color.Red + (255 - bar.Color.Red) * 0.72f),
-                        (byte)(bar.Color.Green + (255 - bar.Color.Green) * 0.72f),
-                        (byte)(bar.Color.Blue + (255 - bar.Color.Blue) * 0.72f));
-                    using (var shader = SKShader.CreateLinearGradient(
+                        (byte)(bar.Color.Red + (255 - bar.Color.Red) * 0.85f),
+                        (byte)(bar.Color.Green + (255 - bar.Color.Green) * 0.85f),
+                        (byte)(bar.Color.Blue + (255 - bar.Color.Blue) * 0.85f));
+                    using (var shader = bar.Gradient ? SKShader.CreateLinearGradient(
                         new SKPoint(barRect.Left, 0f), new SKPoint(barRect.Right, 0f),
-                        new[] { bar.Color, lighter }, null, SKShaderTileMode.Clamp))
-                    using (var paint = new SKPaint { Style = SKPaintStyle.Fill, IsAntialias = true, Shader = shader })
+                        new[] { bar.Color, lighter }, null, SKShaderTileMode.Clamp) : null)
+                    using (var paint = new SKPaint { Style = SKPaintStyle.Fill, IsAntialias = true,
+                        Color = bar.Color, Shader = shader })
                     {
                         canvas.DrawRect(barRect, paint);
                     }
 
-                    using (var border = new SKPaint { Style = SKPaintStyle.Stroke, StrokeWidth = 0.6f, IsAntialias = true, Color = bar.Color })
+                    if (bar.ShowBorder)
                     {
-                        canvas.DrawRect(barRect, border);
+                        using (var border = new SKPaint { Style = SKPaintStyle.Stroke,
+                            StrokeWidth = 0.6f, IsAntialias = true, Color = bar.Color })
+                        {
+                            canvas.DrawRect(barRect, border);
+                        }
                     }
                 }
             }
@@ -258,6 +260,13 @@ namespace Aspose.Cells_FOSS.Rendering
                 {
                     paint.Style = SKPaintStyle.Fill;
                     canvas.DrawCircle(cx, cy, half, paint);
+                    if (icon.HasBorder)
+                    {
+                        paint.Style = SKPaintStyle.Stroke;
+                        paint.StrokeWidth = 0.55f;
+                        paint.Color = icon.BorderColor;
+                        canvas.DrawCircle(cx, cy, half - paint.StrokeWidth / 2f, paint);
+                    }
                     return;
                 }
 
@@ -674,6 +683,23 @@ namespace Aspose.Cells_FOSS.Rendering
                     continue;
                 }
 
+                if (chart.IsChartEx)
+                {
+                    MapChartData mapChart;
+                    if (!_mapChartCache.TryGetValue(chart, out mapChart))
+                    {
+                        mapChart = MapChartXmlParser.Parse(chart.RawChartXml, _context.Workbook);
+                        _mapChartCache[chart] = mapChart;
+                    }
+
+                    if (mapChart != null)
+                    {
+                        new MapChartRenderer(_context).Draw(canvas, ChartRect(page, chart), mapChart, page);
+                    }
+
+                    continue;
+                }
+
                 ParsedChart parsed;
                 if (!_chartCache.TryGetValue(chart, out parsed))
                 {
@@ -824,6 +850,14 @@ namespace Aspose.Cells_FOSS.Rendering
             var top = RowEdgePt(layout, chart.UpperLeftRow, chart.UpperLeftRowOffset) - originY;
             var right = ColumnEdgePt(layout, chart.LowerRightColumn, chart.LowerRightColumnOffset) - originX;
             var bottom = RowEdgePt(layout, chart.LowerRightRow, chart.LowerRightRowOffset) - originY;
+            if (chart.ExtentCx > 0)
+            {
+                right = left + chart.ExtentCx / 12700d;
+            }
+            if (chart.ExtentCy > 0)
+            {
+                bottom = top + chart.ExtentCy / 12700d;
+            }
             return new SKRect((float)left, (float)top, (float)right, (float)bottom);
         }
 
@@ -853,18 +887,6 @@ namespace Aspose.Cells_FOSS.Rendering
                     continue;
                 }
 
-                ParsedShape parsed;
-                if (!_shapeCache.TryGetValue(shape, out parsed))
-                {
-                    parsed = ShapeXmlParser.Parse(shape.RawElementXml, shape.GeometryType, _context.Colors);
-                    _shapeCache[shape] = parsed;
-                }
-
-                if (parsed == null)
-                {
-                    continue;
-                }
-
                 var layoutRef = page.Sheet;
                 var originX = layoutRef.ColumnStartPt[page.StartColumn];
                 var originY = layoutRef.RowStartPt[page.StartRow];
@@ -875,6 +897,23 @@ namespace Aspose.Cells_FOSS.Rendering
                 var rect = new SKRect((float)left, (float)top, (float)right, (float)bottom);
                 if (rect.Width > 0f && rect.Height > 0f)
                 {
+                    if (new GroupShapeRenderer(_context).TryDraw(canvas, page, rect, shape.RawElementXml))
+                    {
+                        continue;
+                    }
+
+                    ParsedShape parsed;
+                    if (!_shapeCache.TryGetValue(shape, out parsed))
+                    {
+                        parsed = ShapeXmlParser.Parse(shape.RawElementXml, shape.GeometryType, _context.Colors);
+                        _shapeCache[shape] = parsed;
+                    }
+
+                    if (parsed == null)
+                    {
+                        continue;
+                    }
+
                     renderer.Draw(canvas, page, rect, parsed, shape, layout.Sheet.Shapes);
                 }
             }
@@ -972,7 +1011,14 @@ namespace Aspose.Cells_FOSS.Rendering
 
         private bool IsCellEmptyForOverflow(SheetLayout layout, int row, int col)
         {
-            if (layout.ColumnHidden[col] || layout.IsMergeCovered(row, col))
+            // Hidden columns have zero printed width and must not stop text in the preceding
+            // visible cell from flowing into the next empty visible column.
+            if (layout.ColumnHidden[col])
+            {
+                return true;
+            }
+
+            if (layout.IsMergeCovered(row, col))
             {
                 return false;
             }
@@ -990,7 +1036,8 @@ namespace Aspose.Cells_FOSS.Rendering
             }
 
             var style = record.Style ?? StyleValue.Default;
-            var text = DisplayTextFormatter.FormatDisplayValue(record.Value, style, _context.Culture);
+            var text = DisplayTextFormatter.FormatDisplayValue(record.Value, style, _context.Culture,
+                DateSystemOf());
             return string.IsNullOrEmpty(text);
         }
 
@@ -1162,7 +1209,36 @@ namespace Aspose.Cells_FOSS.Rendering
 
         private void DrawText(SKCanvas canvas, PageLayout page, int row, int col, SKRect rect, CellRecord record, StyleValue style)
         {
+            ConditionalFormatEvaluator.CellEffect cf;
+            var hasCf = ConditionalFormatFor(page.Sheet).TryGet(row, col, out cf);
+            if (hasCf && cf.SuppressText)
+            {
+                return;
+            }
+
+            if (hasCf && ((cf.HasFontBold && !style.Font.Bold)
+                || (cf.HasFontItalic && !style.Font.Italic)
+                || (cf.HasFontUnderline && style.Font.Underline != cf.FontUnderline)))
+            {
+                style = style.Clone();
+                if (cf.HasFontBold)
+                {
+                    style.Font.Bold = true;
+                }
+                if (cf.HasFontItalic)
+                {
+                    style.Font.Italic = true;
+                }
+                if (cf.HasFontUnderline)
+                {
+                    style.Font.Underline = cf.FontUnderline;
+                }
+            }
+
             var fontContext = _context.GetFontContext(style.Font);
+            var pdfFontMetrics = style.Font != null
+                && (string.Equals(style.Font.Name, "SimSun", StringComparison.OrdinalIgnoreCase)
+                    || string.Equals(style.Font.Name, "\u5b8b\u4f53", StringComparison.Ordinal));
             var padding = (float)SheetLayout.HorizontalPaddingPt;
             var baseInnerWidth = rect.Width - 2f * padding;
             if (baseInnerWidth <= 0f)
@@ -1173,16 +1249,13 @@ namespace Aspose.Cells_FOSS.Rendering
             var horizontal = ResolveHorizontal(style.Alignment.Horizontal, record);
             var indentOffset = IndentOffsetPt(fontContext, style.Alignment, horizontal);
             var innerWidth = Math.Max(0f, baseInnerWidth - indentOffset);
-            var wrapWidth = EffectiveWrapWidthPt(innerWidth, style.Alignment);
+            // Distributed indentation is already accounted for by EffectiveWrapWidthPt;
+            // use the same unindented input as automatic row-height measurement.
+            var wrapWidth = EffectiveWrapWidthPt(horizontal == HorizontalAlignment.Distributed ? baseInnerWidth : innerWidth, style.Alignment);
+            var implicitDistributedWrap = horizontal == HorizontalAlignment.Distributed && !style.Alignment.WrapText;
+            if (implicitDistributedWrap)
+                wrapWidth = DistributedTextLine.UnwrappedWidth(fontContext, baseInnerWidth, style.Alignment);
             if (innerWidth <= 0f)
-            {
-                return;
-            }
-
-            // An icon-set rule with showValue="0" replaces the value with just the icon.
-            ConditionalFormatEvaluator.CellEffect cf;
-            var hasCf = ConditionalFormatFor(page.Sheet).TryGet(row, col, out cf);
-            if (hasCf && cf.SuppressText)
             {
                 return;
             }
@@ -1197,7 +1270,8 @@ namespace Aspose.Cells_FOSS.Rendering
             }
             else
             {
-                text = DisplayTextFormatter.FormatDisplayValue(record.Value, style, _context.Culture);
+                text = DisplayTextFormatter.FormatDisplayValue(record.Value, style, _context.Culture,
+                    DateSystemOf());
             }
 
             if (string.IsNullOrEmpty(text))
@@ -1205,27 +1279,34 @@ namespace Aspose.Cells_FOSS.Rendering
                 return;
             }
 
+            var color = NumberFormatTextColor.Resolve(record.Value, style,
+                _context.Colors.Resolve(style.Font.Color, SKColors.Black));
+            if (hasCf && cf.HasFontColor)
+            {
+                color = cf.FontColor;
+            }
+
             // Rotated / vertically-stacked cell text takes a dedicated path.
             var rotation = style.Alignment.TextRotation;
             if (rotation == 255)
             {
-                DrawStackedCellText(canvas, rect, StripLineBreaks(text), fontContext, style);
+                DrawStackedCellText(canvas, rect, StripLineBreaks(text), fontContext, style, color);
                 return;
             }
             if (rotation != 0)
             {
-                DrawRotatedCellText(canvas, rect, StripLineBreaks(text), fontContext, style, rotation);
+                DrawRotatedCellText(canvas, rect, StripLineBreaks(text), fontContext, style, rotation, color);
                 return;
             }
 
             // Wrapped text breaks on explicit newlines; non-wrapped text collapses them the way
             // Excel does (a manual line break renders as zero-width, keeping one visual line)
             // rather than drawing a missing-glyph box for the control character.
-            var lines = style.Alignment.WrapText
-                ? fontContext.WrapLines(text, wrapWidth)
+            var lines = style.Alignment.WrapText || implicitDistributedWrap
+                ? fontContext.WrapLines(text, wrapWidth, true)
                 : new List<string>(new[] { StripLineBreaks(text) });
 
-            var lineHeight = fontContext.LineHeightPt;
+            var lineHeight = style.Alignment.WrapText || implicitDistributedWrap ? fontContext.WrappedLineHeightPt : fontContext.LineHeightPt;
             var blockHeight = lines.Count * lineHeight;
 
             float blockTop;
@@ -1239,20 +1320,22 @@ namespace Aspose.Cells_FOSS.Rendering
                     break;
                 default: // Bottom / Justify / Distributed
                     blockTop = rect.Bottom - (float)SheetLayout.VerticalPaddingPt - blockHeight;
+                    if (pdfFontMetrics)
+                    {
+                        // Excel places SimSun's print baseline lower than its nominal Skia
+                        // line box. Keep the row height; adjust only bottom-aligned ink.
+                        blockTop += fontContext.SizePt * (3.2f / 11f);
+                    }
                     break;
             }
 
-            var color = _context.Colors.Resolve(style.Font.Color, SKColors.Black);
-            if (hasCf && cf.HasFontColor)
-            {
-                color = cf.FontColor;
-            }
             // Non-wrapped text that is wider than its cell overflows into adjacent EMPTY cells, the
             // way Excel renders it; wrapped text and text with occupied neighbors stay clipped.
             var clip = rect;
-            if (!style.Alignment.WrapText && lines.Count == 1)
+            if (!style.Alignment.WrapText && !implicitDistributedWrap && lines.Count == 1)
             {
-                var needed = fontContext.Measure(lines[0]) + 2f * padding + indentOffset;
+                var needed = (pdfFontMetrics ? fontContext.MeasurePdfText(lines[0]) : fontContext.Measure(lines[0]))
+                    + 2f * padding + indentOffset;
                 if (needed > rect.Width)
                 {
                     clip = ExpandClipForOverflow(page, row, col, rect, horizontal);
@@ -1279,18 +1362,53 @@ namespace Aspose.Cells_FOSS.Rendering
                 var metrics = metricsFont.Metrics;
                 metricsFont.Dispose();
 
+                var wrappedTextOffset = 0;
                 for (var i = 0; i < lines.Count; i++)
                 {
                     var line = lines[i];
                     var lineTop = blockTop + i * lineHeight;
                     var baseline = lineTop - metrics.Ascent; // Ascent is negative in Skia.
 
-                    var lineWidth = fontContext.Measure(line);
+                    var sourceStart = text.IndexOf(line, wrappedTextOffset, StringComparison.Ordinal);
+                    if (sourceStart >= 0) wrappedTextOffset = sourceStart + line.Length;
+                    if (horizontal == HorizontalAlignment.Distributed)
+                    {
+                        var trailingSeparator = wrappedTextOffset < text.Length
+                            && (text[wrappedTextOffset] == ' ' || text[wrappedTextOffset] == '\t');
+                        var distributed = DistributedTextLine.Build(fontContext, line, wrapWidth, trailingSeparator);
+                        var left = rect.MidX - wrapWidth / 2f;
+                        for (var wordIndex = 0; wordIndex < distributed.Words.Length; wordIndex++)
+                        {
+                            var word = distributed.Words[wordIndex];
+                            var wordX = left + distributed.Offsets[wordIndex];
+                            if (!TryRecordRuns(page, clip, fontContext, word, wordX, baseline, paint.Color, true))
+                                DrawRuns(canvas, fontContext, word, wordX, baseline, paint, style.Font);
+                            else DrawDecorations(canvas, fontContext, word, wordX, baseline, paint, style.Font);
+                        }
+                        continue;
+                    }
+
+                    var formatCode = NumberFormat.ResolveFormatCode(style.NumberFormat.Number, style.NumberFormat.Custom);
+                    var accountingSymbol = string.Empty;
+                    if (i == 0 && formatCode.IndexOf('*') >= 0 && line.Length > 1
+                        && !char.IsDigit(line[0]) && (char.IsDigit(line[1]) || line[1] == '-'))
+                    {
+                        accountingSymbol = line.Substring(0, 1);
+                        line = line.Substring(1);
+                    }
+
+                    var usePdfAdvances = pdfFontMetrics || style.Alignment.WrapText;
+                    var lineWidth = usePdfAdvances ? fontContext.MeasurePdfText(line) : fontContext.Measure(line);
                     var lineScale = ShrinkScale(style.Alignment, lineWidth, innerWidth);
                     var renderedWidth = lineWidth * lineScale;
                     float x;
                     switch (horizontal)
                     {
+                        case HorizontalAlignment.Distributed:
+                            x = style.Alignment.WrapText && style.Alignment.IndentLevel > 0
+                                ? rect.Left + (rect.Width - renderedWidth) / 2f
+                                : rect.Left + padding + indentOffset;
+                            break;
                         case HorizontalAlignment.Center:
                         case HorizontalAlignment.CenterContinuous:
                             x = rect.Left + (rect.Width - renderedWidth) / 2f;
@@ -1311,13 +1429,26 @@ namespace Aspose.Cells_FOSS.Rendering
                         DrawRuns(canvas, fontContext, line, 0f, 0f, paint, style.Font);
                         canvas.Restore();
                     }
-                    else if (!TryRecordRuns(page, clip, fontContext, line, x, baseline, paint.Color))
+                    else if (!TryRecordRuns(page, clip, fontContext, line, x, baseline, paint.Color, usePdfAdvances))
                     {
                         DrawRuns(canvas, fontContext, line, x, baseline, paint, style.Font);
                     }
                     else
                     {
                         DrawDecorations(canvas, fontContext, line, x, baseline, paint, style.Font);
+                    }
+
+                    if (accountingSymbol.Length > 0)
+                    {
+                        var symbolX = rect.Left + padding + indentOffset;
+                        if (!TryRecordRuns(page, clip, fontContext, accountingSymbol, symbolX, baseline, paint.Color, pdfFontMetrics))
+                        {
+                            DrawRuns(canvas, fontContext, accountingSymbol, symbolX, baseline, paint, style.Font);
+                        }
+                        else
+                        {
+                            DrawDecorations(canvas, fontContext, accountingSymbol, symbolX, baseline, paint, style.Font);
+                        }
                     }
                 }
             }
@@ -1395,7 +1526,8 @@ namespace Aspose.Cells_FOSS.Rendering
             return alignment.IndentLevel * indentStep;
         }
 
-        private bool TryRecordRuns(PageLayout page, SKRect clip, CellFontContext fontContext, string line, float x, float baseline, SKColor color)
+        private bool TryRecordRuns(PageLayout page, SKRect clip, CellFontContext fontContext, string line,
+            float x, float baseline, SKColor color, bool pdfFontMetrics)
         {
             var session = _context.PdfTextSession;
             if (session == null || !_context.EnableWorksheetTextOptimization || string.IsNullOrEmpty(line))
@@ -1403,7 +1535,7 @@ namespace Aspose.Cells_FOSS.Rendering
                 return false;
             }
 
-            var runs = fontContext.SplitRuns(line);
+            var runs = pdfFontMetrics ? fontContext.SplitPdfRuns(line) : fontContext.SplitRuns(line);
             for (var i = 0; i < runs.Count; i++)
             {
                 if (!SupportsType3Run(runs[i].Typeface))
@@ -1430,8 +1562,9 @@ namespace Aspose.Cells_FOSS.Rendering
                 return false;
             }
 
-            return !string.Equals(typeface.FamilyName, "DengXian", StringComparison.OrdinalIgnoreCase)
-                && !string.Equals(typeface.FamilyName, "等线", StringComparison.Ordinal);
+            // Type3 glyph outlines use the run's coordinate-system matrix, not a
+            // font-family-specific orientation. DengXian can share glyphs too.
+            return true;
         }
 
         private void DrawRuns(SKCanvas canvas, CellFontContext fontContext, string line, float x, float baseline, SKPaint paint, FontValue font)
@@ -1501,7 +1634,7 @@ namespace Aspose.Cells_FOSS.Rendering
                 paint.Style = SKPaintStyle.Stroke;
                 paint.IsAntialias = true;
                 paint.StrokeWidth = Math.Max(0.6f, fontSizePt * 0.055f);
-                var y = baseline + fontSizePt * 0.08f;
+                var y = baseline + fontSizePt * 0.18f;
                 canvas.DrawLine(x0, y, x1, y, paint);
             }
         }
@@ -1524,14 +1657,13 @@ namespace Aspose.Cells_FOSS.Rendering
         /// counter-clockwise degrees above the horizon, 91-180 = clockwise degrees below it). The
         /// rotated text block is aligned within the cell per the cell's horizontal/vertical alignment.
         /// </summary>
-        private void DrawRotatedCellText(SKCanvas canvas, SKRect rect, string text, CellFontContext fontContext, StyleValue style, int rotation)
+        private void DrawRotatedCellText(SKCanvas canvas, SKRect rect, string text, CellFontContext fontContext, StyleValue style, int rotation, SKColor color)
         {
             // Excel angle (counter-clockwise positive); canvas rotation is clockwise-positive (y-down).
             var ccwDeg = rotation <= 90 ? rotation : -(rotation - 90);
             var canvasDeg = (float)(-ccwDeg);
             var isClockwiseDiagonal = rotation > 90 && rotation < 180;
 
-            var color = _context.Colors.Resolve(style.Font.Color, SKColors.Black);
             var padding = (float)SheetLayout.HorizontalPaddingPt;
 
             using (var paint = new SKPaint { Color = color, IsAntialias = true })
@@ -1571,7 +1703,22 @@ namespace Aspose.Cells_FOSS.Rendering
                 float tx;
                 float baseline;
                 var allowClockwiseOverflow = isClockwiseDiagonal && shear == 0f;
-                if (textW <= capacity && !allowClockwiseOverflow)
+                var centeredClockwise = allowClockwiseOverflow
+                    && (style.Alignment.Horizontal == HorizontalAlignment.Center
+                        || style.Alignment.Horizontal == HorizontalAlignment.CenterContinuous)
+                    && style.Alignment.Vertical == VerticalAlignment.Center
+                    && textW * absCos + (ascent + descent) * absSin <= rect.Width - 2f * padding
+                    && textW * absSin + (ascent + descent) * absCos <= rect.Height;
+                if (centeredClockwise)
+                {
+                    // Fitting centered text belongs at the centroid of the same parallelogram
+                    // used by the clockwise cell fill, not at its top overflow anchor.
+                    anchorX = rect.MidX - FillShearFactor(style.Alignment) * rect.Height / 2f;
+                    anchorY = rect.MidY;
+                    tx = -textW / 2f;
+                    baseline = (ascent - descent) / 2f;
+                }
+                else if (textW <= capacity && !allowClockwiseOverflow)
                 {
                     // Fits: center the block. Horizontally, a bordered (sheared) cell places the text a
                     // fifth of the shear extent left of the upright centre - between that centre and the
@@ -1675,14 +1822,13 @@ namespace Aspose.Cells_FOSS.Rendering
         /// Draws vertically-stacked cell text (textRotation 255): each character is upright and placed
         /// below the previous one, the block aligned within the cell.
         /// </summary>
-        private void DrawStackedCellText(SKCanvas canvas, SKRect rect, string text, CellFontContext fontContext, StyleValue style)
+        private void DrawStackedCellText(SKCanvas canvas, SKRect rect, string text, CellFontContext fontContext, StyleValue style, SKColor color)
         {
             if (string.IsNullOrEmpty(text))
             {
                 return;
             }
 
-            var color = _context.Colors.Resolve(style.Font.Color, SKColors.Black);
             var padding = (float)SheetLayout.HorizontalPaddingPt;
             var glyphAdvance = StackedGlyphAdvancePt(fontContext);
             var visibleLength = 0;
@@ -1786,8 +1932,7 @@ namespace Aspose.Cells_FOSS.Rendering
 
         private static float StackedColumnAdvancePt(CellFontContext fontContext)
         {
-            var zeroWidth = fontContext.Measure("0");
-            return Math.Max(fontContext.SizePt * 0.95f, zeroWidth + Math.Max(0.8f, fontContext.SizePt * 0.1f));
+            return StackedGlyphAdvancePt(fontContext);
         }
 
         /// <summary>

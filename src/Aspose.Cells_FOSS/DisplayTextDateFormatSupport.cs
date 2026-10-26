@@ -10,13 +10,36 @@ namespace Aspose.Cells_FOSS
     {
         internal static string FormatDateTimeValue(DateTime value, string formatCode, CultureInfo culture)
         {
+            if (formatCode.IndexOf("ss", StringComparison.OrdinalIgnoreCase) >= 0
+                && formatCode.IndexOf(".0", StringComparison.Ordinal) < 0)
+            {
+                var roundedTicks = ((value.Ticks + TimeSpan.TicksPerSecond / 2) / TimeSpan.TicksPerSecond)
+                    * TimeSpan.TicksPerSecond;
+                value = new DateTime(roundedTicks, value.Kind);
+            }
+
             var builder = new StringBuilder(formatCode.Length + 16);
             var hasAmPm = formatCode.IndexOf("AM/PM", StringComparison.OrdinalIgnoreCase) >= 0
-                || formatCode.IndexOf("A/P", StringComparison.OrdinalIgnoreCase) >= 0;
+                || formatCode.IndexOf("A/P", StringComparison.OrdinalIgnoreCase) >= 0
+                || formatCode.IndexOf("上午/下午", StringComparison.Ordinal) >= 0;
             var inQuote = false;
 
             for (var index = 0; index < formatCode.Length; index++)
             {
+                if (MatchesToken(formatCode, index, "上午/下午"))
+                {
+                    builder.Append(value.Hour < 12 ? "上午" : "下午");
+                    index += 4;
+                    continue;
+                }
+
+                if (MatchesToken(formatCode, index, "aaa"))
+                {
+                    builder.Append(culture.DateTimeFormat.GetAbbreviatedDayName(value.DayOfWeek));
+                    index += 2;
+                    continue;
+                }
+
                 if (MatchesToken(formatCode, index, "AM/PM"))
                 {
                     builder.Append(GetAmPmDesignator(value, culture, false));
@@ -306,6 +329,13 @@ namespace Aspose.Cells_FOSS
 
         internal static string FormatElapsedTimeValue(TimeSpan time, string formatCode, CultureInfo culture)
         {
+            if (formatCode.IndexOf("ss", StringComparison.OrdinalIgnoreCase) >= 0
+                && formatCode.IndexOf(".0", StringComparison.Ordinal) < 0)
+            {
+                time = TimeSpan.FromTicks(((time.Ticks + TimeSpan.TicksPerSecond / 2)
+                    / TimeSpan.TicksPerSecond) * TimeSpan.TicksPerSecond);
+            }
+
             var builder = new StringBuilder(formatCode.Length + 8);
             var inQuote = false;
 

@@ -37,6 +37,8 @@ namespace Aspose.Cells_FOSS.Core
         /// Gets or sets the scale.
         /// </summary>
         public int? Scale { get; set; }
+        /// <summary>Whether fit-to-page scaling is active, independently of stored fit dimensions.</summary>
+        public bool FitToPage { get; set; }
         /// <summary>
         /// Gets or sets the fit to width.
         /// </summary>
@@ -45,6 +47,10 @@ namespace Aspose.Cells_FOSS.Core
         /// Gets or sets the fit to height.
         /// </summary>
         public int? FitToHeight { get; set; }
+        /// <summary>
+        /// Gets or sets whether pages are printed across columns before advancing rows.
+        /// </summary>
+        public bool PageOrderOverThenDown { get; set; }
         /// <summary>
         /// Gets or sets the print area.
         /// </summary>
